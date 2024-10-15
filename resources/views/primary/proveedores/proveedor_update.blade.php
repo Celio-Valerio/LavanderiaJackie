@@ -1,0 +1,115 @@
+@extends('layouts.principal')
+@section('title', 'Editar Proveedor')
+@section('content')
+
+    <section class="section">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title" style="font-size: 30px !important;">Actualizar Proveedor</h1>
+                        <hr>
+                        <!-- Inicio del formulario -->
+                        <form id="proveedorForm" action="{{ route('proveedores.update', $proveedor->id) }}" method="POST" novalidate>
+                            @csrf
+                            @method('PUT')
+
+                            <div class="row mb-3">
+                                <!-- Campo de Nombre del Proveedor -->
+                                <div class="col-md-9">
+                                    <label for="full_name" class="form-label">Nombre del Proveedor</label>
+                                    <input type="text" name="full_name" class="form-control @error('full_name') is-invalid @enderror" id="full_name" value="{{ old('full_name', $proveedor->full_name) }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
+                                    @error('full_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Campo de Teléfono -->
+                                <div class="col-md-3">
+                                    <label for="phone" class="form-label">Teléfono</label>
+                                    <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone', $proveedor->phone) }}" placeholder="Ej: 90123456" maxlength="8" required>
+                                    @error('phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <!-- Campo de Nombre de la Empresa -->
+                                <div class="col-md-9">
+                                    <label for="company_name" class="form-label">Nombre de la Empresa</label>
+                                    <input type="text" name="company_name" class="form-control @error('company_name') is-invalid @enderror" id="company_name" value="{{ old('company_name', $proveedor->company_name) }}" placeholder="Ej: Proveedor S.A." maxlength="100" required>
+                                    @error('company_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Campo de Teléfono de la Empresa -->
+                                <div class="col-md-3">
+                                    <label for="company_phone" class="form-label">Teléfono de la Empresa</label>
+                                    <input type="text" name="company_phone" class="form-control @error('company_phone') is-invalid @enderror" id="company_phone" value="{{ old('company_phone', $proveedor->company_phone) }}" placeholder="Ej: 90123498" maxlength="8" required>
+                                    @error('company_phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <!-- Campo de Email -->
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email', $proveedor->email) }}" placeholder="Ej: proveedor@empresa.com" maxlength="50">
+                                    @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <!-- Campo de Dirección -->
+                            <div class="mb-3">
+                                <label for="company_address" class="form-label">Dirección</label>
+                                <textarea name="company_address" class="form-control @error('company_address') is-invalid @enderror" id="company_address" placeholder="Ej: Calle Principal 123" maxlength="500" rows="3">{{ old('company_address', $proveedor->company_address) }}</textarea>
+                                @error('company_address')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary flex-fill me-1">Actualizar</button>
+                                <button type="button" class="btn btn-warning flex-fill me-1" id="reloadButton">Reestablecer</button>
+                                <a href="{{ route('proveedores.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                            </div>
+                        </form>
+                        <!-- Fin del formulario -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Variables para almacenar los valores iniciales del formulario
+            const initialValues = {
+                fullName: "{{ $proveedor->full_name }}",
+                phone: "{{ $proveedor->phone }}",
+                companyName: "{{ $proveedor->company_name }}",
+                companyPhone: "{{ $proveedor->company_phone }}",
+                email: "{{ $proveedor->email }}",
+                address: "{{ $proveedor->company_address }}"
+            };
+
+            // Recargar los valores originales al hacer clic en el botón Reestablecer
+            document.getElementById('reloadButton').addEventListener('click', function () {
+                const form = document.getElementById('proveedorForm');
+                form.full_name.value = initialValues.fullName;
+                form.phone.value = initialValues.phone;
+                form.company_name.value = initialValues.companyName;
+                form.company_phone.value = initialValues.companyPhone;
+                form.email.value = initialValues.email;
+                form.company_address.value = initialValues.address;
+            });
+        </script>
+    </section>
+@endsection

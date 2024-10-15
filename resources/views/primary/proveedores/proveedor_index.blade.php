@@ -1,0 +1,125 @@
+@extends('layouts.principal')
+@section('title', 'Lista de Proveedores')
+@section('content')
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Proveedores</h1>
+                            <!-- Botón agregar proveedor -->
+                            <a href="{{ route('proveedores.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Proveedor</a>
+                        </div>
+
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                        <hr>
+
+                        <table id="proveedoresTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
+                            <thead class="table table-bordered table-dark">
+                            <tr>
+                                <th style="width: 5%;">N°</th>
+                                <th style="width: 30%;">Nombre Completo</th>
+                                <th style="width: 15%;">Teléfono</th>
+                                <th style="width: 30%;">Nombre de la Empresa</th>
+                                <th style="width: 20%;">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($proveedores as $proveedor)
+                                <tr>
+                                    <td class="row-index"></td>
+                                    <td>{{ $proveedor->full_name }}</td>
+                                    <td>{{ $proveedor->phone }}</td>
+                                    <td>{{ $proveedor->company_name }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('proveedores.show', $proveedor->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                        <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center">No hay proveedores registrados</td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                var table = $('#proveedoresTable').DataTable({
+                    "paging": true,
+                    "pageLength": 5,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "lengthMenu": [5, 10, 25, 50],
+                    "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ proveedores",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún proveedor disponible en esta tabla",
+                        "sInfo": "Mostrar _START_ a _END_ de _TOTAL_ proveedores",
+                        "sInfoEmpty": "Mostrar 0 a 0 de 0 proveedores",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ proveedores)",
+                        "sSearch": "",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        }
+                    },
+                    "columnDefs": [{
+                        "targets": 0,
+                        "orderable": false // Deshabilitar ordenamiento en la columna del índice
+                    }],
+                    "drawCallback": function(settings) {
+                        var api = this.api();
+                        var startIndex = 1; // Comenzar el índice en 1
+
+                        // Actualizar el índice en la columna correspondiente
+                        api.rows({ search: 'applied' }).every(function(rowIdx) {
+                            $(this.node()).find('td.row-index').html(startIndex++); // Incrementar el índice
+                        });
+                    }
+                });
+
+                // Estilo para mover el select a la derecha
+                $('#proveedoresTable_length').addClass('text-end').css('float', 'right');
+
+                // Mover el input de búsqueda a la izquierda y agregar placeholder
+                $('#proveedoresTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                $('#proveedoresTable_filter input').attr('placeholder', 'Buscar por todos los campos');
+                $('#proveedoresTable_filter input').css({
+                    'width': '300px',
+                    'border-radius': '5px',
+                    'padding': '5px'
+                });
+            });
+        </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', (event) => {
+                const alert = document.getElementById('success-message');
+                if (alert) {
+                    setTimeout(() => {
+                        alert.classList.remove('show');
+                        alert.style.display = 'none';
+                    }, 5000);
+                }
+            });
+        </script>
+    </section>
+@endsection
