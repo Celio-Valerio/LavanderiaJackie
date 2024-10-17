@@ -78,8 +78,8 @@
                         "sLengthMenu": "Mostrar _MENU_ clientes",
                         "sZeroRecords": "No se encontraron resultados",
                         "sEmptyTable": "Ningún cliente disponible en esta tabla",
-                        "sInfo": "Mostrar _START_ a _END_ de _TOTAL_ clientes",
-                        "sInfoEmpty": "Mostrar 0 a 0 de 0 clientes",
+                        "sInfo": "Se muestran los clientes del _START_ al _END_ de _TOTAL_.",
+                        "sInfoEmpty": "No hay resultados ",
                         "sInfoFiltered": "(filtrado de un total de _MAX_ clientes)",
                         "sSearch": "",
                         "oPaginate": {
@@ -109,7 +109,7 @@
 
                 // Mover el input de búsqueda a la izquierda y agregar placeholder
                 $('#clientesTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#clientesTable_filter input').attr('placeholder', 'Buscar por todos los campos');
+                $('#clientesTable_filter input').attr('placeholder', 'Buscar por todos los datos');
                 $('#clientesTable_filter input').css({
                     'width': '300px',
                     'border-radius': '5px',

@@ -93,26 +93,87 @@
         </div>
 
         <script>
-            // Variables para almacenar los valores iniciales del formulario
-            const initialValues = {
-                firstName: "{{ $cliente->first_name }}",
-                lastName: "{{ $cliente->last_name }}",
-                email: "{{ $cliente->email }}",
-                phone: "{{ $cliente->phone }}",
-                address: "{{ $cliente->address }}",
-                type: "{{ $cliente->type }}"
-            };
+            // Función para capitalizar la primera letra y la letra después de un espacio
+            function capitalizeInput(input) {
+                let value = input.value.toLowerCase();
+                input.value = value.replace(/\b\w/g, function(char) {
+                    return char.toUpperCase();
+                });
+            }
 
-            // Recargar los valores originales al hacer clic en el botón Recargar
-            document.getElementById('reloadButton').addEventListener('click', function () {
-                const form = document.getElementById('clienteForm');
-                form.first_name.value = initialValues.firstName;
-                form.last_name.value = initialValues.lastName;
-                form.email.value = initialValues.email;
-                form.phone.value = initialValues.phone;
-                form.address.value = initialValues.address;
-                form.type.value = initialValues.type;
+            // Función para restringir la entrada de números y caracteres especiales
+            function restrictInput(e) {
+                let key = e.key;
+                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]*$/;
+
+                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                    e.preventDefault();
+                }
+            }
+
+            // Asignar eventos a los campos first_name y last_name
+            document.getElementById('first_name').addEventListener('input', function(e) {
+                capitalizeInput(e.target);
+            });
+
+            document.getElementById('first_name').addEventListener('keydown', function(e) {
+                restrictInput(e);
+            });
+
+            document.getElementById('last_name').addEventListener('input', function(e) {
+                capitalizeInput(e.target);
+            });
+
+            document.getElementById('last_name').addEventListener('keydown', function(e) {
+                restrictInput(e);
             });
         </script>
+
+        <script>
+            // Función para capitalizar solo la primera letra de la primera palabra
+            function capitalizeFirstLetter(input) {
+                let value = input.value;
+                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+
+            // Función para restringir caracteres si es necesario
+            function restrictInput(e) {
+                let key = e.key;
+                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.]*$/;
+
+                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                    e.preventDefault();
+                }
+            }
+
+            // Asignar eventos al campo address
+            document.getElementById('address').addEventListener('input', function(e) {
+                capitalizeFirstLetter(e.target);
+            });
+            document.getElementById('address').addEventListener('keydown', function(e) {
+                restrictInput(e);
+            });
+        </script>
+
+        <script>
+            document.getElementById('reloadButton').addEventListener('click', function () {
+                const clienteId = "{{ $cliente->id }}"; // Obtener el ID del cliente
+
+                // Hacer una solicitud AJAX para obtener los datos más recientes del cliente
+                fetch(`/clientes/${clienteId}/reload`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Actualizar los valores del formulario con los datos del servidor
+                        document.getElementById('first_name').value = data.first_name;
+                        document.getElementById('last_name').value = data.last_name;
+                        document.getElementById('email').value = data.email;
+                        document.getElementById('phone').value = data.phone;
+                        document.getElementById('address').value = data.address;
+                        document.getElementById('type').value = data.type;
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        </script>
+
     </section>
 @endsection

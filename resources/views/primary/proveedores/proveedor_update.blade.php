@@ -90,26 +90,68 @@
         </div>
 
         <script>
-            // Variables para almacenar los valores iniciales del formulario
-            const initialValues = {
-                fullName: "{{ $proveedor->full_name }}",
-                phone: "{{ $proveedor->phone }}",
-                companyName: "{{ $proveedor->company_name }}",
-                companyPhone: "{{ $proveedor->company_phone }}",
-                email: "{{ $proveedor->email }}",
-                address: "{{ $proveedor->company_address }}"
-            };
+            // Función para capitalizar la primera letra y la letra después de un espacio
+            function capitalizeInput(input) {
+                let value = input.value.toLowerCase();
+                input.value = value.replace(/\b\w/g, function(char) {
+                    return char.toUpperCase();
+                });
+            }
 
-            // Recargar los valores originales al hacer clic en el botón Reestablecer
-            document.getElementById('reloadButton').addEventListener('click', function () {
-                const form = document.getElementById('proveedorForm');
-                form.full_name.value = initialValues.fullName;
-                form.phone.value = initialValues.phone;
-                form.company_name.value = initialValues.companyName;
-                form.company_phone.value = initialValues.companyPhone;
-                form.email.value = initialValues.email;
-                form.company_address.value = initialValues.address;
+            // Función para restringir la entrada de números y caracteres especiales
+            function restrictInput(e) {
+                let key = e.key;
+                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]*$/;
+
+                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                    e.preventDefault();
+                }
+            }
+
+            // Asignar eventos a los campos full_name
+            document.getElementById('full_name').addEventListener('input', function(e) {
+                capitalizeInput(e.target);
+            });
+
+            document.getElementById('full_name').addEventListener('keydown', function(e) {
+                restrictInput(e);
+            });
+
+            // Función para capitalizar la primera letra del input
+            function capitalizeFirstLetter(input) {
+                let value = input.value;
+                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+
+            // Asignar evento al campo Nombre de Empresa y Dirección para capitalizar la primera letra
+            document.getElementById('company_name').addEventListener('input', function(e) {
+                capitalizeFirstLetter(e.target);
+            });
+
+            document.getElementById('company_address').addEventListener('input', function(e) {
+                capitalizeFirstLetter(e.target);
             });
         </script>
+
+        <script>
+            document.getElementById('reloadButton').addEventListener('click', function () {
+                const proveedorId = "{{ $proveedor->id }}"; // Obtener el ID del cliente
+
+                // Hacer una solicitud AJAX para obtener los datos más recientes del cliente
+                fetch(`/proveedores/${proveedorId}/reload`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Actualizar los valores del formulario con los datos del servidor
+                        document.getElementById('full_name').value = data.full_name;
+                        document.getElementById('phone').value = data.phone;
+                        document.getElementById('company_name').value = data.company_name;
+                        document.getElementById('company_phone').value = data.company_phone;
+                        document.getElementById('email').value = data.email;
+                        document.getElementById('company_address').value = data.company_address;
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        </script>
+
     </section>
 @endsection

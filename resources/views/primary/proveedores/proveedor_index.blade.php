@@ -70,8 +70,8 @@
                         "sLengthMenu": "Mostrar _MENU_ proveedores",
                         "sZeroRecords": "No se encontraron resultados",
                         "sEmptyTable": "Ningún proveedor disponible en esta tabla",
-                        "sInfo": "Mostrar _START_ a _END_ de _TOTAL_ proveedores",
-                        "sInfoEmpty": "Mostrar 0 a 0 de 0 proveedores",
+                        "sInfo": "Se muestran los proveedores del _START_ al _END_ de _TOTAL_.",
+                        "sInfoEmpty": "No hay resultados ",
                         "sInfoFiltered": "(filtrado de un total de _MAX_ proveedores)",
                         "sSearch": "",
                         "oPaginate": {

@@ -19,6 +19,12 @@ class ProveedorController extends Controller
         return view('primary.proveedores.proveedor_index', compact('proveedores'));
     }
 
+    public function reload($id)
+    {
+        $proveedor = Proveedor::findOrFail($id);
+        return response()->json($proveedor);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

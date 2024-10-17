@@ -158,6 +158,6 @@
                 });
             });
         </script>
-    </section>
 
+    </section>
 @endsection
