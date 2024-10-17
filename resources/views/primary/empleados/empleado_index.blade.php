@@ -72,8 +72,8 @@
                         "sLengthMenu": "Mostrar _MENU_ empleados",
                         "sZeroRecords": "No se encontraron resultados",
                         "sEmptyTable": "Ningún empleado disponible en esta tabla",
-                        "sInfo": "Mostrar _START_ a _END_ de _TOTAL_ empleados",
-                        "sInfoEmpty": "Mostrar 0 a 0 de 0 empleados",
+                        "sInfo": "Se muestran los empleados del _START_ al _END_ de _TOTAL_.",
+                        "sInfoEmpty": "No hay resultados ",
                         "sInfoFiltered": "(filtrado de un total de _MAX_ empleados)",
                         "sSearch": "",
                         "oPaginate": {
@@ -103,7 +103,7 @@
 
                 // Mover el input de búsqueda a la izquierda y agregar placeholder
                 $('#empleadosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#empleadosTable_filter input').attr('placeholder', 'Buscar por todos los campos');
+                $('#empleadosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
                 $('#empleadosTable_filter input').css({
                     'width': '300px',
                     'border-radius': '5px',

@@ -147,31 +147,54 @@
             document.getElementById('last_name').addEventListener('keydown', function(e) {
                 restrictInput(e);
             });
+        </script>
 
-            // Guardar los valores iniciales
-            const initialValues = {
-                firstName: "{{ old('first_name', $empleado->first_name) }}",
-                lastName: "{{ old('last_name', $empleado->last_name) }}",
-                email: "{{ old('email', $empleado->email) }}",
-                phone: "{{ old('phone', $empleado->phone) }}",
-                address: "{{ old('address', $empleado->address) }}",
-                salary: "{{ old('salary', $empleado->salary) }}",
-                puesto_id: "{{ old('puesto_id', $empleado->puesto_id) }}"
-            };
+        <script>
+            // Función para capitalizar solo la primera letra de la primera palabra
+            function capitalizeFirstLetter(input) {
+                let value = input.value;
+                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
 
-            // Recargar los valores originales al hacer clic en el botón Recargar
+            // Función para restringir caracteres si es necesario
+            function restrictInput(e) {
+                let key = e.key;
+                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.]*$/;
+
+                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                    e.preventDefault();
+                }
+            }
+
+            // Asignar eventos al campo address
+            document.getElementById('address').addEventListener('input', function(e) {
+                capitalizeFirstLetter(e.target);
+            });
+            document.getElementById('address').addEventListener('keydown', function(e) {
+                restrictInput(e);
+            });
+        </script>
+
+        <script>
             document.getElementById('reloadButton').addEventListener('click', function () {
-                const form = document.getElementById('empleadoForm');
-                form.first_name.value = initialValues.firstName;
-                form.last_name.value = initialValues.lastName;
-                form.email.value = initialValues.email;
-                form.phone.value = initialValues.phone;
-                form.address.value = initialValues.address;
-                form.salary.value = initialValues.salary;
-                form.puesto_id.value = initialValues.puesto_id;
+                const empleadoId = "{{ $empleado->id }}"; // Obtener el ID del cliente
+
+                // Hacer una solicitud AJAX para obtener los datos más recientes del cliente
+                fetch(`/empleados/${empleadoId}/reload`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Actualizar los valores del formulario con los datos del servidor
+                        document.getElementById('first_name').value = data.first_name;
+                        document.getElementById('last_name').value = data.last_name;
+                        document.getElementById('email').value = data.email;
+                        document.getElementById('phone').value = data.phone;
+                        document.getElementById('address').value = data.address;
+                        document.getElementById('salary').value = data.salary;
+                        document.getElementById('puesto_id').value = data.puesto_id;
+                    })
+                    .catch(error => console.error('Error:', error));
             });
         </script>
 
     </section>
-
 @endsection
