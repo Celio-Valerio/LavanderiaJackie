@@ -26,7 +26,7 @@ class PuestoSeeder extends Seeder
             ['name' => 'Técnico en Mantenimiento de Máquinas', 'description' => 'Repara y mantiene las máquinas de la lavandería.'],
             ['name' => 'Encargado de Recursos Humanos', 'description' => 'Gestiona el personal y sus tareas en la lavandería.'],
         ];
-        
+
         // Insertar los puestos en la base de datos
         foreach ($puestos as $puesto) {
             Puesto::create($puesto);

@@ -263,7 +263,6 @@ class ProveedorController extends Controller
         return redirect()->route('proveedores.index')->with('success', 'El proveedor ' .$nombreProveedor . ' de la empresa ' . $nombreEmpresa . ' ha sido actualizado exitosamente.');
     }
 
-
     /**
      * Remove the specified resource from storage.
      */
