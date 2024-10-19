@@ -46,9 +46,7 @@ class MantenimientoController extends Controller
             ],
             'maintenance_type' => [
                 'required',
-                'string',
-                'max:255', // Limita la longitud máxima
-                'in:Preventivo,Correctivo', // Solo permite estos tipos de mantenimiento
+                'in:Preventivo,Correctivo,Predictivo,Emergencia', // Solo permite estos tipos de mantenimiento
             ],
             'description' => [
                 'nullable',
@@ -67,10 +65,7 @@ class MantenimientoController extends Controller
             'maquinaria_id.required' => 'Debes seleccionar una máquina.',
             'maquinaria_id.exists' => 'La máquina seleccionada no es válida.',
 
-            'maintenance_type.required' => 'El tipo de mantenimiento es obligatorio.',
-            'maintenance_type.string' => 'El tipo de mantenimiento debe ser una cadena de texto válida.',
-            'maintenance_type.max' => 'El tipo de mantenimiento no puede exceder los 255 caracteres.',
-            'maintenance_type.in' => 'El tipo de mantenimiento debe ser Preventivo o Correctivo.',
+            'maintenance_type.required' => 'Debes seleccionar un tipo de mantenimiento.',
 
             'description.string' => 'La descripción debe ser una cadena de texto válida.',
             'description.max' => 'La descripción no puede exceder los 500 caracteres.',
@@ -83,7 +78,7 @@ class MantenimientoController extends Controller
         // Guardar mantenimiento en la base de datos
         $mantenimiento = new Mantenimiento();
         $mantenimiento->date = $request->date;
-        $mantenimiento->machine_id = $request->machine_id;
+        $mantenimiento->maquinaria_id = $request->maquinaria_id;
         $mantenimiento->maintenance_type = $request->maintenance_type; // Asignar el tipo de mantenimiento
         $mantenimiento->description = $request->description; // Asignar la descripción
         $mantenimiento->price = $request->price; // Asignar el precio
@@ -136,7 +131,7 @@ class MantenimientoController extends Controller
             ],
             'maintenance_type' => [
                 'required',
-                'in:Preventivo,Correctivo', // Opciones en español
+                'in:Preventivo,Correctivo,Predictivo,Emergencia', // Opciones en español
             ],
             'description' => [
                 'nullable',
@@ -155,10 +150,7 @@ class MantenimientoController extends Controller
             'maquinaria_id.required' => 'Debes seleccionar una máquina.',
             'maquinaria_id.exists' => 'La máquina seleccionada no es válida.',
 
-            'maintenance_type.required' => 'El tipo de mantenimiento es obligatorio.',
-            'maintenance_type.string' => 'El tipo de mantenimiento debe ser una cadena de texto válida.',
-            'maintenance_type.max' => 'El tipo de mantenimiento no puede exceder los 255 caracteres.',
-            'maintenance_type.in' => 'El tipo de mantenimiento debe ser Preventivo o Correctivo.',
+            'maintenance_type.required' => 'Debes seleccionar un tipo de mantenimiento.',
 
             'description.string' => 'La descripción debe ser una cadena de texto válida.',
             'description.max' => 'La descripción no puede exceder los 500 caracteres.',
@@ -173,7 +165,7 @@ class MantenimientoController extends Controller
 
         // Actualizar los campos del mantenimiento
         $mantenimiento->date = $request->date;
-        $mantenimiento->machine_id = $request->machine_id;
+        $mantenimiento->maquinaria_id = $request->maquinaria_id;
         $mantenimiento->maintenance_type = $request->maintenance_type;
         $mantenimiento->description = $request->description;
         $mantenimiento->price = $request->price;
