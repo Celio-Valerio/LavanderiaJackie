@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Puesto; // Asegúrate de importar el modelo Puesto
+use App\Models\Puesto;
 
 class PuestoSeeder extends Seeder
 {
@@ -26,8 +26,7 @@ class PuestoSeeder extends Seeder
             ['name' => 'Técnico en Mantenimiento de Máquinas', 'description' => 'Repara y mantiene las máquinas de la lavandería.'],
             ['name' => 'Encargado de Recursos Humanos', 'description' => 'Gestiona el personal y sus tareas en la lavandería.'],
         ];
-
-
+        
         // Insertar los puestos en la base de datos
         foreach ($puestos as $puesto) {
             Puesto::create($puesto);
