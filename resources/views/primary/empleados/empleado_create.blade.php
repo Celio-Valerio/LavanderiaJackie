@@ -199,6 +199,5 @@
                 });
             });
         </script>
-
     </section>
 @endsection
