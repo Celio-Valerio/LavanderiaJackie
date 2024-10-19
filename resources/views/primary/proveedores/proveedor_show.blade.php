@@ -42,7 +42,7 @@
 
                         <div class="row mb-3">
                             <!-- Correo Electrónico (1 columna) -->
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 @if ($proveedor->email)
                                     <label class="form-label"><strong>Correo Electrónico:</strong></label>
                                     <p>{{ $proveedor->email }}</p>
@@ -51,13 +51,19 @@
                                     <p>No disponible</p>
                                 @endif
                             </div>
+
+                            <!-- Puesto, Fecha de Ingreso y Salario en otra fila -->
+                            <div class="col-md-4">
+                                <label class="form-label"><strong>Categoria:</strong></label>
+                                <p>{{ $proveedor->categoria->name ?? 'No asignada' }}</p> <!-- Muestra el nombre de la categoria, si está asignado -->
+                            </div>
                         </div>
 
                         <div class="row mb-3">
                             <!-- Dirección del Proveedor (varias filas si es necesario) -->
                             <div class="col-md-12">
                                 <label class="form-label"><strong>Dirección:</strong></label>
-                                <p>{{ $proveedor->company_address }}</p>
+                                <p>{{ $proveedor->company_address }}, {{ $proveedor->city }}.</p>
                             </div>
                         </div>
 
