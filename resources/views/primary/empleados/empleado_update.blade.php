@@ -50,7 +50,8 @@
                                     <select name="puesto_id" class="form-select @error('puesto_id') is-invalid @enderror" id="puesto_id" required>
                                         <option value="">Selecciona un puesto</option>
                                         @foreach($puestos as $puesto)
-                                            <option value="{{ $puesto->id }}" {{ (old('puesto_id') == $puesto->id || $empleado->puesto_id == $puesto->id) ? 'selected' : '' }}>
+                                            <option value="{{ $puesto->id }}"
+                                                {{ old('puesto_id', $empleado->puesto_id) == $puesto->id ? 'selected' : '' }}>
                                                 {{ $puesto->name }}
                                             </option>
                                         @endforeach
@@ -190,9 +191,11 @@
                         document.getElementById('phone').value = data.phone;
                         document.getElementById('address').value = data.address;
                         document.getElementById('salary').value = data.salary;
-                        document.getElementById('puesto_id').value = data.puesto_id;
+
+                        // Actualizar el select de puesto
+                        const puestoSelect = document.getElementById('puesto_id');
+                        puestoSelect.value = data.puesto_id; // Asignar el valor actual del puesto/categoría
                     })
-                    .catch(error => console.error('Error:', error));
             });
         </script>
 
