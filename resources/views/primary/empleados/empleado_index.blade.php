@@ -123,6 +123,6 @@
                 }
             });
         </script>
-        
+
     </section>
 @endsection
