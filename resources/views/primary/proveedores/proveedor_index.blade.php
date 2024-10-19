@@ -35,7 +35,7 @@
                             @forelse($proveedores as $proveedor)
                                 <tr>
                                     <td class="row-index"></td>
-                                    <td>{{ $proveedor->full_name }}</td>
+                                    <td>{{ $proveedor->full_name }} ({{ $proveedor->city }})</td>
                                     <td>{{ $proveedor->phone }}</td>
                                     <td>{{ $proveedor->company_name }}</td>
                                     <td class="text-center">
