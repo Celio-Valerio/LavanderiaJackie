@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Llamar a la semilla
+        $this->call(CategoriaSeeder::class);
         $this->call(PuestoSeeder::class);
         $this->call(EmpleadoSeeder::class);
         $this->call(ClienteSeeder::class);
