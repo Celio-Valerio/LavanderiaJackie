@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MantenimientoController;
+use App\Http\Controllers\MaquinariaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EmpleadoController;
@@ -56,4 +58,22 @@ Route::resource('proveedores', ProveedorController::class);
 Route::get('/proveedores/{id}/reload', [ProveedorController::class, 'reload'])->name('proveedores.reload');
 
 
+// Rutas para manejar proveedores
+Route::get('/mantenimientos', [MantenimientoController::class, 'index'])->name('mantenimientos.index'); // Lista de proveedores
+
+// Rutas de recursos para proveedores
+Route::resource('mantenimientos', MantenimientoController::class);
+
+// Ruta para recargar el formulario de editar proveedor
+Route::get('/mantenimientos/{id}/reload', [MantenimientoController::class, 'reload'])->name('mantenimientos.reload');
+
+
+// Rutas para manejar maquinarias
+Route::get('/maquinarias', [MaquinariaController::class, 'index'])->name('maquinarias.index'); // Lista de proveedores
+
+// Rutas de recursos para maquinarias
+Route::resource('maquinarias', MaquinariaController::class);
+
+// Ruta para recargar el formulario de editar maquinaria
+Route::get('/maquinarias/{id}/reload', [MaquinariaController::class, 'reload'])->name('maquinarias.reload');
 
