@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categoria;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
 
@@ -30,8 +31,11 @@ class ProveedorController extends Controller
      */
     public function create()
     {
-        return view('primary.proveedores.proveedor_create'); // Asegúrate de tener la vista en 'resources/views/clientes/create.blade.php'
+        $categorias = Categoria::all(); // Obtiene todos los puestos disponibles
+        return view('primary.proveedores.proveedor_create', compact('categorias')); // Pasa los puestos a la vista
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -78,6 +82,15 @@ class ProveedorController extends Controller
                 'min:5',
                 'max:500',
             ],
+            'categoria_id' => [ // Nueva validación para categoria
+                'required',
+                'exists:categorias,id', // Verifica que el puesto exista
+            ],
+            'city' => [
+                'required',
+                'string',
+                'max:50',
+            ],
         ], [
             'full_name.required' => 'El nombre completo del proveedor es obligatorio.',
             'full_name.regex' => 'El nombre completo puede contener hasta 4 palabras y no debe tener símbolos ni números.',
@@ -99,6 +112,11 @@ class ProveedorController extends Controller
             'company_phone.unique' => 'El número de teléfono de la empresa ya está en uso.',
 
             'company_address.required' => 'La dirección de la empresa es obligatoria.',
+
+            'categoria_id.required' => 'La categoria es obligatoria.',
+            'categoria_id.exists' => 'La categoria_id seleccionada no es válida.',
+
+            'city.required' => 'La ciudad es obligatoria.',
         ]);
 
         // Guardar proveedor en la base de datos
@@ -109,6 +127,8 @@ class ProveedorController extends Controller
         $proveedor->company_name = $request->company_name;
         $proveedor->company_phone = $request->company_phone;
         $proveedor->company_address = $request->company_address;
+        $proveedor->city = $request->city;
+        $proveedor->categoria_id = $request->categoria_id; // Asignar la categoria relacionada
         $proveedor->save();
 
         $nombreProveedor = $request-> full_name;
@@ -134,8 +154,11 @@ class ProveedorController extends Controller
      */
     public function edit(string $id)
     {
-        $proveedor = Proveedor::findOrFail($id); // Obtiene el cliente por ID
-        return view('primary.proveedores.proveedor_update', compact('proveedor')); // Retorna la vista de edición
+        $proveedor = Proveedor::findOrFail($id); // Obtiene el empleado por ID
+        $categorias = Categoria::all(); // Obtiene todos los puestos disponibles
+
+        return view('primary.proveedores.proveedor_update', compact('proveedor', 'categorias'));
+
     }
 
     /**
@@ -183,6 +206,16 @@ class ProveedorController extends Controller
                 'min:5',
                 'max:500',
             ],
+            'categoria_id' => [ // Cambia 'position' por 'categoria_id'
+                'required',
+                'exists:categorias,id', // Asegura que el puesto existe en la tabla 'puestos'
+            ],
+            'city' => [
+                'required',
+                'string',
+                'max:50',
+            ],
+
         ], [
             'full_name.required' => 'El nombre completo del proveedor es obligatorio.',
             'full_name.regex' => 'El nombre completo puede contener hasta 4 palabras y no debe tener símbolos ni números.',
@@ -204,6 +237,11 @@ class ProveedorController extends Controller
             'company_phone.unique' => 'El número de teléfono de la empresa ya está en uso.',
 
             'company_address.required' => 'La dirección de la empresa es obligatoria.',
+
+            'categoria_id.required' => 'La categoria es obligatoria.',
+            'categoria_id.exists' => 'La categoria seleccionado no es válida.',
+
+            'city.required' => 'La ciudad es obligatoria.',
         ]);
 
         // Actualizar proveedor en la base de datos
@@ -214,6 +252,9 @@ class ProveedorController extends Controller
         $proveedor->company_name = $request->company_name;
         $proveedor->company_phone = $request->company_phone;
         $proveedor->company_address = $request->company_address;
+        $proveedor->city = $request->city;
+        $proveedor->categoria_id = $request->categoria_id; // Actualiza el ID de la categoria relacionada
+
         $proveedor->save();
 
         $nombreProveedor = $request-> full_name;
