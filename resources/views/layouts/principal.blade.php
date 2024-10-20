@@ -331,6 +331,12 @@
                         <i class="bi bi-circle"></i><span>Usuarios</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="/maquinarias"> <!-- Cambiado el enlace a /maquinas -->
+                        <i class="bi bi-circle"></i><span>Maquinarias</span>
+                    </a>
+                </li>
             </ul>
         </li><!-- End Forms Nav -->
 
@@ -560,7 +566,7 @@
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-        By <a href="">Jackeline Monacada</a>
+        By <a href="">Jackeline Moncada</a>
     </div>
 </footer><!-- End Footer -->
 

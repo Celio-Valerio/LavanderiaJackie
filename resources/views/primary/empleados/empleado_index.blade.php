@@ -103,7 +103,7 @@
 
                 // Mover el input de búsqueda a la izquierda y agregar placeholder
                 $('#empleadosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#empleadosTable_filter input').attr('placeholder', 'Buscar por todos los campos');
+                $('#empleadosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
                 $('#empleadosTable_filter input').css({
                     'width': '300px',
                     'border-radius': '5px',

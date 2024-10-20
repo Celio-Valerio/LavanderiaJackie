@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProveedorController;
-
+use App\Http\Controllers\MaquinaController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,4 +41,11 @@ Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveed
 
 // Rutas de recursos para proveedores
 Route::resource('proveedores', ProveedorController::class);
+
+// Rutas para manejar máquinas
+Route::get('/maquinarias', [MaquinaController::class, 'index'])->name('maquinarias.index'); // Lista de máquinas
+
+// Rutas de recursos para máquinas
+Route::resource('maquinas', MaquinaController::class);
+
 

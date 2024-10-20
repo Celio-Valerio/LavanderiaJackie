@@ -25,7 +25,20 @@ class EmpleadoFactory extends Factory
             'address' => $this->faker->address,  // Dirección que parece real
             'hire_date' => $this->faker->date(),  // Fecha de ingreso
             'salary' => $this->faker->randomFloat(2, 1500, 5000),  // Salario entre 1500 y 5000
-            'puesto_id' =>  $this->faker->numberBetween(2, 9), // Referencia a un puesto aleatorio
+            'puesto_id' =>  $this->faker->numberBetween(2, 9), 
+            'identity' => $this->faker->numerify('#############'),  // Referencia a un puesto aleatorio
+            'emergency_number' => $this->faker->numberBetween(2, 9) . $this->faker->numerify('#######'),  // Teléfono de emergencia
+            'emergency_contact_name' => $this->faker->name,  // Nombre de contacto de emergencia
         ];
+
+        
+            // Arreglo de puestos de trabajo reales en una granja
+            $puestos = [
+                
+                'Operador de maquinaria',
+                'Cajero',
+                'Aseador',
+                'Trabajador de mantenimiento',
+            ];
     }
 }

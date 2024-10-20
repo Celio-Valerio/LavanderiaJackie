@@ -102,18 +102,8 @@ class ClienteController extends Controller
         ]);
 
         // Guardar cliente en la base de datos
-        $cliente = new Cliente();
-        $cliente->first_name = $request->first_name;
-        $cliente->last_name = $request->last_name;
-        $cliente->email = $request->email;
-        $cliente->phone = $request->phone;
-        $cliente->address = $request->address;
-        $cliente->type = $request->type;  // Asignar el tipo de cliente
-        $cliente->save();
-
-        $nombresCliente = $request-> first_name;
-        $apellidosCliente = $request-> first_name;
-        return redirect()->route('clientes.index')->with('success', 'El cliente ' .$nombresCliente . ' ' . $apellidosCliente . ' ha sido registrado exitosamente.');
+        $cliente = Cliente::create($request->all());
+        return redirect()->route('clientes.index')->with('success', 'El cliente ' . $cliente->first_name . '  ' . $cliente->last_name. ' ha sido registrado exitosamente.');
     }
 
     /**
