@@ -10,7 +10,7 @@
                         <h1 class="card-title" style="font-size: 30px !important;">Actualizar Máquina</h1>
                         <hr>
                         <!-- Inicio del formulario -->
-                        <form id="maquinaForm" action="{{ route('maquinas.update', $maquina->id) }}" method="POST">
+                        <form id="maquinaForm" action="{{ route('maquinas.update', $maquina->id) }}" method="POST" novalidate>
                             @csrf
                             @method('PUT') <!-- Enviar método PUT para la actualización -->
 
@@ -18,7 +18,7 @@
                                 <!-- Campo de Nombre -->
                                 <div class="col-md-6">
                                     <label for="nombre" class="form-label">Nombre</label>
-                                    <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre', $maquina->nombre) }}" placeholder="Ej: Excavadora" maxlength="50" required>
+                                    <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre', $maquina->nombre) }}" placeholder="Ej: lavadora ,Secadora, Plancha" maxlength="50" required>
                                     @error('nombre')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -38,7 +38,7 @@
                                 <!-- Campo de Marca -->
                                 <div class="col-md-6">
                                     <label for="marca" class="form-label">Marca</label>
-                                    <input type="text" name="marca" class="form-control @error('marca') is-invalid @enderror" id="marca" value="{{ old('marca', $maquina->marca) }}" placeholder="Ej: Caterpillar" maxlength="50" required>
+                                    <input type="text" name="marca" class="form-control @error('marca') is-invalid @enderror" id="marca" value="{{ old('marca', $maquina->marca) }}" placeholder="Ej: LG " maxlength="50" required>
                                     @error('marca')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -50,7 +50,7 @@
                                 <!-- Campo de Capacidad -->
                                 <div class="col-md-6">
                                     <label for="capacidad" class="form-label">Capacidad</label>
-                                    <input type="text" name="capacidad" class="form-control @error('capacidad') is-invalid @enderror" id="capacidad" value="{{ old('capacidad', $maquina->capacidad) }}" placeholder="Ej: 5 toneladas" maxlength="50" required>
+                                    <input type="text" name="capacidad" class="form-control @error('capacidad') is-invalid @enderror" id="capacidad" value="{{ old('capacidad', $maquina->capacidad) }}" placeholder="Ej: 5 kg" maxlength="50" required>
                                     @error('capacidad')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -88,7 +88,7 @@
                                 <!-- Campo de Descripción -->
                                 <div class="col-md-6">
                                     <label for="descripcion" class="form-label">Descripción</label>
-                                    <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Ej: Máquina para construcción" maxlength="500" rows="3">{{ old('descripcion', $maquina->descripcion) }}</textarea>
+                                    <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Ej: Máquina en mantenimiento" maxlength="500" rows="3">{{ old('descripcion', $maquina->descripcion) }}</textarea>
                                     @error('descripcion')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -150,6 +150,50 @@
                 form.classList.remove('was-validated');
             });
         </script>
+
+       <script>
+            // Función para capitalizar solo la primera letra de la primera palabra
+            function capitalizeFirstLetter(input) {
+                let value = input.value;
+                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+
+            // Función para restringir caracteres si es necesario
+            function restrictInput(e) {
+                let key = e.key;
+                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.]*$/;
+
+                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                    e.preventDefault();
+                }
+            }
+
+            
+        </script>
+
+        <script>
+            document.getElementById('reloadButton').addEventListener('click', function () {
+                const maquinaId = "{{ $maquina->id }}"; // Obtener el ID del cliente
+
+                // Hacer una solicitud AJAX para obtener los datos más recientes del cliente
+                fetch(`/maquinas/${maquinaId}/reload`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Actualizar los valores del formulario con los datos del servidor
+                        document.getElementById('nombre').value = data.nombre;
+                        document.getElementById('modelo').value = data.modelo;
+                        document.getElementById('capacidad').value = data.capacidad;
+                        document.getElementById('marca').value = data.marca;
+                        document.getElementById('proveedor').value = data.proveedor;
+                        document.getElementById('estado').value = data.estado;
+                        document.getElementById('descripcion').value = data.descripcion;
+
+                    
+                    });
+            });
+        </script>
+    </section>
+
 
     </section>
 

@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('maquinas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
+            $table->string('modelo', 10);
             $table->string('marca');
-            $table->string('modelo');
-            $table->integer('capacidad')->comment('Capacidad en kg');
-            $table->string('estado');
+            $table->text('descripcion')->nullable();
+            $table->year('anio_compra');
+            $table->string('capacidad')->nullable();
+            $table->string('tipo')->nullable();
+            $table->enum('estado', ['nuevo', 'usado']);
             $table->string('proveedor');
-            $table->string('fecha_adquisicion');
-            $table->string('serie')->unique();
+            $table->string('serie', 10)->unique();
             $table->timestamps();
         });
     }

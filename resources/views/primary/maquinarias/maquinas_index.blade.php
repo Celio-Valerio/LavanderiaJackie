@@ -14,10 +14,10 @@
                     </div>
 
                     @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
-                            {{ session('success') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
                     @endif
                     <hr>
 
@@ -26,9 +26,10 @@
                         <tr>
                             <th style="width: 5%;">N°</th>
                             <th style="width: 25%;">Nombre</th>
-                            <th style="width: 25%;">Descripción</th>
-                            <th style="width: 20%;">Estado</th> <!-- Nueva columna para el estado -->
-                            <th style="width: 25%;">Acciones</th>
+                            <th style="width: 25%;">Marca</th>
+                            <th style="width: 25%;">Modelo</th>
+                            <th style="width: 20%;">Estado</th> 
+                            <th style="width: 20%;">Acciones</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -36,12 +37,12 @@
                             <tr>
                                 <td class="row-index"></td>
                                 <td>{{ $maquina->nombre }}</td>
-                                <td>{{ $maquina->descripcion }}</td>
+                                <td>{{ $maquina->marca }}</td>
+                                <td>{{ $maquina->modelo }}</td>
                                 <td>{{ $maquina->estado }}</td> <!-- Mostrar el estado de la máquina -->
                                 <td class="text-center">
                                     <a href="{{ route('maquinas.show', $maquina->id) }}" class="btn btn-info btn-sm">Ver</a>
                                     <a href="{{ route('maquinas.edit', $maquina->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                    <form action="{{ route('maquinas.destroy', $maquina->id) }}" method="POST" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
                                        

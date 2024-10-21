@@ -27,10 +27,7 @@
                                 <p>{{ $maquina->capacidad }}</p>
                             </div>
 
-                            <div class="col-md-4">
-                                <label class="form-label"><strong>Año de Fabricación:</strong></label>
-                                <p>{{ $maquina->anio_fabricacion }}</p>
-                            </div>
+                            
 
                             <div class="col-md-4">
                                 <label class="form-label"><strong>Marca:</strong></label>
@@ -56,7 +53,18 @@
                                 <label class="form-label"><strong>Serie:</strong></label>
                                 <p>{{ $maquina->serie }}</p>
                             </div>
-                        </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label"><strong>Descripción:</strong></label>
+                                <p>{{ $maquina->descripcion }}</p>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label"><strong>Tipo:</strong></label>
+                                <p>{{ $maquina->tipo }}</p>
+                            </div>
+
+                        
 
                         <!-- Botones de acción (1 columna cada uno en la misma fila) -->
                         <div class="row">

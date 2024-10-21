@@ -48,5 +48,18 @@ Route::get('/maquinarias', [MaquinaController::class, 'index'])->name('maquinari
 // Rutas de recursos para máquinas
 Route::resource('maquinas', MaquinaController::class);
 
+// Rutas para manejar categorías
+Route::get('/categorias', [CategoriaController::class, 'index'])->name('categorias.index'); // Lista de categorías
+
+// Rutas de recursos para categorías
+Route::resource('categorias', CategoriaController::class);
+
+// Mantenimiento de máquinas
+Route::get('/mantenimiento', [MantenimientoController::class, 'index'])->name('mantenimiento.index'); // Lista de mantenimiento
+
+// Rutas de recursos para mantenimiento
+Route::resource('mantenimiento', MantenimientoController::class);
+
+
 
 

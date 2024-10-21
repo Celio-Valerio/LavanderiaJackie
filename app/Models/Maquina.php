@@ -17,8 +17,11 @@ class Maquina extends Model
         'capacidad',
         'estado',
         'proveedor',
-        'fecha_adquisicion',
+        'anio_compra',
         'serie',
+        'descripcion',
+        'tipo',
+
     ];
 }
 
