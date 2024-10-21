@@ -1,5 +1,5 @@
 @extends('layouts.principal')
-@section('title', 'Lista de Empleados')
+@section('title', 'Lista de Mantenimientos')
 @section('content')
 
     <section class="section">
@@ -8,9 +8,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Empleados</h1>
-                            <!-- Botón agregar empleado -->
-                            <a href="{{ route('empleados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Empleado</a>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Mantenimientos</h1>
+                            <!-- Botón agregar mantenimiento -->
+                            <a href="{{ route('mantenimientos.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Mantenimiento</a>
                         </div>
 
                         @if(session('success'))
@@ -21,33 +21,43 @@
                         @endif
                         <hr>
 
-                        <table id="empleadosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
+                        <table id="mantenimientosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
-                                <th style="width: 25%;">Nombre</th>
-                                <th style="width: 25%;">Apellido</th>
-                                <th style="width: 10%;">Teléfono</th>
-                                <th style="width: 15%;">Puesto</th>
+                                <th style="width: 25%;">Fecha</th>
+                                <th style="width: 25%;">Maquinaria</th>
+                                <th style="width: 10%;">Tipo de Mantenimiento</th>
+                                <th style="width: 15%;">Precio</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($empleados as $empleado)
+                            @forelse($mantenimientos as $mantenimiento)
                                 <tr>
                                     <td class="row-index"></td>
-                                    <td>{{ $empleado->first_name }}</td>
-                                    <td>{{ $empleado->last_name }}</td>
-                                    <td>{{ $empleado->phone }}</td>
-                                    <td>{{ $empleado->puesto->name }}</td>
+                                    <td>{{ ucfirst(\Carbon\Carbon::parse($mantenimiento->date)->translatedFormat('l d \d\e F, Y')) }}</td>
+                                    <td>{{ $mantenimiento->maquinaria->name }}</td>
+                                    <td>
+                                        @if($mantenimiento->maintenance_type == 'Emergencia')
+                                            <span class="badge bg-danger">{{ $mantenimiento->maintenance_type }}</span>
+                                        @elseif($mantenimiento->maintenance_type == 'Preventivo')
+                                            <span class="badge bg-success">{{ $mantenimiento->maintenance_type }}</span>
+                                        @elseif($mantenimiento->maintenance_type == 'Correctivo')
+                                            <span class="badge bg-warning">{{ $mantenimiento->maintenance_type }}</span>
+                                        @else
+                                            <span class="badge bg-secondary">{{ $mantenimiento->maintenance_type }}</span>
+                                        @endif
+                                    </td>
+                                    <td>L. {{ number_format($mantenimiento->price, 2) }}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('empleados.show', $empleado->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{{ route('mantenimientos.show', $mantenimiento->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                        <a href="{{ route('mantenimientos.edit', $mantenimiento->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">No hay empleados registrados</td>
+                                    <td colspan="7" class="text-center">No hay mantenimientos registrados</td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -60,7 +70,7 @@
 
         <script>
             $(document).ready(function() {
-                var table = $('#empleadosTable').DataTable({
+                var table = $('#mantenimientosTable').DataTable({
                     "paging": true,
                     "pageLength": 5,
                     "lengthChange": true,
@@ -69,12 +79,12 @@
                     "lengthMenu": [5, 10, 25, 50],
                     "language": {
                         "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ empleados",
+                        "sLengthMenu": "Mostrar _MENU_ mantenimientos",
                         "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún empleado disponible en esta tabla",
-                        "sInfo": "Se muestran los empleados del _START_ al _END_ de _TOTAL_.",
+                        "sEmptyTable": "Ningún mantenimiento disponible en esta tabla",
+                        "sInfo": "Se muestran los mantenimientos del _START_ al _END_ de _TOTAL_.",
                         "sInfoEmpty": "No hay resultados ",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ empleados)",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ mantenimientos)",
                         "sSearch": "",
                         "oPaginate": {
                             "sFirst": "Primero",
@@ -99,12 +109,12 @@
                 });
 
                 // Estilo para mover el select a la derecha
-                $('#empleadosTable_length').addClass('text-end').css('float', 'right');
+                $('#mantenimientosTable_length').addClass('text-end').css('float', 'right');
 
                 // Mover el input de búsqueda a la izquierda y agregar placeholder
-                $('#empleadosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#empleadosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#empleadosTable_filter input').css({
+                $('#mantenimientosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                $('#mantenimientosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
+                $('#mantenimientosTable_filter input').css({
                     'width': '300px',
                     'border-radius': '5px',
                     'padding': '5px'
@@ -123,6 +133,5 @@
                 }
             });
         </script>
-
     </section>
 @endsection

@@ -176,6 +176,6 @@
                 });
             });
         </script>
-    </section>
 
+    </section>
 @endsection

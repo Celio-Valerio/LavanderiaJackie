@@ -9,7 +9,7 @@ class Puesto extends Model
 {
     use HasFactory;
 
-    // Especifica el nombre de la tabla si es diferente a la convención de nombres de Laravel
+    // Especifica el nombre de la tabla si es diferente a la convención de nombres
     protected $table = 'puestos';
 
     // Especifica los campos que pueden ser asignados en masa (mass assignable)

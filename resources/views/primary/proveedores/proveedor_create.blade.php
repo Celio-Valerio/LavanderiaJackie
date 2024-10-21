@@ -63,6 +63,53 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="col-md-3">
+                                    <label for="categoria_id" class="form-label">Categoría</label>
+                                    <select name="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" id="categoria_id" required>
+                                        <option value="">Selecciona una categoría</option>
+                                        @foreach($categorias as $categoria)
+                                            <option value="{{ $categoria->id }}" {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}>
+                                                {{ $categoria->name }} <!-- Asegúrate de que este campo corresponda al modelo Categoria -->
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('categoria_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                    <?php
+                                    $municipios = [
+                                        "Danlí", "Tegucigalpa", "San Pedro Sula", "Comayagua", "Cortes", "La Ceiba", "Choluteca",
+                                        "Santa Rosa de Copán", "Gracias", "Juticalpa", "Puerto Cortes", "La Esperanza", "Olancho",
+                                        "Tocoa", "Nacaome", "Guaimaca", "Tegucigalpita", "Intibucá", "Pespire", "Colón",
+                                        "El Paraíso", "La Libertad", "San Lorenzo", "Siguatepeque", "Lempira", "Marcala",
+                                        "Ocotepeque", "Santa Bárbara", "Valle", "Yoro", "La Paz", "Camasca", "Campamento",
+                                        "San Antonio de Flores", "Santa Cruz de Yojoa", "La Paz", "San Manuel de Colohete",
+                                        "Potrerillos", "El Porvenir", "Quebrada de Agua", "El Negrito", "Talgua", "Tocoa",
+                                        "Manto", "El Paraíso", "San Miguelito", "Cerro Verde", "San Antonio", "San Ignacio",
+                                        "Yoro", "Pueblo Nuevo", "Tocoa", "Pespire", "La Fortuna", "La Masica",
+                                        // (continúa hasta completar los 298 municipios)
+                                    ];
+                                    ?>
+
+                                    <!-- Campo de Ciudad para Crear Proveedor -->
+                                <div class="col-md-3">
+                                    <label for="city" class="form-label">Ciudad</label>
+                                    <select name="city" class="form-select @error('city') is-invalid @enderror" id="city" required>
+                                        <option value="">Selecciona una ciudad</option>
+                                        @foreach($municipios as $municipio)
+                                            <option value="{{ $municipio }}" {{ old('city') == $municipio ? 'selected' : '' }}>
+                                                {{ $municipio }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('city')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
 
                             <!-- Campo de Dirección -->
@@ -133,7 +180,6 @@
         </script>
 
         <script>
-            // Función para limpiar los campos del formulario y eliminar los errores de validación
             document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('proveedorForm');
 
@@ -145,6 +191,12 @@
                 form.querySelectorAll('input:not([type="hidden"]), textarea').forEach(function (input) {
                     input.value = '';  // Borra el valor del campo
                 });
+
+                // Limpiar el select de categoría
+                document.getElementById('categoria_id').selectedIndex = 0;
+
+                // Limpiar el select de ciudad
+                document.getElementById('city').selectedIndex = 0;
 
                 // Remover clases de validación (is-invalid) y ocultar mensajes de error
                 const invalidElements = form.querySelectorAll('.is-invalid');
@@ -158,6 +210,6 @@
                 });
             });
         </script>
-    </section>
 
+    </section>
 @endsection

@@ -196,13 +196,57 @@
                 }
                 // Reiniciar la validación de los campos
                 form.classList.remove('was-validated');
+            }); // Cierre de la función corregido
+        </script>
+
+        <script>
+            // Función para capitalizar solo la primera letra de la primera palabra
+            function capitalizeFirstLetter(input) {
+                let value = input.value;
+                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+
+            // Función para restringir caracteres si es necesario
+            function restrictInput(e) {
+                let key = e.key;
+                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.]*$/;
+
+                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                    e.preventDefault();
+                }
+            }
+
+            // Asignar eventos al campo address
+            document.getElementById('address').addEventListener('input', function(e) {
+                capitalizeFirstLetter(e.target);
+            });
+            document.getElementById('address').addEventListener('keydown', function(e) {
+                restrictInput(e);
             });
         </script>
 
-        
-        </script>
+        <script>
+            document.getElementById('reloadButton').addEventListener('click', function () {
+                const empleadoId = "{{ $empleado->id }}"; // Obtener el ID del cliente
+
+                // Hacer una solicitud AJAX para obtener los datos más recientes del cliente
+                fetch(`/empleados/${empleadoId}/reload`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Actualizar los valores del formulario con los datos del servidor
+                        document.getElementById('first_name').value = data.first_name;
+                        document.getElementById('last_name').value = data.last_name;
+                        document.getElementById('email').value = data.email;
+                        document.getElementById('phone').value = data.phone;
+                        document.getElementById('address').value = data.address;
+                        document.getElementById('salary').value = data.salary;
+
+                        // Actualizar el select de puesto
+                        const puestoSelect = document.getElementById('puesto_id');
+                        puestoSelect.value = data.puesto_id; // Asignar el valor actual del puesto/categoría
+                    });
+            });
         </script>
     </section>
 
 @endsection
-

@@ -20,10 +20,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         // Llamar a la semilla
+        $this->call(CategoriaSeeder::class);
         $this->call(PuestoSeeder::class);
         $this->call(EmpleadoSeeder::class);
         $this->call(ClienteSeeder::class);
         $this->call(ProveedorSeeder::class);
-        $this->call(MaquinaSeeder::class);
+        $this->call(MaquinariaSeeder::class);
+        $this->call(MantenimientoSeeder::class);
     }
 }

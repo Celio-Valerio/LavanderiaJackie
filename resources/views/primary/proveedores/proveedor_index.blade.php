@@ -35,7 +35,7 @@
                             @forelse($proveedores as $proveedor)
                                 <tr>
                                     <td class="row-index"></td>
-                                    <td>{{ $proveedor->full_name }}</td>
+                                    <td><b>{{ $proveedor->full_name }}</b> ({{ $proveedor->city }})</td>
                                     <td>{{ $proveedor->phone }}</td>
                                     <td>{{ $proveedor->company_name }}</td>
                                     <td class="text-center">
@@ -70,8 +70,8 @@
                         "sLengthMenu": "Mostrar _MENU_ proveedores",
                         "sZeroRecords": "No se encontraron resultados",
                         "sEmptyTable": "Ningún proveedor disponible en esta tabla",
-                        "sInfo": "Mostrar _START_ a _END_ de _TOTAL_ proveedores",
-                        "sInfoEmpty": "Mostrar 0 a 0 de 0 proveedores",
+                        "sInfo": "Se muestran los proveedores del _START_ al _END_ de _TOTAL_.",
+                        "sInfoEmpty": "No hay resultados ",
                         "sInfoFiltered": "(filtrado de un total de _MAX_ proveedores)",
                         "sSearch": "",
                         "oPaginate": {
@@ -101,7 +101,7 @@
 
                 // Mover el input de búsqueda a la izquierda y agregar placeholder
                 $('#proveedoresTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#proveedoresTable_filter input').attr('placeholder', 'Buscar por todos los campos');
+                $('#proveedoresTable_filter input').attr('placeholder', 'Buscar por todos los datos');
                 $('#proveedoresTable_filter input').css({
                     'width': '300px',
                     'border-radius': '5px',

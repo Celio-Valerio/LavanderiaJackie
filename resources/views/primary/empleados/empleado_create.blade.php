@@ -226,13 +226,15 @@
                     }
                 });
 
+                // Limpiar el select de categoría
+                document.getElementById('puesto_id').selectedIndex = 0;
+
                 // También puedes eliminar las clases de error de validación
                 form.querySelectorAll('.is-invalid').forEach(function (input) {
                     input.classList.remove('is-invalid');
                 });
             });
         </script>
-
     </section>
 @endsection
 

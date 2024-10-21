@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('company_name', 100); // Nombre de la empresa
             $table->char('company_phone', 8)->unique(); // Teléfono de la empresa
             $table->text('company_address'); // Dirección de la empresa
+            $table->unsignedBigInteger('categoria_id'); // Referencia a la tabla categorias
+            $table->string('city', 50); // Ciudad del proveedor
+            // Definir la relación con la tabla categorias
+            $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
             $table->timestamps();
         });
     }

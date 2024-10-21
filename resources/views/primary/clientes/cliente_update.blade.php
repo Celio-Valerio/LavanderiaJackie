@@ -93,19 +93,27 @@
         </div>
 
         <script>
-            // Almacena los valores iniciales del formulario
-            const form = document.getElementById('clienteForm');
-            const initialValues = new FormData(form);
+            // Variables para almacenar los valores iniciales del formulario
+            const initialValues = {
+                firstName: "{{ $cliente->first_name }}",
+                lastName: "{{ $cliente->last_name }}",
+                email: "{{ $cliente->email }}",
+                phone: "{{ $cliente->phone }}",
+                address: "{{ $cliente->address }}",
+                type: "{{ $cliente->type }}"
+            };
 
-            document.getElementById('reloadButton').addEventListener('click', function() {
-                // Restaura los valores anteriores
-                for (const [key, value] of initialValues.entries()) {
-                    const input = form.querySelector(`[name="${key}"]`);
-                    if (input) {
-                        input.value = value; // Restaura el valor
-                    }
-                }
+            // Recargar los valores originales al hacer clic en el botón Recargar
+            document.getElementById('reloadButton').addEventListener('click', function () {
+                const form = document.getElementById('clienteForm');
+                form.first_name.value = initialValues.firstName;
+                form.last_name.value = initialValues.lastName;
+                form.email.value = initialValues.email;
+                form.phone.value = initialValues.phone;
+                form.address.value = initialValues.address;
+                form.type.value = initialValues.type;
             });
         </script>
+
     </section>
 @endsection

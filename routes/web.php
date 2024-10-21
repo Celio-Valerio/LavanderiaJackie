@@ -49,3 +49,4 @@ Route::get('/maquinarias', [MaquinaController::class, 'index'])->name('maquinari
 Route::resource('maquinas', MaquinaController::class);
 
 
+

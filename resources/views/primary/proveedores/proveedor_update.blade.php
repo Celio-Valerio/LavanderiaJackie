@@ -64,6 +64,57 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <!-- Campo de Categoría -->
+                                <div class="col-md-3">
+                                    <label for="categoria_id" class="form-label">Categoría (Insumo)</label>
+                                    <select name="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" id="categoria_id" required>
+                                        <option value="">Selecciona una categoría</option>
+                                        @foreach($categorias as $categoria)
+                                            <option value="{{ $categoria->id }}"
+                                                {{ old('categoria_id', $proveedor->categoria_id) == $categoria->id ? 'selected' : '' }}>
+                                                {{ $categoria->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('categoria_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Campo de Ciudad -->
+                                    <?php
+                                        $municipios = [
+                                            "Danlí", "Tegucigalpa", "San Pedro Sula", "Comayagua", "Cortes", "La Ceiba", "Choluteca",
+                                            "Santa Rosa de Copán", "Gracias", "Juticalpa", "Puerto Cortes", "La Esperanza", "Olancho",
+                                            "Tocoa", "Nacaome", "Guaimaca", "Tegucigalpita", "Intibucá", "Pespire", "Colón",
+                                            "El Paraíso", "La Libertad", "San Lorenzo", "Siguatepeque", "Lempira", "Marcala",
+                                            "Ocotepeque", "Santa Bárbara", "Valle", "Yoro", "La Paz", "Camasca", "Campamento",
+                                            "San Antonio de Flores", "Santa Cruz de Yojoa", "La Paz", "San Manuel de Colohete",
+                                            "Potrerillos", "El Porvenir", "Quebrada de Agua", "El Negrito", "Talgua", "Tocoa",
+                                            "Manto", "El Paraíso", "San Miguelito", "Cerro Verde", "San Antonio", "San Ignacio",
+                                            "Yoro", "Pueblo Nuevo", "Tocoa", "Pespire", "La Fortuna", "La Masica", "Santa Rosa",
+                                            // (continúa hasta completar los 298 municipios)
+                                        ];
+                                    ?>
+
+                                    <!-- Campo de Ciudad -->
+                                    <div class="col-md-3">
+                                    <label for="city" class="form-label">Ciudad</label>
+                                    <select name="city" class="form-select @error('city') is-invalid @enderror" id="city" required>
+                                        <option value="">Selecciona una ciudad</option>
+                                        @foreach($municipios as $municipio)
+                                            <option value="{{ $municipio }}" {{ old('city', $proveedor->city) == $municipio ? 'selected' : '' }}>
+                                                {{ $municipio }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('city')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+
                             </div>
 
                             <!-- Campo de Dirección -->
@@ -105,5 +156,34 @@
                 }
             });
         </script>
+
+        <script>
+            document.getElementById('reloadButton').addEventListener('click', function () {
+                const proveedorId = "{{ $proveedor->id }}"; // Obtener el ID del cliente
+
+                // Hacer una solicitud AJAX para obtener los datos más recientes del cliente
+                fetch(`/proveedores/${proveedorId}/reload`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Actualizar los valores del formulario con los datos del servidor
+                        document.getElementById('full_name').value = data.full_name;
+                        document.getElementById('phone').value = data.phone;
+                        document.getElementById('company_name').value = data.company_name;
+                        document.getElementById('company_phone').value = data.company_phone;
+                        document.getElementById('email').value = data.email;
+                        document.getElementById('company_address').value = data.company_address;
+
+                        // Actualizar el select de categoría
+                        const categoriaSelect = document.getElementById('categoria_id');
+                        categoriaSelect.value = data.categoria_id; // Asignar el valor actual de la categoría
+
+                        // Actualizar el select de categoría
+                        const ciudadSelect = document.getElementById('city');
+                        ciudadSelect.value = data.city; // Asignar el valor actual de la categoría
+
+                    })
+            });
+        </script>
+
     </section>
 @endsection

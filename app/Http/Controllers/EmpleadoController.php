@@ -20,6 +20,12 @@ class EmpleadoController extends Controller
         return view('primary.empleados.empleado_index', compact('empleados'));
     }
 
+    public function reload($id)
+    {
+        $empleado = Empleado::findOrFail($id);
+        return response()->json($empleado);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
