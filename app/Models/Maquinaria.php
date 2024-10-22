@@ -20,6 +20,7 @@ class Maquinaria extends Model
         'acquisition_date',
         'brand',
         'model',
+        'proveedor_id', // Relación con el proveedor
     ];
 
     /**
@@ -30,5 +31,15 @@ class Maquinaria extends Model
     public function mantenimientos()
     {
         return $this->hasMany(Mantenimiento::class, 'maquinaria_id', 'id'); // Clave foránea correcta
+    }
+
+    /**
+     * Relación con el Proveedor
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class, 'proveedor_id', 'id'); // Relación con proveedor
     }
 }

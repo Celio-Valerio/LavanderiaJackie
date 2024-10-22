@@ -61,7 +61,7 @@
                                     <select name="type" class="form-control @error('type') is-invalid @enderror" id="type" required>
                                         <option value="" disabled selected>Seleccione el tipo de cliente</option>
                                         <option value="Contado" {{ old('type') == 'Contado' ? 'selected' : '' }}>Contado</option>
-                                        <option value="Credito" {{ old('type') == 'Credito' ? 'selected' : '' }}>Credito</option>
+                                        <option value="Credito" {{ old('type') == 'Credito' ? 'selected' : '' }}>Crédito</option>
                                     </select>
                                     @error('type')
                                     <div class="invalid-feedback">{{ $message }}</div>

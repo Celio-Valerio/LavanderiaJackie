@@ -29,7 +29,11 @@ return new class extends Migration
             $table->date('acquisition_date'); // Fecha de adquisición
             $table->string('brand', 50); // Marca de la maquinaria
             $table->string('model', 50); // Modelo de la maquinaria
+            $table->unsignedBigInteger('proveedor_id'); // Referencia al proveedor
             $table->timestamps();
+
+            // Definir la relación con la tabla proveedores
+            $table->foreign('proveedor_id')->references('id')->on('proveedors')->onDelete('cascade');
         });
     }
 

@@ -141,19 +141,46 @@
         </div>
 
         <script>
-            
-            // Almacena los valores iniciales del formulario
-            const form = document.getElementById('proveedorForm');
-            const initialValues = new FormData(form);
+            // Función para capitalizar la primera letra y la letra después de un espacio
+            function capitalizeInput(input) {
+                let value = input.value.toLowerCase();
+                input.value = value.replace(/\b\w/g, function(char) {
+                    return char.toUpperCase();
+                });
+            }
 
-            document.getElementById('reloadButton').addEventListener('click', function() {
-                // Restaura los valores anteriores
-                for (const [key, value] of initialValues.entries()) {
-                    const input = form.querySelector(`[name="${key}"]`);
-                    if (input) {
-                        input.value = value; // Restaura el valor
-                    }
+            // Función para restringir la entrada de números y caracteres especiales
+            function restrictInput(e) {
+                let key = e.key;
+                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]*$/;
+
+                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                    e.preventDefault();
                 }
+            }
+
+            // Asignar eventos a los campos full_name
+            document.getElementById('full_name').addEventListener('input', function(e) {
+                capitalizeInput(e.target);
+            });
+
+            document.getElementById('full_name').addEventListener('keydown', function(e) {
+                restrictInput(e);
+            });
+
+            // Función para capitalizar la primera letra del input
+            function capitalizeFirstLetter(input) {
+                let value = input.value;
+                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+
+            // Asignar evento al campo Nombre de Empresa y Dirección para capitalizar la primera letra
+            document.getElementById('company_name').addEventListener('input', function(e) {
+                capitalizeFirstLetter(e.target);
+            });
+
+            document.getElementById('company_address').addEventListener('input', function(e) {
+                capitalizeFirstLetter(e.target);
             });
         </script>
 

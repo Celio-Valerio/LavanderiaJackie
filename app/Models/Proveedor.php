@@ -9,25 +9,28 @@ class Proveedor extends Model
 {
     use HasFactory;
 
-    // Cambia 'categorias' por 'proveedors'
     protected $table = 'proveedors';
 
-    // Especifica los campos que pueden ser asignados en masa (mass assignable)
     protected $fillable = [
-        'full_name',    // Nombre completo
-        'email',        // Correo Electrónico
-        'phone',        // Teléfono
-        'company_name', // Nombre de la empresa
-        'company_phone',// Teléfono de la empresa
-        'company_address', // Dirección
-        'city',         // Ciudad
-        'categoria_id'  // ID de la categoría asociada
+        'full_name',
+        'email',
+        'phone',
+        'company_name',
+        'company_phone',
+        'company_address',
+        'city',
+        'categoria_id'
     ];
 
-    // Relación con la tabla de categorias
+    // Relación con categorias
     public function categoria()
     {
         return $this->belongsTo(Categoria::class, 'categoria_id', 'id');
     }
-}
 
+    // Relación con maquinarias
+    public function maquinarias()
+    {
+        return $this->hasMany(Maquinaria::class, 'proveedor_id', 'id');
+    }
+}

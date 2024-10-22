@@ -21,6 +21,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2022-03-15',
                 'brand' => 'LG',
                 'model' => 'T1234',
+                'proveedor_id' => '1',
             ],
             [
                 'name' => 'Secadora de Prendas',
@@ -29,6 +30,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2021-06-20',
                 'brand' => 'Whirlpool',
                 'model' => 'S5678',
+                'proveedor_id' => '2',
             ],
             [
                 'name' => 'Planchadora de Vapor',
@@ -37,6 +39,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2023-01-10',
                 'brand' => 'Bosch',
                 'model' => 'P9101',
+                'proveedor_id' => '3',
             ],
             [
                 'name' => 'Extrusora de Detergente',
@@ -45,6 +48,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2020-12-05',
                 'brand' => 'Procter & Gamble',
                 'model' => 'E2345',
+                'proveedor_id' => '4',
             ],
             [
                 'name' => 'Lavadora de Carga Frontal',
@@ -53,6 +57,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2019-07-30',
                 'brand' => 'Samsung',
                 'model' => 'LF1234',
+                'proveedor_id' => '5',
             ],
             [
                 'name' => 'Secadora a Gas',
@@ -61,6 +66,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2021-09-12',
                 'brand' => 'Maytag',
                 'model' => 'SG5678',
+                'proveedor_id' => '6',
             ],
             [
                 'name' => 'Planchadora de Ropa',
@@ -69,6 +75,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2022-05-01',
                 'brand' => 'Rowenta',
                 'model' => 'PR9102',
+                'proveedor_id' => '7',
             ],
             [
                 'name' => 'Lavadora de Alta Eficiencia',
@@ -77,6 +84,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2023-03-18',
                 'brand' => 'Electrolux',
                 'model' => 'HE2345',
+                'proveedor_id' => '8',
             ],
             [
                 'name' => 'Centrifugadora',
@@ -85,6 +93,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2023-04-10',
                 'brand' => 'Fagor',
                 'model' => 'C9001',
+                'proveedor_id' => '1',
             ],
             [
                 'name' => 'Prensa de Ropa',
@@ -93,6 +102,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2022-11-05',
                 'brand' => 'Teka',
                 'model' => 'PR8901',
+                'proveedor_id' => '1',
             ],
             [
                 'name' => 'Desmanchadora',
@@ -101,6 +111,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2021-12-15',
                 'brand' => 'Kärcher',
                 'model' => 'D1000',
+                'proveedor_id' => '2',
             ],
             [
                 'name' => 'Máquina de Planchado',
@@ -109,6 +120,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2018-05-20',
                 'brand' => 'Philips',
                 'model' => 'P9500',
+                'proveedor_id' => '1',
             ],
             [
                 'name' => 'Máquina de Rociado',
@@ -117,6 +129,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2022-07-25',
                 'brand' => 'Graco',
                 'model' => 'G5000',
+                'proveedor_id' => '1',
             ],
             [
                 'name' => 'Cámara de Secado',
@@ -125,6 +138,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2023-02-18',
                 'brand' => 'Nordic',
                 'model' => 'CS600',
+                'proveedor_id' => '8',
             ],
             [
                 'name' => 'Máquina de Embalaje',
@@ -133,6 +147,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2021-08-30',
                 'brand' => 'PackTech',
                 'model' => 'PE1500',
+                'proveedor_id' => '2',
             ],
             [
                 'name' => 'Máquina de Doblado',
@@ -141,6 +156,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2023-05-05',
                 'brand' => 'Böhler',
                 'model' => 'D750',
+                'proveedor_id' => '2',
             ],
             [
                 'name' => 'Calandra',
@@ -149,6 +165,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2017-09-15',
                 'brand' => 'Draper',
                 'model' => 'C900',
+                'proveedor_id' => '2',
             ],
             [
                 'name' => 'Máquina de Hidrolavado',
@@ -157,6 +174,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2023-03-22',
                 'brand' => 'Kärcher',
                 'model' => 'HD150',
+                'proveedor_id' => '3',
             ],
             [
                 'name' => 'Máquina de Acabado',
@@ -165,6 +183,7 @@ class MaquinariaSeeder extends Seeder
                 'acquisition_date' => '2022-10-05',
                 'brand' => 'Rema',
                 'model' => 'AC320',
+                'proveedor_id' => '1',
             ],
         ];
 

@@ -19,6 +19,12 @@ class ClienteController extends Controller
         return view('primary.clientes.cliente_index', compact('clientes'));
     }
 
+    public function reload($id)
+    {
+        $cliente = Cliente::findOrFail($id);
+        return response()->json($cliente);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -102,8 +108,18 @@ class ClienteController extends Controller
         ]);
 
         // Guardar cliente en la base de datos
-        $cliente = Cliente::create($request->all());
-        return redirect()->route('clientes.index')->with('success', 'El cliente ' . $cliente->first_name . '  ' . $cliente->last_name. ' ha sido registrado exitosamente.');
+        $cliente = new Cliente();
+        $cliente->first_name = $request->first_name;
+        $cliente->last_name = $request->last_name;
+        $cliente->email = $request->email;
+        $cliente->phone = $request->phone;
+        $cliente->address = $request->address;
+        $cliente->type = $request->type;  // Asignar el tipo de cliente
+        $cliente->save();
+
+        $nombresCliente = $request-> first_name;
+        $apellidosCliente = $request-> last_name;
+        return redirect()->route('clientes.index')->with('success', 'El cliente ' .$nombresCliente . ' ' . $apellidosCliente . ' ha sido registrado exitosamente.');
     }
 
     /**

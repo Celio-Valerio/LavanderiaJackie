@@ -111,7 +111,7 @@ class MantenimientoController extends Controller
         $maquinarias = Maquinaria::all();
 
         // Retornar una vista con el formulario de edición
-        return view('primary.mantenimientos.mantenimiento_edit', compact('mantenimiento', 'maquinarias'));
+        return view('primary.mantenimientos.mantenimiento_update', compact('mantenimiento', 'maquinarias'));
     }
 
     /**

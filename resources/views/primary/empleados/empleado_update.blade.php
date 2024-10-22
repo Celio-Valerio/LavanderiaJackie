@@ -50,7 +50,8 @@
                                     <select name="puesto_id" class="form-select @error('puesto_id') is-invalid @enderror" id="puesto_id" required>
                                         <option value="">Selecciona un puesto</option>
                                         @foreach($puestos as $puesto)
-                                            <option value="{{ $puesto->id }}" {{ (old('puesto_id') == $puesto->id || $empleado->puesto_id == $puesto->id) ? 'selected' : '' }}>
+                                            <option value="{{ $puesto->id }}"
+                                                {{ old('puesto_id', $empleado->puesto_id) == $puesto->id ? 'selected' : '' }}>
                                                 {{ $puesto->name }}
                                             </option>
                                         @endforeach
@@ -61,41 +62,7 @@
                                 </div>
                             </div>
 
-
                             <div class="row mb-3">
-                                <!-- Campo de Identidad -->
-                                <div class="col-md-3">
-                                    <label for="identity" class="form-label">Identidad</label>
-                                    <input type="text" name="identity" class="form-control @error('identity') is-invalid @enderror" id="identity" value="{{ old('identity', $empleado->identity) }}" placeholder="Ej: 0801199012345" maxlength="13" required>
-                                    @error('identity')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                    
-                            <!-- Numero de Emergencia -->
-                            <div class="row mb-3">
-                                <div class="col-md-3">
-                                    <label for="emergency_number" class="form-label">Número de Emergencia</label>
-                                    <input type="text" name="emergency_number" class="form-control @error('emergency_number') is-invalid @enderror" id="emergency_number" value="{{ old('emergency_number', $empleado->emergency_number) }}" placeholder="Ej: 90123456" maxlength="8" required pattern="^\d{8}$">
-                                    @error('emergency_number')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="emergency_contact_name" class="form-label">Nombre del Contacto de Emergencia</label>
-                                <input type="text" name="emergency_contact_name" class="form-control @error('emergency_contact_name') is-invalid @enderror" id="emergency_contact_name" value="{{ old('emergency_contact_name', $empleado->emergency_contact_name) }}" placeholder="Ej: Juan Pérez" maxlength="50" required>
-                                @error('emergency_contact_name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            </div>
-
-
-                            <div class="row mb-3">          
                                 <!-- Campo de Teléfono -->
                                 <div class="col-md-3">
                                     <label for="phone" class="form-label">Teléfono</label>
@@ -114,10 +81,10 @@
                                     @enderror
                                 </div>
 
-                                 <!-- Campo de Salario -->
-                                 <div class="col-md-3">
+                                <!-- Campo de Salario -->
+                                <div class="col-md-3">
                                     <label for="salary" class="form-label">Salario</label>
-                                    <input type="text" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary') }}" placeholder="Ej: 2000" pattern="^\d{1,5}$" maxlength="5" required>
+                                    <input type="number" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary', $empleado->salary) }}" placeholder="Ej: 2000" min="1500" max="5000" step="0.01" required>
                                     @error('salary')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -165,10 +132,6 @@
                 }
             }
 
-            // Almacena los valores iniciales del formulario
-            const form = document.getElementById('empleadoForm');
-            let initialValues = new FormData(form);
-
             // Asignar eventos a los campos first_name y last_name
             document.getElementById('first_name').addEventListener('input', function(e) {
                 capitalizeInput(e.target);
@@ -185,18 +148,6 @@
             document.getElementById('last_name').addEventListener('keydown', function(e) {
                 restrictInput(e);
             });
-
-            document.getElementById('reloadButton').addEventListener('click', function() {
-                // Restaura los valores anteriores
-                for (const [key, value] of initialValues.entries()) {
-                    const input = form.querySelector(`[name="${key}"]`);
-                    if (input) {
-                        input.value = value; // Restaura el valor
-                    }
-                }
-                // Reiniciar la validación de los campos
-                form.classList.remove('was-validated');
-            }); // Cierre de la función corregido
         </script>
 
         <script>
@@ -244,9 +195,9 @@
                         // Actualizar el select de puesto
                         const puestoSelect = document.getElementById('puesto_id');
                         puestoSelect.value = data.puesto_id; // Asignar el valor actual del puesto/categoría
-                    });
+                    })
             });
         </script>
-    </section>
 
+    </section>
 @endsection

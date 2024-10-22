@@ -21,9 +21,6 @@ return new class extends Migration
             $table->unsignedBigInteger('puesto_id'); // Referencia a la tabla puestos
             $table->date('hire_date'); // Fecha de Ingreso
             $table->decimal('salary', 10, 2); // Salario
-            $table->string('identity', 13)->nullable()->unique(); // Identidad
-            $table->string('emergency_number', 8)->nullable()->unique(); // Número de emergencia
-            $table->string('emergency_contact_name', 100); // Nombre del contacto de emergencia
 
             // Definir la relación con la tabla puestos
             $table->foreign('puesto_id')->references('id')->on('puestos')->onDelete('cascade');
@@ -35,10 +32,7 @@ return new class extends Migration
      * Reverse the migrations.
      */
     public function down(): void
-    
     {
         Schema::dropIfExists('empleados');
-        
     }
 };
-
