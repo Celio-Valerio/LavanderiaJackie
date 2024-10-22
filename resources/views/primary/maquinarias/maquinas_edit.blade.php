@@ -10,7 +10,7 @@
                         <h1 class="card-title" style="font-size: 30px !important;">Actualizar Máquina</h1>
                         <hr>
                         <!-- Inicio del formulario -->
-                        <form id="maquinaForm" action="{{ route('maquinas.update', $maquina->id) }}" method="POST">
+                        <form id="maquinaForm" action="{{ route('maquinas.update', $maquina->id) }}" method="POST" novalidate>
                             @csrf
                             @method('PUT') <!-- Enviar método PUT para la actualización -->
 
@@ -44,49 +44,19 @@
                                     @enderror
                                 </div>
 
-                              
+                                <!-- Campo de Año de Compra -->
+                                <div class="col-md-6">
+                                    <label for="anio_compra" class="form-label">Año de Compra</label>
+                                    <input type="number" name="anio_compra" class="form-control @error('anio_compra') is-invalid @enderror" id="anio_compra" value="{{ old('anio_compra', $maquina->anio_compra) }}" min="1900" max="{{ date('Y') }}" required maxlength="4" oninput="this.value = this.value.slice(0, 4);">
+                                    @error('anio_compra')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
 
                             <div class="row mb-3">
-                                <!-- Campo de Capacidad -->
-                                <div class="col-md-6">
-                                    <label for="capacidad" class="form-label">Capacidad</label>
-                                    <input type="text" name="capacidad" class="form-control @error('capacidad') is-invalid @enderror" id="capacidad" value="{{ old('capacidad', $maquina->capacidad) }}" placeholder="Ej: 5 toneladas" maxlength="50" required>
-                                    @error('capacidad')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Campo de Proveedor -->
-                                <div class="col-md-6">
-                                    <label for="proveedor" class="form-label">Proveedor</label>
-                                    <input type="text" name="proveedor" class="form-control @error('proveedor') is-invalid @enderror" id="proveedor" value="{{ old('proveedor', $maquina->proveedor) }}" placeholder="Ej: Empresa XYZ" maxlength="100" required>
-                                    @error('proveedor')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                           
-
-                                <!-- Campo de Estado -->
-                                <div class="col-md-6">
-                                    <label for="estado" class="form-label">Estado</label>
-                                    <select name="estado" class="form-select @error('estado') is-invalid @enderror" id="estado" required>
-                                        <option value="">Seleccione un estado</option>
-                                        <option value="Activo" {{ old('estado', $maquina->estado) == 'Activo' ? 'selected' : '' }}>Activo</option>
-                                        <option value="Inactivo" {{ old('estado', $maquina->estado) == 'Inactivo' ? 'selected' : '' }}>Inactivo</option>
-                                        <option value="En mantenimiento" {{ old('estado', $maquina->estado) == 'En mantenimiento' ? 'selected' : '' }}>En mantenimiento</option>
-                                    </select>
-                                    @error('estado')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                           
-
                                 <!-- Campo de Descripción -->
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label for="descripcion" class="form-label">Descripción</label>
                                     <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Ej: Máquina para construcción" maxlength="500" rows="3">{{ old('descripcion', $maquina->descripcion) }}</textarea>
                                     @error('descripcion')
@@ -121,20 +91,12 @@
             const form = document.getElementById('maquinaForm');
             let initialValues = new FormData(form);
 
-            // Asignar eventos a los campos nombre, modelo, marca y proveedor
+            // Asignar eventos a los campos nombre y modelo
             document.getElementById('nombre').addEventListener('input', function(e) {
                 capitalizeInput(e.target);
             });
 
             document.getElementById('modelo').addEventListener('input', function(e) {
-                capitalizeInput(e.target);
-            });
-
-            document.getElementById('marca').addEventListener('input', function(e) {
-                capitalizeInput(e.target);
-            });
-
-            document.getElementById('proveedor').addEventListener('input', function(e) {
                 capitalizeInput(e.target);
             });
 
