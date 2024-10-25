@@ -34,12 +34,12 @@
                             <tbody>
                             @forelse($clientes as $cliente)
                                 <tr>
-                                    <td class="row-index"></td>
+                                    <td class="row-index small-text-field"></td>
 
-                                    <td>{{ $cliente->first_name }}</td>
-                                    <td>{{ $cliente->last_name }}</td>
-                                    <td>{{ $cliente->phone }}</td>
-                                    <td>
+                                    <td class="small-text-field" >{{ $cliente->first_name }}</td>
+                                    <td class="small-text-field" >{{ $cliente->last_name }}</td>
+                                    <td class="small-text-field" >{{ $cliente->phone }}</td>
+                                    <td class="small-text-field" >
                                         @if ($cliente->type === 'Credito')
                                             <span class="badge bg-danger">Crédito</span>
                                         @else

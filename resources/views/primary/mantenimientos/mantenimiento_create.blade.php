@@ -39,7 +39,6 @@
                                         <option value="">Selecciona un tipo</option>
                                         <option value="Preventivo" {{ old('maintenance_type') == 'Preventivo' ? 'selected' : '' }}>Preventivo</option>
                                         <option value="Correctivo" {{ old('maintenance_type') == 'Correctivo' ? 'selected' : '' }}>Correctivo</option>
-                                        <option value="Predictivo" {{ old('maintenance_type') == 'Predictivo' ? 'selected' : '' }}>Predictivo</option>
                                         <option value="Emergencia" {{ old('maintenance_type') == 'Emergencia' ? 'selected' : '' }}>Emergencia</option>
                                     </select>
                                     @error('maintenance_type')
@@ -52,7 +51,7 @@
                                 <!-- Campo de Precio -->
                                 <div class="col-md-6">
                                     <label for="price" class="form-label">Precio (Lempiras)</label>
-                                    <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 1000.00" step="0.01" required>
+                                    <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 2000" min="1" max="100000" step="0.01" required>
                                     @error('price')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -94,6 +93,22 @@
         </div>
 
         <script>
+            // Función para obtener la fecha actual en formato 'YYYY-MM-DD'
+            function getCurrentDate() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = ('0' + (today.getMonth() + 1)).slice(-2); // Añade un cero si es necesario
+                const day = ('0' + today.getDate()).slice(-2); // Añade un cero si es necesario
+                return `${year}-${month}-${day}`;
+            }
+
+            // Establecer la fecha actual al cargar la página
+            document.addEventListener('DOMContentLoaded', function() {
+                document.getElementById('date').value = getCurrentDate();
+            });
+        </script>
+
+        <script>
             // Función para limpiar el formulario
             document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('mantenimientoForm');
@@ -107,11 +122,17 @@
                     element.classList.remove('is-invalid');
                 });
 
-                // Limpiar el select de categoría
+                // Limpiar el select de maquinaria
                 document.getElementById('maquinaria_id').selectedIndex = 0;
 
-                // Limpiar el select de ciudad
+                // Limpiar el select de tipo de mantenimiento
                 document.getElementById('maintenance_type').selectedIndex = 0;
+
+                // Limpiar el campo de descripción
+                document.getElementById('description').value = '';
+
+                // Limpiar el campo de fecha
+                document.getElementById('date').value = '';
 
                 const invalidFeedbacks = form.querySelectorAll('.invalid-feedback');
                 invalidFeedbacks.forEach(function (feedback) {
@@ -119,6 +140,5 @@
                 });
             });
         </script>
-
     </section>
 @endsection

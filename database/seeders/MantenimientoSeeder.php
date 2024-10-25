@@ -39,7 +39,7 @@ class MantenimientoSeeder extends Seeder
             [
                 'date' => '2023-07-30',
                 'maquinaria_id' => 4, // ID de la Extrusora de Detergente
-                'maintenance_type' => 'Predictivo',
+                'maintenance_type' => 'Emergencia',
                 'description' => 'Inspección de rutina para detectar desgastes.',
                 'price' => 90.00,
             ],

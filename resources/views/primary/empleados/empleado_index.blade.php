@@ -25,22 +25,22 @@
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
-                                <th style="width: 25%;">Nombre</th>
-                                <th style="width: 25%;">Apellido</th>
+                                <th style="width: 20%;">Nombre</th>
+                                <th style="width: 20%;">Apellido</th>
                                 <th style="width: 10%;">Teléfono</th>
-                                <th style="width: 15%;">Puesto</th>
+                                <th style="width: 25%;">Puesto</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
                             @forelse($empleados as $empleado)
                                 <tr>
-                                    <td class="row-index"></td>
-                                    <td>{{ $empleado->first_name }}</td>
-                                    <td>{{ $empleado->last_name }}</td>
-                                    <td>{{ $empleado->phone }}</td>
-                                    <td>{{ $empleado->puesto->name }}</td>
-                                    <td class="text-center">
+                                    <td class="row-index small-text-field" ></td>
+                                    <td class="small-text-field" >{{ $empleado->first_name }}</td>
+                                    <td class="small-text-field" >{{ $empleado->last_name }}</td>
+                                    <td class="small-text-field" >{{ $empleado->phone }}</td>
+                                    <td class="small-text-field" >{{ $empleado->puesto->name }}</td>
+                                    <td class="text-center small-text-field">
                                         <a href="{{ route('empleados.show', $empleado->id) }}" class="btn btn-info btn-sm">Ver</a>
                                         <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                     </td>

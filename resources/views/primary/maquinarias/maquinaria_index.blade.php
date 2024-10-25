@@ -1,5 +1,5 @@
 @extends('layouts.principal')
-@section('title', 'Lista de Maquinarias')
+@section('title', 'Lista de Maquinaria')
 @section('content')
 
     <style>
@@ -18,7 +18,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Maquinarias</h1>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Maquinaria</h1>
                             <!-- Botón agregar maquinaria -->
                             <a href="{{ route('maquinarias.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Maquinaria</a>
                         </div>
@@ -99,9 +99,9 @@
                         "sLengthMenu": "Mostrar _MENU_ maquinarias",
                         "sZeroRecords": "No se encontraron resultados",
                         "sEmptyTable": "Ninguna maquinaria disponible en esta tabla",
-                        "sInfo": "Se muestran las maquinarias del _START_ al _END_ de _TOTAL_.",
+                        "sInfo": "Se muestran las maquinas del _START_ al _END_ de _TOTAL_.",
                         "sInfoEmpty": "No hay resultados ",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ maquinarias)",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ maquinas)",
                         "sSearch": "",
                         "oPaginate": {
                             "sFirst": "Primero",

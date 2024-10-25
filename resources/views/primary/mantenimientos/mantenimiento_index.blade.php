@@ -35,10 +35,10 @@
                             <tbody>
                             @forelse($mantenimientos as $mantenimiento)
                                 <tr>
-                                    <td class="row-index"></td>
-                                    <td>{{ ucfirst(\Carbon\Carbon::parse($mantenimiento->date)->translatedFormat('l d \d\e F, Y')) }}</td>
-                                    <td>{{ $mantenimiento->maquinaria->name }}</td>
-                                    <td>
+                                    <td class="row-index small-text-field"></td>
+                                    <td class="small-text-field">{{ ucfirst(\Carbon\Carbon::parse($mantenimiento->date)->translatedFormat('l, d \d\e F, Y')) }}</td>
+                                    <td class="small-text-field">{{ $mantenimiento->maquinaria->name }}</td>
+                                    <td class="small-text-field">
                                         @if($mantenimiento->maintenance_type == 'Emergencia')
                                             <span class="badge bg-danger">{{ $mantenimiento->maintenance_type }}</span>
                                         @elseif($mantenimiento->maintenance_type == 'Preventivo')
@@ -49,10 +49,10 @@
                                             <span class="badge bg-secondary">{{ $mantenimiento->maintenance_type }}</span>
                                         @endif
                                     </td>
-                                    <td>L. {{ number_format($mantenimiento->price, 2) }}</td>
-                                    <td class="text-center">
+                                    <td class="small-text-field">L. {{ number_format($mantenimiento->price, 2) }}</td>
+                                    <td class="text-center small-text-field">
                                         <a href="{{ route('mantenimientos.show', $mantenimiento->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('mantenimientos.edit', $mantenimiento->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{{ route('mantenimientos.update', $mantenimiento->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                     </td>
                                 </tr>
                             @empty

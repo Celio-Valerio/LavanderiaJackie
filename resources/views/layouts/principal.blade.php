@@ -40,6 +40,10 @@
             font-family: 'Roboto', sans-serif; /* Cambia la fuente de todo el body */
         }
 
+        .small-text-field {
+            font-size: 14px; /* Ajusta el tamaño según tus preferencias */
+        }
+
         #clientesTable {
             font-size: 0.9rem; /* Tamaño de fuente más pequeño */
         }

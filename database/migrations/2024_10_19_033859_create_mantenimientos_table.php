@@ -19,7 +19,6 @@ return new class extends Migration
             $table->enum('maintenance_type', [
                 'Preventivo',
                 'Correctivo',
-                'Predictivo',
                 'Emergencia'
             ]); // Tipo de mantenimiento
             $table->text('description'); // Descripción del mantenimiento

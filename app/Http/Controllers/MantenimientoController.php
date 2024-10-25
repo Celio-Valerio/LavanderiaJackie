@@ -49,14 +49,15 @@ class MantenimientoController extends Controller
                 'in:Preventivo,Correctivo,Predictivo,Emergencia', // Solo permite estos tipos de mantenimiento
             ],
             'description' => [
-                'nullable',
+                'required',
                 'string', // Permite que sea una cadena
                 'max:500', // Limita la longitud máxima
             ],
             'price' => [
                 'required',
                 'numeric', // Verifica que sea un número
-                'min:0', // Asegura que el precio no sea negativo
+                'min:1', // Asegura que el precio no sea negativo
+                'max:100000', // Asegura que el precio no sea negativo
             ],
         ], [
             'date.required' => 'La fecha del mantenimiento es obligatoria.',
@@ -69,10 +70,12 @@ class MantenimientoController extends Controller
 
             'description.string' => 'La descripción debe ser una cadena de texto válida.',
             'description.max' => 'La descripción no puede exceder los 500 caracteres.',
+            'description.required' => 'La descripción es obligatoria.',
 
             'price.required' => 'El precio es obligatorio.',
             'price.numeric' => 'El precio debe ser un número válido.',
-            'price.min' => 'El precio no puede ser negativo.',
+            'price.min' => 'El precio debe estar entre L. 1.00 y L. 100,000.00.',
+            'price.max' => 'El precio debe estar entre L. 1.00 y L. 100,000.00.',
         ]);
 
         // Guardar mantenimiento en la base de datos
@@ -134,14 +137,15 @@ class MantenimientoController extends Controller
                 'in:Preventivo,Correctivo,Predictivo,Emergencia', // Opciones en español
             ],
             'description' => [
-                'nullable',
+                'required',
                 'string',
                 'max:500', // Puedes ajustar el tamaño máximo según lo necesites
             ],
             'price' => [
                 'required',
                 'numeric',
-                'min:0', // El precio debe ser un número positivo
+                'min:1',
+                'max:100000',
             ],
         ], [
             'date.required' => 'La fecha del mantenimiento es obligatoria.',
@@ -154,10 +158,12 @@ class MantenimientoController extends Controller
 
             'description.string' => 'La descripción debe ser una cadena de texto válida.',
             'description.max' => 'La descripción no puede exceder los 500 caracteres.',
+            'description.required' => 'La descripción es obligatoria.',
 
             'price.required' => 'El precio es obligatorio.',
             'price.numeric' => 'El precio debe ser un número válido.',
-            'price.min' => 'El precio no puede ser negativo.',
+            'price.min' => 'El precio debe estar entre L. 1.00 y L. 100,000.00.',
+            'price.max' => 'El precio debe estar entre L. 1.00 y L. 100,000.00.',
         ]);
 
         // Buscar el mantenimiento en la base de datos
