@@ -34,11 +34,11 @@
                             <tbody>
                             @forelse($proveedores as $proveedor)
                                 <tr>
-                                    <td class="row-index"></td>
-                                    <td><b>{{ $proveedor->full_name }}</b> ({{ $proveedor->city }})</td>
-                                    <td>{{ $proveedor->phone }}</td>
-                                    <td>{{ $proveedor->company_name }}</td>
-                                    <td class="text-center">
+                                    <td class="row-index small-text-field"></td>
+                                    <td class="small-text-field"><b>{{ $proveedor->full_name }}</b> ({{ $proveedor->city }})</td>
+                                    <td class="small-text-field">{{ $proveedor->phone }}</td>
+                                    <td class="small-text-field">{{ $proveedor->company_name }}</td>
+                                    <td class="text-center small-text-field">
                                         <a href="{{ route('proveedores.show', $proveedor->id) }}" class="btn btn-info btn-sm">Ver</a>
                                         <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                     </td>

@@ -94,7 +94,7 @@ class ClienteController extends Controller
             'email.regex' => 'Debes ingresar una dirección de correo electrónico correcta.',
 
             'phone.required' => 'El número de teléfono es obligatorio.',
-            'phone.digits' => 'El número de teléfono debe tener exactamente 8 dígitos.',
+            'phone.digits' => 'El número de teléfono debe tener exactamente 8 dígitos númericos.',
             'phone.regex' => 'El número de teléfono debe empezar con 2, 3, 8 o 9.',
             'phone.unique' => 'El número de teléfono ya está en uso.',
 
@@ -209,7 +209,7 @@ class ClienteController extends Controller
             'email.regex' => 'Debes ingresar una dirección de correo electrónico correcta.',
 
             'phone.required' => 'El número de teléfono es obligatorio.',
-            'phone.digits' => 'El número de teléfono debe tener exactamente 8 dígitos.',
+            'phone.digits' => 'El número de teléfono debe tener exactamente 8 dígitos númericos.',
             'phone.regex' => 'El número de teléfono debe empezar con 2, 3, 8 o 9.',
             'phone.unique' => 'El número de teléfono ya está en uso.',
 

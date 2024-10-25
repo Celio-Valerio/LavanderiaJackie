@@ -16,59 +16,57 @@
                             @method('PUT')
 
                             <div class="row mb-3">
-                                <!-- Campo de Nombre del Proveedor -->
-                                <div class="col-md-9">
-                                    <label for="full_name" class="form-label">Nombre del Proveedor</label>
-                                    <input type="text" name="full_name" class="form-control @error('full_name') is-invalid @enderror" id="full_name" value="{{ old('full_name', $proveedor->full_name) }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
-                                    @error('full_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Campo de Teléfono -->
-                                <div class="col-md-3">
-                                    <label for="phone" class="form-label">Teléfono</label>
-                                    <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone', $proveedor->phone) }}" placeholder="Ej: 90123456" maxlength="8" required>
-                                    @error('phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
                                 <!-- Campo de Nombre de la Empresa -->
-                                <div class="col-md-9">
+                                <div class="col-md-4">
                                     <label for="company_name" class="form-label">Nombre de la Empresa</label>
-                                    <input type="text" name="company_name" class="form-control @error('company_name') is-invalid @enderror" id="company_name" value="{{ old('company_name', $proveedor->company_name) }}" placeholder="Ej: Proveedor S.A." maxlength="100" required>
+                                    <input type="text" name="company_name" class="form-control small-text-field @error('company_name') is-invalid @enderror" id="company_name" value="{{ old('company_name', $proveedor->company_name) }}" placeholder="Ej: Proveedor S.A." maxlength="100" required>
                                     @error('company_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <!-- Campo de Teléfono de la Empresa -->
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <label for="company_phone" class="form-label">Teléfono de la Empresa</label>
-                                    <input type="text" name="company_phone" class="form-control @error('company_phone') is-invalid @enderror" id="company_phone" value="{{ old('company_phone', $proveedor->company_phone) }}" placeholder="Ej: 90123498" maxlength="8" required>
+                                    <input type="text" name="company_phone" class="form-control small-text-field @error('company_phone') is-invalid @enderror" id="company_phone" value="{{ old('company_phone', $proveedor->company_phone) }}" placeholder="Ej: 90123498" maxlength="8" required>
                                     @error('company_phone')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Campo de Email -->
+                                <div class="col-md-4">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" name="email" class="form-control small-text-field @error('email') is-invalid @enderror" id="email" value="{{ old('email', $proveedor->email) }}" placeholder="Ej: proveedor@empresa.com" maxlength="50">
+                                    @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <!-- Campo de Email -->
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Correo Electrónico</label>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email', $proveedor->email) }}" placeholder="Ej: proveedor@empresa.com" maxlength="50">
-                                    @error('email')
+                                <!-- Campo de Nombre del Proveedor -->
+                                <div class="col-md-4">
+                                    <label for="full_name" class="form-label">Nombre del Vendedor</label>
+                                    <input type="text" name="full_name" class="form-control small-text-field @error('full_name') is-invalid @enderror" id="full_name" value="{{ old('full_name', $proveedor->full_name) }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
+                                    @error('full_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Campo de Teléfono -->
+                                <div class="col-md-4">
+                                    <label for="phone" class="form-label">Teléfono</label>
+                                    <input type="text" name="phone" class="form-control small-text-field @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone', $proveedor->phone) }}" placeholder="Ej: 90123456" maxlength="8" required>
+                                    @error('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                                 <!-- Campo de Categoría -->
-                                <div class="col-md-3">
-                                    <label for="categoria_id" class="form-label">Categoría (Insumo)</label>
-                                    <select name="categoria_id" class="form-select @error('categoria_id') is-invalid @enderror" id="categoria_id" required>
+                                <div class="col-md-4">
+                                    <label for="categoria_id" class="form-label">Categoría</label>
+                                    <select name="categoria_id" class="form-select small-text-field @error('categoria_id') is-invalid @enderror" id="categoria_id" required>
                                         <option value="">Selecciona una categoría</option>
                                         @foreach($categorias as $categoria)
                                             <option value="{{ $categoria->id }}"
@@ -81,31 +79,26 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
 
+                            <div class="row mb-3">
                                 <!-- Campo de Ciudad -->
                                     <?php
-                                        $municipios = [
-                                            "Danlí", "Tegucigalpa", "San Pedro Sula", "Comayagua", "Cortes", "La Ceiba", "Choluteca",
-                                            "Santa Rosa de Copán", "Gracias", "Juticalpa", "Puerto Cortes", "La Esperanza", "Olancho",
-                                            "Tocoa", "Nacaome", "Guaimaca", "Tegucigalpita", "Intibucá", "Pespire", "Colón",
-                                            "El Paraíso", "La Libertad", "San Lorenzo", "Siguatepeque", "Lempira", "Marcala",
-                                            "Ocotepeque", "Santa Bárbara", "Valle", "Yoro", "La Paz", "Camasca", "Campamento",
-                                            "San Antonio de Flores", "Santa Cruz de Yojoa", "La Paz", "San Manuel de Colohete",
-                                            "Potrerillos", "El Porvenir", "Quebrada de Agua", "El Negrito", "Talgua", "Tocoa",
-                                            "Manto", "El Paraíso", "San Miguelito", "Cerro Verde", "San Antonio", "San Ignacio",
-                                            "Yoro", "Pueblo Nuevo", "Tocoa", "Pespire", "La Fortuna", "La Masica", "Santa Rosa",
-                                            // (continúa hasta completar los 298 municipios)
+                                        $departamentos = [
+                                            "Atlántida", "Colón", "Comayagua", "Copán", "Cortés", "Choluteca", "El Paraíso", "Francisco Morazán",
+                                            "Gracias a Dios", "Intibucá", "Islas de la Bahía", "La Paz", "Lempira", "Ocotepeque", "Olancho", "Santa Bárbara",
+                                            "Valle", "Yoro"
                                         ];
                                     ?>
 
                                     <!-- Campo de Ciudad -->
-                                    <div class="col-md-3">
-                                    <label for="city" class="form-label">Ciudad</label>
-                                    <select name="city" class="form-select @error('city') is-invalid @enderror" id="city" required>
-                                        <option value="">Selecciona una ciudad</option>
-                                        @foreach($municipios as $municipio)
-                                            <option value="{{ $municipio }}" {{ old('city', $proveedor->city) == $municipio ? 'selected' : '' }}>
-                                                {{ $municipio }}
+                                    <div class="col-md-4">
+                                    <label for="city" class="form-label">Departamento</label>
+                                    <select name="city" class="form-select small-text-field @error('city') is-invalid @enderror" id="city" required>
+                                        <option value="">Selecciona un departamento</option>
+                                        @foreach($departamentos as $departamento)
+                                            <option value="{{ $departamento }}" {{ old('city', $proveedor->city) == $departamento ? 'selected' : '' }}>
+                                                {{ $departamento }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -120,7 +113,7 @@
                             <!-- Campo de Dirección -->
                             <div class="mb-3">
                                 <label for="company_address" class="form-label">Dirección</label>
-                                <textarea name="company_address" class="form-control @error('company_address') is-invalid @enderror" id="company_address" placeholder="Ej: Calle Principal 123" maxlength="500" rows="3">{{ old('company_address', $proveedor->company_address) }}</textarea>
+                                <textarea name="company_address" class="form-control small-text-field @error('company_address') is-invalid @enderror" id="company_address" placeholder="Ej: Calle Principal 123" maxlength="500" rows="3">{{ old('company_address', $proveedor->company_address) }}</textarea>
                                 @error('company_address')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

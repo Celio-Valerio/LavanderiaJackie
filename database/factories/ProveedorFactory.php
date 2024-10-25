@@ -23,8 +23,8 @@ class ProveedorFactory extends Factory
             'company_name' => $this->faker->company . ' ' . $this->faker->randomElement(['SA', 'S de RL']),  // Nombre de la empresa con SA o S de RL
             'company_phone' => $this->faker->numberBetween(2, 9) . $this->faker->numerify('#######'),  // Teléfono de la empresa
             'company_address' => $this->faker->address,  // Dirección de la empresa
-            'city' => $this->faker->randomElement(['Danlí', 'Comayagua', 'San Pedro Sula', 'La Esperanza', 'Tegucigalpa']), // Seleccionar ciudad aleatoria
-            'categoria_id' => $this->faker->numberBetween(1, 8), // Referencia a un puesto aleatorio
+            'city' => $this->faker->randomElement(['El Paraíso', 'Comayagua', 'Intibuca', 'Francisco Morazán', 'Cortés']), // Seleccionar ciudad aleatoria
+            'categoria_id' => $this->faker->numberBetween(1, 3), // Referencia a un puesto aleatorio
         ];
     }
 }
