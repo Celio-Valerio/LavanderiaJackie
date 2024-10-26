@@ -70,7 +70,7 @@
                             <!-- Dirección del Proveedor (varias filas si es necesario) -->
                             <div class="col-md-12">
                                 <label class="form-label"><strong>Dirección:</strong></label>
-                                <p class="small-text-field">{{ $proveedor->company_address }}, {{ $proveedor->city }}.</p>
+                                <p class="small-text-field">{{ $proveedor->company_address }}.</p>
                             </div>
                         </div>
 
