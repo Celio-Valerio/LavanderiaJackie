@@ -8,7 +8,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Actualizar Cliente</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Actualizar cliente</h1>
                         <hr>
                         <!-- Inicio del formulario -->
                         <form id="clienteForm" action="{{ route('clientes.update', $cliente->id) }}" method="POST" novalidate>

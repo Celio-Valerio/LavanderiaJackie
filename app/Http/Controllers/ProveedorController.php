@@ -97,15 +97,15 @@ class ProveedorController extends Controller
             'email.unique' => 'El correo electrónico ya está en uso.',
 
             'phone.required' => 'El teléfono del vendedor es obligatorio.',
-            'phone.digits' => 'El número de teléfono debe tener exactamente 8 dígitos númericos.',
-            'phone.regex' => 'El número de teléfono debe empezar con 2, 3, 8 o 9.',
-            'phone.unique' => 'El número de teléfono ya está en uso.',
+            'phone.digits' => 'El número de teléfono del vendedor debe tener 8 números.',
+            'phone.regex' => 'El número de teléfono del vendedor debe empezar con 2, 3, 8 o 9.',
+            'phone.unique' => 'El número de teléfono del vendedor ya está en uso.',
 
             'company_name.required' => 'El nombre de la empresa es obligatorio.',
             'company_name.regex' => 'El nombre de la empresa puede contener hasta 6 palabras.',
 
             'company_phone.required' => 'El teléfono de la empresa es obligatorio.',
-            'company_phone.digits' => 'El número de teléfono de la empresa debe tener exactamente 8 dígitos númericos.',
+            'company_phone.digits' => 'El número de teléfono de la empresa debe tener 8 números.',
             'company_phone.regex' => 'El número de teléfono de la empresa debe empezar con 2, 3, 8 o 9.',
             'company_phone.unique' => 'El número de teléfono de la empresa ya está en uso.',
 
@@ -222,15 +222,15 @@ class ProveedorController extends Controller
             'email.unique' => 'El correo electrónico ya está en uso.',
 
             'phone.required' => 'El teléfono del vendedor es obligatorio.',
-            'phone.digits' => 'El número de teléfono debe tener exactamente 8 dígitos númericos.',
-            'phone.regex' => 'El número de teléfono debe empezar con 2, 3, 8 o 9.',
-            'phone.unique' => 'El número de teléfono ya está en uso.',
+            'phone.digits' => 'El número de teléfono del vendedor debe tener 8 números.',
+            'phone.regex' => 'El número de teléfono del vendedor debe empezar con 2, 3, 8 o 9.',
+            'phone.unique' => 'El número de teléfono del vendedor ya está en uso.',
 
             'company_name.required' => 'El nombre de la empresa es obligatorio.',
             'company_name.regex' => 'El nombre de la empresa puede contener hasta 6.',
 
             'company_phone.required' => 'El teléfono de la empresa es obligatorio.',
-            'company_phone.digits' => 'El número de teléfono de la empresa debe tener exactamente 8 dígitos númericos.',
+            'company_phone.digits' => 'El número de teléfono de la empresa debe tener 8 números.',
             'company_phone.regex' => 'El número de teléfono de la empresa debe empezar con 2, 3, 8 o 9.',
             'company_phone.unique' => 'El número de teléfono de la empresa ya está en uso.',
 

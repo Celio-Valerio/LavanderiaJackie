@@ -8,7 +8,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Actualizar Proveedor</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Actualizar proveedor</h1>
                         <hr>
                         <!-- Inicio del formulario -->
                         <form id="proveedorForm" action="{{ route('proveedores.update', $proveedor->id) }}" method="POST" novalidate>
@@ -18,7 +18,7 @@
                             <div class="row mb-3">
                                 <!-- Campo de Nombre de la Empresa -->
                                 <div class="col-md-4">
-                                    <label for="company_name" class="form-label">Nombre de la Empresa</label>
+                                    <label for="company_name" class="form-label">Nombre de la empresa</label>
                                     <input type="text" name="company_name" class="form-control small-text-field @error('company_name') is-invalid @enderror" id="company_name" value="{{ old('company_name', $proveedor->company_name) }}" placeholder="Ej: Proveedor S.A." maxlength="100" required>
                                     @error('company_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -27,7 +27,7 @@
 
                                 <!-- Campo de Teléfono de la Empresa -->
                                 <div class="col-md-4">
-                                    <label for="company_phone" class="form-label">Teléfono de la Empresa</label>
+                                    <label for="company_phone" class="form-label">Teléfono de la empresa</label>
                                     <input type="text" name="company_phone" class="form-control small-text-field @error('company_phone') is-invalid @enderror" id="company_phone" value="{{ old('company_phone', $proveedor->company_phone) }}" placeholder="Ej: 90123498" maxlength="8" required>
                                     @error('company_phone')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -36,7 +36,7 @@
 
                                 <!-- Campo de Email -->
                                 <div class="col-md-4">
-                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <label for="email" class="form-label">Correo electrónico</label>
                                     <input type="email" name="email" class="form-control small-text-field @error('email') is-invalid @enderror" id="email" value="{{ old('email', $proveedor->email) }}" placeholder="Ej: proveedor@empresa.com" maxlength="50">
                                     @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -47,7 +47,7 @@
                             <div class="row mb-3">
                                 <!-- Campo de Nombre del Proveedor -->
                                 <div class="col-md-4">
-                                    <label for="full_name" class="form-label">Nombre del Vendedor</label>
+                                    <label for="full_name" class="form-label">Nombre del vendedor</label>
                                     <input type="text" name="full_name" class="form-control small-text-field @error('full_name') is-invalid @enderror" id="full_name" value="{{ old('full_name', $proveedor->full_name) }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
                                     @error('full_name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -56,7 +56,7 @@
 
                                 <!-- Campo de Teléfono -->
                                 <div class="col-md-4">
-                                    <label for="phone" class="form-label">Teléfono</label>
+                                    <label for="phone" class="form-label">Teléfono del vendedor</label>
                                     <input type="text" name="phone" class="form-control small-text-field @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone', $proveedor->phone) }}" placeholder="Ej: 90123456" maxlength="8" required>
                                     @error('phone')
                                     <div class="invalid-feedback">{{ $message }}</div>

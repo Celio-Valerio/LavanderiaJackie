@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Proveedores</h1>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de proveedores</h1>
                             <!-- Botón agregar proveedor -->
                             <a href="{{ route('proveedores.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Proveedor</a>
                         </div>
@@ -25,9 +25,9 @@
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
-                                <th style="width: 30%;">Nombre Completo</th>
+                                <th style="width: 30%;">Nombre del vendedor</th>
                                 <th style="width: 15%;">Teléfono</th>
-                                <th style="width: 30%;">Nombre de la Empresa</th>
+                                <th style="width: 30%;">Nombre de la empresa</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>

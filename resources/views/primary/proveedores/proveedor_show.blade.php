@@ -7,31 +7,27 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Detalles del Proveedor</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Detalles del proveedor</h1>
                         <hr>
 
                         <!-- Información de la Empresa -->
                         <div class="row mb-3">
                             <!-- Nombre de la Empresa -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Nombre de la Empresa:</strong></label>
-                                <p class="small-text-field">{{ $proveedor->company_name }}</p>
+                                <label class="form-label small-text-field"><strong>Nombre de la empresa:</strong> {{ $proveedor->company_name }}</label>
                             </div>
 
                             <!-- Teléfono de la Empresa -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Teléfono:</strong></label>
-                                <p class="small-text-field">{{ $proveedor->company_phone }}</p>
+                                <label class="form-label small-text-field"><strong>Teléfono de la empresa:</strong> {{ $proveedor->company_phone }}</label>
                             </div>
 
                             <!-- Correo Electrónico -->
                             <div class="col-md-4">
                                 @if ($proveedor->email)
-                                    <label class="form-label"><strong>Correo Electrónico:</strong></label>
-                                    <p class="small-text-field">{{ $proveedor->email }}</p>
+                                    <label class="form-label small-text-field"><strong>Correo electrónico:</strong> {{ $proveedor->email }}</label>
                                 @else
-                                    <label class="form-label"><strong>Correo Electrónico:</strong></label>
-                                    <p>No disponible</p>
+                                    <label class="form-label small-text-field"><strong>Correo electrónico:</strong> No disponible</label>
                                 @endif
                             </div>
                         </div>
@@ -40,20 +36,17 @@
                         <div class="row mb-3">
                             <!-- Nombre del Proveedor -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Nombre del Vendedor:</strong></label>
-                                <p class="small-text-field">{{ $proveedor->full_name }}</p>
+                                <label class="form-label small-text-field"><strong>Nombre del vendedor:</strong> {{ $proveedor->full_name }}</label>
                             </div>
 
                             <!-- Teléfono del Proveedor -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Teléfono:</strong></label>
-                                <p class="small-text-field">{{ $proveedor->phone }}</p>
+                                <label class="form-label small-text-field"><strong>Teléfono del vendedor:</strong> {{ $proveedor->phone }}</label>
                             </div>
 
                             <!-- Categoria -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Categoria:</strong></label>
-                                <p class="small-text-field">{{ $proveedor->categoria->name ?? 'No asignada' }}</p> <!-- Muestra el nombre de la categoria, si está asignado -->
+                                <label class="form-label small-text-field"><strong>Categoria:</strong> {{ $proveedor->categoria->name ?? 'No asignada' }}</label>
                             </div>
                         </div>
 
@@ -61,15 +54,14 @@
                         <div class="row mb-3">
                             <!-- Departamento -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Departamento:</strong></label>
-                                <p class="small-text-field">{{ $proveedor->city ?? 'No asignada' }}</p> <!-- Muestra el nombre de la categoria, si está asignado -->
+                                <label class="form-label small-text-field"><strong>Departamento:</strong> {{ $proveedor->city ?? 'No asignada' }}</label>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <!-- Dirección del Proveedor (varias filas si es necesario) -->
                             <div class="col-md-12">
-                                <label class="form-label"><strong>Dirección:</strong></label>
+                                <label class="form-label small-text-field"><strong>Dirección:</strong></label>
                                 <p class="small-text-field">{{ $proveedor->company_address }}.</p>
                             </div>
                         </div>
