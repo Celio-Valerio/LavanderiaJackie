@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\MaquinariaController;
+use App\Http\Controllers\PromoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EmpleadoController;
@@ -76,4 +77,13 @@ Route::resource('maquinarias', MaquinariaController::class);
 
 // Ruta para recargar el formulario de editar maquinaria
 Route::get('/maquinarias/{id}/reload', [MaquinariaController::class, 'reload'])->name('maquinarias.reload');
+
+// Rutas para manejar maquinarias
+Route::get('/promociones', [PromoController::class, 'index'])->name('promociones.index'); // Lista de promociones
+
+// Rutas de recursos para maquinarias
+Route::resource('promociones', PromoController::class);
+
+// Ruta para recargar el formulario de editar maquinaria
+Route::get('/promociones/{id}/reload', [PromoController::class, 'reload'])->name('promociones.reload');
 

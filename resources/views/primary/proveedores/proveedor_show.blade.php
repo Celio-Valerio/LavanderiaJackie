@@ -61,8 +61,7 @@
                         <div class="row mb-3">
                             <!-- Dirección del Proveedor (varias filas si es necesario) -->
                             <div class="col-md-12">
-                                <label class="form-label small-text-field"><strong>Dirección:</strong></label>
-                                <p class="small-text-field">{{ $proveedor->company_address }}.</p>
+                                <label class="form-label small-text-field"><strong>Dirección:</strong>{{ $proveedor->company_address }}.</label>
                             </div>
                         </div>
 
