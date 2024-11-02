@@ -50,9 +50,7 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
                             </div>
-
 
                             <!-- Campo de Descripción -->
                             <div class="row mb-3">
