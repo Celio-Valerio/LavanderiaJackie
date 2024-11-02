@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Mantenimientos</h1>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de mantenimientos</h1>
                             <!-- Botón agregar mantenimiento -->
                             <a href="{{ route('mantenimientos.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Mantenimiento</a>
                         </div>
@@ -27,7 +27,7 @@
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 25%;">Fecha</th>
                                 <th style="width: 25%;">Maquinaria</th>
-                                <th style="width: 10%;">Tipo de Mantenimiento</th>
+                                <th style="width: 10%;">Tipo de mantenimiento</th>
                                 <th style="width: 15%;">Precio</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>

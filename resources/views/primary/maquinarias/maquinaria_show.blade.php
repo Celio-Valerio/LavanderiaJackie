@@ -7,33 +7,29 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Detalles de la Maquinaria</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Detalles de la maquinaria</h1>
                         <hr>
                         <div class="row mb-3">
                             <!-- Nombre de la maquinaria -->
                             <div class="col-md-6">
-                                <label for="name" class="form-label"><strong>Nombre de la Maquinaria</strong></label>
-                                <p class="form-control-static small-text-field" >{{ $maquinaria->name }}</p>
+                                <label for="name" class="form-label small-text-field"><strong>Nombre de la maquinaria</strong> {{ $maquinaria->name }}</label>
                             </div>
 
                             <!-- Marca -->
                             <div class="col-md-6">
-                                <label for="brand" class="form-label"><strong>Marca</strong></label>
-                                <p class="form-control-static small-text-field" >{{ $maquinaria->brand }}</p>
+                                <label for="brand" class="form-label small-text-field"><strong>Marca</strong> {{ $maquinaria->brand }}</label>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <!-- Modelo -->
                             <div class="col-md-6">
-                                <label for="model" class="form-label"><strong>Modelo</strong></label>
-                                <p class="form-control-static small-text-field" >{{ $maquinaria->model }}</p>
+                                <label for="model" class="form-label small-text-field"><strong>Modelo</strong> {{ $maquinaria->model }}</label>
                             </div>
 
                             <!-- Fecha de adquisición -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Fecha de Adquisición:</strong></label>
-                                <p class="small-text-field" >{{ ucfirst(\Carbon\Carbon::parse($maquinaria->acquisition_date)->translatedFormat('l, d \d\e F, Y') )}}</p>
+                                <label class="form-label small-text-field"><strong>Fecha de adquisición:</strong> {{ ucfirst(\Carbon\Carbon::parse($maquinaria->acquisition_date)->translatedFormat('l, d \d\e F, Y') )}}</label>
                             </div>
 
                         </div>
@@ -41,22 +37,19 @@
                         <div class="row mb-3">
                             <!-- Tipo de maquinaria -->
                             <div class="col-md-6">
-                                <label for="type" class="form-label"><strong>Tipo de Maquinaria</strong></label>
-                                <p class="form-control-static small-text-field" >{{ $maquinaria->type }}</p>
+                                <label for="type" class="form-label  small-text-field"><strong>Tipo de maquinaria</strong> {{ $maquinaria->type }}</label>
                             </div>
 
                             <!-- Estado de la maquinaria -->
                             <div class="col-md-6">
-                                <label for="status" class="form-label"><strong>Estado</strong></label>
-                                <p class="form-control-static small-text-field" >{{ $maquinaria->status }}</p>
+                                <label for="status" class="form-label small-text-field"><strong>Estado</strong> {{ $maquinaria->status }}</label>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <!-- Proveedor -->
                             <div class="col-md-6">
-                                <label for="proveedor" class="form-label"><strong>Proveedor</strong></label>
-                                <p class="form-control-static small-text-field">{{ $maquinaria->proveedor->full_name }}</p>
+                                <label for="proveedor" class="form-label small-text-field"><strong>Proveedor</strong> {{ $maquinaria->proveedor->full_name }}</label>
                             </div>
                         </div>
 

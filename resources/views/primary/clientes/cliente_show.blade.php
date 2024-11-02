@@ -37,9 +37,9 @@
                             <!-- Correo Electrónico (1 columna) -->
                             <div class="col-md-6">
                                 @if ($cliente->email)
-                                    <label class="form-label small-text-field"><strong>Correo Electrónico:</strong> {{ $cliente->email }}</label>
+                                    <label class="form-label small-text-field"><strong>Correo electrónico:</strong> {{ $cliente->email }}</label>
                                 @else
-                                    <label class="form-label small-text-field"><strong>Correo Electrónico:</strong> No asignado</label>
+                                    <label class="form-label small-text-field"><strong>Correo electrónico:</strong> No asignado</label>
                                 @endif
                             </div>
 

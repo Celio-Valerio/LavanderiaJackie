@@ -8,7 +8,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar Mantenimiento</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Registrar mantenimiento</h1>
                         <hr>
                         <!-- Inicio del formulario -->
                         <form id="mantenimientoForm" action="{{ route('mantenimientos.store') }}" method="POST" novalidate>
@@ -34,7 +34,7 @@
 
                                 <!-- Campo de Tipo de Mantenimiento -->
                                 <div class="col-md-6">
-                                    <label for="maintenance_type" class="form-label">Tipo de Mantenimiento</label>
+                                    <label for="maintenance_type" class="form-label">Tipo de mantenimiento</label>
                                     <select name="maintenance_type" class="form-select @error('maintenance_type') is-invalid @enderror" id="maintenance_type" required>
                                         <option value="">Selecciona un tipo</option>
                                         <option value="Preventivo" {{ old('maintenance_type') == 'Preventivo' ? 'selected' : '' }}>Preventivo</option>
@@ -59,7 +59,7 @@
 
                                 <!-- Campo de Fecha -->
                                 <div class="col-md-6">
-                                    <label for="date" class="form-label">Fecha del Mantenimiento</label>
+                                    <label for="date" class="form-label">Fecha del mantenimiento</label>
                                     <input type="date" name="date" class="form-control @error('date') is-invalid @enderror" id="date" value="{{ old('date') }}" required>
                                     @error('date')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -70,7 +70,7 @@
                             <div class="row mb-3">
                                 <!-- Campo de Descripción -->
                                 <div class="col-md-12">
-                                    <label for="description" class="form-label">Descripción del Mantenimiento</label>
+                                    <label for="description" class="form-label">Descripción del mantenimiento</label>
                                     <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description" placeholder="Descripción del mantenimiento" maxlength="500" rows="3">{{ old('description') }}</textarea>
                                     @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>

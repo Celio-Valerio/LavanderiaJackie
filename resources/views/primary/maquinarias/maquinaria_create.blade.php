@@ -8,7 +8,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar Maquinaria</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Registrar maquinaria</h1>
                         <hr>
                         <!-- Inicio del formulario -->
                         <form id="maquinariaForm" action="{{ route('maquinarias.store') }}" method="POST" novalidate>
@@ -17,7 +17,7 @@
                             <div class="row mb-3">
                                 <!-- Campo de Nombre de Maquinaria -->
                                 <div class="col-md-6">
-                                    <label for="name" class="form-label">Nombre de la Maquinaria</label>
+                                    <label for="name" class="form-label">Nombre de la maquinaria</label>
                                     <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" placeholder="Ej: Lavadora Industrial" maxlength="100" required>
                                     @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -46,7 +46,7 @@
 
                                 <!-- Campo de Fecha de Ingreso -->
                                 <div class="col-md-3">
-                                    <label for="acquisition_date" class="form-label">Fecha de Adquisición</label>
+                                    <label for="acquisition_date" class="form-label">Fecha de adquisición</label>
                                     <input type="date" name="acquisition_date" class="form-control @error('acquisition_date') is-invalid @enderror" id="acquisition_date" value="{{ old('acquisition_date') }}" required>
                                     @error('acquisition_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -93,7 +93,7 @@
                             <div class="row mb-3">
                                 <!-- Campo de Tipo -->
                                 <div class="col-md-6">
-                                    <label for="type" class="form-label">Tipo de Maquinaria</label>
+                                    <label for="type" class="form-label">Tipo de maquinaria</label>
                                     <input type="text" name="type" class="form-control @error('type') is-invalid @enderror" id="type" value="{{ old('type') }}" placeholder="Ej: Industrial" maxlength="50" required>
                                     @error('type')
                                     <div class="invalid-feedback">{{ $message }}</div>
