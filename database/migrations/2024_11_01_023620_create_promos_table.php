@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('promos', function (Blueprint $table) {
             $table->id();
-            $table->decimal('price', 8, 2)->unsigned()->default(1)->comment('Price from 1 to 30000');
-            $table->unsignedTinyInteger('discount')->default(1)->comment('Discount from 1 to 99');
-            $table->string('image')->nullable()->comment('Path to the image');
+            $table->decimal('price', 8, 2)->unsigned()->default(1);
+            $table->unsignedTinyInteger('discount')->default(1);
+            $table->string('image')->nullable();
             $table->string('name');
-            $table->json('days')->nullable()->comment('Days selected: Monday, Tuesday, Wednesday, etc.');
+            $table->json('days')->nullable();
             $table->timestamps();
         });
     }
