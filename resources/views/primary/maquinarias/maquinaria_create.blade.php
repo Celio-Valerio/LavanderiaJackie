@@ -47,7 +47,7 @@
                                 <!-- Campo de Fecha de Ingreso -->
                                 <div class="col-md-3">
                                     <label for="acquisition_date" class="form-label">Fecha de adquisición</label>
-                                    <input type="date" name="acquisition_date" class="form-control @error('acquisition_date') is-invalid @enderror" id="acquisition_date" value="{{ old('acquisition_date', date('Y-m-d')) }}" required>
+                                    <input type="date" name="acquisition_date" class="form-control @error('acquisition_date') is-invalid @enderror" id="acquisition_date" value="{{ old('acquisition_date') }}" required>
                                     @error('acquisition_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -88,7 +88,7 @@
                                 <!-- Campo de Tipo -->
                                 <div class="col-md-6">
                                     <label for="type" class="form-label">Tipo de maquinaria</label>
-                                    <input type="text" name="type" class="form-control @error('type') is-invalid @enderror" id="type" value="{{ old('type') }}" placeholder="Ej: Industrial" maxlength="20" required>
+                                    <input type="text" name="type" class="form-control @error('type') is-invalid @enderror" id="type" value="{{ old('type') }}" placeholder="Ej: Industrial" maxlength="50" required>
                                     @error('type')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

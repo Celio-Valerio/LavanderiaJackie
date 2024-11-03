@@ -1,5 +1,5 @@
 @extends('layouts.principal')
-@section('title', 'Lista de Empleados')
+@section('title', 'Lista de Compras')
 @section('content')
 
     <section class="section">
@@ -8,9 +8,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de empleados</h1>
-                            <!-- Botón agregar empleado -->
-                            <a href="{{ route('empleados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Empleado</a>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Compras</h1>
+                            <!-- Botón agregar compra -->
+                            <a href="{{ route('compras.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Compra</a>
                         </div>
 
                         @if(session('success'))
@@ -21,33 +21,37 @@
                         @endif
                         <hr>
 
-                        <table id="empleadosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
+                        <table id="comprasTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
-                                <th style="width: 20%;">Nombre</th>
-                                <th style="width: 20%;">Apellido</th>
-                                <th style="width: 10%;">Teléfono</th>
-                                <th style="width: 25%;">Puesto</th>
-                                <th style="width: 20%;">Acciones</th>
+                                <th style="width: 20%;">Factura</th>
+                                <th style="width: 15%;">Fecha</th>
+                                <th style="width: 25%;">Proveedor</th>
+                                <th style="width: 20%;">Total en Lempiras</th>
+                                <th style="width: 15%;">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($empleados as $empleado)
+                            @forelse($compras as $compra)
                                 <tr>
-                                    <td class="row-index small-text-field" ></td>
-                                    <td class="small-text-field" >{{ $empleado->first_name }}</td>
-                                    <td class="small-text-field" >{{ $empleado->last_name }}</td>
-                                    <td class="small-text-field" >{{ $empleado->phone }}</td>
-                                    <td class="small-text-field" >{{ $empleado->puesto->name }}</td>
+                                    <td class="row-index small-text-field"></td>
+                                    <td class="small-text-field">{{ $compra->numero_factura }}</td>
+                                    <td class="small-text-field">{{ ucfirst(\Carbon\Carbon::parse($compra->fecha_compra)->translatedFormat('l d \d\e F, Y')) }}</td>
+                                    <td class="small-text-field">{{ $compra->proveedor->full_name ?? 'Sin proveedor' }}</td>
+                                    <td class="small-text-field">
+                                        L. {{ number_format($compra->detalles->sum(function($detalle) {
+                                            return $detalle->cantidad * $detalle->precio;
+                                        }), 2) }}
+                                    </td>
                                     <td class="text-center small-text-field">
-                                        <a href="{{ route('empleados.show', $empleado->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{{ route('compras.show', $compra->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                        <a href="{{ route('compras.edit', $compra->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center">No hay empleados registrados</td>
+                                    <td colspan="6" class="text-center">No hay compras registradas</td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -60,7 +64,7 @@
 
         <script>
             $(document).ready(function() {
-                var table = $('#empleadosTable').DataTable({
+                var table = $('#comprasTable').DataTable({
                     "paging": true,
                     "pageLength": 5,
                     "lengthChange": true,
@@ -69,12 +73,12 @@
                     "lengthMenu": [5, 10, 25, 50],
                     "language": {
                         "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ empleados",
+                        "sLengthMenu": "Mostrar _MENU_ compras",
                         "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún empleado disponible en esta tabla",
-                        "sInfo": "Se muestran los empleados del _START_ al _END_ de _TOTAL_.",
+                        "sEmptyTable": "Ninguna compra disponible en esta tabla",
+                        "sInfo": "Se muestran las compras del _START_ al _END_ de _TOTAL_.",
                         "sInfoEmpty": "No hay resultados ",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ empleados)",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ compras)",
                         "sSearch": "",
                         "oPaginate": {
                             "sFirst": "Primero",
@@ -99,12 +103,12 @@
                 });
 
                 // Estilo para mover el select a la derecha
-                $('#empleadosTable_length').addClass('text-end').css('float', 'right');
+                $('#comprasTable_length').addClass('text-end').css('float', 'right');
 
                 // Mover el input de búsqueda a la izquierda y agregar placeholder
-                $('#empleadosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#empleadosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#empleadosTable_filter input').css({
+                $('#comprasTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                $('#comprasTable_filter input').attr('placeholder', 'Buscar por todos los datos');
+                $('#comprasTable_filter input').css({
                     'width': '300px',
                     'border-radius': '5px',
                     'padding': '5px'
@@ -123,6 +127,5 @@
                 }
             });
         </script>
-
     </section>
 @endsection

@@ -1,0 +1,193 @@
+@extends('layouts.principal')
+@section('title', 'Registrar Promoción')
+@section('content')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title" style="font-size: 30px !important;">Registrar promoción</h1>
+                        <hr>
+
+                        <!-- Inicio del formulario -->
+                        <form id="promoForm" action="{{ route('promociones.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+                            @csrf
+
+                            <div class="row">
+                                <!-- Columnas de contenido -->
+                                <div class="col-md-8">
+                                    <div class="row mb-3">
+                                        <!-- Campo de Nombre de la Promoción -->
+                                        <div class="col-md-12">
+                                            <label for="name" class="form-label">Nombre de la promoción</label>
+                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" placeholder="Ej: Promoción especial" maxlength="255" required>
+                                            @error('name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <!-- Campo de Precio -->
+                                        <div class="col-md-6">
+                                            <label for="price" class="form-label">Precio</label>
+                                            <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 99.99" required>
+                                            @error('price')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Campo de Descuento -->
+                                        <div class="col-md-6">
+                                            <label for="discount" class="form-label">Descuento (%)</label>
+                                            <input type="text" name="discount" class="form-control @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount') }}" placeholder="Ej: 20" required>
+                                            @error('discount')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <!-- Campo de Días de la Promoción -->
+                                    <div class="row mb-3">
+                                        <label class="form-label">Días de la promoción</label>
+                                        <div class="col-md-12 d-flex flex-wrap">
+                                            <!-- Agrupamos los días en dos filas -->
+                                            @foreach(array_chunk(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'], 4) as $dayGroup)
+                                                <div class="col-md-6">
+                                                    @foreach($dayGroup as $day)
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="days[]" value="{{ $day }}" id="day_{{ $day }}" {{ in_array($day, old('days', [])) ? 'checked' : '' }}>
+                                                            <label class="form-check-label" for="day_{{ $day }}">{{ $day }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        @error('days')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                </div>
+
+                                <!-- Columna de la Imagen -->
+                                <div class="col-md-4 d-flex flex-column align-items-center">
+                                    <div class="mb-3" style="width: 100%; text-align: center;">
+                                        <label for="image" class="form-label">Imagen de la Promoción</label>
+                                        <!-- Div de imagen en gris, centrado -->
+                                        <div class="mb-3 image-preview-wrapper" style="position: relative; width: 100%; max-width: 300px; height: 200px;">
+                                            <div class="image-preview-border" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 3px dashed #b0b0b0; border-radius: 5px; pointer-events: none;"></div>
+                                            <div id="imagePreviewContainer" class="image-preview-container" style="width: 100%; height: 100%; background-color: #f0f0f0; border-radius: 5px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                                                <img id="imagePreview" src="{{ old('image') ? asset('storage/' . old('image')) : '#' }}" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 100%; display: {{ old('image') ? 'block' : 'none' }};">
+                                            </div>
+                                        </div>
+
+                                        <!-- Botón para seleccionar imagen -->
+                                        <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" id="image" accept="image/*">
+                                        @error('image')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+
+                                        <!-- Mostrar nombre del archivo si existe -->
+                                        @if(old('image'))
+                                            <small class="text-muted">Archivo: {{ basename(old('image')) }}</small>
+                                        @endif
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
+                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
+                                <a href="{{ route('promociones.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                            </div>
+                        </form>
+                        <!-- Fin del formulario -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const imagePreview = document.getElementById('imagePreview');
+                const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                const colorThief = new ColorThief();
+
+                // Cambiar el fondo del contenedor cuando se carga una imagen
+                if (imagePreview.src !== '#') {
+                    imagePreview.addEventListener('load', function() {
+                        // Obtener el color dominante de la imagen
+                        const dominantColor = colorThief.getColor(imagePreview);
+                        // Cambiar el fondo del contenedor al color dominante
+                        imagePreviewContainer.style.backgroundColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+                    });
+
+                    // También establecer el fondo inicial si ya hay una imagen
+                    imagePreview.addEventListener('load', function() {
+                        const dominantColor = colorThief.getColor(imagePreview);
+                        imagePreviewContainer.style.backgroundColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
+                    });
+                }
+            });
+        </script>
+
+        <script>
+            // Capitalizar primera letra del nombre
+            document.getElementById('name').addEventListener('input', function (e) {
+                e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+            });
+
+            // Validación de porcentaje (solo dos dígitos del 1 al 9)
+            document.getElementById('discount').addEventListener('input', function (e) {
+                e.target.value = e.target.value.replace(/[^1-9]/g, '').slice(0, 2);
+            });
+
+            // Validación del precio (solo 7 dígitos y dos decimales después del punto)
+            document.getElementById('price').addEventListener('input', function (e) {
+                e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');  // Limita a un punto decimal
+                if (e.target.value.includes('.')) {
+                    const [integer, decimal] = e.target.value.split('.');
+                    e.target.value = integer.slice(0, 7) + '.' + (decimal ? decimal.slice(0, 2) : '');
+                } else {
+                    e.target.value = e.target.value.slice(0, 7);
+                }
+            });
+
+            // Mostrar vista previa de la imagen seleccionada
+            document.getElementById('image').addEventListener('change', function (event) {
+                const file = event.target.files[0];
+                const preview = document.getElementById('imagePreview');
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.style.display = 'none';
+                    preview.src = '#';
+                }
+            });
+
+            // Limpiar el formulario
+            document.getElementById('clearButton').addEventListener('click', function () {
+                const form = document.getElementById('promoForm');
+                form.reset();
+                document.getElementById('imagePreview').style.display = 'none';
+
+                // Remover clases de validación
+                form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+                form.querySelectorAll('.invalid-feedback').forEach((el) => el.style.display = 'none');
+            });
+        </script>
+    </section>
+@endsection

@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Actualizar Empleado</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Actualizar empleado</h1>
                         <hr>
                         <!-- Inicio del formulario -->
                         <form id="empleadoForm" action="{{ route('empleados.update', $empleado->id) }}" method="POST" novalidate>
@@ -37,7 +37,7 @@
                             <div class="row mb-3">
                                 <!-- Campo de Email -->
                                 <div class="col-md-6">
-                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <label for="email" class="form-label">Correo electrónico</label>
                                     <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email', $empleado->email) }}" placeholder="Ej: ejemplo@gmail.com" required>
                                     @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -74,7 +74,7 @@
 
                                 <!-- Campo de Fecha de Ingreso -->
                                 <div class="col-md-3">
-                                    <label for="hire_date" class="form-label">Fecha de Ingreso</label>
+                                    <label for="hire_date" class="form-label">Fecha de ingreso</label>
                                     <input type="date" name="hire_date" class="form-control @error('hire_date') is-invalid @enderror" id="hire_date" value="{{ old('hire_date', $empleado->hire_date) }}" required>
                                     @error('hire_date')
                                     <div class="invalid-feedback">{{ $message }}</div>

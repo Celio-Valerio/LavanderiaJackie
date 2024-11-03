@@ -20,7 +20,7 @@ class CategoriaSeeder extends Seeder
             ],
 
             [
-                'name' => 'Insumos',
+                'name' => 'Productos',
                 'description' => 'Materiales como detergentes, suavizantes, y otros productos químicos utilizados en el proceso de lavado.'
             ],
             [

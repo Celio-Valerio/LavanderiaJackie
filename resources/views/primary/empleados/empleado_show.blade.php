@@ -7,51 +7,44 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Detalles del Empleado</h5>
+                        <h5 class="card-title">Detalles del empleado</h5>
                         <hr>
 
                         <!-- Información del Empleado -->
                         <div class="row mb-3">
                             <!-- Nombre, Correo y Teléfono en una fila -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Nombre:</strong></label>
-                                <p>{{ $empleado->first_name }} {{ $empleado->last_name }}</p>
+                                <label class="form-label small-text-field"><strong>Nombre: </strong>{{ $empleado->first_name }} {{ $empleado->last_name }}</label>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Correo Electrónico:</strong></label>
-                                <p>{{ $empleado->email }}</p>
+                                <label class="form-label small-text-field"><strong>Correo electrónico: </strong>{{ $empleado->email }}</label>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Teléfono:</strong></label>
-                                <p>{{ $empleado->phone }}</p>
+                                <label class="form-label small-text-field"><strong>Teléfono: </strong>{{ $empleado->phone }}</label>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <!-- Puesto, Fecha de Ingreso y Salario en otra fila -->
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Puesto:</strong></label>
-                                <p>{{ $empleado->puesto->name ?? 'No asignado' }}</p> <!-- Muestra el nombre del puesto, si está asignado -->
+                                <label class="form-label small-text-field"><strong>Puesto: </strong>{{ $empleado->puesto->name ?? 'No asignado' }}</label>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Fecha de Ingreso:</strong></label>
-                                <p>{{ \Carbon\Carbon::parse($empleado->hire_date)->translatedFormat('l d \d\e F, Y') }}</p>
+                                <label class="form-label small-text-field"><strong>Fecha de ingreso: </strong>{{ \Carbon\Carbon::parse($empleado->hire_date)->translatedFormat('l d \d\e F, Y') }}</label>
                             </div>
 
                             <div class="col-md-4">
-                                <label class="form-label"><strong>Salario:</strong></label>
-                                <p>L. {{ number_format($empleado->salary, 2, ',', '.') }}</p>
+                                <label class="form-label small-text-field"><strong>Salario: </strong>L. {{ number_format($empleado->salary, 2, ',', '.') }}</label>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <!-- Dirección del Empleado -->
                             <div class="col-md-12">
-                                <label class="form-label"><strong>Dirección:</strong></label>
-                                <p>{{ $empleado->address }}</p>
+                                <label class="form-label small-text-field"><strong>Dirección: </strong>{{ $empleado->address }}</label>
                             </div>
                         </div>
 

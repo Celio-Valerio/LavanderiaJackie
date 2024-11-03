@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\MaquinariaController;
+use App\Http\Controllers\PromoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\CompraController;
+use App\Http\Controllers\ProductoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,4 +79,33 @@ Route::resource('maquinarias', MaquinariaController::class);
 
 // Ruta para recargar el formulario de editar maquinaria
 Route::get('/maquinarias/{id}/reload', [MaquinariaController::class, 'reload'])->name('maquinarias.reload');
+
+// Rutas para manejar promociones
+Route::get('/promociones', [PromoController::class, 'index'])->name('promociones.index'); // Lista de promociones
+
+// Rutas de recursos para promociones
+Route::resource('promociones', PromoController::class);
+
+// Ruta para recargar el formulario de editar promocione
+Route::get('/promociones/{id}/reload', [PromoController::class, 'reload'])->name('promociones.reload');
+
+
+// Rutas para manejar compras
+Route::get('/compras', [CompraController::class, 'index'])->name('compras.index'); // Lista de compras
+
+// Rutas de recursos para compras
+Route::resource('compras', CompraController::class);
+
+// Ruta para recargar el formulario de editar compra
+Route::get('/compras/{id}/reload', [CompraController::class, 'reload'])->name('compras.reload');
+
+
+// Rutas para manejar productos
+Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index'); // Lista de productos
+
+// Rutas de recursos para productos
+Route::resource('productos', ProductoController::class);
+
+// Ruta para recargar el formulario de editar producto
+Route::get('/productos/{id}/reload', [ProductoController::class, 'reload'])->name('productos.reload');
 
