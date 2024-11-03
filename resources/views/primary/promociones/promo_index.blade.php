@@ -6,6 +6,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
 
+    <style>
+        .promo-card img {
+            transition: transform 0.3s ease, opacity 0.3s ease; /* Añadir transición */
+        }
+
+        .promo-card:hover img {
+            transform: scale(1.05); /* Aumentar el tamaño de la imagen */
+            opacity: 0.9; /* Cambiar opacidad */
+        }
+
+        .promo-card .btn {
+            display: none; /* Ocultar el botón por defecto */
+        }
+    </style>
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -58,14 +72,14 @@
                                                     <span class="badge bg-secondary me-1" style="font-size: 0.7em;">{{ $day }}</span>
                                                 @endforeach
                                             </div>
-                                            <a href="#" class="btn btn-primary w-100 rounded-pill">Aplicar</a>
+                                            <a href="#" class="btn btn-primary w-100 rounded-pill" style="display: none;">Aplicar</a>
                                         </div>
                                     </div>
                                 </div>
+
                             @endforeach
                         </div>
 
-                        <!-- Paginación -->
                         <!-- Paginación -->
                         <div id="paginationContainer" class="d-flex justify-content-center mt-4">
                             <div>
@@ -147,6 +161,16 @@
                 // Agregar evento de búsqueda con debounce
                 searchInput.addEventListener('input', debounce(filterCards, 300)); // Ajusta el tiempo según sea necesario
             });
+
+            promoCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    card.querySelector('.btn').style.display = 'block'; // Mostrar botón al pasar el mouse
+                });
+                card.addEventListener('mouseleave', function() {
+                    card.querySelector('.btn').style.display = 'none'; // Ocultar botón al salir el mouse
+                });
+            });
+
         </script>
 
 

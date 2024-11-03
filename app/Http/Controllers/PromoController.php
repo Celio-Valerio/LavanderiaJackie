@@ -25,7 +25,7 @@ class PromoController extends Controller
      */
     public function create()
     {
-        return view('primary.promos.promo_create'); // Vista para crear una nueva promoción
+        return view('primary.promociones.promo_create'); // Vista para crear una nueva promoción
     }
 
     /**
@@ -37,45 +37,49 @@ class PromoController extends Controller
             'name' => [
                 'required',
                 'string',
-                'max:255', // Suponiendo un límite de 255 caracteres
+                'max:255',
             ],
             'price' => [
                 'required',
                 'numeric',
-                'min:0', // El precio no puede ser negativo
+                'min:0',
             ],
             'discount' => [
                 'required',
                 'numeric',
-                'between:0,100', // Descuento entre 0 y 100
+                'between:5,45',
             ],
             'image' => [
-                'nullable',
-                'string',
-                'max:255', // Suponiendo un límite de 255 caracteres para la URL de la imagen
+                'required',
+                'image',
+                'mimes:jpeg,png,jpg,gif',
+                'max:2048',
             ],
             'days' => [
-                'nullable',
-                'json', // Se espera un JSON válido
+                'required',
+                'array',
             ],
         ], [
-            // Mensajes de error personalizados
             'name.required' => 'El nombre de la promoción es obligatorio.',
             'name.string' => 'El nombre de la promoción debe ser una cadena de texto válida.',
             'name.max' => 'El nombre de la promoción no puede exceder los 255 caracteres.',
 
             'price.required' => 'El precio es obligatorio.',
             'price.numeric' => 'El precio debe ser un número.',
-            'price.min' => 'El precio no puede ser negativo.',
+            'price.min' => 'El precio debe ser mayor a L. 10,000.00.',
+            'price.max' => 'El precio debe ser menor a L. 1.00.',
 
             'discount.required' => 'El descuento es obligatorio.',
             'discount.numeric' => 'El descuento debe ser un número.',
-            'discount.between' => 'El descuento debe estar entre 0 y 100.',
+            'discount.between' => 'El descuento debe estar entre 5 y 45.',
 
-            'image.string' => 'Debes ingresar una imagen correcta.',
-            'image.max' => 'La URL de la imagen no puede exceder los 255 caracteres.',
+            'image.required' => 'Debes cargar una imagen.',
+            'image.image' => 'Debes seleccionar una imagen en un formato válido.',
+            'image.mimes' => 'La imagen debe estar en formato jpeg, png, jpg o gif.',
+            'image.max' => 'La imagen no puede exceder los 2048 KB.',
 
-            'days.json' => 'Los días deben ser un formato JSON válido.',
+            'days.required' => 'Debes seleccionar al menos 1 día de la semana.',
+            'days.array' => 'Los días deben ser un arreglo válido.',
         ]);
 
         // Guardar promoción en la base de datos
@@ -83,11 +87,29 @@ class PromoController extends Controller
         $promo->name = $request->name;
         $promo->price = $request->price;
         $promo->discount = $request->discount;
-        $promo->image = $request->image;
-        $promo->days = $request->days; // Se asume que se puede guardar en formato JSON
+
+        // Guardar imagen
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $extension = $image->getClientOriginalExtension();
+
+            // Generar el nombre en el formato deseado
+            $timestamp = now()->format('d-m-Y_H-i-s');
+            $randomNumber = str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+            $imageName = "promos_{$timestamp}_{$randomNumber}.{$extension}";
+
+            // Guardar la imagen directamente en la carpeta public/assets/img/promociones
+            $image->move(public_path('assets/img/promociones'), $imageName);
+
+            // Almacenar el nombre en la base de datos
+            $promo->image = $imageName;
+        }
+
+
+        $promo->days = json_encode($request->days);
         $promo->save();
 
-        return redirect()->route('promos.index')->with('success', 'La promoción ' . $promo->name . ' ha sido registrada exitosamente.');
+        return redirect()->route('promociones.index')->with('success', 'La promoción ' . $promo->name . ' ha sido registrada exitosamente.');
     }
 
     /**
@@ -104,7 +126,7 @@ class PromoController extends Controller
     public function edit($id)
     {
         $promo = Promo::findOrFail($id); // Encuentra la promoción por ID o lanza un error 404 si no existe
-        return view('primary.promos.promo_edit', compact('promo')); // Pasa la promoción a la vista
+        return view('primary.promociones.promo_edit', compact('promo')); // Pasa la promoción a la vista
     }
 
     /**
@@ -166,7 +188,7 @@ class PromoController extends Controller
         $promo->days = $request->days;
         $promo->save();
 
-        return redirect()->route('promos.index')->with('success', 'La promoción ' . $promo->name . ' ha sido actualizada exitosamente.');
+        return redirect()->route('primary.promociones.promo_index')->with('success', 'La promoción ' . $promo->name . ' ha sido actualizada exitosamente.');
     }
 
     /**

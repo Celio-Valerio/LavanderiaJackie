@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->decimal('price', 8, 2)->unsigned()->default(1);
             $table->unsignedTinyInteger('discount')->default(1);
-            $table->string('image')->nullable();
+            $table->string('image');
             $table->string('name');
-            $table->json('days')->nullable();
+            $table->json('days');
             $table->timestamps();
         });
     }
