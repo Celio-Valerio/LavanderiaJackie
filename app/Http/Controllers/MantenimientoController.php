@@ -57,7 +57,7 @@ class MantenimientoController extends Controller
                 'required',
                 'numeric', // Verifica que sea un número
                 'min:1', // Asegura que el precio no sea negativo
-                'max:100000', // Asegura que el precio no sea negativo
+                'digits_between:1,5', //     Limita el precio a entre 1 y 5 dígitos
             ],
         ], [
             'date.required' => 'La fecha del mantenimiento es obligatoria.',
@@ -74,8 +74,8 @@ class MantenimientoController extends Controller
 
             'price.required' => 'El precio es obligatorio.',
             'price.numeric' => 'El precio debe ser un número válido.',
-            'price.min' => 'El precio debe estar entre L. 1.00 y L. 100,000.00.',
-            'price.max' => 'El precio debe estar entre L. 1.00 y L. 100,000.00.',
+            'price.min' => 'El precio debe estar entre L. 1.00 y L. 10000.',
+            'price.max' => 'El precio debe estar entre L. 1.00 y L. 10000.',
         ]);
 
         // Guardar mantenimiento en la base de datos
@@ -101,6 +101,8 @@ class MantenimientoController extends Controller
         // Retornar una vista con los detalles del mantenimiento
         return view('primary.mantenimientos.mantenimiento_show', compact('mantenimiento'));
     }
+
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -145,7 +147,7 @@ class MantenimientoController extends Controller
                 'required',
                 'numeric',
                 'min:1',
-                'max:100000',
+                'digits_between:1,5',
             ],
         ], [
             'date.required' => 'La fecha del mantenimiento es obligatoria.',

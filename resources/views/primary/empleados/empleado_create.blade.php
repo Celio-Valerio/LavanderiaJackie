@@ -82,7 +82,7 @@
                                 <!-- Campo de Salario -->
                                 <div class="col-md-3">
                                     <label for="salary" class="form-label">Salario</label>
-                                    <input type="number" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary') }}" placeholder="Ej: 2000" min="1500" max="5000" step="0.01" required>
+                                    <input type="number" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary') }}" placeholder="Ej: 2000" min="1500" max="999999" step="0.01" required>
                                     @error('salary')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -197,6 +197,15 @@
                 form.querySelectorAll('.is-invalid').forEach(function (input) {
                     input.classList.remove('is-invalid');
                 });
+            });
+        </script>
+
+        <script>
+            // Validación para limitar el campo de salario a 6 dígitos
+            document.getElementById('salary').addEventListener('input', function(e) {
+                if (this.value.length > 6) {
+                    this.value = this.value.slice(0, 6); // Limitar a 6 dígitos
+                }
             });
         </script>
     </section>

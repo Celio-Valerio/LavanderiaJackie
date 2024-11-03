@@ -80,7 +80,7 @@ class EmpleadoController extends Controller
             'salary' => [
                 'required',
                 'numeric',
-                'between:1500,5000',
+                'between:1500,50000',
             ],
             'puesto_id' => [ // Nueva validación para puesto
                 'required',
@@ -216,7 +216,7 @@ class EmpleadoController extends Controller
             'salary' => [
                 'required',
                 'numeric',
-                'between:1500,5000',
+                'between:1500,50000',
             ],
         ], [
             // Mensajes de error personalizados

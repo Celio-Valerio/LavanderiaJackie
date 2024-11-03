@@ -8,7 +8,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar Maquinaria</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Registrar maquinaria</h1>
                         <hr>
                         <!-- Inicio del formulario -->
                         <form id="maquinariaForm" action="{{ route('maquinarias.store') }}" method="POST" novalidate>
@@ -17,8 +17,8 @@
                             <div class="row mb-3">
                                 <!-- Campo de Nombre de Maquinaria -->
                                 <div class="col-md-6">
-                                    <label for="name" class="form-label">Nombre de la Maquinaria</label>
-                                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" placeholder="Ej: Lavadora Industrial" maxlength="100" required>
+                                    <label for="name" class="form-label">Nombre de la maquinaria</label>
+                                    <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" placeholder="Ej: Lavadora Industrial" maxlength="40" required> <!-- Limitar a 20 caracteres -->
                                     @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -27,7 +27,7 @@
                                 <!-- Campo de Marca -->
                                 <div class="col-md-6">
                                     <label for="brand" class="form-label">Marca</label>
-                                    <input type="text" name="brand" class="form-control @error('brand') is-invalid @enderror" id="brand" value="{{ old('brand') }}" placeholder="Ej: Whirlpool" maxlength="50" required>
+                                    <input type="text" name="brand" class="form-control @error('brand') is-invalid @enderror" id="brand" value="{{ old('brand') }}" placeholder="Ej: Whirlpool" maxlength="30" required> <!-- Limitar a 10 caracteres -->
                                     @error('brand')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -38,7 +38,7 @@
                                 <!-- Campo de Modelo -->
                                 <div class="col-md-6">
                                     <label for="model" class="form-label">Modelo</label>
-                                    <input type="text" name="model" class="form-control @error('model') is-invalid @enderror" id="model" value="{{ old('model') }}" placeholder="Ej: XYZ-123" maxlength="50" required>
+                                    <input type="text" name="model" class="form-control @error('model') is-invalid @enderror" id="model" value="{{ old('model') }}" placeholder="Ej: XYZ-123" maxlength="30" required> <!-- Limitar a 10 caracteres -->
                                     @error('model')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -46,8 +46,8 @@
 
                                 <!-- Campo de Fecha de Ingreso -->
                                 <div class="col-md-3">
-                                    <label for="acquisition_date" class="form-label">Fecha de Adquisición</label>
-                                    <input type="date" name="acquisition_date" class="form-control @error('acquisition_date') is-invalid @enderror" id="acquisition_date" value="{{ old('acquisition_date') }}" required>
+                                    <label for="acquisition_date" class="form-label">Fecha de adquisición</label>
+                                    <input type="date" name="acquisition_date" class="form-control @error('acquisition_date') is-invalid @enderror" id="acquisition_date" value="{{ old('acquisition_date', date('Y-m-d')) }}" required>
                                     @error('acquisition_date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -59,14 +59,8 @@
                                     <label for="status" class="form-label">Estado</label>
                                     <select name="status" class="form-control @error('status') is-invalid @enderror" id="status" required>
                                         <option value="" disabled selected>Seleccione el estado de la maquina</option>
-                                        <option value="Operativa" {{ old('status') == 'Operativa' ? 'selected' : '' }}>Operativa</option>
-                                        <option value="En mantenimiento" {{ old('status') == 'En mantenimiento' ? 'selected' : '' }}>En mantenimiento</option>
-                                        <option value="Dada de baja" {{ old('status') == 'Dada de baja' ? 'selected' : '' }}>Dada de baja</option>
-                                        <option value="Pendiente de revisión" {{ old('status') == 'Pendiente de revisión' ? 'selected' : '' }}>Pendiente de revisión</option>
-                                        <option value="En reparación" {{ old('status') == 'En reparación' ? 'selected' : '' }}>En reparación</option>
-                                        <option value="Requiere repuestos" {{ old('status') == 'Requiere repuestos' ? 'selected' : '' }}>Requiere repuestos</option>
-                                        <option value="En espera de piezas" {{ old('status') == 'En espera de piezas' ? 'selected' : '' }}>En espera de piezas</option>
-                                        <option value="Programada para actualización" {{ old('status') == 'Programada para actualización' ? 'selected' : '' }}>Programada para actualización</option>
+                                        <option value="Nuevo" {{ old('status') == 'Nuevo' ? 'selected' : '' }}>Nuevo</option>
+                                        <option value="Usado" {{ old('status') == 'Usado' ? 'selected' : '' }}>Usado</option>
                                     </select>
                                     @error('status')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -93,8 +87,8 @@
                             <div class="row mb-3">
                                 <!-- Campo de Tipo -->
                                 <div class="col-md-6">
-                                    <label for="type" class="form-label">Tipo de Maquinaria</label>
-                                    <input type="text" name="type" class="form-control @error('type') is-invalid @enderror" id="type" value="{{ old('type') }}" placeholder="Ej: Industrial" maxlength="50" required>
+                                    <label for="type" class="form-label">Tipo de maquinaria</label>
+                                    <input type="text" name="type" class="form-control @error('type') is-invalid @enderror" id="type" value="{{ old('type') }}" placeholder="Ej: Industrial" maxlength="20" required>
                                     @error('type')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

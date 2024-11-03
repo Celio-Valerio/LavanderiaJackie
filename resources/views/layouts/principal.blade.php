@@ -69,11 +69,11 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a href="/" class="logo d-flex align-items-center">
-            <img src="assets/img/logo.png" alt="">
-            <span class="d-none d-lg-block">Lavandería Jackie</span>
+        <a href="/" class="logo d-flex align-items-center" style="flex-direction: row;">
+            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="max-width: 200%; max-height: 150px; object-fit: contain; margin-top: 65px;">
+            <span class="d-none d-lg-block" style="white-space: nowrap;">Lavandería Jackie</span>
         </a>
-        <i class="bi bi-list toggle-sidebar-btn"></i>
+        <i class="bi bi-list toggle-sidebar-btn" style="margin-left: 75px;"></i>
     </div><!-- End Logo -->
 
 
@@ -328,6 +328,12 @@
                 <li>
                     <a href="forms-validation.html">
                         <i class="bi bi-circle"></i><span>Usuarios</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/maquinarias">
+                        <i class="bi bi-circle"></i><span>Maquinarias</span>
                     </a>
                 </li>
             </ul>

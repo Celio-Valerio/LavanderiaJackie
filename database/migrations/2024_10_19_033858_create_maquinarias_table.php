@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('type', 50); // Tipo de maquinaria
             $table->enum('status', [
                 'Operativa',
+                'Nuevo',
+                'Usado',
                 'En mantenimiento',
                 'Dada de baja',
                 'Pendiente de revisión',
@@ -27,8 +29,8 @@ return new class extends Migration
                 'Programada para actualización'
             ]); // Estado de la maquinaria
             $table->date('acquisition_date'); // Fecha de adquisición
-            $table->string('brand', 50); // Marca de la maquinaria
-            $table->string('model', 50); // Modelo de la maquinaria
+            $table->string('brand', 50); // Updated length for the brand column
+            $table->string('model', 20); // Modelo de la maquinaria
             $table->unsignedBigInteger('proveedor_id'); // Referencia al proveedor
             $table->timestamps();
 

@@ -19,7 +19,7 @@ class MaquinariaFactory extends Factory
         return [
             'name' => $this->faker->word() . ' ' . $this->faker->word(), // Nombre de la maquinaria, como "Lavadora Industrial"
             'type' => $this->faker->randomElement(['Lavadora', 'Secadora', 'Planchadora', 'Extrusora']), // Tipo de maquinaria
-            'status' => $this->faker->randomElement(['operational', 'under_maintenance', 'decommissioned']), // Estado
+            'status' => $this->faker->randomElement(['operational', 'under_maintenance', 'decommissioned','New','Used']), // Estado
             'acquisition_date' => $this->faker->date(), // Fecha de adquisición
             'brand' => $this->faker->company, // Marca de la maquinaria
             'model' => $this->faker->bothify('Model ###'), // Modelo de la maquinaria, como "Model 123"

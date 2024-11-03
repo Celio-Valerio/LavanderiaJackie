@@ -8,7 +8,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar Mantenimiento</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Registrar mantenimiento</h1>
                         <hr>
                         <!-- Inicio del formulario -->
                         <form id="mantenimientoForm" action="{{ route('mantenimientos.store') }}" method="POST" novalidate>
@@ -34,12 +34,12 @@
 
                                 <!-- Campo de Tipo de Mantenimiento -->
                                 <div class="col-md-6">
-                                    <label for="maintenance_type" class="form-label">Tipo de Mantenimiento</label>
+                                    <label for="maintenance_type" class="form-label">Tipo de mantenimiento</label>
                                     <select name="maintenance_type" class="form-select @error('maintenance_type') is-invalid @enderror" id="maintenance_type" required>
                                         <option value="">Selecciona un tipo</option>
                                         <option value="Preventivo" {{ old('maintenance_type') == 'Preventivo' ? 'selected' : '' }}>Preventivo</option>
                                         <option value="Correctivo" {{ old('maintenance_type') == 'Correctivo' ? 'selected' : '' }}>Correctivo</option>
-                                        <option value="Emergencia" {{ old('maintenance_type') == 'Emergencia' ? 'selected' : '' }}>Emergencia</option>
+                                       
                                     </select>
                                     @error('maintenance_type')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -51,15 +51,28 @@
                                 <!-- Campo de Precio -->
                                 <div class="col-md-6">
                                     <label for="price" class="form-label">Precio (Lempiras)</label>
-                                    <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 2000" min="1" max="100000" step="0.01" required>
+                                    <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 2000" maxlength="5" required min="0" max="99999>
                                     @error('price')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
+
+
+                                <div class="row mb-3">
+                                <!-- Campo de Descripción -->
+                                <div class="col-md-12">
+                                    <label for="description" class="form-label">Descripción del mantenimiento</label>
+                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description" placeholder="Descripción del mantenimiento" maxlength="500" rows="3">{{ old('description') }}</textarea>
+                                    @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
                                 <!-- Campo de Fecha -->
                                 <div class="col-md-6">
-                                    <label for="date" class="form-label">Fecha del Mantenimiento</label>
+                                    <label for="date" class="form-label">Fecha del mantenimiento</label>
                                     <input type="date" name="date" class="form-control @error('date') is-invalid @enderror" id="date" value="{{ old('date') }}" required>
                                     @error('date')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -67,16 +80,7 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <!-- Campo de Descripción -->
-                                <div class="col-md-12">
-                                    <label for="description" class="form-label">Descripción del Mantenimiento</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description" placeholder="Descripción del mantenimiento" maxlength="500" rows="3">{{ old('description') }}</textarea>
-                                    @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
+                            
 
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
@@ -131,13 +135,22 @@
                 // Limpiar el campo de descripción
                 document.getElementById('description').value = '';
 
-                // Limpiar el campo de fecha
-                document.getElementById('date').value = '';
+                // Limpiar el campo de precio
+                document.getElementById('price').value = '';
 
                 const invalidFeedbacks = form.querySelectorAll('.invalid-feedback');
                 invalidFeedbacks.forEach(function (feedback) {
                     feedback.style.display = 'none';
                 });
+            });
+        </script>
+
+         <script>
+            // Validación para limitar el campo de salario a 6 dígitos
+            document.getElementById('price').addEventListener('input', function(e) {
+                if (this.value.length > 5) {
+                    this.value = this.value.slice(0, 5); // Limitar a 6 dígitos
+                }
             });
         </script>
     </section>
