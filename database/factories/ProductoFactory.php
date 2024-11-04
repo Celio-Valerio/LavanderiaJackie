@@ -18,16 +18,16 @@ class ProductoFactory extends Factory
     {
         // Lista de nombres de productos comunes en lavanderías
         $nombres = [
-            'Detergente Líquido',
-            'Suavizante de Ropa',
+            'Detergente líquido',
+            'Suavizante de ropa',
             'Blanqueador',
-            'Limpiador de Manchas',
-            'Bolsa para Lavado',
-            'Rociador de Aroma',
-            'Jabón para Lavar a Mano',
-            'Cuidado de Colores',
+            'Limpiador de manchas',
+            'Bolsa para lavado',
+            'Rociador de aroma',
+            'Jabón para lavar a mano',
+            'Cuidado de colores',
             'Desinfectante',
-            'Limpiador Multiusos',
+            'Limpiador multiusos',
         ];
 
         // Descripciones breves para los productos

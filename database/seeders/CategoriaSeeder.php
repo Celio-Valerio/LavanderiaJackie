@@ -16,7 +16,8 @@ class CategoriaSeeder extends Seeder
         // Array con datos de categorías
         $categorias = [
             [
-                'name' => 'Maquinaria', 'description' => 'Equipos y máquinas utilizados en el proceso de lavado y secado.'
+                'name' => 'Maquinaria',
+                'description' => 'Equipos y máquinas utilizados en el proceso de lavado y secado.'
             ],
 
             [

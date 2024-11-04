@@ -1,11 +1,6 @@
 @extends('layouts.principal')
-@section('title', 'Lista de Promociones')
+@section('title', 'Promociones')
 @section('content')
-
-    <!-- Incluir CSS y JS necesarios -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
-
     <style>
         .promo-card img {
             transition: transform 0.3s ease, opacity 0.3s ease;
@@ -28,7 +23,6 @@
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Promociones</h1>
                             <a href="{{ route('promociones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Promoción</a>
                             <a href="{{ route('promociones.index') }}" class="btn btn-dark btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Modo Tabla</a>
-
                         </div>
 
                         @if(session('success'))
@@ -38,11 +32,6 @@
                             </div>
                         @endif
                         <hr>
-
-                        <div class="d-flex justify-content-start mb-3">
-                            <input type="text" id="searchInput" placeholder="Buscar promociones..." class="form-control" style="width: 300px;">
-                        </div>
-
 
                         <div id="promotionsContainer" class="row">
                             @foreach($promociones as $promo)
@@ -84,33 +73,10 @@
                             @endforeach
                         </div>
 
-                        <!-- Paginación -->
-                        <div id="paginationContainer" class="d-flex justify-content-center mt-4">
-                            <div>
-                                <!-- Enlace de la página anterior -->
-                                @if($promociones->onFirstPage())
-                                    <span class="disabled btn btn-secondary">Anterior</span>
-                                @else
-                                    <a href="{{ $promociones->previousPageUrl() }}" class="btn btn-primary">Anterior</a>
-                                @endif
-
-                                <!-- Mostrar números de página -->
-                                @for($i = 1; $i <= $promociones->lastPage(); $i++)
-                                    @if($i == $promociones->currentPage())
-                                        <span class="btn btn-secondary disabled">{{ $i }}</span>
-                                    @else
-                                        <a href="{{ $promociones->url($i) }}" class="btn btn-primary">{{ $i }}</a>
-                                    @endif
-                                @endfor
-
-                                <!-- Enlace de la siguiente página -->
-                                @if($promociones->hasMorePages())
-                                    <a href="{{ $promociones->nextPageUrl() }}" class="btn btn-primary">Siguiente</a>
-                                @else
-                                    <span class="disabled btn btn-secondary">Siguiente</span>
-                                @endif
-                            </div>
+                        <div>
+                            {{ $promociones->links('pagination::bootstrap-5') }} <!-- Paginación -->
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -125,43 +91,9 @@
                         alert.style.display = 'none';
                     }, 5000);
                 }
-
-                const searchInput = document.getElementById('searchInput');
-                const promoCards = document.querySelectorAll('.promo-card');
-
-                function debounce(func, delay) {
-                    let timeoutId;
-                    return function(...args) {
-                        if (timeoutId) clearTimeout(timeoutId);
-                        timeoutId = setTimeout(() => func.apply(null, args), delay);
-                    };
-                }
-
-                const filterCards = debounce(function() {
-                    const searchValue = searchInput.value.trim().toLowerCase();
-
-                    promoCards.forEach(card => {
-                        const name = card.getAttribute('data-name').toLowerCase();
-                        const price = card.getAttribute('data-price').toLowerCase();
-                        const discount = card.getAttribute('data-discount').toLowerCase();
-                        const days = card.getAttribute('data-days').toLowerCase();
-
-                        if (
-                            name.includes(searchValue) ||
-                            price.includes(searchValue) ||
-                            discount.includes(searchValue) ||
-                            days.includes(searchValue)
-                        ) {
-                            card.style.display = ''; // Mostrar tarjeta
-                        } else {
-                            card.style.display = 'none'; // Ocultar tarjeta
-                        }
-                    });
-                }, 300);
-
-                searchInput.addEventListener('input', filterCards);
             });
         </script>
+
 
     </section>
 @endsection

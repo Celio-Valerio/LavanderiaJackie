@@ -15,7 +15,7 @@ class MaquinariaSeeder extends Seeder
     {
         $maquinarias = [
             [
-                'name' => 'Lavadora Industrial',
+                'name' => 'Lavadora industrial',
                 'type' => 'Lavadora',
                 'status' => 'En reparación',
                 'acquisition_date' => '2022-03-15',
@@ -24,7 +24,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '1',
             ],
             [
-                'name' => 'Secadora de Prendas',
+                'name' => 'Secadora de prendas',
                 'type' => 'Secadora',
                 'status' => 'Operativa',
                 'acquisition_date' => '2021-06-20',
@@ -33,7 +33,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '2',
             ],
             [
-                'name' => 'Planchadora de Vapor',
+                'name' => 'Planchadora de vapor',
                 'type' => 'Planchadora',
                 'status' => 'En mantenimiento',
                 'acquisition_date' => '2023-01-10',
@@ -42,7 +42,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '3',
             ],
             [
-                'name' => 'Extrusora de Detergente',
+                'name' => 'Extrusora de detergente',
                 'type' => 'Extrusora',
                 'status' => 'Operativa',
                 'acquisition_date' => '2020-12-05',
@@ -51,7 +51,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '4',
             ],
             [
-                'name' => 'Lavadora de Carga Frontal',
+                'name' => 'Lavadora de carga Frontal',
                 'type' => 'Lavadora',
                 'status' => 'Dada de baja',
                 'acquisition_date' => '2019-07-30',
@@ -60,7 +60,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '5',
             ],
             [
-                'name' => 'Secadora a Gas',
+                'name' => 'Secadora a gas',
                 'type' => 'Secadora',
                 'status' => 'Operativa',
                 'acquisition_date' => '2021-09-12',
@@ -69,7 +69,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '6',
             ],
             [
-                'name' => 'Planchadora de Ropa',
+                'name' => 'Planchadora de ropa',
                 'type' => 'Planchadora',
                 'status' => 'Operativa',
                 'acquisition_date' => '2022-05-01',
@@ -78,7 +78,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '7',
             ],
             [
-                'name' => 'Lavadora de Alta Eficiencia',
+                'name' => 'Lavadora de alta eficiencia',
                 'type' => 'Lavadora',
                 'status' => 'Operativa',
                 'acquisition_date' => '2023-03-18',
@@ -96,7 +96,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '1',
             ],
             [
-                'name' => 'Prensa de Ropa',
+                'name' => 'Prensa de ropa',
                 'type' => 'Prensa',
                 'status' => 'En mantenimiento',
                 'acquisition_date' => '2022-11-05',
@@ -114,7 +114,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '2',
             ],
             [
-                'name' => 'Máquina de Planchado',
+                'name' => 'Máquina de planchado',
                 'type' => 'Planchadora',
                 'status' => 'Dada de baja',
                 'acquisition_date' => '2018-05-20',
@@ -123,7 +123,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '1',
             ],
             [
-                'name' => 'Máquina de Rociado',
+                'name' => 'Máquina de rociado',
                 'type' => 'Rociadora',
                 'status' => 'Operativa',
                 'acquisition_date' => '2022-07-25',
@@ -132,7 +132,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '1',
             ],
             [
-                'name' => 'Cámara de Secado',
+                'name' => 'Cámara de secado',
                 'type' => 'Secado',
                 'status' => 'En mantenimiento',
                 'acquisition_date' => '2023-02-18',
@@ -141,7 +141,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '8',
             ],
             [
-                'name' => 'Máquina de Embalaje',
+                'name' => 'Máquina de embalaje',
                 'type' => 'Embalaje',
                 'status' => 'Operativa',
                 'acquisition_date' => '2021-08-30',
@@ -150,7 +150,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '2',
             ],
             [
-                'name' => 'Máquina de Doblado',
+                'name' => 'Máquina de doblado',
                 'type' => 'Dobladora',
                 'status' => 'Operativa',
                 'acquisition_date' => '2023-05-05',
@@ -168,7 +168,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '2',
             ],
             [
-                'name' => 'Máquina de Hidrolavado',
+                'name' => 'Máquina de hidrolavado',
                 'type' => 'Hidrolavadora',
                 'status' => 'Operativa',
                 'acquisition_date' => '2023-03-22',
@@ -177,7 +177,7 @@ class MaquinariaSeeder extends Seeder
                 'proveedor_id' => '3',
             ],
             [
-                'name' => 'Máquina de Acabado',
+                'name' => 'Máquina de acabado',
                 'type' => 'Acabado',
                 'status' => 'Pendiente de revisión',
                 'acquisition_date' => '2022-10-05',

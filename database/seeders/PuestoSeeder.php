@@ -15,16 +15,16 @@ class PuestoSeeder extends Seeder
     {
         // Array con datos de puestos
         $puestos = [
-            ['name' => 'Propietario de la Lavandería', 'description' => 'Responsable de la gestión general de la lavandería.'],
-            ['name' => 'Ayudante de Lavandería', 'description' => 'Asiste en el lavado, secado y manejo de la ropa.'],
-            ['name' => 'Especialista en Lavado en Seco', 'description' => 'Encargado del tratamiento especializado de prendas delicadas.'],
-            ['name' => 'Operador de Máquinas de Lavado', 'description' => 'Supervisa y opera las máquinas de lavado y secado.'],
-            ['name' => 'Contador de Lavandería', 'description' => 'Maneja las finanzas y registros de la lavandería.'],
-            ['name' => 'Recepcionista de Lavandería', 'description' => 'Atiende a clientes y gestiona pedidos.'],
-            ['name' => 'Vendedor de Servicios de Lavandería', 'description' => 'Encargado de la promoción y venta de servicios de la lavandería.'],
-            ['name' => 'Promotor de Servicios Ecológicos', 'description' => 'Desarrolla campañas para promover servicios de lavado ecológico.'],
-            ['name' => 'Técnico en Mantenimiento de Máquinas', 'description' => 'Repara y mantiene las máquinas de la lavandería.'],
-            ['name' => 'Encargado de Recursos Humanos', 'description' => 'Gestiona el personal y sus tareas en la lavandería.'],
+            ['name' => 'Propietario de la lavandería', 'description' => 'Responsable de la gestión general de la lavandería.'],
+            ['name' => 'Ayudante de lavandería', 'description' => 'Asiste en el lavado, secado y manejo de la ropa.'],
+            ['name' => 'Especialista en lavado en seco', 'description' => 'Encargado del tratamiento especializado de prendas delicadas.'],
+            ['name' => 'Operador de máquinas de lavado', 'description' => 'Supervisa y opera las máquinas de lavado y secado.'],
+            ['name' => 'Contador de lavandería', 'description' => 'Maneja las finanzas y registros de la lavandería.'],
+            ['name' => 'Recepcionista de lavandería', 'description' => 'Atiende a clientes y gestiona pedidos.'],
+            ['name' => 'Vendedor de servicios de lavandería', 'description' => 'Encargado de la promoción y venta de servicios de la lavandería.'],
+            ['name' => 'Promotor de servicios ecológicos', 'description' => 'Desarrolla campañas para promover servicios de lavado ecológico.'],
+            ['name' => 'Técnico en mantenimiento de máquinas', 'description' => 'Repara y mantiene las máquinas de la lavandería.'],
+            ['name' => 'Encargado de recursos humanos', 'description' => 'Gestiona el personal y sus tareas en la lavandería.'],
         ];
 
         // Insertar los puestos en la base de datos

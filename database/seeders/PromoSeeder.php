@@ -13,7 +13,7 @@ class PromoSeeder extends Seeder
      */
     public function run(): void
     {
-        $daysOfWeek = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        $daysOfWeek = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
         $products = ['Edredones', 'Cortinas', 'Sabanas', 'Pantalones', 'Ropa Interior'];
 
         for ($i = 1; $i <= 15; $i++) {

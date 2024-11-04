@@ -19,9 +19,9 @@ class PromoController extends Controller
 
     public function view(Request $request)
     {
-        $perPage = $request->input('perPage', 3); // Valor por defecto es 15
+        // Obtener las promociones paginadas
+        $perPage = 3; // Número de promociones por página
         $promociones = Promo::paginate($perPage);
-
         return view('primary.promociones.promo_vista', compact('promociones'));
     }
 
