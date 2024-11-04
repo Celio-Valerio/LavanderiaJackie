@@ -11,12 +11,18 @@ class PromoController extends Controller
      * Display a listing of the resource.
      */
     // PromocionesController.php
-    public function index(Request $request)
+    public function index()
+    {
+        $promociones = Promo::all(); // O cualquier lógica de paginación o filtrado que necesites
+        return view('primary.promociones.promo_index', compact('promociones'));
+    }
+
+    public function view(Request $request)
     {
         $perPage = $request->input('perPage', 3); // Valor por defecto es 15
         $promociones = Promo::paginate($perPage);
 
-        return view('primary.promociones.promo_index', compact('promociones'));
+        return view('primary.promociones.promo_vista', compact('promociones'));
     }
 
 

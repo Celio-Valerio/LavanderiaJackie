@@ -82,6 +82,8 @@ Route::get('/maquinarias/{id}/reload', [MaquinariaController::class, 'reload'])-
 
 // Rutas para manejar promociones
 Route::get('/promociones', [PromoController::class, 'index'])->name('promociones.index'); // Lista de promociones
+Route::get('/promociones-tarjetas', [PromoController::class, 'view'])->name('promociones.view'); // Lista de promociones
+
 
 // Rutas de recursos para promociones
 Route::resource('promociones', PromoController::class);
