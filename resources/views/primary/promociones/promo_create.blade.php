@@ -188,14 +188,18 @@
                 e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
             });
 
+            document.getElementById('notes').addEventListener('input', function (e) {
+                e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+            });
+
             // Validación de porcentaje (solo dos dígitos del 1 al 9)
             document.getElementById('discount').addEventListener('input', function (e) {
-                e.target.value = e.target.value.replace(/[^1-9]/g, '').slice(0, 2);
+                e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
             });
 
             // Validación de porcentaje (solo dos dígitos del 1 al 9)
             document.getElementById('libras').addEventListener('input', function (e) {
-                e.target.value = e.target.value.replace(/[^1-9]/g, '').slice(0, 2);
+                e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
             });
 
             // Validación del precio (solo 7 dígitos y dos decimales después del punto)
