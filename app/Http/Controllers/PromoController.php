@@ -55,6 +55,14 @@ class PromoController extends Controller
                 'numeric',
                 'between:5,45',
             ],
+            'libras' => [
+                'required',
+                'numeric',
+                'between:1,99',
+            ],
+            'promo' => [
+                'required',
+            ],
             'image' => [
                 'required',
                 'image',
@@ -64,6 +72,12 @@ class PromoController extends Controller
             'days' => [
                 'required',
                 'array',
+            ],
+            'notes' => [
+                'nullable',
+                'string',
+                'min:5',
+                'max:500',
             ],
         ], [
             'name.required' => 'El nombre de la promoción es obligatorio.',
@@ -75,9 +89,15 @@ class PromoController extends Controller
             'price.min' => 'El precio debe ser mayor a L. 10,000.00.',
             'price.max' => 'El precio debe ser menor a L. 1.00.',
 
+            'promo.required' => 'Debes seleccionar una promoción o servicio.',
+
             'discount.required' => 'El descuento es obligatorio.',
             'discount.numeric' => 'El descuento debe ser un número.',
             'discount.between' => 'El descuento debe estar entre 5 y 45.',
+
+            'libras.required' => 'Las libras son obligatorias.',
+            'libras.numeric' => 'Las libras se deben expresar en números.',
+            'libras.between' => 'Las libras deben estar entre 1 y 99.',
 
             'image.required' => 'Debes cargar una imagen.',
             'image.image' => 'Debes seleccionar una imagen en un formato válido.',
@@ -86,6 +106,10 @@ class PromoController extends Controller
 
             'days.required' => 'Debes seleccionar al menos 1 día de la semana.',
             'days.array' => 'Los días deben ser un arreglo válido.',
+
+            'notes.string' => 'Las notas deben ser una cadena de texto válida.',
+            'notes.min' => 'Las notas deben tener al menos 5 caracteres.',
+            'notes.max' => 'Las notas no pueden exceder los 500 caracteres.',
         ]);
 
         // Guardar promoción en la base de datos
@@ -93,6 +117,9 @@ class PromoController extends Controller
         $promo->name = $request->name;
         $promo->price = $request->price;
         $promo->discount = $request->discount;
+        $promo->promo = $request->promo;
+        $promo->libras = $request->libras;
+        $promo->notes = $request->notes;
 
         // Guardar imagen
         if ($request->hasFile('image')) {

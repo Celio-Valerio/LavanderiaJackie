@@ -15,15 +15,42 @@
                         <form id="promoForm" action="{{ route('promociones.store') }}" method="POST" enctype="multipart/form-data" novalidate>
                             @csrf
 
-                            <div class="row">
+                            <div class="row  small-text-field">
                                 <!-- Columnas de contenido -->
                                 <div class="col-md-8">
                                     <div class="row mb-3">
                                         <!-- Campo de Nombre de la Promoción -->
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <label for="name" class="form-label">Nombre de la promoción</label>
-                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" placeholder="Ej: Promoción especial" maxlength="255" required>
+                                            <input type="text" name="name" class="form-control small-text-field @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" placeholder="Ej: Promoción especial" maxlength="50" required>
                                             @error('name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                            <?php
+                                            $promos = [
+                                                "Ropa habitual de 21 a 49 libras",
+                                                "Lavado y secado -20 libras",
+                                                "Sabanas, cubrecolchón y sobrefundas",
+                                                "Lavados y secados +50 libras",
+                                                "Peluches, almohadas y cojines",
+                                                "Edredones"
+                                            ];
+                                            ?>
+
+                                            <!-- Campo de departamento -->
+                                        <div class="col-md-6">
+                                            <label for="promo" class="form-label">Promoción</label>
+                                            <select name="promo" class="form-select small-text-field @error('promo') is-invalid @enderror" id="promo" required>
+                                                <option value="">Selecciona una promoción</option>
+                                                @foreach($promos as $promo)
+                                                    <option value="{{ $promo }}" {{ old('promo') == $promo ? 'selected' : '' }}>
+                                                        {{ $promo }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('promo')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -32,21 +59,39 @@
                                     <div class="row mb-3">
                                         <!-- Campo de Precio -->
                                         <div class="col-md-6">
-                                            <label for="price" class="form-label">Precio</label>
-                                            <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 99.99" required>
+                                            <label for="price" class="form-label">Precio por libra</label>
+                                            <input type="text" name="price" class="form-control small-text-field @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 99.99" required>
                                             @error('price')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
                                         <!-- Campo de Descuento -->
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <label for="discount" class="form-label">Descuento (%)</label>
-                                            <input type="text" name="discount" class="form-control @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount') }}" placeholder="Ej: 20" required>
+                                            <input type="text" name="discount" class="form-control small-text-field @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount') }}" placeholder="Ej: 20" required>
                                             @error('discount')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
+
+                                        <!-- Campo de Libra -->
+                                        <div class="col-md-3">
+                                            <label for="discount" class="form-label">Peso en libras</label>
+                                            <input type="text" name="libras" class="form-control small-text-field @error('libras') is-invalid @enderror" id="libras" value="{{ old('libras') }}" placeholder="Ej: 20" required>
+                                            @error('libras')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <!-- Campo de Dirección -->
+                                    <div class="mb-3">
+                                        <label for="notes" class="form-label">Notas</label>
+                                        <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" id="notes" placeholder="Ej: Notas básicas al respecto" maxlength="500" rows="3">{{ old('notes') }}</textarea>
+                                        @error('notes')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
 
                                     <!-- Campo de Días de la Promoción -->
@@ -59,7 +104,7 @@
                                                     @foreach($dayGroup as $day)
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="checkbox" name="days[]" value="{{ $day }}" id="day_{{ $day }}" {{ in_array($day, old('days', [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label" for="day_{{ $day }}">{{ $day }}</label>
+                                                            <label class="form-check-label small-text-field" for="day_{{ $day }}">{{ $day }}</label>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -96,7 +141,6 @@
                                         @endif
                                     </div>
                                 </div>
-
                             </div>
 
                             <!-- Botones de acción -->
@@ -146,6 +190,11 @@
 
             // Validación de porcentaje (solo dos dígitos del 1 al 9)
             document.getElementById('discount').addEventListener('input', function (e) {
+                e.target.value = e.target.value.replace(/[^1-9]/g, '').slice(0, 2);
+            });
+
+            // Validación de porcentaje (solo dos dígitos del 1 al 9)
+            document.getElementById('libras').addEventListener('input', function (e) {
                 e.target.value = e.target.value.replace(/[^1-9]/g, '').slice(0, 2);
             });
 

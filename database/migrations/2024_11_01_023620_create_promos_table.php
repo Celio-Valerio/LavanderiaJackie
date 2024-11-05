@@ -17,6 +17,9 @@ return new class extends Migration
             $table->unsignedTinyInteger('discount')->default(1);
             $table->string('image');
             $table->string('name');
+            $table->integer('libras');
+            $table->string('promo');
+            $table->text('notes')->nullable();
             $table->json('days');
             $table->timestamps();
         });
