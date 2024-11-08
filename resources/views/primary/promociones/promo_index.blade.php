@@ -25,10 +25,9 @@
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
-                                <th style="width: 20%;">Nombre</th>
-                                <th style="width: 15%;">Precio</th>
+                                <th style="width: 25%;">Nombre</th>
                                 <th style="width: 10%;">Descuento</th>
-                                <th style="width: 30%;">Días</th>
+                                <th style="width: 40%;">Días</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
@@ -37,9 +36,12 @@
                                 <tr>
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field"><b>{{ $promo->name }}</b></td>
-                                    <td class="small-text-field">L. {{ $promo->price}}</td>
                                     <td class="small-text-field">{{ $promo->discount }} %</td>
-                                    <td class="small-text-field">{{ implode(', ', json_decode($promo->days, true)) }}</td>
+                                    <td class="small-text-field">
+                                        @foreach(json_decode($promo->days, true) as $day)
+                                            <span class="badge bg-dark me-1">{{ $day }}</span>
+                                        @endforeach
+                                    </td>
                                     <td class="text-center small-text-field">
                                         <a href="{{ route('promociones.show', $promo->id) }}" class="btn btn-info btn-sm">Ver</a>
                                         <a href="{{ route('promociones.edit', $promo->id) }}" class="btn btn-warning btn-sm">Editar</a>

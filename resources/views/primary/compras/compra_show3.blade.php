@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles de la factura</title>
+    <title>Factura Minimalista</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* Global Styling */
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
+            background-color: #f4f4f4;
+            color: #424242;
+            margin: 0;
             padding: 20px;
         }
 
@@ -21,116 +23,111 @@
             align-items: center;
             padding: 20px;
             background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 26px;
-            color: #333;
+            font-size: 22px;
+            color: #009688;
             font-weight: 700;
+            margin: 0;
         }
 
         .contact-info {
-            font-size: 14px;
-            color: #666;
+            font-size: 12px;
             text-align: right;
+            color: #757575;
         }
 
-        /* Tarjeta de Factura */
+        /* Invoice Card */
         .card-factura {
-            border: 1px solid #ddd;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #009688;
         }
 
         .section-title {
-            font-size: 18px;
-            color: #333;
+            font-size: 16px;
+            color: #009688;
+            font-weight: 500;
             margin-bottom: 15px;
-            font-weight: 600;
         }
 
         .info-box {
-            background-color: #f8f8f8;
+            background: #f9f9f9;
             padding: 15px;
-            border-radius: 8px;
-            color: #333;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            border-radius: 5px;
+            color: #424242;
+            margin-bottom: 10px;
         }
 
-        /* Tabla de Detalles */
+        /* Table Styling */
         .table th {
-            background-color: #333;
-            color: #ffffff;
-            font-weight: 600;
-            border-top: none;
-            border-bottom: 2px solid #666;
-        }
-
-        .table td {
-            padding: 12px;
-            border-top: 1px solid #ddd;
+            background-color: #009688;
+            color: white;
+            font-weight: 500;
+            border: none;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f7f7f7;
+            background-color: #f4f4f4;
         }
 
-        /* Estilo de Moneda */
-        .currency {
-            font-family: monospace;
-            display: inline-block;
-            min-width: 100px;
+        .table td, .table th {
+            padding: 12px;
+            vertical-align: middle;
+        }
+
+        /* Total Section */
+        .total-section {
             text-align: right;
-            color: #333;
-        }
-
-        /* Botones */
-        .btn-custom {
-            border-radius: 25px;
-            font-weight: bold;
-            padding: 10px 20px;
-            transition: background-color 0.2s ease;
-        }
-
-        .btn-primary-custom {
-            background-color: #333;
-            color: #fff;
-        }
-
-        .btn-primary-custom:hover {
-            background-color: #555;
-        }
-
-        .btn-secondary-custom {
-            background-color: #6c757d;
-            color: #fff;
-        }
-
-        /* Redes Sociales */
-        .social-icons {
             font-size: 18px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
+            font-weight: 500;
+            color: #009688;
             margin-top: 20px;
         }
 
-        .social-icons a {
-            color: #333;
-            transition: color 0.3s;
+        /* Buttons */
+        .btn-custom {
+            border-radius: 20px;
+            font-weight: bold;
+            padding: 8px 16px;
+            color: #fff;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary-custom {
+            background-color: #009688;
+        }
+
+        .btn-secondary-custom {
+            background-color: #757575;
+        }
+
+        .btn-custom:hover {
+            opacity: 0.9;
+        }
+
+        /* Social Media */
+        .social-icons {
+            font-size: 18px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 15px;
+            color: #757575;
         }
 
         .social-icons a:hover {
-            color: #666;
+            color: #009688;
         }
 
-        /* Estilos de impresión */
+        /* Print Styles */
         @media print {
             .header, .btn, .social-icons {
                 display: none;
@@ -143,8 +140,6 @@
         }
     </style>
 </head>
-
-
 <body>
 
 <section class="container py-3">

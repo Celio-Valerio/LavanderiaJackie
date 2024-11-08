@@ -101,7 +101,6 @@ Route::resource('compras', CompraController::class);
 // Ruta para recargar el formulario de editar compra
 Route::get('/compras/{id}/reload', [CompraController::class, 'reload'])->name('compras.reload');
 
-
 // Rutas para manejar productos
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index'); // Lista de productos
 

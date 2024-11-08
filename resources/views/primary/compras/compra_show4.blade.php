@@ -9,8 +9,8 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f5;
-            color: #333;
+            background: linear-gradient(135deg, #e0f4ff, #d0e9ff);
+            color: #444;
             padding: 20px;
         }
 
@@ -21,90 +21,89 @@
             align-items: center;
             padding: 20px;
             background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
         }
 
         .header h1 {
-            font-size: 26px;
-            color: #333;
+            font-size: 24px;
+            color: #00509e;
             font-weight: 700;
         }
 
         .contact-info {
-            font-size: 14px;
+            font-size: 13px;
             color: #666;
             text-align: right;
         }
 
         /* Tarjeta de Factura */
         .card-factura {
-            border: 1px solid #ddd;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border: none;
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         .section-title {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 15px;
+            font-size: 20px;
+            color: #00509e;
+            margin-bottom: 12px;
             font-weight: 600;
         }
 
         .info-box {
-            background-color: #f8f8f8;
-            padding: 15px;
+            background: #f3f9ff;
+            padding: 18px;
             border-radius: 8px;
             color: #333;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            margin-bottom: 12px;
         }
 
         /* Tabla de Detalles */
         .table th {
-            background-color: #333;
+            background-color: #00509e;
             color: #ffffff;
             font-weight: 600;
             border-top: none;
-            border-bottom: 2px solid #666;
+            border-bottom: 1px solid #ddd;
         }
 
         .table td {
-            padding: 12px;
+            padding: 14px;
             border-top: 1px solid #ddd;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f7f7f7;
+            background-color: #e3f2fd;
         }
 
         /* Estilo de Moneda */
         .currency {
             font-family: monospace;
             display: inline-block;
-            min-width: 100px;
+            min-width: 120px;
             text-align: right;
-            color: #333;
+            color: #00509e;
         }
 
         /* Botones */
         .btn-custom {
-            border-radius: 25px;
+            border-radius: 30px;
             font-weight: bold;
             padding: 10px 20px;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         .btn-primary-custom {
-            background-color: #333;
+            background-color: #00509e;
             color: #fff;
         }
 
         .btn-primary-custom:hover {
-            background-color: #555;
+            background-color: #003c7e;
         }
 
         .btn-secondary-custom {
@@ -122,28 +121,52 @@
         }
 
         .social-icons a {
-            color: #333;
+            color: #00509e;
             transition: color 0.3s;
         }
 
         .social-icons a:hover {
-            color: #666;
+            color: #003c7e;
         }
 
         /* Estilos de impresión */
         @media print {
+            /* Tamaño de página */
+            @page {
+                size: A4;
+                margin: 1.5cm;
+            }
+
+            /* Ocultar elementos no necesarios */
             .header, .btn, .social-icons {
                 display: none;
             }
 
+            /* Ajustes de la tarjeta para impresión */
             .card-factura {
                 box-shadow: none;
                 padding: 0;
             }
+
+            /* Dividir la tabla en varias páginas si es necesario */
+            .table tbody {
+                display: table-row-group;
+            }
+
+            /* Limitar altura de la tabla para 20 filas aprox. en tamaño carta */
+            .table-responsive {
+                max-height: 500px;
+                overflow: visible;
+                page-break-inside: auto;
+            }
+
+            .table tbody tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
         }
     </style>
 </head>
-
 
 <body>
 

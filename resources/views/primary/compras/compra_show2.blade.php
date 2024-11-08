@@ -9,9 +9,8 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f5;
+            background-color: #f0f4f8;
             color: #333;
-            padding: 20px;
         }
 
         /* Encabezado */
@@ -19,92 +18,82 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
+            padding: 15px;
             background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
 
         .header h1 {
-            font-size: 26px;
-            color: #333;
+            font-size: 22px;
+            color: #1e90ff;
             font-weight: 700;
         }
 
         .contact-info {
-            font-size: 14px;
-            color: #666;
+            font-size: 12px;
+            color: #555;
             text-align: right;
         }
 
         /* Tarjeta de Factura */
         .card-factura {
-            border: 1px solid #ddd;
-            padding: 30px;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border: none;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .section-title {
             font-size: 18px;
-            color: #333;
-            margin-bottom: 15px;
+            color: #1e90ff;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
         .info-box {
-            background-color: #f8f8f8;
+            background: #f8fafc;
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 6px;
             color: #333;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
+            margin-bottom: 10px;
         }
 
         /* Tabla de Detalles */
         .table th {
-            background-color: #333;
-            color: #ffffff;
+            background-color: #1e90ff;
+            color: white;
             font-weight: 600;
-            border-top: none;
-            border-bottom: 2px solid #666;
         }
 
         .table td {
             padding: 12px;
-            border-top: 1px solid #ddd;
         }
 
         .table-striped tbody tr:nth-of-type(odd) {
-            background-color: #f7f7f7;
+            background-color: #f0f4f8;
         }
 
         /* Estilo de Moneda */
         .currency {
             font-family: monospace;
             display: inline-block;
-            min-width: 100px;
+            min-width: 120px;
             text-align: right;
-            color: #333;
         }
 
         /* Botones */
         .btn-custom {
             border-radius: 25px;
             font-weight: bold;
-            padding: 10px 20px;
-            transition: background-color 0.2s ease;
+            padding: 10px 18px;
+            transition: all 0.2s ease;
         }
 
         .btn-primary-custom {
-            background-color: #333;
+            background-color: #1e90ff;
             color: #fff;
-        }
-
-        .btn-primary-custom:hover {
-            background-color: #555;
         }
 
         .btn-secondary-custom {
@@ -116,18 +105,18 @@
         .social-icons {
             font-size: 18px;
             display: flex;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .social-icons a {
-            color: #333;
+            color: #1e90ff;
             transition: color 0.3s;
         }
 
         .social-icons a:hover {
-            color: #666;
+            color: #0056b3;
         }
 
         /* Estilos de impresión */
@@ -143,8 +132,6 @@
         }
     </style>
 </head>
-
-
 <body>
 
 <section class="container py-3">
@@ -207,13 +194,13 @@
                 </thead>
                 <tbody>
                 @foreach ($compra->detalles as $detalle)
-                    <tr>
-                        <td class="text-start">{{ $detalle->producto->nombre }}</td>
-                        <td>{{ $detalle->cantidad }}</td>
-                        <td>{!! formatCurrency($detalle->precio) !!}</td>
-                        <td>{!! formatCurrency($detalle->descuento) !!}</td>
-                        <td>{!! formatCurrency(($detalle->precio * $detalle->cantidad) - $detalle->descuento) !!}</td>
-                    </tr>
+                <tr>
+                    <td class="text-start">{{ $detalle->producto->nombre }}</td>
+                    <td>{{ $detalle->cantidad }}</td>
+                    <td>{!! formatCurrency($detalle->precio) !!}</td>
+                    <td>{!! formatCurrency($detalle->descuento) !!}</td>
+                    <td>{!! formatCurrency(($detalle->precio * $detalle->cantidad) - $detalle->descuento) !!}</td>
+                </tr>
                 @endforeach
                 </tbody>
             </table>
@@ -223,7 +210,7 @@
         <div class="d-flex justify-content-end my-3">
             <h4>Total: {!! formatCurrency($compra->detalles->sum(function($detalle) {
                 return ($detalle->precio * $detalle->cantidad) - $detalle->descuento;
-            })) !!}</h4>
+                })) !!}</h4>
         </div>
 
         <!-- Botones -->
@@ -260,10 +247,10 @@
 </html>
 
 @php
-    function formatCurrency($amount) {
-        // Formatear la cantidad con el formato L. y con espacios para alinear
-        $formattedAmount = number_format($amount, 2, '.', ',');
-        $spaces = str_repeat('&nbsp;', 12 - strlen($formattedAmount));
-        return "<span class='currency'>L.$spaces$formattedAmount</span>";
-    }
+function formatCurrency($amount) {
+// Formatear la cantidad con el formato L. y con espacios para alinear
+$formattedAmount = number_format($amount, 2, '.', ',');
+$spaces = str_repeat('&nbsp;', 12 - strlen($formattedAmount));
+return "<span class='currency'>L.$spaces$formattedAmount</span>";
+}
 @endphp

@@ -49,7 +49,7 @@ class ProductoController extends Controller
             'precio' => [
                 'required',
                 'numeric',
-                'min:0', // Precio no puede ser negativo
+                'min:1', // Precio no puede ser negativo
             ],
             'categoria_id' => [
                 'required',
@@ -64,13 +64,16 @@ class ProductoController extends Controller
                 'string',
                 'max:500',
             ],
+            'presentacion' => [
+                'required',
+            ],
         ], [
             'nombre.required' => 'El nombre del producto es obligatorio.',
-            'nombre.regex' => 'El nombre del producto solo puede contener letras, números y puntos.',
+            'nombre.regex' => 'El nombre del producto solo puede contener letras y números.',
 
             'precio.required' => 'El precio del producto es obligatorio.',
             'precio.numeric' => 'El precio debe ser un número.',
-            'precio.min' => 'El precio no puede ser negativo.',
+            'precio.min' => 'El precio del producto debe ser mayor a L. 0.00.',
 
             'categoria_id.required' => 'Debes seleccionar una categoría.',
             'categoria_id.exists' => 'La categoría seleccionada no es válida.',
@@ -79,6 +82,8 @@ class ProductoController extends Controller
             'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
 
             'descripcion.max' => 'La descripción no puede exceder los 500 caracteres.',
+
+            'presentacion.required' => 'Debes seleccionar la presentación del producto.',
         ]);
 
         // Guardar producto en la base de datos
@@ -86,6 +91,7 @@ class ProductoController extends Controller
         $producto->nombre = $request->nombre;
         $producto->descripcion = $request->descripcion;
         $producto->precio = $request->precio;
+        $producto->presentacion = $request->presentacion;
         $producto->stock = 0; // Asegúrate de añadir este campo en la migración
         $producto->categoria_id = 2; // Asignar la categoría relacionada
         $producto->proveedor_id = $request->proveedor_id; // Asignar el proveedor relacionado

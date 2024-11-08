@@ -20,10 +20,21 @@
                                 <div class="col-md-8">
                                     <div class="row mb-3">
                                         <!-- Campo de Nombre de la Promoción -->
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <label for="name" class="form-label">Nombre de la promoción</label>
                                             <input type="text" name="name" class="form-control small-text-field @error('name') is-invalid @enderror" id="name" value="{{ old('name') }}" placeholder="Ej: Promoción especial" maxlength="50" required>
                                             @error('name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <!-- Campo de Descuento -->
+                                        <div class="col-md-6">
+                                            <label for="discount" class="form-label">Descuento (%)</label>
+                                            <input type="text" name="discount" class="form-control small-text-field @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount') }}" placeholder="Ej: 20" required>
+                                            @error('discount')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -56,17 +67,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
-                                        <!-- Campo de Descuento -->
-                                        <div class="col-md-3">
-                                            <label for="discount" class="form-label">Descuento (%)</label>
-                                            <input type="text" name="discount" class="form-control small-text-field @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount') }}" placeholder="Ej: 20" required>
-                                            @error('discount')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                    </div>
-
                                     <!-- Campo de Dirección -->
                                     <div class="mb-3">
                                         <label for="notes" class="form-label">Notas</label>
@@ -75,28 +75,6 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
-                                    <!-- Campo de Días de la Promoción -->
-                                    <div class="row mb-3">
-                                        <label class="form-label">Días de la promoción</label>
-                                        <div class="col-md-12 d-flex flex-wrap">
-                                            <!-- Agrupamos los días en dos filas -->
-                                            @foreach(array_chunk(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'], 4) as $dayGroup)
-                                                <div class="col-md-6">
-                                                    @foreach($dayGroup as $day)
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="days[]" value="{{ $day }}" id="day_{{ $day }}" {{ in_array($day, old('days', [])) ? 'checked' : '' }}>
-                                                            <label class="form-check-label small-text-field" for="day_{{ $day }}">{{ $day }}</label>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        @error('days')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
                                 </div>
 
                                 <!-- Columna de la Imagen -->
@@ -122,6 +100,23 @@
                                             <small class="text-muted">Archivo: {{ basename(old('image')) }}</small>
                                         @endif
                                     </div>
+                                </div>
+
+                                <!-- Campo de Días de la Promoción -->
+                                <div class="row mb-3">
+                                    <label class="form-label">Días de la promoción</label>
+                                    <div class="col-md-12 d-flex flex-wrap">
+                                        <!-- Todos los días en una sola fila -->
+                                        @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as $day)
+                                            <div class="form-check me-3">
+                                                <input class="form-check-input" type="checkbox" name="days[]" value="{{ $day }}" id="day_{{ $day }}" {{ in_array($day, old('days', [])) ? 'checked' : '' }}>
+                                                <label class="form-check-label small-text-field" for="day_{{ $day }}">{{ $day }}</label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    @error('days')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 

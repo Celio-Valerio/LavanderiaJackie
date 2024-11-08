@@ -52,15 +52,16 @@
                                         </div>
                                         <div class="card-body text-center flex-grow-1">
                                             <h5 class="card-title" style="font-size: 1.1em;">{{ $promo->name }}</h5>
-                                            <p class="text-muted mb-1" style="font-size: 0.8em;">
+                                            <p class="text-muted mb-1" style="font-size: 0.8em; display: none;">
                                                 <del>L. {{ number_format($promo->price, 2) }}</del>
                                             </p>
                                             @php
                                                 $discountedPrice = $promo->price - ($promo->price * ($promo->discount / 100));
                                             @endphp
-                                            <p class="fw-bold mb-3" style="color: #d9534f; font-size: 1.3em;">
+                                            <p class="fw-bold mb-3" style="color: #d9534f; font-size: 1.3em; display: none;">
                                                 L. {{ number_format($discountedPrice, 2) }}
                                             </p>
+
                                             <div class="mb-3">
                                                 @foreach(json_decode($promo->days, true) as $day)
                                                     <span class="badge bg-secondary me-1" style="font-size: 0.7em;">{{ $day }}</span>

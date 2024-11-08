@@ -16,9 +16,9 @@
 
                             <div class="row mb-3">
                                 <!-- Campo de Nombre del Producto -->
-                                <div class="col-md-4">
+                                <div class="col-md-8">
                                     <label for="nombre" class="form-label">Nombre del producto</label>
-                                    <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre') }}" placeholder="Ej: Jabón Líquido" maxlength="100" required>
+                                    <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre') }}" placeholder="Ej: Jabón Líquido" maxlength="50" required>
                                     @error('nombre')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -27,14 +27,16 @@
                                 <!-- Campo de Precio -->
                                 <div class="col-md-4">
                                     <label for="precio" class="form-label">Precio</label>
-                                    <input type="number" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio') }}" placeholder="Ej: 50.00" step="0.01" required>
+                                    <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio') }}" placeholder="Ej: 99.99" required>
                                     @error('precio')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
 
+                            <div class="row mb-3">
                                 <!-- Campo de Proveedor -->
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="proveedor_id" class="form-label">Proveedor</label>
                                     <select name="proveedor_id" class="form-select small-text-field @error('proveedor_id') is-invalid @enderror" id="proveedor_id" required>
                                         <option value="">Selecciona un proveedor</option>
@@ -50,6 +52,31 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                    <?php
+                                    $presentacion = [
+                                        "Gramos", "Kilogramos", "Litros", "Mililitros", "Unidades", "Bolsas", "Paquetes",
+                                        "Galones", "Botellas", "Cubetas", "Cajas", "Latas", "Sachets", "Sobres", "Polvo",
+                                        "Líquido", "Gel", "Pastillas", "Barras", "Tabletas", "Dispensadores"
+                                    ];
+                                    ?>
+
+                                    <!-- Campo de presentación -->
+                                <div class="col-md-6">
+                                    <label for="presentacion" class="form-label">Presentación</label>
+                                    <select name="presentacion" class="form-select small-text-field @error('presentacion') is-invalid @enderror" id="presentacion" required>
+                                        <option value="">Selecciona una presentación</option>
+                                        @foreach($presentacion as $opcion)
+                                            <option value="{{ $opcion }}" {{ old('presentacion') == $opcion ? 'selected' : '' }}>
+                                                {{ $opcion }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('presentacion')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                             </div>
 
                             <!-- Campo de Descripción -->
@@ -79,6 +106,29 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            // Validación del precio (solo 7 dígitos y dos decimales después del punto)
+            document.getElementById('precio').addEventListener('input', function (e) {
+                e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');  // Limita a un punto decimal
+                if (e.target.value.includes('.')) {
+                    const [integer, decimal] = e.target.value.split('.');
+                    e.target.value = integer.slice(0, 4) + '.' + (decimal ? decimal.slice(0, 2) : '');
+                } else {
+                    e.target.value = e.target.value.slice(0, 4);
+                }
+            });
+
+            // Capitalizar primera letra del nombre
+            document.getElementById('nombre').addEventListener('input', function (e) {
+                e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+            });
+
+            // Capitalizar primera letra del nombre
+            document.getElementById('descripcion').addEventListener('input', function (e) {
+                e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+            });
+        </script>
 
         <script>
             document.getElementById('clearButton').addEventListener('click', function () {
