@@ -45,20 +45,10 @@ class PromoController extends Controller
                 'string',
                 'max:255',
             ],
-            'price' => [
-                'required',
-                'numeric',
-                'min:0',
-            ],
             'discount' => [
                 'required',
                 'numeric',
                 'between:5,45',
-            ],
-            'libras' => [
-                'required',
-                'numeric',
-                'between:1,99',
             ],
             'promo' => [
                 'required',
@@ -84,20 +74,11 @@ class PromoController extends Controller
             'name.string' => 'El nombre de la promoción debe ser una cadena de texto válida.',
             'name.max' => 'El nombre de la promoción no puede exceder los 255 caracteres.',
 
-            'price.required' => 'El precio es obligatorio.',
-            'price.numeric' => 'El precio debe ser un número.',
-            'price.min' => 'El precio debe ser mayor a L. 10,000.00.',
-            'price.max' => 'El precio debe ser menor a L. 1.00.',
-
             'promo.required' => 'Debes seleccionar una promoción o servicio.',
 
             'discount.required' => 'El descuento es obligatorio.',
             'discount.numeric' => 'El descuento debe ser un número.',
             'discount.between' => 'El descuento debe estar entre 5 y 45.',
-
-            'libras.required' => 'Las libras son obligatorias.',
-            'libras.numeric' => 'Las libras se deben expresar en números.',
-            'libras.between' => 'Las libras deben estar entre 1 y 99.',
 
             'image.required' => 'Debes cargar una imagen.',
             'image.image' => 'Debes seleccionar una imagen en un formato válido.',
@@ -115,10 +96,8 @@ class PromoController extends Controller
         // Guardar promoción en la base de datos
         $promo = new Promo();
         $promo->name = $request->name;
-        $promo->price = $request->price;
         $promo->discount = $request->discount;
         $promo->promo = $request->promo;
-        $promo->libras = $request->libras;
         $promo->notes = $request->notes;
 
         // Guardar imagen
@@ -175,11 +154,6 @@ class PromoController extends Controller
                 'string',
                 'max:255',
             ],
-            'price' => [
-                'required',
-                'numeric',
-                'min:0',
-            ],
             'discount' => [
                 'required',
                 'numeric',
@@ -199,10 +173,6 @@ class PromoController extends Controller
             'name.string' => 'El nombre de la promoción debe ser una cadena de texto válida.',
             'name.max' => 'El nombre de la promoción no puede exceder los 255 caracteres.',
 
-            'price.required' => 'El precio es obligatorio.',
-            'price.numeric' => 'El precio debe ser un número.',
-            'price.min' => 'El precio no puede ser negativo.',
-
             'discount.required' => 'El descuento es obligatorio.',
             'discount.numeric' => 'El descuento debe ser un número.',
             'discount.between' => 'El descuento debe estar entre 0 y 100.',
@@ -215,7 +185,6 @@ class PromoController extends Controller
 
         // Actualizar la promoción en la base de datos
         $promo->name = $request->name;
-        $promo->price = $request->price;
         $promo->discount = $request->discount;
         $promo->image = $request->image;
         $promo->days = $request->days;

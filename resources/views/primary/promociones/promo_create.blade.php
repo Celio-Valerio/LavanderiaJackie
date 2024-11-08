@@ -57,29 +57,11 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                        <!-- Campo de Precio -->
-                                        <div class="col-md-6">
-                                            <label for="price" class="form-label">Precio por libra</label>
-                                            <input type="text" name="price" class="form-control small-text-field @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 99.99" required>
-                                            @error('price')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
                                         <!-- Campo de Descuento -->
                                         <div class="col-md-3">
                                             <label for="discount" class="form-label">Descuento (%)</label>
                                             <input type="text" name="discount" class="form-control small-text-field @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount') }}" placeholder="Ej: 20" required>
                                             @error('discount')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <!-- Campo de Libra -->
-                                        <div class="col-md-3">
-                                            <label for="discount" class="form-label">Peso en libras</label>
-                                            <input type="text" name="libras" class="form-control small-text-field @error('libras') is-invalid @enderror" id="libras" value="{{ old('libras') }}" placeholder="Ej: 20" required>
-                                            @error('libras')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -197,22 +179,6 @@
                 e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
             });
 
-            // Validación de porcentaje (solo dos dígitos del 1 al 9)
-            document.getElementById('libras').addEventListener('input', function (e) {
-                e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
-            });
-
-            // Validación del precio (solo 7 dígitos y dos decimales después del punto)
-            document.getElementById('price').addEventListener('input', function (e) {
-                e.target.value = e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');  // Limita a un punto decimal
-                if (e.target.value.includes('.')) {
-                    const [integer, decimal] = e.target.value.split('.');
-                    e.target.value = integer.slice(0, 7) + '.' + (decimal ? decimal.slice(0, 2) : '');
-                } else {
-                    e.target.value = e.target.value.slice(0, 7);
-                }
-            });
-
             // Mostrar vista previa de la imagen seleccionada
             document.getElementById('image').addEventListener('change', function (event) {
                 const file = event.target.files[0];
@@ -242,5 +208,42 @@
                 form.querySelectorAll('.invalid-feedback').forEach((el) => el.style.display = 'none');
             });
         </script>
+
+        <script>
+            // Función para limpiar los campos del formulario de promoción y eliminar los errores de validación
+            document.getElementById('clearButton').addEventListener('click', function () {
+                const form = document.getElementById('promoForm');
+
+                // Limpiar los valores del formulario
+                form.reset();
+
+                // Limpiar los campos manualmente para evitar restauración por old()
+                form.querySelectorAll('input, textarea, select').forEach(function (input) {
+                    if (input.type !== 'hidden') { // No limpiar campos ocultos
+                        input.value = '';
+                    }
+                });
+
+                // Limpiar el select de promoción
+                document.getElementById('promo').selectedIndex = 0;
+
+                // Limpiar los checkboxes de días de la promoción
+                form.querySelectorAll('input[type="checkbox"]').forEach(function (checkbox) {
+                    checkbox.checked = false;
+                });
+
+                // Limpiar vista previa de la imagen
+                const imagePreview = document.getElementById('imagePreview');
+                imagePreview.src = '#';
+                imagePreview.style.display = 'none';
+                document.getElementById('imagePreviewContainer').style.backgroundColor = '#f0f0f0';
+
+                // También puedes eliminar las clases de error de validación
+                form.querySelectorAll('.is-invalid').forEach(function (input) {
+                    input.classList.remove('is-invalid');
+                });
+            });
+        </script>
+
     </section>
 @endsection
