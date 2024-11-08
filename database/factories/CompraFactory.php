@@ -18,7 +18,7 @@ class CompraFactory extends Factory
     {
         return [
             'numero_factura' => strtoupper($this->faker->bothify('C2#112024######000##')), // Genera un número de factura único
-            'fecha_compra' => $this->faker->date(), // Genera una fecha de compra
+            'fecha_compra' => $this->faker->dateTimeBetween('2000-01-01', 'now')->format('Y-m-d'), // Genera una fecha entre el 01/01/2000 y la fecha actual
             'descripcion' => $this->faker->sentence, // Descripción opcional de la compra
             'proveedor_id' => $this->faker->numberBetween(1, 10), // ID de un proveedor aleatorio (puedes ajustar esto)
         ];

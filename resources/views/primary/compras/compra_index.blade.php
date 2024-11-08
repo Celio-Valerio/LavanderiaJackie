@@ -21,6 +21,14 @@
                         @endif
                         <hr>
 
+                        <!-- Filtros de fechas -->
+                        <div class="mb-3">
+                            <label for="fecha-desde" class="form-label">Desde:</label>
+                            <input type="date" id="fecha-desde" class="form-control" style="display: inline-block; width: auto;">
+                            <label for="fecha-hasta" class="form-label">Hasta:</label>
+                            <input type="date" id="fecha-hasta" class="form-control" style="display: inline-block; width: auto;">
+                        </div>
+
                         <table id="comprasTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
                             <thead class="table table-bordered table-dark">
                             <tr>
@@ -34,7 +42,7 @@
                             </thead>
                             <tbody>
                             @forelse($compras as $compra)
-                                <tr>
+                                <tr data-fecha="{{ \Carbon\Carbon::parse($compra->fecha_compra)->format('Y-m-d') }}">
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field">{{ $compra->numero_factura }}</td>
                                     <td class="small-text-field">{{ ucfirst(\Carbon\Carbon::parse($compra->fecha_compra)->translatedFormat('l d \d\e F, Y')) }}</td>
@@ -100,6 +108,32 @@
                             $(this.node()).find('td.row-index').html(startIndex++); // Incrementar el índice
                         });
                     }
+                });
+
+                // Filtro de fechas con valores predeterminados
+                var fechaInicial = '2000-01-01';
+                var fechaFinal = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+                $('#fecha-desde').val(fechaInicial);
+                $('#fecha-hasta').val(fechaFinal);
+
+                $('#fecha-desde, #fecha-hasta').change(function() {
+                    var fechaDesde = $('#fecha-desde').val();
+                    var fechaHasta = $('#fecha-hasta').val();
+
+                    table.rows().every(function() {
+                        var row = this.node();
+                        var fechaCompra = $(row).data('fecha');
+
+                        if (fechaDesde && fechaHasta) {
+                            if (fechaCompra >= fechaDesde && fechaCompra <= fechaHasta) {
+                                $(row).show();
+                            } else {
+                                $(row).hide();
+                            }
+                        } else {
+                            $(row).show(); // Si no se aplica filtro, mostrar todas las filas
+                        }
+                    });
                 });
 
                 // Estilo para mover el select a la derecha
