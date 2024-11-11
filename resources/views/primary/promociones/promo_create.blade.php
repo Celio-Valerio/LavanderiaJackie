@@ -136,109 +136,80 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const imagePreview = document.getElementById('imagePreview');
                 const imagePreviewContainer = document.getElementById('imagePreviewContainer');
                 const colorThief = new ColorThief();
-
-                // Cambiar el fondo del contenedor cuando se carga una imagen
-                if (imagePreview.src !== '#') {
-                    imagePreview.addEventListener('load', function() {
-                        // Obtener el color dominante de la imagen
-                        const dominantColor = colorThief.getColor(imagePreview);
-                        // Cambiar el fondo del contenedor al color dominante
-                        imagePreviewContainer.style.backgroundColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
-                    });
-
-                    // También establecer el fondo inicial si ya hay una imagen
-                    imagePreview.addEventListener('load', function() {
-                        const dominantColor = colorThief.getColor(imagePreview);
-                        imagePreviewContainer.style.backgroundColor = `rgb(${dominantColor[0]}, ${dominantColor[1]}, ${dominantColor[2]})`;
-                    });
-                }
-            });
-        </script>
-
-        <script>
-            // Capitalizar primera letra del nombre
-            document.getElementById('name').addEventListener('input', function (e) {
-                e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
-            });
-
-            document.getElementById('notes').addEventListener('input', function (e) {
-                e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
-            });
-
-            // Validación de porcentaje (solo dos dígitos del 1 al 9)
-            document.getElementById('discount').addEventListener('input', function (e) {
-                e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
-            });
-
-            // Mostrar vista previa de la imagen seleccionada
-            document.getElementById('image').addEventListener('change', function (event) {
-                const file = event.target.files[0];
-                const preview = document.getElementById('imagePreview');
-
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function (e) {
-                        preview.src = e.target.result;
-                        preview.style.display = 'block';
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.style.display = 'none';
-                    preview.src = '#';
-                }
-            });
-
-            // Limpiar el formulario
-            document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('promoForm');
-                form.reset();
-                document.getElementById('imagePreview').style.display = 'none';
+                const clearButton = document.getElementById('clearButton');
 
-                // Remover clases de validación
-                form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
-                form.querySelectorAll('.invalid-feedback').forEach((el) => el.style.display = 'none');
-            });
-        </script>
+                // Función para cambiar el fondo al color dominante de la imagen
+                const updateContainerBackground = () => {
+                    if (imagePreview.src && imagePreview.src !== '#') {
+                        const dominantColor = colorThief.getColor(imagePreview);
+                        imagePreviewContainer.style.backgroundColor = `rgb(${dominantColor.join(',')})`;
+                    }
+                };
 
-        <script>
-            // Función para limpiar los campos del formulario de promoción y eliminar los errores de validación
-            document.getElementById('clearButton').addEventListener('click', function () {
-                const form = document.getElementById('promoForm');
-
-                // Limpiar los valores del formulario
-                form.reset();
-
-                // Limpiar los campos manualmente para evitar restauración por old()
-                form.querySelectorAll('input, textarea, select').forEach(function (input) {
-                    if (input.type !== 'hidden') { // No limpiar campos ocultos
-                        input.value = '';
+                // Mostrar vista previa de la imagen seleccionada y cambiar fondo
+                document.getElementById('image').addEventListener('change', function (event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            imagePreview.src = e.target.result;
+                            imagePreview.style.display = 'block';
+                            updateContainerBackground();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        imagePreview.src = '#';
+                        imagePreview.style.display = 'none';
+                        imagePreviewContainer.style.backgroundColor = '#f0f0f0';
                     }
                 });
 
-                // Limpiar el select de promoción
-                document.getElementById('promo').selectedIndex = 0;
+                // Actualizar el fondo al cargar la imagen
+                imagePreview.addEventListener('load', updateContainerBackground);
 
-                // Limpiar los checkboxes de días de la promoción
-                form.querySelectorAll('input[type="checkbox"]').forEach(function (checkbox) {
-                    checkbox.checked = false;
+                // Función para capitalizar la primera letra de los inputs
+                const capitalizeFirstLetter = (e) => {
+                    e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+                };
+
+                // Aplicar capitalización en campos de texto específicos
+                ['name', 'notes'].forEach((id) => {
+                    document.getElementById(id).addEventListener('input', capitalizeFirstLetter);
                 });
 
-                // Limpiar vista previa de la imagen
-                const imagePreview = document.getElementById('imagePreview');
-                imagePreview.src = '#';
-                imagePreview.style.display = 'none';
-                document.getElementById('imagePreviewContainer').style.backgroundColor = '#f0f0f0';
-
-                // También puedes eliminar las clases de error de validación
-                form.querySelectorAll('.is-invalid').forEach(function (input) {
-                    input.classList.remove('is-invalid');
+                // Validar el campo de porcentaje de descuento
+                document.getElementById('discount').addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
                 });
+
+                // Función para limpiar el formulario
+                const clearForm = () => {
+                    form.reset();
+                    form.querySelectorAll('input, textarea, select').forEach((input) => {
+                        if (input.type !== 'hidden') input.value = '';
+                    });
+
+                    // Reiniciar select y checkboxes
+                    document.getElementById('promo').selectedIndex = 0;
+                    form.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => checkbox.checked = false);
+
+                    // Restablecer la vista previa de la imagen
+                    imagePreview.src = '#';
+                    imagePreview.style.display = 'none';
+                    imagePreviewContainer.style.backgroundColor = '#f0f0f0';
+
+                    // Eliminar errores de validación
+                    form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+                };
+
+                // Limpiar el formulario al hacer clic en el botón
+                clearButton.addEventListener('click', clearForm);
             });
         </script>
-
     </section>
 @endsection
