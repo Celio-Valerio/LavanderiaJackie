@@ -12,19 +12,19 @@
                         <div class="row mb-3">
                             <!-- Nombre de la maquinaria -->
                             <div class="col-md-6">
-                                <label for="name" class="form-label small-text-field"><strong>Nombre de la maquinaria</strong> {{ $maquinaria->name }}</label>
+                                <label for="name" class="form-label small-text-field"><strong>Nombre de la maquinaria:</strong> {{ $maquinaria->name }}</label>
                             </div>
 
                             <!-- Marca -->
                             <div class="col-md-6">
-                                <label for="brand" class="form-label small-text-field"><strong>Marca</strong> {{ $maquinaria->brand }}</label>
+                                <label for="brand" class="form-label small-text-field"><strong>Marca:</strong> {{ $maquinaria->brand }}</label>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <!-- Modelo -->
                             <div class="col-md-6">
-                                <label for="model" class="form-label small-text-field"><strong>Modelo</strong> {{ $maquinaria->model }}</label>
+                                <label for="model" class="form-label small-text-field"><strong>Modelo:</strong> {{ $maquinaria->model }}</label>
                             </div>
 
                             <!-- Fecha de adquisición -->
@@ -37,19 +37,19 @@
                         <div class="row mb-3">
                             <!-- Tipo de maquinaria -->
                             <div class="col-md-6">
-                                <label for="type" class="form-label  small-text-field"><strong>Tipo de maquinaria</strong> {{ $maquinaria->type }}</label>
+                                <label for="type" class="form-label  small-text-field"><strong>Tipo de maquinaria:</strong> {{ $maquinaria->type }}</label>
                             </div>
 
                             <!-- Estado de la maquinaria -->
                             <div class="col-md-6">
-                                <label for="status" class="form-label small-text-field"><strong>Estado</strong> {{ $maquinaria->status }}</label>
+                                <label for="status" class="form-label small-text-field"><strong>Estado:</strong> {{ $maquinaria->status }}</label>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <!-- Proveedor -->
                             <div class="col-md-6">
-                                <label for="proveedor" class="form-label small-text-field"><strong>Proveedor</strong> {{ $maquinaria->proveedor->full_name }}</label>
+                                <label for="proveedor" class="form-label small-text-field"><strong>Proveedor:</strong> {{ $maquinaria->proveedor->full_name }}</label>
                             </div>
                         </div>
 
