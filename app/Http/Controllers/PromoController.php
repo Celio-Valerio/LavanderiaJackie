@@ -19,12 +19,19 @@ class PromoController extends Controller
 
     public function view(Request $request)
     {
-        // Obtener las promociones paginadas
-        $perPage = 3; // Número de promociones por página
-        $promociones = Promo::paginate($perPage);
-        return view('primary.promociones.promo_vista', compact('promociones'));
+        // Obtener el término de búsqueda
+        $search = $request->get('search');
+
+        // Filtrar las promociones si hay un término de búsqueda
+        $promociones = Promo::when($search, function ($query, $search) {
+            return $query->where('name', 'like', '%' . $search . '%');
+        })->paginate(3); // Número de promociones por página
+
+        return view('primary.promociones.promo_vista', compact('promociones', 'search'));
     }
-    
+
+
+
     /**
      * Show the form for creating a new resource.
      */

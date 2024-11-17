@@ -27,13 +27,28 @@
                             </div>
                         </div>
 
-                    @if(session('success'))
+                        <!-- Formulario de búsqueda -->
+                        <form method="GET" action="{{ route('promociones.view') }}" class="mb-3">
+                            <div class="d-flex">
+                                <input type="text" name="search" class="form-control" placeholder="Buscar promoción..." value="{{ $search ?? '' }}">
+                                <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+                            </div>
+                        </form>
+
+                        @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
                                 {{ session('success') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         @endif
                         <hr>
+
+                        <!-- Mostrar mensaje si no se encontraron promociones -->
+                        @if($promociones->isEmpty() && $search)
+                            <div class="alert alert-warning">
+                                No se han encontrado promociones para "<strong>{{ $search }}</strong>".
+                            </div>
+                        @endif
 
                         <div id="promotionsContainer" class="row">
                             @foreach($promociones as $promo)
@@ -76,8 +91,9 @@
                             @endforeach
                         </div>
 
+                        <!-- Agregar el parámetro de búsqueda en la URL de la paginación -->
                         <div>
-                            {{ $promociones->links('pagination::bootstrap-5') }} <!-- Paginación -->
+                            {{ $promociones->appends(['search' => $search])->links('pagination::bootstrap-5') }} <!-- Paginación con búsqueda -->
                         </div>
 
                     </div>
@@ -96,7 +112,6 @@
                 }
             });
         </script>
-
 
     </section>
 @endsection
