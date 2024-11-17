@@ -26,7 +26,7 @@
                                 <a href="{{ route('promociones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Promoción</a>
                             </div>
                         </div>
-                        
+
                     @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
                                 {{ session('success') }}

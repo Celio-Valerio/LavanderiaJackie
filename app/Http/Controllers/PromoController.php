@@ -24,8 +24,7 @@ class PromoController extends Controller
         $promociones = Promo::paginate($perPage);
         return view('primary.promociones.promo_vista', compact('promociones'));
     }
-
-
+    
     /**
      * Show the form for creating a new resource.
      */
@@ -127,10 +126,15 @@ class PromoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        // Buscar la promoción por ID o lanzar un error 404 si no existe
+        $promocion = Promo::findOrFail($id);
+
+        // Pasar la promoción a la vista para mostrarla
+        return view('primary.promociones.promo_show', compact('promocion'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -138,7 +142,7 @@ class PromoController extends Controller
     public function edit($id)
     {
         $promo = Promo::findOrFail($id); // Encuentra la promoción por ID o lanza un error 404 si no existe
-        return view('primary.promociones.promo_edit', compact('promo')); // Pasa la promoción a la vista
+        return view('primary.promociones.promo_update', compact('promo')); // Pasa la promoción a la vista
     }
 
     /**
@@ -157,40 +161,90 @@ class PromoController extends Controller
             'discount' => [
                 'required',
                 'numeric',
-                'between:0,100',
+                'between:5,45',
+            ],
+            'promo' => [
+                'required',
             ],
             'image' => [
                 'nullable',
-                'string',
-                'max:255',
+                'image',
+                'mimes:jpeg,png,jpg,gif',
+                'max:2048',
             ],
             'days' => [
+                'required',
+                'array',
+            ],
+            'notes' => [
                 'nullable',
-                'json',
+                'string',
+                'min:5',
+                'max:500',
             ],
         ], [
             'name.required' => 'El nombre de la promoción es obligatorio.',
             'name.string' => 'El nombre de la promoción debe ser una cadena de texto válida.',
             'name.max' => 'El nombre de la promoción no puede exceder los 255 caracteres.',
 
+            'promo.required' => 'Debes seleccionar una promoción o servicio.',
+
             'discount.required' => 'El descuento es obligatorio.',
             'discount.numeric' => 'El descuento debe ser un número.',
-            'discount.between' => 'El descuento debe estar entre 0 y 100.',
+            'discount.between' => 'El descuento debe estar entre 5 y 45.',
 
-            'image.string' => 'La imagen debe ser una cadena de texto válida.',
-            'image.max' => 'La URL de la imagen no puede exceder los 255 caracteres.',
+            'image.required' => 'Debes cargar una imagen.',
+            'image.image' => 'Debes seleccionar una imagen en un formato válido.',
+            'image.mimes' => 'La imagen debe estar en formato jpeg, png, jpg o gif.',
+            'image.max' => 'La imagen no puede exceder los 2048 KB.',
 
-            'days.json' => 'Los días deben ser un formato JSON válido.',
+            'days.required' => 'Debes seleccionar al menos 1 día de la semana.',
+            'days.array' => 'Los días deben ser un arreglo válido.',
+
+            'notes.string' => 'Las notas deben ser una cadena de texto válida.',
+            'notes.min' => 'Las notas deben tener al menos 5 caracteres.',
+            'notes.max' => 'Las notas no pueden exceder los 500 caracteres.',
         ]);
+        if (!$promo) {
+            return response()->json(['error' => 'Promoción no encontrada'], 404);
+        }
 
-        // Actualizar la promoción en la base de datos
+        // Actualizar los datos de la promoción
         $promo->name = $request->name;
         $promo->discount = $request->discount;
-        $promo->image = $request->image;
-        $promo->days = $request->days;
+        $promo->promo = $request->promo;
+        $promo->notes = $request->notes;
+
+        // Verificar si se ha cargado una nueva imagen
+        if ($request->hasFile('image')) {
+            // Eliminar la imagen anterior si existe
+            if ($promo->image && file_exists(public_path('assets/img/promociones/' . $promo->image))) {
+                unlink(public_path('assets/img/promociones/' . $promo->image));
+            }
+
+            // Subir la nueva imagen
+            $image = $request->file('image');
+            $extension = $image->getClientOriginalExtension();
+
+            // Generar el nuevo nombre de la imagen
+            $timestamp = now()->format('d-m-Y_H-i-s');
+            $randomNumber = str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+            $imageName = "promos_{$timestamp}_{$randomNumber}.{$extension}";
+
+            // Mover la imagen a la carpeta correspondiente
+            $image->move(public_path('assets/img/promociones'), $imageName);
+
+            // Actualizar el nombre de la imagen en la base de datos
+            $promo->image = $imageName;
+        }
+
+        // Actualizar los días de la promoción
+        $promo->days = json_encode($request->days);
+
+        // Guardar los cambios
         $promo->save();
 
-        return redirect()->route('primary.promociones.promo_index')->with('success', 'La promoción ' . $promo->name . ' ha sido actualizada exitosamente.');
+        return redirect()->route('promociones.index')->with('success', 'La promoción ' . $promo->name . ' ha sido actualizada exitosamente.');
     }
 
     /**
