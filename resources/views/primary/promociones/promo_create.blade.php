@@ -187,8 +187,8 @@
                     e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
                 });
 
-                // Función para limpiar el formulario
                 const clearForm = () => {
+                    // Restablecer el formulario y limpiar los campos
                     form.reset();
                     form.querySelectorAll('input, textarea, select').forEach((input) => {
                         if (input.type !== 'hidden') input.value = '';
@@ -198,14 +198,22 @@
                     document.getElementById('promo').selectedIndex = 0;
                     form.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => checkbox.checked = false);
 
+                    // Eliminar la clase is-invalid de los campos
+                    form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
+
+                    // Eliminar los errores de validación específicos de los días
+                    const daysErrorElement = document.querySelector('.invalid-feedback.d-block');
+                    if (daysErrorElement) {
+                        daysErrorElement.classList.remove('d-block');
+                    }
+
                     // Restablecer la vista previa de la imagen
                     imagePreview.src = '#';
                     imagePreview.style.display = 'none';
                     imagePreviewContainer.style.backgroundColor = '#f0f0f0';
-
-                    // Eliminar errores de validación
-                    form.querySelectorAll('.is-invalid').forEach((el) => el.classList.remove('is-invalid'));
                 };
+
+
 
                 // Limpiar el formulario al hacer clic en el botón
                 clearButton.addEventListener('click', clearForm);
