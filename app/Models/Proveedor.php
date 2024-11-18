@@ -28,6 +28,13 @@ class Proveedor extends Model
         return $this->belongsTo(Categoria::class, 'categoria_id', 'id');
     }
 
+    // Relación de productos
+    public function productos()
+    {
+        return $this->hasMany(Producto::class);
+}
+
+
     // Relación con maquinarias
     public function maquinarias()
     {
