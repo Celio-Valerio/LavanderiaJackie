@@ -65,7 +65,7 @@
                                         <label class="form-label"><strong>Precio:</strong></label>
                                     </div>
                                     <div class="col-md-6">
-                                        <p class="form-text mb-0">${{ number_format($servicio->precio, 2) }}</p>
+                                        <p class="form-text mb-0">L.{{ number_format($servicio->precio, 2) }}</p>
                                     </div>
                                 </div>
 

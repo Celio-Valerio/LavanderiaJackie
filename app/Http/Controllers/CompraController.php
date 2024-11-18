@@ -45,7 +45,7 @@ class CompraController extends Controller
         $compra = Compra::with(['proveedor', 'detalles.producto'])->findOrFail($id);
 
         // Retorna la vista 'compras.show' y le pasa los datos de la compra
-        return view('primary.compras.compra_show4', compact('compra'));
+        return view('primary.compras.compra_show', compact('compra'));
     }
 
     /**

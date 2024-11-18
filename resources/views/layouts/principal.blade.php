@@ -315,6 +315,12 @@
                 </li>
 
                 <li>
+                    <a href="/servicios">
+                        <i class="bi bi-circle"></i><span>Servicios</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="/promociones">
                         <i class="bi bi-circle"></i><span>Promociones</span>
                     </a>

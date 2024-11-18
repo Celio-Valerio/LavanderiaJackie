@@ -11,7 +11,7 @@
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Servicios</h1>
                             <div class="button-group d-flex gap-2">
                                 <!-- Deshabilitar el botón "Agregar Servicio" utilizando el atributo disabled -->
-                                <a href="{{ route('servicios.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px; pointer-events: none; opacity: 0.6;">Agregar Servicio</a>
+                                <a href="{{ route('servicios.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Agregar Servicio</a>
                             </div>
 
                         </div>
