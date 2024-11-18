@@ -2,7 +2,63 @@
 @section('title', 'Registrar Promoción')
 @section('content')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+    <style>
+        .custom-checkbox-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
 
+        .custom-checkbox-input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .custom-checkbox-label {
+            position: relative;
+            padding-left: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .custom-checkbox-label::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            transform: translateY(-50%);
+            background-color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        .custom-checkbox-input:checked + .custom-checkbox-label::before {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .custom-checkbox-label::after {
+            content: '✔';
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            font-size: 14px;
+            color: #fff;
+            opacity: 0;
+            transform: translateY(-50%);
+            transition: opacity 0.3s;
+        }
+
+        .custom-checkbox-input:checked + .custom-checkbox-label::after {
+            opacity: 1;
+        }
+
+    </style>
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -106,11 +162,10 @@
                                 <div class="row mb-3">
                                     <label class="form-label">Días de la promoción</label>
                                     <div class="col-md-12 d-flex flex-wrap">
-                                        <!-- Todos los días en una sola fila -->
                                         @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as $day)
-                                            <div class="form-check me-3">
-                                                <input class="form-check-input" type="checkbox" name="days[]" value="{{ $day }}" id="day_{{ $day }}" {{ in_array($day, old('days', [])) ? 'checked' : '' }}>
-                                                <label class="form-check-label small-text-field" for="day_{{ $day }}">{{ $day }}</label>
+                                            <div class="custom-checkbox-wrapper me-3">
+                                                <input class="custom-checkbox-input" type="checkbox" name="days[]" value="{{ $day }}" id="day_{{ $day }}" {{ in_array($day, old('days', [])) ? 'checked' : '' }}>
+                                                <label class="custom-checkbox-label" for="day_{{ $day }}">{{ $day }}</label>
                                             </div>
                                         @endforeach
                                     </div>
@@ -118,9 +173,8 @@
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
-                            </div>
 
-                            <!-- Botones de acción -->
+                                <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
                                 <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
