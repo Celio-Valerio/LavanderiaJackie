@@ -40,7 +40,7 @@
         <div class="col-md-4">
             <div class="form-group">
                 <label for="numero_factura">Número de Factura:</label>
-                <input type="text" name="numero_factura" id="numero_factura" class="form-control @error('numero_factura') is-invalid @enderror" required maxlength="15" value="{{old('numero_factura')}}">
+                <input type="text" name="numero_factura" id="numero_factura" class="form-control @error('numero_factura') is-invalid @enderror" required maxlength="16" value="{{old('numero_factura')}}">
                 @error('numero_factura')
                 <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -110,7 +110,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label for="opcion">Acción:</label> <br>
-                    <button class="btn btn-success btn-sm flex-fill me-1" name="agrePro" id="agrePro">Agregar producto</button>
+                    <button class="btn btn-success btn-sm flex-fill me-0" name="agrePro" id="agrePro" style="height: 30px; width: 120px;">Agregar producto</button>
                 </div>
             </div>
             <input type="hidden" name="detallesMandar" id="detallesMandar">
