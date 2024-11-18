@@ -55,14 +55,22 @@
 
                                     <?php
                                     $presentacion = [
-                                        "Gramos", "Kilogramos", "Litros", "Mililitros", "Unidades", "Bolsas", "Paquetes",
-                                        "Galones", "Botellas", "Cubetas", "Cajas", "Latas", "Sachets", "Sobres", "Polvo",
-                                        "Líquido", "Gel", "Pastillas", "Barras", "Tabletas", "Dispensadores"
+                                        "Litros", "Kilogramos","Bolsas"
                                     ];
                                     ?>
 
+                                        <!-- Campo de Descuento -->
+                                <div class="col-md-2">
+                                    <label for="cantidad" class="form-label">Cantidad</label>
+                                    <input type="text" name="cantidad" class="form-control small-text-field @error('cantidad') is-invalid @enderror" id="cantidad" value="{{ old('cantidad') }}" placeholder="Ej: 20" required>
+                                    @error('cantidad')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+
                                     <!-- Campo de presentación -->
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="presentacion" class="form-label">Presentación</label>
                                     <select name="presentacion" class="form-select small-text-field @error('presentacion') is-invalid @enderror" id="presentacion" required>
                                         <option value="">Selecciona una presentación</option>
@@ -127,6 +135,11 @@
             // Capitalizar primera letra del nombre
             document.getElementById('descripcion').addEventListener('input', function (e) {
                 e.target.value = e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1);
+            });
+
+            // Validar el campo de porcentaje de descuento
+            document.getElementById('discount').addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 5);
             });
         </script>
 

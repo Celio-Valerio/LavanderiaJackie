@@ -10,9 +10,10 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Servicios</h1>
                             <div class="button-group d-flex gap-2">
-                                <a href="{{ route('servicios.view') }}" class="btn btn-dark btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Modo Vista</a>
-                                <a href="{{ route('servicios.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Servicio</a>
+                                <!-- Deshabilitar el botón "Agregar Servicio" utilizando el atributo disabled -->
+                                <a href="{{ route('servicios.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px; pointer-events: none; opacity: 0.6;">Agregar Servicio</a>
                             </div>
+
                         </div>
 
                         @if(session('success'))
