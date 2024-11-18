@@ -3,6 +3,12 @@
 @section('content')
 
     <section class="section">
+    @if(session('clearLocalStorage'))
+            <script>
+                localStorage.removeItem('detallesCompra');
+                localStorage.removeItem('productosSeleccionados');
+            </script>
+        @endif
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -49,7 +55,7 @@
                                     <td class="small-text-field">{{ $compra->proveedor->full_name ?? 'Sin proveedor' }}</td>
                                     <td class="small-text-field">
                                         L. {{ number_format($compra->detalles->sum(function($detalle) {
-                                            return $detalle->cantidad * $detalle->precio;
+                                            return ($detalle->cantidad * $detalle->precio) - ( ($detalle->descuento / 100) * ($detalle->cantidad * $detalle->precio));
                                         }), 2) }}
                                     </td>
                                     <td class="text-center small-text-field">
