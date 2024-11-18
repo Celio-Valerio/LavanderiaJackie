@@ -221,10 +221,9 @@
             <table class="table table-striped table-bordered text-center">
                 <thead>
                 <tr>
-                    <th style="width: 45%;">Producto</th>
+                    <th style="width: 50%;">Producto</th>
                     <th style="width: 10%;">Cantidad</th>
                     <th style="width: 15%;">Precio</th>
-                    <th style="width: 15%;">Descuento</th>
                     <th style="width: 15%;">Total</th>
                 </tr>
                 </thead>
@@ -234,7 +233,6 @@
                         <td class="text-start">{{ $detalle->producto->nombre }}</td>
                         <td>{{ $detalle->cantidad }}</td>
                         <td>{!! formatCurrency($detalle->precio) !!}</td>
-                        <td>{!! formatCurrency($detalle->descuento) !!}</td>
                         <td>{!! formatCurrency(($detalle->precio * $detalle->cantidad) - $detalle->descuento) !!}</td>
                     </tr>
                 @endforeach
@@ -251,20 +249,15 @@
 
         <!-- Botones -->
         <div class="row mb-2">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <a href="{{ route('compras.index') }}" class="btn btn-secondary btn-custom w-100">
                     <i class="fas fa-arrow-left"></i> Volver a la Lista
                 </a>
             </div>
-            <div class="col-md-4">
-                <a href="{{ route('compras.edit', $compra->id) }}" class="btn btn-primary-custom btn-custom w-100">
-                    <i class="fas fa-edit"></i> Editar Factura
+            <div class="col-md-6">
+                <a onclick="window.print()" class="btn btn-primary-custom btn-custom w-100">
+                    <i class="fas fa-edit"></i> Imprimir Factura
                 </a>
-            </div>
-            <div class="col-md-4">
-                <button onclick="window.print()" class="btn btn-secondary btn-custom w-100">
-                    <i class="fas fa-print"></i> Imprimir Factura
-                </button>
             </div>
         </div>
 
