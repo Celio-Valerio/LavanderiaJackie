@@ -73,12 +73,14 @@ class ProductoFactory extends Factory
 
         // Asignación de categorías según el proveedor
         $proveedores = [1,3,6,7,11,13,18];
+        $cantidades = [1,3,6,7,11,13,18];
 
         return [
             'nombre' => $this->faker->randomElement($nombres), // Nombre del producto
             'precio' => $this->faker->randomElement($precios), // Precio aleatorio de la lista especificada
-            'descripcion' => $this->faker->randomElement($descripciones), // Descripción del producto
+            'descripcion' => $this->faker->randomElement($descripciones),// Descripción del producto
             'stock' => 0, // Asignar la cantidad de inventario
+            'cantidad' => $this->faker->randomElement($cantidades),
             'presentacion' => $this->faker->randomElement($presentacion),
             'categoria_id' => 2, // Asignar la categoría insumos
             'proveedor_id' => $this->faker->randomElement($proveedores), // ID del proveedor seleccionado

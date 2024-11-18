@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('descripcion')->nullable(); // Descripción del producto
             $table->decimal('precio', 10, 2); // Precio del producto
             $table->integer('stock');
+            $table->integer('cantidad');
             $table->string('presentacion');
             $table->unsignedBigInteger('categoria_id'); // Referencia a la categoría
             $table->unsignedBigInteger('proveedor_id'); // Referencia al proveedor

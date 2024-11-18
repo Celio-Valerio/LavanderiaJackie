@@ -51,6 +51,12 @@ class ProductoController extends Controller
                 'numeric',
                 'min:1', // Precio no puede ser negativo
             ],
+            'cantidad' => [
+                'required',
+                'numeric',
+                'min:1', // Precio no puede ser negativo
+                'max:10000', // Precio no puede ser negativo
+            ],
             'categoria_id' => [
                 'required',
                 'exists:categorias,id', // Verifica que la categoría exista
@@ -75,6 +81,11 @@ class ProductoController extends Controller
             'precio.numeric' => 'El precio debe ser un número.',
             'precio.min' => 'El precio del producto debe ser mayor a L. 0.00.',
 
+            'cantidad.required' => 'La cantidad del producto es obligatoria.',
+            'cantidad.numeric' => 'La cantidad debe ser un número.',
+            'cantidad.min' => 'La cantidad del producto debe ser mayor a 0.',
+            'cantidad.max' => 'La cantidad del producto debe ser menor a 10,000.',
+
             'categoria_id.required' => 'Debes seleccionar una categoría.',
             'categoria_id.exists' => 'La categoría seleccionada no es válida.',
 
@@ -91,6 +102,7 @@ class ProductoController extends Controller
         $producto->nombre = $request->nombre;
         $producto->descripcion = $request->descripcion;
         $producto->precio = $request->precio;
+        $producto->cantidad = $request->cantidad;
         $producto->presentacion = $request->presentacion;
         $producto->stock = 0; // Asegúrate de añadir este campo en la migración
         $producto->categoria_id = 2; // Asignar la categoría relacionada

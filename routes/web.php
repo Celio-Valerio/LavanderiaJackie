@@ -9,6 +9,7 @@ use App\Http\Controllers\EmpleadoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ServicioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,3 +110,21 @@ Route::resource('productos', ProductoController::class);
 // Ruta para recargar el formulario de editar producto
 Route::get('/productos/{id}/reload', [ProductoController::class, 'reload'])->name('productos.reload');
 
+// Rutas para manejar servicios
+Route::get('/servicios', [ServicioController::class, 'index'])->name('servicios.index'); // Lista de servicios
+Route::get('/servicios-tarjetas', [ServicioController::class, 'view'])->name('servicios.view'); // Vista en tarjetas
+
+// Rutas de recursos para servicios
+Route::resource('servicios', ServicioController::class);
+
+// Ruta para recargar el formulario de editar servicio
+Route::get('/servicios/{id}/reload', [ServicioController::class, 'reload'])->name('servicios.reload');
+
+// Ruta para buscar servicios (por nombre, tipo, etc.)
+Route::get('/servicios/buscar', [ServicioController::class, 'search'])->name('servicios.search');
+
+// Ruta para obtener los servicios activos
+Route::get('/servicios/activos', [ServicioController::class, 'active'])->name('servicios.active');
+
+// Ruta para cambiar el estado de un servicio (activar/desactivar)
+Route::post('/servicios/{id}/toggle', [ServicioController::class, 'toggleStatus'])->name('servicios.toggle');
