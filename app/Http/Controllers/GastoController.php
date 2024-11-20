@@ -39,18 +39,15 @@ class GastoController extends Controller
                 'required',
                 'date',
                 'before_or_equal:today',
+                'after_or_equal:' . now()->subYears(10)->toDateString(),
             ],
 
-            'categoria' => [
-                'required',
-                'string',
-                'max:255',
-            ],
-
+            
             'monto' => [
                 'required',
                 'numeric',
-                'max:9999',
+                'max:9999999999',
+                'min:0.01',
             ],
             'descripcion' => [  
                 'nullable',
@@ -61,12 +58,11 @@ class GastoController extends Controller
 
             'fecha.date' => 'La fecha no es correcta.',
             'fecha.required' => 'La fecha es obligatoria.',
-            'fecha.before_or_equal' => 'La fecha no es correcta.',
-            'categoria.required' => 'La categoría es obligatoria.',
+            'fecha.before_or_equal' => 'La fecha no es valida.',
+            'fecha.after_or_equal' => 'La fecha no es valida.',
             'monto.required' => 'El monto es obligatorio.',
             'monto.max' => 'El monto no es correcto.',
-            'categoria.max' => 'La categoría no puede exceder 255 caracteres.',
-            'monto.numeric' => 'El monto debe ser un número.',
+            'monto.min' => 'El monto no es correcto.',
             'descripcion.string' => 'La descripción debe ser un texto.',
         ]);
 
