@@ -1,5 +1,5 @@
 @extends('layouts.principal')
-@section('title', 'Lista de Gastos')
+@section('title', 'Lista de gastos')
 @section('content')
 
 <section class="section">
@@ -21,36 +21,50 @@
                         @endif
                         <hr>
 
-                        
-<table id="gastosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
-<thead class="table table-bordered table-dark">
-<tr>
-    <th style="width: 5%;">N°</th>
-    <th style="width: 20%;">Fecha</th>
-    <th style="width: 20%;">Categoría</th>
-    <th style="width: 20%;">Monto</th>
-    <th style="width: 15%;">Acciones</th>
-</tr>
-</thead>
-<tbody>
-@forelse($gastos as $gasto)
-<tr data-fecha="{{ \Carbon\Carbon::parse($gasto->fecha_gasto)->format('Y-m-d') }}">
-    <td class="row-index small-text-field"></td>
-    <td class="small-text-field">{{ \Carbon\Carbon::parse($gasto->fecha_gasto)->translatedFormat('l d \d\e F, Y') }}</td>
-    <td class="small-text-field">{{ $gasto->categoria }}</td>
-    <td class="small-text-field">{{ $gasto->monto }}</td>
-    <td class="text-center small-text-field">
-        <a href="{{ route('gastos.show', $gasto->id) }}" class="btn btn-info btn-sm">Ver</a>
-        <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
-    </td>
-</tr>
-@empty
-    <tr>
-        <td colspan="7" class="text-center">No hay gastos registrados</td>
+                         <!-- Filtros de fechas -->
+                         <div class="mb-3">
+                            <label for="fecha-desde" class="form-label">Desde:</label>
+                            <input type="date" id="fecha-desde" class="form-control" style="display: inline-block; width: auto;">
+                            <label for="fecha-hasta" class="form-label">Hasta:</label>
+                            <input type="date" id="fecha-hasta" class="form-control" style="display: inline-block; width: auto;">
+                        </div>
+        
+        <table id="gastosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
+        <thead class="table table-bordered table-dark">
+                <tr></tr>
+        <th style="width: 5%;">N°</th>
+        <th style="width: 20%;">Fecha</th>
+        <th style="width: 20%;">Monto</th>
+        <th style="width: 25%;">Descripción</th>
+        <th style="width: 15%;">Acciones</th>
     </tr>
-@endforelse
-</tbody>
-</table>
+    </thead>
+    <tbody>
+    @forelse($gastos as $gasto)
+    <tr data-fecha="{{ \Carbon\Carbon::parse($gasto->fecha)->format('Y-m-d') }}">
+        <td class="row-index small-text-field"></td>
+        <td class="small-text-field">{{ \Carbon\Carbon::parse($gasto->fecha)->translatedFormat('l d \d\e F, Y') }}</td>
+        <td class="small-text-field">{{ $gasto->monto }}</td>
+        <td class="small-text-field">{{ $gasto->descripcion }}</td>
+        <td class="text-center small-text-field">
+            <a href="{{ route('gastos.show', $gasto->id) }}" class="btn btn-info btn-sm">Ver</a>
+            <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
+        </td>
+    </tr>
+    @empty
+        <tr>
+            <td colspan="4" class="text-center">No hay gastos registrados</td>
+        </tr>
+    @endforelse
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="2" class="text-end"><strong>Total:</strong></td>
+            <td id="totalMonto" class="small-text-field"></td>
+            <td></td>
+        </tr>
+    </tfoot>
+    </table>
 
 <script>
             $(document).ready(function() {
@@ -89,8 +103,17 @@
                         api.rows({ search: 'applied' }).every(function(rowIdx) {
                             $(this.node()).find('td.row-index').html(startIndex++); // Incrementar el índice
                         });
+
+                        var total = api.column(2, { page: 'current' }).data().reduce(function(a, b) {
+                            return a + b * 1; // Sumar los montos
+                        }, 0);
+                        $('#totalMonto').html(total.toFixed(2)); // Mostrar el total
                     }
                 });
+
+
+
+                
 
                 // Estilo para mover el select a la derecha
                 $('#gastosTable_length').addClass('text-end').css('float', 'right');
@@ -103,7 +126,35 @@
                     'border-radius': '5px',
                     'padding': '5px'
                 });
+
+                // Filtro de fechas con valores predeterminados
+                var fechaInicial = '2000-01-01';
+                var fechaFinal = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+                $('#fecha-desde').val(fechaInicial);
+                $('#fecha-hasta').val(fechaFinal);
+
+                $('#fecha-desde, #fecha-hasta').change(function() {
+                    var fechaDesde = $('#fecha-desde').val();
+                    var fechaHasta = $('#fecha-hasta').val();
+
+                    table.rows().every(function() {
+                        var row = this.node();
+                        var fechaGasto = $(row).data('fecha');
+
+                        if (fechaDesde && fechaHasta) {
+                            if (fechaGasto >= fechaDesde && fechaGasto <= fechaHasta) {
+                                $(row).show();
+                            } else {
+                                $(row).hide();
+                            }
+                        } else {
+                            $(row).show(); // Si no se aplica filtro, mostrar todas las filas
+                        }
+                    });
+                });
             });
+
+            
         </script>
 
         <script>
