@@ -54,7 +54,7 @@ class PromoController extends Controller
             'discount' => [
                 'required',
                 'numeric',
-                'between:5,45',
+                'between:5,70',
             ],
             'promo' => [
                 'required',
@@ -84,7 +84,7 @@ class PromoController extends Controller
 
             'discount.required' => 'El descuento es obligatorio.',
             'discount.numeric' => 'El descuento debe ser un número.',
-            'discount.between' => 'El descuento debe estar entre 5 y 45.',
+            'discount.between' => 'El descuento debe estar entre 5% y 70%.',
 
             'image.required' => 'Debes cargar una imagen.',
             'image.image' => 'Debes seleccionar una imagen en un formato válido.',
@@ -168,7 +168,7 @@ class PromoController extends Controller
             'discount' => [
                 'required',
                 'numeric',
-                'between:5,45',
+                'between:5,70',
             ],
             'promo' => [
                 'required',
@@ -198,7 +198,7 @@ class PromoController extends Controller
 
             'discount.required' => 'El descuento es obligatorio.',
             'discount.numeric' => 'El descuento debe ser un número.',
-            'discount.between' => 'El descuento debe estar entre 5 y 45.',
+            'discount.between' => 'El descuento debe estar entre 5% y 70%.',
 
             'image.required' => 'Debes cargar una imagen.',
             'image.image' => 'Debes seleccionar una imagen en un formato válido.',

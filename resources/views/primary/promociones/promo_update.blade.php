@@ -285,7 +285,7 @@
                     document.getElementById('promo').value = originalData.promo;
 
                     // Restablecer checkboxes de días
-                    ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].forEach(day => {
+                    ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'].forEach(day => {
                         const checkbox = document.getElementById(`day_${day}`);
                         checkbox.checked = originalData.days.includes(day);
                     });
@@ -302,7 +302,6 @@
                 // Asignar función al botón de reestablecer
                 reloadButton.addEventListener('click', resetForm);
             });
-
         </script>
     </section>
 @endsection
