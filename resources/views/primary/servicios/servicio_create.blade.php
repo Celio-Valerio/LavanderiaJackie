@@ -4,10 +4,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
     <style>
         .custom-checkbox-wrapper {
-            width: 150px; /* Ajusta el valor a lo que consideres adecuado */
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: start;
+            margin-bottom: 10px;
         }
 
         .custom-checkbox-input {
@@ -24,7 +25,8 @@
             color: #333;
         }
 
-        .custom-checkbox-label::before {
+        /* Estilo para Artículos (Azul) */
+        .custom-checkbox-label.articulo::before {
             content: '';
             position: absolute;
             top: 50%;
@@ -38,9 +40,29 @@
             transition: background-color 0.3s;
         }
 
-        .custom-checkbox-input:checked + .custom-checkbox-label::before {
+        .custom-checkbox-input:checked + .custom-checkbox-label.articulo::before {
             background-color: #007bff;
             border-color: #007bff;
+        }
+
+        /* Estilo para Extras (Verde) */
+        .custom-checkbox-label.extra::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #28a745;
+            border-radius: 5px;
+            transform: translateY(-50%);
+            background-color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        .custom-checkbox-input:checked + .custom-checkbox-label.extra::before {
+            background-color: #28a745;
+            border-color: #28a745;
         }
 
         .custom-checkbox-label::after {
@@ -58,7 +80,6 @@
         .custom-checkbox-input:checked + .custom-checkbox-label::after {
             opacity: 1;
         }
-
     </style>
     <section class="section">
         <div class="row">
@@ -77,13 +98,23 @@
                                 <div class="col-md-12">
                                     <div class="row mb-3">
                                         <!-- Campo de Nombre del Servicio -->
-                                        <div class="col-md-12">
+                                        <div class="col-md-9">
                                             <label for="nombre" class="form-label">Nombre del servicio</label>
                                             <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre') }}" placeholder="Ej: Lavado, Planchado" maxlength="100" required>
                                             @error('nombre')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
+
+                                        <!-- Campo de Precio -->
+                                        <div class="col-md-3">
+                                            <label for="precio" class="form-label">Precio en libras</label>
+                                            <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio') }}" placeholder="Ej: 100.00" required step="0.01">
+                                            @error('precio')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
                                     </div>
 
                                     <div class="row mb-3">
@@ -98,74 +129,38 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                        <!-- Campo de Precio -->
-                                        <div class="col-md-3">
-                                            <label for="precio" class="form-label">Precio del servicio</label>
-                                            <input type="number" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio') }}" placeholder="Ej: 100.00" required step="0.01">
-                                            @error('precio')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        <!-- Columna de Artículos -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Artículos de la promoción</label>
+                                            <div class="col-md-12 d-flex flex-column">
+                                                @foreach(['Ropa casual', 'Ropa de cama', 'Peluches', 'Zapatos', 'Edredones', 'Almohadas', 'Manteles', 'Cojines', 'Alfombras', 'Tenis'] as $articulo)
+                                                    <div class="custom-checkbox-wrapper">
+                                                        <input class="custom-checkbox-input" type="checkbox" name="articulos[]" value="{{ $articulo }}" id="articulo_{{ $articulo }}" {{ in_array($articulo, old('articulos', [])) ? 'checked' : '' }}>
+                                                        <label class="custom-checkbox-label articulo" for="articulo_{{ $articulo }}">{{ $articulo }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            @error('articulos')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
 
-                                        <!-- Campo de Duración Estimada -->
-                                        <div class="col-md-3">
-                                            <label for="duracion_estimada" class="form-label">Duración estimada (minutos)</label>
-                                            <input type="number" name="duracion_estimada" class="form-control small-text-field @error('duracion_estimada') is-invalid @enderror" id="duracion_estimada" value="{{ old('duracion_estimada') }}" placeholder="Ej: 30">
-                                            @error('duracion_estimada')
-                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        <!-- Columna de Extras -->
+                                        <div class="col-md-6">
+                                            <label class="form-label">Servicios extras de la promoción</label>
+                                            <div class="col-md-12 d-flex flex-column">
+                                                @foreach(['Detergente', 'Suavizante', 'Quitamanchas', 'Planchado', 'Secado', 'Recogida y entrega', 'Lavado'] as $extra)
+                                                    <div class="custom-checkbox-wrapper">
+                                                        <input class="custom-checkbox-input" type="checkbox" name="extras[]" value="{{ $extra }}" id="extra_{{ $extra }}" {{ in_array($extra, old('extras', [])) ? 'checked' : '' }}>
+                                                        <label class="custom-checkbox-label extra" for="extra_{{ $extra }}">{{ $extra }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            @error('extras')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
                                             @enderror
                                         </div>
-
-                                        <!-- Campo de Estado -->
-                                        <div class="col-md-3">
-                                            <label for="estado" class="form-label">Estado del servicio</label>
-                                            <select name="estado" class="form-select @error('estado') is-invalid @enderror" id="estado" required>
-                                                <option value="" {{ old('estado') === null || old('estado') === '' ? 'selected' : '' }}>Selecciona un estado</option>
-                                                <option value="1" {{ old('estado') == 1 ? 'selected' : '' }}>Activo</option>
-                                                <option value="0" {{ old('estado') == 0 ? 'selected' : '' }}>Inactivo</option>
-                                            </select>
-
-                                            @error('estado')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
                                     </div>
-
-
-                                    <!-- Selección de Artículos -->
-                                    <div class="row mb-3">
-                                        <label class="form-label">Artículos</label>
-                                        <div class="col-md-12 d-flex flex-wrap justify-content-start">
-                                            @foreach(['Ropa casual', 'Ropa de cama', 'Peluches', 'Zapatos', 'Edredones', 'Almohadas', 'Manteles', 'Cojines', 'Alfombras', 'Tenis'] as $articulo)
-                                                <div class="custom-checkbox-wrapper me-3 mb-2 d-flex align-items-center">
-                                                    <input class="custom-checkbox-input" type="checkbox" name="articulos[]" value="{{ $articulo }}" id="articulo_{{ $articulo }}" {{ in_array($articulo, old('articulos', [])) ? 'checked' : '' }}>
-                                                    <label class="custom-checkbox-label ms-2" for="articulo_{{ $articulo }}">{{ $articulo }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        @error('articulos')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Selección de Extras -->
-                                    <div class="row mb-3">
-                                        <label class="form-label">Servicios adicionales</label>
-                                        <div class="col-md-12 d-flex flex-wrap justify-content-start">
-                                            @foreach(['Detergente', 'Suavizante', 'Quitamanchas', 'Planchado', 'Secado', 'Recogida y entrega', 'Lavado'] as $extra)
-                                                <div class="custom-checkbox-wrapper me-3 mb-2 d-flex align-items-center">
-                                                    <input class="custom-checkbox-input" type="checkbox" name="extras[]" value="{{ $extra }}" id="extra_{{ $extra }}" {{ in_array($extra, old('extras', [])) ? 'checked' : '' }}>
-                                                    <label class="custom-checkbox-label ms-2" for="extra_{{ $extra }}">{{ $extra }}</label>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        @error('extras')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-
                                 </div>
                             </div>
 
@@ -202,12 +197,22 @@
 
                 // Validar el campo de precio para permitir solo números y decimales
                 document.getElementById('precio').addEventListener('input', (e) => {
-                    e.target.value = e.target.value.replace(/[^0-9.]/g, '').slice(0, 8);
-                });
+                    let valor = e.target.value;
 
-                // Validar el campo de duración estimada (solo números enteros)
-                document.getElementById('duracion_estimada').addEventListener('input', (e) => {
-                    e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 4);
+                    // Elimina caracteres no permitidos (todo excepto números y un único punto)
+                    valor = valor.replace(/[^0-9.]/g, '');
+
+                    // Asegúrate de que solo haya un punto
+                    if ((valor.match(/\./g) || []).length > 1) {
+                        valor = valor.replace(/\.+$/, ''); // Elimina el último punto agregado
+                    }
+
+                    // Verifica la longitud máxima dependiendo de si contiene un punto o no
+                    if (valor.includes('.')) {
+                        e.target.value = valor.slice(0, 5); // Máximo 5 caracteres si hay un punto
+                    } else {
+                        e.target.value = valor.slice(0, 4); // Máximo 4 caracteres si no hay un punto
+                    }
                 });
 
                 // Función para limpiar el formulario

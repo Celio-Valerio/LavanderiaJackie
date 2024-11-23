@@ -14,10 +14,8 @@ return new class extends Migration
         Schema::create('servicios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 100); // Nombre del servicio, ejemplo: Lavado, Planchado
-            $table->text('descripcion')->nullable(); // Descripción del servicio
+            $table->text('descripcion'); // Descripción del servicio
             $table->decimal('precio', 8, 2); // Precio del servicio con dos decimales
-            $table->integer('duracion_estimada')->nullable(); // Duración en minutos
-            $table->boolean('estado')->default(true); // Estado del servicio (activo/inactivo)
             $table->json('articulos')->nullable(); // Artículos que se pueden lavar
             $table->json('extras')->nullable(); // Servicios adicionales disponibles
             $table->timestamps();

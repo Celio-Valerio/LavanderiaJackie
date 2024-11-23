@@ -36,10 +36,10 @@ class ServicioController extends Controller
                 'string',
                 'min:3',
                 'max:100',
-                'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9. ]+$/', // Permite letras, números y puntos
+                'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ]+$/', // Permite letras, números y puntos
             ],
             'descripcion' => [
-                'nullable',
+                'required',
                 'string',
                 'max:500',
             ],
@@ -47,16 +47,7 @@ class ServicioController extends Controller
                 'required',
                 'numeric',
                 'min:0.01', // Precio debe ser mayor a 0
-            ],
-            'duracion_estimada' => [
-                'nullable',
-                'integer',
-                'min:1',
-                'max:2881', // Máximo 2 días horas (2881 minutos)
-            ],
-            'estado' => [
-                'required',
-                'boolean',
+                'max:99.99',
             ],
             'articulos' => [
                 'required',
@@ -70,21 +61,15 @@ class ServicioController extends Controller
             'nombre.required' => 'El nombre del servicio es obligatorio.',
             'nombre.min' => 'El nombre del servicio debe tener al menos 3 caracteres.',
             'nombre.max' => 'El nombre del servicio no puede exceder los 100 caracteres.',
-            'nombre.regex' => 'El nombre solo puede contener letras, números y puntos.',
+            'nombre.regex' => 'El nombre solo puede contener letras ó números.',
 
             'descripcion.max' => 'La descripción no puede exceder los 500 caracteres.',
+            'descripcion.required' => 'La descripción es obligatoria.',
 
-            'precio.required' => 'El precio del servicio es obligatorio.',
-            'precio.numeric' => 'El precio debe ser un número.',
-            'precio.min' => 'El precio debe ser mayor a L. 0.00.',
-
-            'duracion_estimada.integer' => 'La duración debe ser un número entero.',
-            'duracion_estimada.requerid' => 'La duración estimada es obligatoria.',
-            'duracion_estimada.min' => 'La duración debe ser al menos 1 minuto.',
-            'duracion_estimada.max' => 'La duración máxima es de 1440 minutos (24 horas).',
-
-            'estado.required' => 'El estado del servicio es obligatorio.',
-            'estado.boolean' => 'El estado debe ser verdadero o falso.',
+            'precio.required' => 'El precio en libras es obligatorio.',
+            'precio.numeric' => 'El precio en libras debe ser expresado en números.',
+            'precio.min' => 'El precio en libras debe ser mayor a L. 0.00.',
+            'precio.max' => 'El precio en libras debe ser menor o igual a L. 99.99.',
 
             'articulos.required' => 'Debes seleccionar al menos artículo para el servicio.',
             'extras.required' => 'Debes seleccionar al menos un extra para el servicio.',
@@ -95,8 +80,6 @@ class ServicioController extends Controller
         $servicio->nombre = $request->nombre;
         $servicio->descripcion = $request->descripcion;
         $servicio->precio = $request->precio;
-        $servicio->duracion_estimada = $request->duracion_estimada;
-        $servicio->estado = $request->estado;
         $servicio->articulos = json_encode($request->articulos);
         $servicio->extras = json_encode($request->extras);
         $servicio->save();
