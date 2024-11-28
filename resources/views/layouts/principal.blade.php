@@ -68,15 +68,14 @@
 <!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
-    <div class="d-flex align-items-center justify-content-between">
-        <a href="/" class="logo d-flex align-items-center" style="flex-direction: row;">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="max-width: 200%; max-height: 150px; object-fit: contain; margin-top: 65px;">
-            <span class="d-none d-lg-block" style="white-space: nowrap;">Lavandería Jackie</span>
+    <div class="d-flex align-items-center justify-content-start">
+        <a href="/" class="logo d-flex align-items-center" style="flex-direction: row; gap: 5px;">
+            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo"
+                 style="width: 700px; height: 700px; object-fit: contain;">
+            <span class="d-none d-lg-block" style="white-space: nowrap; font-size: 22px; font-weight: bold;">Lavandería Jackie</span>
         </a>
-        <i class="bi bi-list toggle-sidebar-btn" style="margin-left: 75px;"></i>
+        <i class="bi bi-list toggle-sidebar-btn" style="margin-left: 12px;"></i>
     </div><!-- End Logo -->
-
-
 
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">

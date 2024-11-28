@@ -125,17 +125,92 @@ class ProductoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $producto = Producto::findOrFail($id); // Busca el producto o lanza un error si no existe
+        $categorias = Categoria::all(); // Obtiene todas las categorías disponibles
+        $proveedores = Proveedor::all(); // Obtiene todos los proveedores disponibles
+        return view('primary.productos.producto_update', compact('producto', 'categorias', 'proveedores'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Validación de los datos
+        $request->validate([
+            'nombre' => [
+                'required',
+                'string',
+                'min:3',
+                'max:100',
+                'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9. ]+$/', // Permite letras, números y puntos
+            ],
+            'precio' => [
+                'required',
+                'numeric',
+                'min:1', // Precio no puede ser negativo
+            ],
+            'cantidad' => [
+                'required',
+                'numeric',
+                'min:1', // Precio no puede ser negativo
+                'max:10000', // Precio no puede ser negativo
+            ],
+            'categoria_id' => [
+                'required',
+                'exists:categorias,id', // Verifica que la categoría exista
+            ],
+            'proveedor_id' => [
+                'required',
+                'exists:proveedors,id', // Verifica que el proveedor exista
+            ],
+            'descripcion' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
+            'presentacion' => [
+                'required',
+            ],
+        ], [
+            'nombre.required' => 'El nombre del producto es obligatorio.',
+            'nombre.regex' => 'El nombre del producto solo puede contener letras y números.',
+
+            'precio.required' => 'El precio del producto es obligatorio.',
+            'precio.numeric' => 'El precio debe ser un número.',
+            'precio.min' => 'El precio del producto debe ser mayor a L. 0.00.',
+
+            'cantidad.required' => 'La cantidad del producto es obligatoria.',
+            'cantidad.numeric' => 'La cantidad debe ser un número.',
+            'cantidad.min' => 'La cantidad del producto debe ser mayor a 0.',
+            'cantidad.max' => 'La cantidad del producto debe ser menor a 10,000.',
+
+            'categoria_id.required' => 'Debes seleccionar una categoría.',
+            'categoria_id.exists' => 'La categoría seleccionada no es válida.',
+
+            'proveedor_id.required' => 'Debes seleccionar un proveedor.',
+            'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
+
+            'descripcion.max' => 'La descripción no puede exceder los 500 caracteres.',
+
+            'presentacion.required' => 'Debes seleccionar la presentación del producto.',
+        ]);
+
+        // Actualizar producto en la base de datos
+        $producto = Producto::findOrFail($id); // Busca el producto o lanza un error si no existe
+        $producto->nombre = $request->nombre;
+        $producto->descripcion = $request->descripcion;
+        $producto->precio = $request->precio;
+        $producto->cantidad = $request->cantidad;
+        $producto->presentacion = $request->presentacion;
+        $producto->categoria_id = 2; // Asegúrate de mantener la categoría como 2
+        $producto->proveedor_id = $request->proveedor_id; // Actualizar el proveedor relacionado
+        $producto->save();
+
+        $nombreProducto = $request->nombre;
+        return redirect()->route('productos.index')->with('success', 'El producto ' . $nombreProducto . ' ha sido actualizado exitosamente.');
     }
 
     /**
