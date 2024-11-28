@@ -127,24 +127,20 @@ Route::get('/servicios/buscar', [ServicioController::class, 'search'])->name('se
 // Ruta para obtener los servicios activos
 Route::get('/servicios/activos', [ServicioController::class, 'active'])->name('servicios.active');
 
-// Ruta para cambiar el estado de un servicio (activar/desactivar)
-Route::post('/servicios/{id}/toggle', [ServicioController::class, 'toggleStatus'])->name('servicios.toggle');
+// Ruta para la lista de servicios efectuados
+Route::get('/servicios-efectuados', [ServicioEfectuadoController::class, 'index'])->name('servicios_efectuados.index');
 
-// Rutas para manejar servicios efectuados
-Route::get('/servicios-efectuados', [ServicioEfectuadoController::class, 'index'])->name('servicios_efectuados.index'); // Lista de servicios efectuados
-Route::get('/servicios-efectuados/tarjetas', [ServicioEfectuadoController::class, 'view'])->name('servicios_efectuados.view'); // Vista en tarjetas
+// Ruta para crear un nuevo servicio efectuado
+Route::get('/servicios-efectuados/create', [ServicioEfectuadoController::class, 'create'])->name('servicios_efectuados.create');
 
-// Rutas de recursos para servicios efectuados
-Route::resource('servicios-efectuados', ServicioEfectuadoController::class);
+// Ruta para almacenar un nuevo servicio efectuado
+Route::post('/servicios-efectuados', [ServicioEfectuadoController::class, 'store'])->name('servicios_efectuados.store');
+
+// Ruta para la visualización de un servicio efectuado
+Route::get('/servicios-efectuados/show/{id}', [ServicioEfectuadoController::class, 'show'])->name('servicios_efectuados.show');
 
 // Ruta para recargar el formulario de editar servicio efectuado
 Route::get('/servicios-efectuados/{id}/reload', [ServicioEfectuadoController::class, 'reload'])->name('servicios_efectuados.reload');
-
-// Ruta para buscar servicios efectuados (por cliente, servicio, estado, etc.)
-Route::get('/servicios-efectuados/buscar', [ServicioEfectuadoController::class, 'search'])->name('servicios_efectuados.search');
-
-// Ruta para obtener los servicios efectuados activos
-Route::get('/servicios-efectuados/activos', [ServicioEfectuadoController::class, 'active'])->name('servicios_efectuados.active');
 
 // Ruta para cambiar el estado de un servicio efectuado (activar/desactivar)
 Route::post('/servicios-efectuados/{id}/toggle', [ServicioEfectuadoController::class, 'toggleStatus'])->name('servicios_efectuados.toggle');

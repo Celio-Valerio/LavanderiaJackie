@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
+use App\Models\Promo;
+use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
 use Illuminate\Http\Request;
 
@@ -14,8 +17,9 @@ class ServicioEfectuadoController extends Controller
     {
         // Obtener todos los servicios efectuados
         $serviciosEfectuados = ServicioEfectuado::all();
-        return view('primary.servicios.efectuado_index', compact('serviciosEfectuados'));
+        return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados'));
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -25,7 +29,7 @@ class ServicioEfectuadoController extends Controller
         $clientes = Cliente::all();
         $servicios = Servicio::all();
         $promos = Promo::all();  // Si no se quiere usar, puede ser `nullable` en la migración
-        return view('primary.efectuados.efectuado_create', compact('clientes', 'servicios', 'promos'));
+        return view('primary.servicios_efectuados.servicios_efectuados_create', compact('clientes', 'servicios', 'promos'));
     }
 
     /**
@@ -41,7 +45,7 @@ class ServicioEfectuadoController extends Controller
             'libras' => 'required|integer|min:1',
             'notas' => 'nullable|string|max:500',
             'estado' => 'required|in:Pendiente,Terminado,Entregado',
-            'envio' => 'required|in:Local,Envio a domicilio',
+            'envio' => 'required|in:Local,A domicilio',
         ], [
             'cliente_id.required' => 'El cliente es obligatorio.',
             'cliente_id.exists' => 'El cliente seleccionado no existe.',
@@ -52,8 +56,9 @@ class ServicioEfectuadoController extends Controller
             'libras.min' => 'Las libras deben ser al menos 1.',
             'estado.required' => 'El estado del servicio es obligatorio.',
             'estado.in' => 'El estado debe ser uno de los siguientes: Pendiente, Terminado, Entregado.',
+
             'envio.required' => 'El tipo de envío es obligatorio.',
-            'envio.in' => 'El tipo de envío debe ser uno de los siguientes: Local, Envio a domicilio.',
+            'envio.in' => 'El tipo de envío debe ser uno de los siguientes: local ó a domicilio.',
         ]);
 
         // Crear el servicio efectuado
@@ -65,22 +70,27 @@ class ServicioEfectuadoController extends Controller
         $servicioEfectuado->notas = $request->notas;
         $servicioEfectuado->estado = $request->estado;
         $servicioEfectuado->envio = $request->envio;
-        $servicioEfectuado->total = $this->calcularTotal($request->libras, $request->servicio_id);
+        $servicioEfectuado->total = $request->total;
         $servicioEfectuado->save();
 
-        return redirect()->route('efectuados.index')->with('success', 'El servicio efectuado ha sido registrado exitosamente.');
+        return redirect()->route('servicios_efectuados.index')->with('success', 'El servicio efectuado ha sido registrado exitosamente.');
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        // Obtener el servicio efectuado por ID
+        // Buscar el servicio efectuado por su ID
         $servicioEfectuado = ServicioEfectuado::findOrFail($id);
-        return view('primary.servicios_efectuados.servicio_efectuado_show', compact('servicioEfectuado'));
+
+        // Pasar los datos a la vista y renderizarla
+        return view('primary.servicios_efectuados.servicios_efectuados_show', compact('servicioEfectuado'));
     }
+
+
+
 
     /**
      * Show the form for editing the specified resource.

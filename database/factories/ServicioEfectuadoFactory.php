@@ -30,7 +30,7 @@ class ServicioEfectuadoFactory extends Factory
             'promo_id' => $promo ? $promo->id : null, // Promoción aleatoria o null si no aplica
             'libras' => $this->faker->numberBetween(1, 10), // Número aleatorio de libras (1-10)
             'notas' => $this->faker->text(200), // Notas aleatorias
-            'estado' => $this->faker->randomElement(['Pendiente', 'Terminado', 'Entrado']), // Estado aleatorio
+            'estado' => $this->faker->randomElement(['Pendiente', 'Terminado', 'Entregado']), // Estado aleatorio
             'envio' => $this->faker->randomElement(['A domicilio', 'Local']), // Tipo de envío aleatorio
             'total' => function (array $attributes) {
                 // Calcular el total basado en las libras y el precio del servicio
