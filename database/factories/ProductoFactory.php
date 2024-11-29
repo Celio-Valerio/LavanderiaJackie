@@ -31,27 +31,9 @@ class ProductoFactory extends Factory
         ];
 
         $presentacion = [
-            'Gramos',
+            'Bolsas',
             'Kilogramos',
             'Litros',
-            'Mililitros',
-            'Unidades',
-            'Bolsas',
-            'Paquetes',
-            'Galones',
-            'Botellas',
-            'Cubetas',
-            'Cajas',
-            'Latas',
-            'Sachets',
-            'Sobres',
-            'Polvo',
-            'Líquido',
-            'Gel',
-            'Pastillas',
-            'Barras',
-            'Tabletas',
-            'Dispensadores'
         ];
 
         // Descripciones breves para los productos

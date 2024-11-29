@@ -52,7 +52,7 @@
                 <div class="card shadow-lg rounded-lg border-0">
                     <div class="card-body">
                         <!-- Título de la sección -->
-                        <h1 class="card-title text-center mb-4">Detalles del Servicio</h1>
+                        <h1 class="card-title text-center mb-4">Detalles del servicio</h1>
                         <hr>
 
                         <!-- Información del servicio -->
