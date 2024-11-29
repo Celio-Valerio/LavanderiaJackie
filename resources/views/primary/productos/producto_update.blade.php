@@ -17,7 +17,7 @@
 
                             <div class="row mb-3">
                                 <!-- Campo de Nombre del Producto -->
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <label for="nombre" class="form-label">Nombre del producto</label>
                                     <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre', $producto->nombre) }}" placeholder="Ej: Jabón Líquido" maxlength="50" required>
                                     @error('nombre')
@@ -26,7 +26,7 @@
                                 </div>
 
                                 <!-- Campo de Precio -->
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="precio" class="form-label">Precio</label>
                                     <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio', $producto->precio) }}" placeholder="Ej: 99.99" required>
                                     @error('precio')
@@ -53,17 +53,8 @@
                                     @enderror
                                 </div>
 
-                                <!-- Campo de Cantidad -->
-                                <div class="col-md-2">
-                                    <label for="cantidad" class="form-label">Cantidad</label>
-                                    <input type="text" name="cantidad" class="form-control small-text-field @error('cantidad') is-invalid @enderror" id="cantidad" value="{{ old('cantidad', $producto->cantidad) }}" placeholder="Ej: 20" required>
-                                    @error('cantidad')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
                                 <!-- Campo de Presentación -->
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label for="presentacion" class="form-label">Presentación</label>
                                     <select name="presentacion" class="form-select small-text-field @error('presentacion') is-invalid @enderror" id="presentacion" required>
                                         <option value="Litros" {{ old('presentacion', $producto->presentacion) === 'Litros' ? 'selected' : '' }}>Litros</option>

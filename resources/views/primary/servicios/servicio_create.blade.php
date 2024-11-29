@@ -131,9 +131,9 @@
                                     <div class="row mb-3">
                                         <!-- Columna de Artículos -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Artículos de la promoción</label>
+                                            <label class="form-label">Servicios</label>
                                             <div class="col-md-12 d-flex flex-column">
-                                                @foreach(['Ropa casual', 'Ropa de cama', 'Peluches', 'Zapatos', 'Edredones', 'Almohadas', 'Manteles', 'Cojines', 'Alfombras', 'Tenis'] as $articulo)
+                                                @foreach(['Ropa casual', 'Ropa de cama', 'Peluches', 'Zapatos', 'Edredones', 'Almohadas', 'Manteles', 'Cojines', 'Alfombras', 'Tenis', 'Camisas', 'Pantalones', 'Sábanas'] as $articulo)
                                                     <div class="custom-checkbox-wrapper">
                                                         <input class="custom-checkbox-input" type="checkbox" name="articulos[]" value="{{ $articulo }}" id="articulo_{{ $articulo }}" {{ in_array($articulo, old('articulos', [])) ? 'checked' : '' }}>
                                                         <label class="custom-checkbox-label articulo" for="articulo_{{ $articulo }}">{{ $articulo }}</label>
@@ -147,7 +147,7 @@
 
                                         <!-- Columna de Extras -->
                                         <div class="col-md-6">
-                                            <label class="form-label">Servicios extras de la promoción</label>
+                                            <label class="form-label">Servicios extras</label>
                                             <div class="col-md-12 d-flex flex-column">
                                                 @foreach(['Detergente', 'Suavizante', 'Quitamanchas', 'Planchado', 'Secado', 'Recogida y entrega', 'Lavado'] as $extra)
                                                     <div class="custom-checkbox-wrapper">
