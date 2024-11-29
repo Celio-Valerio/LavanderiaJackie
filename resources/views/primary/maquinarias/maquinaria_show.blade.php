@@ -2,13 +2,59 @@
 @section('title', 'Detalles de la Maquinaria')
 @section('content')
 
+    <style>
+        .list-unstyled {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .list-unstyled li {
+            flex: 1 1 auto;
+            min-width: 180px;
+            box-sizing: border-box;
+        }
+
+        .card {
+            background-image: url('{{ asset('assets/img/laundry-background.jpg') }}');
+            background-size: cover;
+            background-position: center center;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-body {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .card-title {
+            font-size: 30px !important;
+            color: #333;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
     <section class="section">
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card shadow-lg rounded-lg border-0">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Detalles de la maquinaria</h1>
+                        <!-- Título de la sección -->
+                        <h1 class="card-title text-center mb-4">Detalles de la maquinaria</h1>
                         <hr>
+
                         <div class="row mb-3">
                             <!-- Nombre de la maquinaria -->
                             <div class="col-md-6">
@@ -28,7 +74,7 @@
                             </div>
 
                             <!-- Fecha de adquisición -->
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label class="form-label small-text-field"><strong>Fecha de adquisición:</strong> {{ ucfirst(\Carbon\Carbon::parse($maquinaria->acquisition_date)->translatedFormat('l, d \d\e F, Y') )}}</label>
                             </div>
 
