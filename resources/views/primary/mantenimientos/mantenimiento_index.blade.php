@@ -52,7 +52,7 @@
                                     <td class="small-text-field">L. {{ number_format($mantenimiento->price, 2) }}</td>
                                     <td class="text-center small-text-field">
                                         <a href="{{ route('mantenimientos.show', $mantenimiento->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('mantenimientos.update', $mantenimiento->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{{ route('mantenimientos.edit', $mantenimiento->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                     </td>
                                 </tr>
                             @empty

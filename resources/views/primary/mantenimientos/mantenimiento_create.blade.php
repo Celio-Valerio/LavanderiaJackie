@@ -39,7 +39,7 @@
                                         <option value="">Selecciona un tipo</option>
                                         <option value="Preventivo" {{ old('maintenance_type') == 'Preventivo' ? 'selected' : '' }}>Preventivo</option>
                                         <option value="Correctivo" {{ old('maintenance_type') == 'Correctivo' ? 'selected' : '' }}>Correctivo</option>
-                                       
+
                                     </select>
                                     @error('maintenance_type')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -56,8 +56,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
-
 
                                 <div class="row mb-3">
                                 <!-- Campo de Descripción -->
@@ -80,7 +78,7 @@
                                 </div>
                             </div>
 
-                            
+
 
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
