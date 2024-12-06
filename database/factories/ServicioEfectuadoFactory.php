@@ -38,6 +38,10 @@ class ServicioEfectuadoFactory extends Factory
                 $precioPorLibra = $servicio ? $servicio->precio : 0;
                 return $attributes['libras'] * $precioPorLibra; // Total calculado por libras
             },
+            // Nuevas columnas
+            'direccion' => $this->faker->address, // Dirección aleatoria
+            'precio_envio' => $this->faker->randomFloat(2, 0, 50), // Precio de envío aleatorio entre 0 y 50
+            'pago_envio' => $this->faker->randomElement(['Cliente', 'Empresa']), // Quien paga el envío aleatorio
         ];
     }
 }

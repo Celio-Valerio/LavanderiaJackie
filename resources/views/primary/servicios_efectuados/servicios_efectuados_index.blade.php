@@ -30,8 +30,8 @@
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 25%;">Cliente</th>
                                 <th style="width: 25%;">Servicio</th>
-                                <th style="width: 15%;">Estado</th>
-                                <th style="width: 10%;">Total</th>
+                                <th style="width: 10%;">Estado</th>
+                                <th style="width: 15%;">Total</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>

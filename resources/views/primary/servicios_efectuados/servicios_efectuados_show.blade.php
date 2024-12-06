@@ -77,11 +77,41 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label"><strong>Promoción:</strong> {{ $servicioEfectuado->promo->name }} ({{ $servicioEfectuado->promo->promo }})</label>
+                                <label class="form-label">
+                                    <strong>Pagará el envío:</strong>
+                                    {{ $servicioEfectuado->pago_envio }}
+                                </label>
                             </div>
 
                             <div class="col-md-6">
-                                <label class="form-label"><strong>Descuento:</strong> {{ $servicioEfectuado->promo->discount }}% </label>
+                                <label class="form-label">
+                                    <strong>Precio de envio:</strong>
+                                    {{ $servicioEfectuado->precio_envio }}
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <strong>Promoción:</strong>
+                                    @if($servicioEfectuado->promo && $servicioEfectuado->promo->name)
+                                        {{ $servicioEfectuado->promo->name }} ({{ $servicioEfectuado->promo->promo }})
+                                    @else
+                                        No se le aplicó promoción.
+                                    @endif
+                                </label>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">
+                                    <strong>Descuento:</strong>
+                                    @if($servicioEfectuado->promo && $servicioEfectuado->promo->discount)
+                                        {{ $servicioEfectuado->promo->discount }}%
+                                    @else
+                                        No se le aplicó descuento.
+                                    @endif
+                                </label>
                             </div>
                         </div>
 
@@ -97,6 +127,12 @@
                                     <label class="form-label"><strong>Notas:</strong> {{ $servicioEfectuado->notas ?? 'No hay notas disponibles.' }}</label>
                                 </div>
                             </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label class="form-label"><strong>Dirección:</strong> {{ $servicioEfectuado->dirección ?? 'El cliente recogerá, en la empresa.' }}</label>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Botones de acción -->
@@ -108,6 +144,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -22,6 +22,11 @@ return new class extends Migration
             $table->enum('estado', ['Pendiente', 'Terminado', 'Entregado']); // Estado del servicio
             $table->enum('envio', ['A domicilio', 'Local']); // Envío a domicilio o local
             $table->decimal('total', 8, 2); // Total del servicio basado en libras y precio del servicio
+
+            $table->text('direccion')->nullable(); // Dirección de envío (si aplica)
+            $table->decimal('precio_envio', 8, 2)->nullable()->default(0); // Precio del envío
+            $table->enum('pago_envio', ['Cliente', 'Empresa'])->nullable(); // ¿Quién paga el envío?
+
             $table->timestamps();
         });
     }
