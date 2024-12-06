@@ -34,7 +34,7 @@
                 <tr></tr>
         <th style="width: 5%;">N°</th>
         <th style="width: 20%;">Fecha</th>
-        <th style="width: 20%;">Monto</th>
+        <th style="width: 20%;">Total</th>
         <th style="width: 25%;">Descripción</th>
         <th style="width: 15%;">Acciones</th>
     </tr>
@@ -59,8 +59,8 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="2" class="text-end"><strong>Total:</strong></td>
-            <td id="totalMonto" class="small-text-field"></td>
+            <td colspan="2" class="text-end"><strong style="font-size: 20px;">Total:</strong></td>
+            <td id="totalMonto" class="small-text-field" style="font-size: 20px; font-weight: bold;"></td>
             <td></td>
         </tr>
     </tfoot>
@@ -107,7 +107,7 @@
                         var total = api.column(2, { page: 'current' }).data().reduce(function(a, b) {
                             return a + b * 1; // Sumar los montos
                         }, 0);
-                        $('#totalMonto').html(total.toFixed(2)); // Mostrar el total
+                        $('#totalMonto').html(total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")); // Mostrar el total con comas
                     }
                 });
 

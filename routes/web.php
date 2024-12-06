@@ -11,6 +11,7 @@ use App\Http\Controllers\CompraController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\ServicioEfectuadoController;
+use App\Http\Controllers\GastoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -101,6 +102,12 @@ Route::resource('compras', CompraController::class);
 
 // Ruta para recargar el formulario de editar compra
 Route::get('/compras/{id}/reload', [CompraController::class, 'reload'])->name('compras.reload');
+
+// Rutas para manejar gastos
+Route::get('/gastos', [GastoController::class, 'index'])->name('gastos.index'); // Lista de gastos
+
+// Rutas de recursos para gastos
+Route::resource('gastos', GastoController::class);
 
 // Rutas para manejar productos
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index'); // Lista de productos

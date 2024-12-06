@@ -15,6 +15,7 @@ class Gasto extends Model
     protected $fillable = [
         'descripcion',
         'monto',
+        'totalAmount',
         'fecha',
         'categoria_id',
     ];

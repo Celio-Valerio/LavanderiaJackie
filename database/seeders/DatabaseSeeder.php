@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CompraSeeder::class);
         $this->call(ServicioSeeder::class);
         $this->call(ServicioEfectuadoSeeder::class);
-        //$this->call(GastosSeeder::class);
+        $this->call(GastosSeeder::class); 
+
 
     }
 }
