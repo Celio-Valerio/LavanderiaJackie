@@ -14,9 +14,13 @@ return new class extends Migration
         Schema::create('gastos', function (Blueprint $table) {
             $table->id();
             $table->date('fecha');
-            $table->string('categoria')->nullable();
-            $table->decimal('monto', 10, 2);
-            $table->text('descripcion')->nullable();
+            $table->text('descripcion');
+            $table->decimal('energia', 10, 2);
+            $table->decimal('agua', 10, 2);
+            $table->decimal('renta', 10, 2);
+            $table->decimal('nomina', 10, 2);
+            $table->decimal('internet', 10, 2);
+            $table->decimal('totalG', 10, 2);
             $table->timestamps();
         });
     }

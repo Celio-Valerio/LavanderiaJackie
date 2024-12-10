@@ -18,6 +18,7 @@ class Gasto extends Model
         'totalAmount',
         'fecha',
         'categoria_id',
+        
     ];
 
     // Relación con la tabla de categorías
@@ -30,5 +31,9 @@ class Gasto extends Model
     public function getMontoFormateadoAttribute()
     {
         return number_format($this->monto, 2);
+    }
+    public function detalles()
+    {
+        return $this->hasMany(Detalles_gasto::class);
     }
 }

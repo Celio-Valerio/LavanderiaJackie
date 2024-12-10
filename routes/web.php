@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\ServicioEfectuadoController;
 use App\Http\Controllers\GastoController;
+use App\Http\Controllers\InventarioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -151,3 +152,10 @@ Route::get('/servicios-efectuados/{id}/reload', [ServicioEfectuadoController::cl
 
 // Ruta para cambiar el estado de un servicio efectuado (activar/desactivar)
 Route::post('/servicios-efectuados/{id}/toggle', [ServicioEfectuadoController::class, 'toggleStatus'])->name('servicios_efectuados.toggle');
+
+// Rutas para manejar inventarios
+Route::get('/inventarios', [InventarioController::class, 'index'])->name('inventarios.inventarios_index'); // Lista de productos
+
+// Rutas de recursos para inventarios
+Route::resource('inventarios', InventarioController::class);
+

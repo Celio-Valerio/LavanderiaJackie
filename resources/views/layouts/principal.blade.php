@@ -346,7 +346,7 @@
                 </li>
 
                 <li>
-                    <a href="/inventario">
+                    <a href="/inventarios">
                         <i class="bi bi-circle"></i><span>Inventario</span>
                     </a>
                 </li>
