@@ -45,4 +45,11 @@ class Producto extends Model
     {
         return $this->hasMany(DetalleCompra::class);
     }
+
+    // En el modelo Producto
+    public function historialPrecios()
+    {
+        return $this->hasMany(ProductoPrecioHistorial::class);
+    }
+
 }

@@ -51,10 +51,7 @@ class ProductoFactory extends Factory
         ];
 
         // Precios permitidos
-        $precios = [10, 20, 100, 500, 1000];
-
-        // Asignación de categorías según el proveedor
-        $proveedores = [1,3,6,7,11,13,18];
+        $precios = [ 100, 200, 300];
 
         return [
             'nombre' => $this->faker->randomElement($nombres), // Nombre del producto
@@ -63,7 +60,6 @@ class ProductoFactory extends Factory
             'stock' => 0, // Asignar la cantidad de inventario
             'presentacion' => $this->faker->randomElement($presentacion),
             'categoria_id' => 2, // Asignar la categoría insumos
-            'proveedor_id' => $this->faker->randomElement($proveedores), // ID del proveedor seleccionado
         ];
     }
 }

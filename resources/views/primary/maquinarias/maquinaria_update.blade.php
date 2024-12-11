@@ -67,10 +67,10 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                                            
+
                                 </select>
                                 </select>
-                                
+
                                 <p></p>
                                 <!-- Campo de Proveedor -->
                                 <div class="col-md-6">
@@ -169,7 +169,7 @@
                     .catch(error => {
                         console.error('Error al recargar los datos de la maquinaria:', error);
                     });
-                    
+
             });
 
             // Nueva función para restablecer los datos del formulario

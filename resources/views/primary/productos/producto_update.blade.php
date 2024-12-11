@@ -25,34 +25,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- Campo de Precio -->
-                                <div class="col-md-6">
-                                    <label for="precio" class="form-label">Precio</label>
-                                    <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio', $producto->precio) }}" placeholder="Ej: 99.99" required>
-                                    @error('precio')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Campo de Proveedor -->
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="proveedor_id" class="form-label">Proveedor</label>
-                                    <select name="proveedor_id" class="form-select small-text-field @error('proveedor_id') is-invalid @enderror" id="proveedor_id" required>
-                                        <option value="">Selecciona un proveedor</option>
-                                        @foreach($proveedores as $proveedor)
-                                            <option value="{{ $proveedor->id }}"
-                                                {{ old('proveedor_id', $producto->proveedor_id) == $proveedor->id ? 'selected' : '' }}>
-                                                {{ $proveedor->company_name }} - {{ $proveedor->full_name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('proveedor_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
                                 <!-- Campo de Presentación -->
                                 <div class="col-md-6">
                                     <label for="presentacion" class="form-label">Presentación</label>
@@ -66,6 +38,17 @@
                                     @enderror
                                 </div>
 
+                            </div>
+
+                            <!-- Campo de Precio -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="precio" class="form-label">Precio</label>
+                                    <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio', $producto->precio) }}" placeholder="Ej: 99.99" required>
+                                    @error('precio')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <!-- Campo de Descripción -->
@@ -105,7 +88,6 @@
                 const originalData = {
                     nombre: "{{ old('nombre', $producto->nombre) }}",
                     precio: "{{ old('precio', $producto->precio) }}",
-                    proveedor_id: "{{ old('proveedor_id', $producto->proveedor_id) }}",
                     presentacion: "{{ old('presentacion', $producto->presentacion) }}",
                     descripcion: `{{ old('descripcion', $producto->descripcion) }}`
                 };
@@ -114,7 +96,6 @@
                 const resetForm = () => {
                     document.getElementById('nombre').value = originalData.nombre;
                     document.getElementById('precio').value = originalData.precio;
-                    document.getElementById('proveedor_id').value = originalData.proveedor_id;
                     document.getElementById('descripcion').value = originalData.descripcion;
 
                     // Restablecer select de presentación

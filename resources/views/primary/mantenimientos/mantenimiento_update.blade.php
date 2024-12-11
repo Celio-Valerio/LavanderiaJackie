@@ -20,7 +20,7 @@
                                 <!-- Campo de Maquinaria -->
                                 <div class="col-md-6">
                                     <label for="maquinaria_id" class="form-label">Maquinaria</label>
-                                    <select name="maquinaria_id" class="form-select @error('maquinaria_id') is-invalid @enderror" id="maquinaria_id" required>
+                                    <select name="maquinaria_id" class="form-select @error('maquinaria_id') is-invalid @enderror" id="maquinaria_id" required disabled>
                                         <option value="">Selecciona una maquinaria</option>
                                         @foreach($maquinarias as $maquinaria)
                                             <option value="{{ $maquinaria->id }}" {{ old('maquinaria_id', $mantenimiento->maquinaria_id) == $maquinaria->id ? 'selected' : '' }}>
@@ -36,7 +36,7 @@
                                 <!-- Campo de Tipo de Mantenimiento -->
                                 <div class="col-md-6">
                                     <label for="maintenance_type" class="form-label">Tipo de mantenimiento</label>
-                                    <select name="maintenance_type" class="form-select @error('maintenance_type') is-invalid @enderror" id="maintenance_type" required>
+                                    <select name="maintenance_type" class="form-select @error('maintenance_type') is-invalid @enderror" id="maintenance_type" required disabled>
                                         <option value="">Selecciona un tipo</option>
                                         <option value="Preventivo" {{ old('maintenance_type', $mantenimiento->maintenance_type) == 'Preventivo' ? 'selected' : '' }}>Preventivo</option>
                                         <option value="Correctivo" {{ old('maintenance_type', $mantenimiento->maintenance_type) == 'Correctivo' ? 'selected' : '' }}>Correctivo</option>
@@ -51,7 +51,7 @@
                                 <!-- Campo de Precio -->
                                 <div class="col-md-6">
                                     <label for="price" class="form-label">Precio (Lempiras)</label>
-                                    <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price', $mantenimiento->price) }}" placeholder="Ej: 2000" maxlength="5" required>
+                                    <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price', $mantenimiento->price) }}" placeholder="Ej: 2000" maxlength="9" required>
                                     @error('price')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -61,7 +61,7 @@
                                 <!-- Campo de Fecha -->
                                 <div class="col-md-6">
                                     <label for="date" class="form-label">Fecha del mantenimiento</label>
-                                    <input type="date" name="date" class="form-control @error('date') is-invalid @enderror" id="date" value="{{ old('date', $mantenimiento->date) }}" required>
+                                    <input type="date" name="date" class="form-control @error('date') is-invalid @enderror" id="date" value="{{ old('date', $mantenimiento->date) }}" required disabled>
                                     @error('date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -119,6 +119,36 @@
 
                 // Limpiar el campo de fecha
                 document.getElementById('date').value = '{{ old('date', $mantenimiento->date) }}';
+            });
+        </script>
+
+        <script>
+            document.getElementById('price').addEventListener('input', function (event) {
+                const input = event.target;
+                let value = input.value.replace(/,/g, ''); // Eliminar comas temporalmente para procesar el número crudo
+
+                // Validar número con hasta 5 dígitos antes del punto, un punto, y hasta 2 dígitos después
+                const regex = /^\d{0,5}(\.\d{0,2})?$/;
+
+                if (regex.test(value)) {
+                    // Formatear con comas en la parte entera
+                    const [integerPart, decimalPart] = value.split('.');
+                    input.value = parseInt(integerPart || '0', 10).toLocaleString() + (decimalPart !== undefined ? '.' + decimalPart : '');
+                } else {
+                    // Si no es válido, revertir al valor anterior
+                    input.value = input.value.slice(0, -1);
+                }
+
+                // Limitar la longitud total a 9 caracteres (incluyendo comas y punto)
+                if (input.value.length > 9) {
+                    input.value = input.value.slice(0, 9);
+                }
+            });
+
+            // Antes de enviar el formulario, eliminar las comas para almacenar solo datos numéricos
+            document.getElementById('mantenimientoForm').addEventListener('submit', function () {
+                const priceInput = document.getElementById('price');
+                priceInput.value = priceInput.value.replace(/,/g, ''); // Eliminar comas
             });
         </script>
 

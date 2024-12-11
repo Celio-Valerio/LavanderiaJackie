@@ -3,7 +3,6 @@
 @section('content')
 
     <section class="section">
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -15,7 +14,6 @@
                             @csrf <!-- Protección contra CSRF -->
 
                             <div class="row mb-3">
-
                                 <!-- Campo de Maquinaria -->
                                 <div class="col-md-6">
                                     <label for="maquinaria_id" class="form-label">Maquinaria</label>
@@ -23,7 +21,7 @@
                                         <option value="">Selecciona una maquinaria</option>
                                         @foreach($maquinarias as $maquinaria)
                                             <option value="{{ $maquinaria->id }}" {{ old('maquinaria_id') == $maquinaria->id ? 'selected' : '' }}>
-                                                {{ $maquinaria->name }} <!-- Asegúrate de que este campo corresponda al modelo Maquinaria -->
+                                                {{ $maquinaria->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -39,7 +37,6 @@
                                         <option value="">Selecciona un tipo</option>
                                         <option value="Preventivo" {{ old('maintenance_type') == 'Preventivo' ? 'selected' : '' }}>Preventivo</option>
                                         <option value="Correctivo" {{ old('maintenance_type') == 'Correctivo' ? 'selected' : '' }}>Correctivo</option>
-
                                     </select>
                                     @error('maintenance_type')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -51,22 +48,11 @@
                                 <!-- Campo de Precio -->
                                 <div class="col-md-6">
                                     <label for="price" class="form-label">Precio (Lempiras)</label>
-                                    <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 2000" maxlength="5" required min="0" max="99999>
+                                    <input type="text" name="price" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}" placeholder="Ej: 2000.00" required>
                                     @error('price')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
-                                <div class="row mb-3">
-                                <!-- Campo de Descripción -->
-                                <div class="col-md-12">
-                                    <label for="description" class="form-label">Descripción del mantenimiento</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description" placeholder="Descripción del mantenimiento" maxlength="500" rows="3">{{ old('description') }}</textarea>
-                                    @error('description')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
 
                                 <!-- Campo de Fecha -->
                                 <div class="col-md-6">
@@ -78,7 +64,14 @@
                                 </div>
                             </div>
 
-
+                            <!-- Campo de Descripción -->
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Descripción del mantenimiento</label>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" id="description" placeholder="Descripción del mantenimiento" maxlength="500" rows="3">{{ old('description') }}</textarea>
+                                @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
 
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
@@ -95,60 +88,49 @@
         </div>
 
         <script>
-            // Función para obtener la fecha actual en formato 'YYYY-MM-DD'
-            function getCurrentDate() {
-                const today = new Date();
-                const year = today.getFullYear();
-                const month = ('0' + (today.getMonth() + 1)).slice(-2); // Añade un cero si es necesario
-                const day = ('0' + today.getDate()).slice(-2); // Añade un cero si es necesario
-                return `${year}-${month}-${day}`;
-            }
-
             // Establecer la fecha actual al cargar la página
             document.addEventListener('DOMContentLoaded', function() {
-                document.getElementById('date').value = getCurrentDate();
+                document.getElementById('date').value = new Date().toISOString().split('T')[0];
             });
-        </script>
 
-        <script>
+            // Formatear descripción para iniciar con mayúscula
+            document.getElementById('description').addEventListener('input', function(event) {
+                const input = event.target;
+                input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
+            });
+
             // Función para limpiar el formulario
             document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('mantenimientoForm');
-
-                // Limpiar los valores del formulario
                 form.reset();
-
-                // Remover clases de validación (is-invalid) y ocultar mensajes de error
-                const invalidElements = form.querySelectorAll('.is-invalid');
-                invalidElements.forEach(function (element) {
-                    element.classList.remove('is-invalid');
-                });
-
-                // Limpiar el select de maquinaria
-                document.getElementById('maquinaria_id').selectedIndex = 0;
-
-                // Limpiar el select de tipo de mantenimiento
-                document.getElementById('maintenance_type').selectedIndex = 0;
-
-                // Limpiar el campo de descripción
-                document.getElementById('description').value = '';
-
-                // Limpiar el campo de precio
-                document.getElementById('price').value = '';
-
-                const invalidFeedbacks = form.querySelectorAll('.invalid-feedback');
-                invalidFeedbacks.forEach(function (feedback) {
-                    feedback.style.display = 'none';
-                });
+                document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
             });
-        </script>
 
-         <script>
-            // Validación para limitar el campo de salario a 6 dígitos
-            document.getElementById('price').addEventListener('input', function(e) {
-                if (this.value.length > 5) {
-                    this.value = this.value.slice(0, 5); // Limitar a 6 dígitos
+            // Validación y formateo del campo de precio
+            document.getElementById('price').addEventListener('input', function(event) {
+                const input = event.target;
+                let value = input.value.replace(/,/g, ''); // Eliminar comas temporalmente para procesar el número crudo
+
+                // Validar número con hasta 5 dígitos antes del punto, un punto, y hasta 2 dígitos después
+                const regex = /^\d{0,5}(\.\d{0,2})?$/;
+
+                if (regex.test(value)) {
+                    const [integerPart, decimalPart] = value.split('.');
+                    input.value = parseInt(integerPart || '0', 10).toLocaleString() + (decimalPart !== undefined ? '.' + decimalPart : '');
+                } else {
+                    input.value = input.value.slice(0, -1);
                 }
+
+                // Limitar la longitud total a 9 caracteres (incluyendo comas y punto)
+                if (input.value.length > 9) {
+                    input.value = input.value.slice(0, 9);
+                }
+            });
+
+            // Eliminar las comas antes de enviar el formulario
+            document.getElementById('mantenimientoForm').addEventListener('submit', function() {
+                const priceInput = document.getElementById('price');
+                priceInput.value = priceInput.value.replace(/,/g, '');
             });
         </script>
     </section>

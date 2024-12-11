@@ -19,12 +19,10 @@ return new class extends Migration
             $table->integer('stock');
             $table->string('presentacion');
             $table->unsignedBigInteger('categoria_id'); // Referencia a la categoría
-            $table->unsignedBigInteger('proveedor_id'); // Referencia al proveedor
             $table->timestamps();
 
             // Relaciones con las tablas categorias y proveedores
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
-            $table->foreign('proveedor_id')->references('id')->on('proveedors')->onDelete('cascade');
         });
     }
 

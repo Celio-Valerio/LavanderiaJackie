@@ -57,7 +57,7 @@ class MantenimientoController extends Controller
                 'required',
                 'numeric', // Verifica que sea un número
                 'min:1', // Asegura que el precio no sea negativo
-                'digits_between:1,5', //     Limita el precio a entre 1 y 5 dígitos
+                'max:99999',
             ],
         ], [
             'date.required' => 'La fecha del mantenimiento es obligatoria.',
@@ -74,8 +74,8 @@ class MantenimientoController extends Controller
 
             'price.required' => 'El precio es obligatorio.',
             'price.numeric' => 'El precio debe ser un número válido.',
-            'price.min' => 'El precio debe estar entre L. 1.00 y L. 10000.',
-            'price.max' => 'El precio debe estar entre L. 1.00 y L. 10000.',
+            'price.min' => 'El precio debe ser mayor que L. 0.00.',
+            'price.max' => 'El precio debe ser menor que L. 100,000.00.',
         ]);
 
         // Guardar mantenimiento en la base de datos
@@ -126,18 +126,6 @@ class MantenimientoController extends Controller
     {
         // Validación de los datos de entrada
         $request->validate([
-            'date' => [
-                'required',
-                'date',
-            ],
-            'maquinaria_id' => [
-                'required',
-                'exists:maquinarias,id', // Asegúrate de que la máquina existe en la tabla maquinarias
-            ],
-            'maintenance_type' => [
-                'required',
-                'in:Preventivo,Correctivo,Predictivo,Emergencia', // Opciones en español
-            ],
             'description' => [
                 'required',
                 'string',
@@ -147,33 +135,23 @@ class MantenimientoController extends Controller
                 'required',
                 'numeric', // Verifica que sea un número
                 'min:1', // Asegura que el precio no sea negativo
-                'between:1,999',
+                'max:99999',
+
             ],
         ], [
-            'date.required' => 'La fecha del mantenimiento es obligatoria.',
-            'date.date' => 'La fecha debe ser una fecha válida.',
-
-            'maquinaria_id.required' => 'Debes seleccionar una máquina.',
-            'maquinaria_id.exists' => 'La máquina seleccionada no es válida.',
-
-            'maintenance_type.required' => 'Debes seleccionar un tipo de mantenimiento.',
-
             'description.string' => 'La descripción debe ser una cadena de texto válida.',
             'description.max' => 'La descripción no puede exceder los 500 caracteres.',
             'description.required' => 'La descripción es obligatoria.',
 
             'price.required' => 'El precio es obligatorio.',
             'price.numeric' => 'El precio debe ser un número válido.',
-            'price.between' => 'El precio debe estar entre L. 1.00 y L. 999.00.',
+            'price.between' => 'El precio debe estar entre L. 1.00 y L. 99,999.00.',
         ]);
 
         // Buscar el mantenimiento en la base de datos
         $mantenimiento = Mantenimiento::findOrFail($id);
 
         // Actualizar los campos del mantenimiento
-        $mantenimiento->date = $request->date;
-        $mantenimiento->maquinaria_id = $request->maquinaria_id;
-        $mantenimiento->maintenance_type = $request->maintenance_type;
         $mantenimiento->description = $request->description;
         $mantenimiento->price = $request->price;
         $mantenimiento->save();

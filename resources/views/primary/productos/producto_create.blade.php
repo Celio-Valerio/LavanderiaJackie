@@ -24,34 +24,6 @@
                                     @enderror
                                 </div>
 
-                                <!-- Campo de Precio -->
-                                <div class="col-md-6">
-                                    <label for="precio" class="form-label">Precio</label>
-                                    <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio') }}" placeholder="Ej: 99.99" required>
-                                    @error('precio')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <!-- Campo de Proveedor -->
-                                <div class="col-md-6">
-                                    <label for="proveedor_id" class="form-label">Proveedor</label>
-                                    <select name="proveedor_id" class="form-select small-text-field @error('proveedor_id') is-invalid @enderror" id="proveedor_id" required>
-                                        <option value="">Selecciona un proveedor</option>
-                                        @foreach($proveedores as $proveedor)
-                                            @if($proveedor->categoria_id == 2) <!-- Mostrar solo proveedores con categoria_id = 2 -->
-                                            <option value="{{ $proveedor->id }}" {{ old('proveedor_id') == $proveedor->id ? 'selected' : '' }}>
-                                                {{ $proveedor->company_name }} <!-- Asegúrate de que este campo corresponda al modelo Proveedor -->
-                                            </option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    @error('proveedor_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
                                     <?php
                                     $presentacion = [
                                         "Litros", "Kilogramos","Bolsas"
@@ -73,6 +45,17 @@
                                     @enderror
                                 </div>
 
+                            </div>
+
+                            <div class="row mb-3">
+                                <!-- Campo de Precio -->
+                                <div class="col-md-6">
+                                    <label for="precio" class="form-label">Precio</label>
+                                    <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio') }}" placeholder="Ej: 99.99" required>
+                                    @error('precio')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <!-- Campo de Descripción -->

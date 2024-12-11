@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Producto;
+use App\Models\ProductoPrecioHistorial;
+use Database\Factories\ProductoPrecioHistorialFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -32,8 +35,14 @@ class DatabaseSeeder extends Seeder
         $this->call(CompraSeeder::class);
         $this->call(ServicioSeeder::class);
         $this->call(ServicioEfectuadoSeeder::class);
-        $this->call(GastosSeeder::class); 
+        $this->call(GastosSeeder::class);
 
+        // Crear productos con historial de precios
+        Producto::all()->each(function ($producto) {
+            ProductoPrecioHistorial::factory()->count(2)->create([
+                'producto_id' => $producto->id
+            ]);
+        });
 
     }
 }

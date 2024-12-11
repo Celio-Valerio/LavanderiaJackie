@@ -27,7 +27,7 @@
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 30%;">Producto</th>
                                 <th style="width: 15%;">Precio</th>
-                                <th style="width: 30%;">Proveedor</th>
+                                <th style="width: 30%;">Presentación</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
@@ -37,7 +37,7 @@
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field"><b>{{ $producto->nombre }}</b></td>
                                     <td class="small-text-field">L. {{ $producto->precio }}</td>
-                                    <td class="small-text-field">{{ $producto->proveedor->full_name }}</td>
+                                    <td class="small-text-field">{{ $producto->presentacion }}</td>
                                     <td class="text-center small-text-field">
                                         <a href="{{ route('productos.show', $producto->id) }}" class="btn btn-info btn-sm">Ver</a>
                                         <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-warning btn-sm">Editar</a>

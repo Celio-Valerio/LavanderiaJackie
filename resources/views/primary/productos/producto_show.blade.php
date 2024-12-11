@@ -38,6 +38,11 @@
         .btn:hover {
             background-color: #0056b3;
         }
+
+        .badge {
+            font-size: 0.875rem;
+            padding: 0.5rem;
+        }
     </style>
 
     <section class="section">
@@ -61,9 +66,6 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label"><strong>Proveedor:</strong> {{ $producto->proveedor->full_name }}</label>
-                            </div>
-                            <div class="col-md-6">
                                 <label class="form-label"><strong>Presentación:</strong> {{ $producto->presentacion }}</label>
                             </div>
                         </div>
@@ -74,7 +76,24 @@
                             </div>
                         </div>
 
-
+                        <!-- Historial de precios -->
+                        <h3 class="mt-4 mb-3 text-center">Historial de Precios</h3>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Precio</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($historialPrecios as $historial)
+                                <tr>
+                                    <td>{{ ucfirst(\Carbon\Carbon::parse($historial->fecha_cambio)->translatedFormat('l d \d\e F, Y')) }}</td>
+                                    <td>L.{{ number_format($historial->precio_nuevo, 2) }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
 
                         <!-- Botones de acción -->
                         <div class="row mt-4">
