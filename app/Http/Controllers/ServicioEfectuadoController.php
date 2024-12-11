@@ -44,31 +44,74 @@ class ServicioEfectuadoController extends Controller
             'promo_id' => 'nullable|exists:promos,id',
             'libras' => 'required|integer|min:1',
             'notas' => 'nullable|string|max:500',
-            'estado' => 'required|in:Pendiente,Terminado,Entregado',
+            'estado' => 'in:Pendiente',
             'envio' => 'required|in:Local,A domicilio',
             'direccion' => 'nullable|string|max:500', // Validación para direccion
-            'precio_envio' => 'nullable|numeric|min:1|max:350', // Validación para precio_envio
-            'pago_envio' => 'required|in:Cliente,Empresa', // Validación para pago_envio
+            'precio_envio' => 'nullable|numeric|min:1|max:999', // Validación para precio_envio
+            'pago_envio' => 'nullable|in:Cliente,Empresa', // Validación para pago_envio
         ], [
             'cliente_id.required' => 'El cliente es obligatorio.',
             'cliente_id.exists' => 'El cliente seleccionado no existe.',
+
             'servicio_id.required' => 'El servicio es obligatorio.',
             'servicio_id.exists' => 'El servicio seleccionado no existe.',
+
             'libras.required' => 'Las libras son obligatorias.',
             'libras.integer' => 'Las libras deben ser un número entero.',
             'libras.min' => 'Las libras deben ser al menos 1.',
-            'estado.required' => 'El estado del servicio es obligatorio.',
-            'estado.in' => 'El estado debe ser uno de los siguientes: Pendiente, Terminado, Entregado.',
+
+            'estado.in' => 'El estado debe ser uno de los siguientes: Pendiente.',
+
             'envio.required' => 'El tipo de envío es obligatorio.',
             'envio.in' => 'El tipo de envío debe ser uno de los siguientes: Local o A domicilio.',
+
             'direccion.string' => 'La dirección debe ser una cadena de texto.',
             'direccion.max' => 'La dirección no debe exceder los 500 caracteres.',
+
             'precio_envio.numeric' => 'El precio de envío debe ser un número.',
-            'precio_envio.min' => 'El precio de envío debe ser mayor que L. 1.00.',
-            'precio_envio.max' => 'El precio de envío debe ser menor que L. 350.00.',
-            'pago_envio.required' => 'Es obligatorio indicar quién paga el envío.',
+            'precio_envio.min' => 'El precio de envío debe ser mayor o igual a 0.',
+            'precio_envio.max' => 'El precio de envío debe ser menor o igual a 999.',
+
             'pago_envio.in' => 'El pago del envío debe ser uno de los siguientes: Cliente o Empresa.',
         ]);
+
+        // Lógica de validación específica según el tipo de envío
+        if ($request->envio === 'A domicilio') {
+            // Si es "A domicilio", la dirección y pago de envío son obligatorios
+            $request->validate([
+                'direccion' => 'required|string|max:500', // Dirección obligatoria
+                'pago_envio' => 'required|in:Cliente,Empresa', // Pago obligatorio
+            ], [
+                'direccion.required' => 'La dirección es obligatoria para el envío a domicilio.',
+                'direccion.string' => 'La dirección debe ser una cadena de texto válida.',
+                'direccion.max' => 'La dirección no debe exceder los 500 caracteres.',
+                'pago_envio.required' => 'Es obligatorio indicar quién paga el envío (Cliente o Empresa).',
+                'pago_envio.in' => 'La opción de pago del envío debe ser "Cliente" o "Empresa".',
+            ]);
+        }
+
+        // Si el pago del envío es "Cliente", el precio de envío puede ser 0
+        if ($request->pago_envio === 'Cliente') {
+            $request->validate([
+                'precio_envio' => 'nullable|numeric|min:0|max:0', // El precio de envío debe ser 0
+            ], [
+                'precio_envio.numeric' => 'El precio de envío debe ser un número.',
+                'precio_envio.min' => 'El precio de envío debe ser 0.',
+                'precio_envio.max' => 'El precio de envío debe ser 0.',
+            ]);
+        }
+
+        if ($request->pago_envio === 'Empresa') {
+            // Si el pago del envío es "Empresa", el precio de envío debe estar entre 0 y 999
+            $request->validate([
+                'precio_envio' => 'required|numeric|min:1|max:999', // El precio de envío debe estar entre 0 y 999
+            ], [
+                'precio_envio.required' => 'El precio de envío es obligatorio.',
+                'precio_envio.numeric' => 'El precio de envío debe ser un número.',
+                'precio_envio.min' => 'El precio de envío debe ser al menos L. 1.00.',
+                'precio_envio.max' => 'El precio de envío debe ser menor o igual a L. 999.00.',
+            ]);
+        }
 
         // Crear el servicio efectuado
         $servicioEfectuado = new ServicioEfectuado();
@@ -77,7 +120,7 @@ class ServicioEfectuadoController extends Controller
         $servicioEfectuado->promo_id = $request->promo_id;
         $servicioEfectuado->libras = $request->libras;
         $servicioEfectuado->notas = $request->notas;
-        $servicioEfectuado->estado = $request->estado;
+        $servicioEfectuado->estado = 'Pendiente';
         $servicioEfectuado->envio = $request->envio;
         $servicioEfectuado->direccion = $request->direccion; // Guardar la dirección
         $servicioEfectuado->precio_envio = $request->precio_envio; // Guardar el precio de envío

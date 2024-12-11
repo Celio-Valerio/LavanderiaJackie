@@ -13,9 +13,9 @@ class PromoSeeder extends Seeder
      */
     public function run(): void
     {
-        $daysOfWeek = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
+        $daysOfWeek = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
         $products = ['Edredones', 'Cortinas', 'Sabanas', 'Pantalones', 'Ropa Interior'];
-        $promos = ['Edredones', 'Peluches, almohadas y cojines', 'Lavados y secados + 50 libras'];
+        $promos = ['Edredones', 'Peluches, almohadas y cojines', 'Lavados y secados'];
 
         for ($i = 1; $i <= 15; $i++) {
             DB::table('promos')->insert([
@@ -23,6 +23,8 @@ class PromoSeeder extends Seeder
                 'name' => Arr::random($products), // Sin json_encode
                 'promo' => Arr::random($promos),
                 'image' => "promos ($i).JPG",
+                'desde' => rand(10, 15),
+                'hasta' => rand(20, 30),
                 'days' => json_encode(Arr::random($daysOfWeek, rand(1, 5))),
                 'created_at' => now(),
                 'updated_at' => now(),

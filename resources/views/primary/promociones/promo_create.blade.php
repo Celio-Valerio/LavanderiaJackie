@@ -87,20 +87,38 @@
 
                                     <div class="row mb-3">
                                         <!-- Campo de Descuento -->
-                                        <div class="col-md-6">
-                                            <label for="discount" class="form-label">Descuento (%)</label>
+                                        <div class="col-md-2">
+                                            <label for="discount" class="form-label">Descuento(%)</label>
                                             <input type="text" name="discount" class="form-control small-text-field @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount') }}" placeholder="Ej: 20" required>
                                             @error('discount')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
 
+                                        <!-- Campo de Descuento -->
+                                        <div class="col-md-2">
+                                            <label for="desde" class="form-label">Desde(lbs)</label>
+                                            <input type="text" name="desde" class="form-control small-text-field @error('desde') is-invalid @enderror" id="desde" value="{{ old('desde') }}" placeholder="Ej: 10" required>
+                                            @error('desde')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Campo de Descuento -->
+                                        <div class="col-md-2">
+                                            <label for="hasta" class="form-label">Hasta(lbs)</label>
+                                            <input type="text" name="hasta" class="form-control small-text-field @error('hasta') is-invalid @enderror" id="hasta" value="{{ old('hasta') }}" placeholder="Ej: 20" required>
+                                            @error('hasta')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
                                             <?php
                                             $promos = [
-                                                "Ropa habitual de 21 a 49 libras",
-                                                "Lavado y secado -20 libras",
+                                                "Ropa habitual",
+                                                "Lavado y secado",
                                                 "Sabanas, cubrecolchón y sobrefundas",
-                                                "Lavados y secados +50 libras",
+                                                "Lavados y secados",
                                                 "Peluches, almohadas y cojines",
                                                 "Edredones"
                                             ];
@@ -241,6 +259,16 @@
                     e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
                 });
 
+                // Validar el campo de porcentaje de desde
+                document.getElementById('desde').addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
+                });
+
+                // Validar el campo de porcentaje de hasta
+                document.getElementById('hasta').addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
+                });
+
                 const clearForm = () => {
                     // Restablecer el formulario y limpiar los campos
                     form.reset();
@@ -266,8 +294,6 @@
                     imagePreview.style.display = 'none';
                     imagePreviewContainer.style.backgroundColor = '#f0f0f0';
                 };
-
-
 
                 // Limpiar el formulario al hacer clic en el botón
                 clearButton.addEventListener('click', clearForm);

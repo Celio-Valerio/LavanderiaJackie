@@ -88,10 +88,28 @@
 
                                     <div class="row mb-3">
                                         <!-- Campo de Descuento -->
-                                        <div class="col-md-6">
-                                            <label for="discount" class="form-label">Descuento (%)</label>
+                                        <div class="col-md-2">
+                                            <label for="discount" class="form-label">Descuento(%)</label>
                                             <input type="text" name="discount" class="form-control small-text-field @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount', $promo->discount) }}" placeholder="Ej: 20" required>
                                             @error('discount')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Campo de Descuento -->
+                                        <div class="col-md-2">
+                                            <label for="desde" class="form-label">Desde(lbs)</label>
+                                            <input type="text" name="desde" class="form-control small-text-field @error('desde') is-invalid @enderror" id="desde" value="{{ old('desde', $promo->desde) }}" placeholder="Ej: 10" required>
+                                            @error('desde')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Campo de Descuento -->
+                                        <div class="col-md-2">
+                                            <label for="hasta" class="form-label">Hasta(lbs)</label>
+                                            <input type="text" name="hasta" class="form-control small-text-field @error('hasta') is-invalid @enderror" id="hasta" value="{{ old('hasta', $promo->hasta) }}" placeholder="Ej: 20" required>
+                                            @error('hasta')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>

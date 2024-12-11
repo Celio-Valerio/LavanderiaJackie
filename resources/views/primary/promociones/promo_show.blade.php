@@ -42,7 +42,7 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <label class="form-label"><strong>Descuento:</strong> {{ $promocion->discount }}%</label>
+                                    <label class="form-label"><strong>Descuento:</strong> {{ $promocion->discount }}% <strong>desde</strong> {{ $promocion->desde }} libras <strong>hasta</strong> {{ $promocion->hasta }} libras</label>
                                 </div>
 
                                 <!-- Días de la promoción: Ahora en la misma fila -->

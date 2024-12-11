@@ -38,7 +38,8 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validar los datos del formulario
+        $validated = $request->validate([
             'first_name' => [
                 'required',
                 'string',
@@ -107,19 +108,15 @@ class ClienteController extends Controller
             'type.in' => 'El tipo de cliente debe ser Contado o Crédito.',
         ]);
 
-        // Guardar cliente en la base de datos
-        $cliente = new Cliente();
-        $cliente->first_name = $request->first_name;
-        $cliente->last_name = $request->last_name;
-        $cliente->email = $request->email;
-        $cliente->phone = $request->phone;
-        $cliente->address = $request->address;
-        $cliente->type = $request->type;  // Asignar el tipo de cliente
-        $cliente->save();
+        // Crear cliente usando los datos validados
+        $cliente = Cliente::create($validated);
 
-        $nombresCliente = $request-> first_name;
-        $apellidosCliente = $request-> last_name;
-        return redirect()->route('clientes.index')->with('success', 'El cliente ' .$nombresCliente . ' ' . $apellidosCliente . ' ha sido registrado exitosamente.');
+        // Mensaje de éxito
+        $successMessage = 'El cliente ' . $cliente->first_name . ' ' . $cliente->last_name . ' ha sido registrado exitosamente.';
+
+        // Redirigir a la URL previa o al índice de clientes
+        return redirect($request->input('redirect_to', route('clientes.index')))
+            ->with('success', $successMessage);
     }
 
     /**

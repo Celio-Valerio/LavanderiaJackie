@@ -107,12 +107,22 @@
                                 <!-- Cliente -->
                                 <div class="col-md-6">
                                     <label for="cliente_id" class="form-label">Cliente</label>
-                                    <select name="cliente_id" id="cliente_id" class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
-                                        <option value="">Seleccione un cliente</option>
-                                        @foreach($clientes as $cliente)
-                                            <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>{{ $cliente->first_name }} {{ $cliente->last_name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="d-flex align-items-start">
+                                        <!-- Select de cliente -->
+                                        <select name="cliente_id" id="cliente_id" class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
+                                            <option value="">Seleccione un cliente</option>
+                                            @foreach($clientes as $cliente)
+                                                <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
+                                                    {{ $cliente->first_name }} {{ $cliente->last_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        <!-- Botón para agregar cliente -->
+                                        <a href="{{ route('clientes.create') }}" class="btn btn-primary ms-2" title="Agregar nuevo cliente">
+                                            <i class="bi bi-plus-circle"></i>
+                                        </a>
+                                    </div>
                                     @error('cliente_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -124,7 +134,9 @@
                                     <select name="servicio_id" id="servicio_id" class="form-control @error('servicio_id') is-invalid @enderror" required>
                                         <option value="">Seleccione un servicio</option>
                                         @foreach($servicios as $servicio)
-                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}" {{ old('servicio_id') == $servicio->id ? 'selected' : '' }}>{{ $servicio->nombre }} <strong> - L. {{ $servicio->precio }}</strong></option>
+                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}" {{ old('servicio_id') == $servicio->id ? 'selected' : '' }}>
+                                                {{ $servicio->nombre }} <strong> - L. {{ $servicio->precio }}</strong>
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('servicio_id')
@@ -133,29 +145,8 @@
                                 </div>
                             </div>
 
+                            <!-- ACTUAL -->
                             <div class="row mt-3">
-                                <!-- Promoción -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Promoción</label>
-                                    <div class="d-flex align-items-center">
-                                        <select name="promo_id" id="promo_id" class="form-control @error('promo_id') is-invalid @enderror me-2" {{ old('no_aplica') ? 'disabled' : '' }}>
-                                            <option value="">Seleccione una promoción</option>
-                                            @foreach($promos as $promo)
-                                                <option value="{{ $promo->id }}" data-descuento="{{ $promo->discount }}" {{ old('promo_id') == $promo->id ? 'selected' : '' }}>
-                                                    {{ $promo->name }} ({{ $promo->promo }}) <strong>{{ $promo->discount }}%</strong>
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <div class="form-check">
-                                            <input class="form-check-input custom-checkbox-input" type="checkbox" id="no_aplica" name="no_aplica" {{ old('no_aplica') ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-checkbox-label ms-1" for="no_aplica">Aplica</label>
-                                        </div>
-                                    </div>
-                                    @error('promo_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
                                 <!-- Libras -->
                                 <div class="col-md-3">
                                     <label for="libras" class="form-label">Libras</label>
@@ -170,31 +161,49 @@
                                     <label for="total" class="form-label">Total</label>
                                     <input type="text" name="total" id="total" class="form-control" value="{{ old('total') }}" readonly>
                                 </div>
-                            </div>
 
-                            <div class="row mt-3">
-                                <!-- Columna 2: Estado -->
+                                <!-- Promoción -->
                                 <div class="col-md-6">
-                                    <label class="form-label">Estado</label>
+                                    <label class="form-label">Promoción</label>
                                     <div class="d-flex align-items-center">
-                                        <div class="form-check custom-radio-wrapper me-3">
-                                            <input class="form-check-input custom-radio-input" type="radio" name="estado" id="estado_pendiente" value="Pendiente" {{ old('estado') == 'Pendiente' ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-radio-label" for="estado_pendiente">Pendiente</label>
+                                        <select name="promo_id" id="promo_id" class="form-control @error('promo_id') is-invalid @enderror me-2" disabled>
+                                            <option value="">Seleccione una promoción</option>
+                                            @foreach($promos as $promo)
+                                                @php
+                                                    $diasPromo = json_decode($promo->days); // Decodificar el JSON en un array
+                                                    $diasAbreviados = implode(', ', array_map(function($dia) {
+                                                        return substr($dia, 0, 1); // Obtener solo la primera letra de cada día
+                                                    }, $diasPromo)); // Convertir los días en las primeras letras
+                                                @endphp
+                                                <option value="{{ $promo->id }}"
+                                                        data-descuento="{{ $promo->discount }}"
+                                                        data-dias="{{ json_encode($diasPromo) }}"
+                                                        data-desde="{{ $promo->desde }}"
+                                                        data-hasta="{{ $promo->hasta }}"
+                                                    {{ old('promo_id') == $promo->id ? 'selected' : '' }}>
+                                                    {{ $promo->name }} ({{ $promo->desde }} lbs -{{ $promo->hasta }} lbs
+                                                    {{ $diasAbreviados }})
+                                                    <strong>{{ $promo->discount }}%</strong>
+                                                </option>
+                                            @endforeach
+
+
+                                        </select>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input custom-checkbox-input" type="checkbox" id="no_aplica" name="no_aplica" {{ old('no_aplica') ? 'checked' : '' }}>
+                                            <label class="form-check-label custom-checkbox-label ms-1" for="no_aplica"></label>
                                         </div>
-                                        <div class="form-check custom-radio-wrapper me-3">
-                                            <input class="form-check-input custom-radio-input" type="radio" name="estado" id="estado_terminado" value="Terminado" {{ old('estado') == 'Terminado' ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-radio-label" for="estado_terminado">Terminado</label>
-                                        </div>
-                                        <div class="form-check custom-radio-wrapper">
-                                            <input class="form-check-input custom-radio-input" type="radio" name="estado" id="estado_entregado" value="Entregado" {{ old('estado') == 'Entregado' ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-radio-label" for="estado_entregado">Entregado</label>
-                                        </div>
+
                                     </div>
-                                    @error('estado')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @error('promo_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
 
+
+                            <div class="row mt-3">
                                 <!-- Columna 1: Envío -->
                                 <div class="col-md-6">
                                     <!-- Fila 1 y 2: Envío -->
@@ -209,37 +218,12 @@
                                             <label class="form-check-label custom-radio-label" for="envio_domicilio">A domicilio</label>
                                         </div>
                                     </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row mt-3">
-
-                                <!-- Columna 2: Notas -->
-                                <div class="col-md-6">
-                                    <!-- Fila 3 a 6: Notas -->
-                                    <label for="notas" class="form-label">Notas</label>
-                                    <textarea name="notas" id="notas" class="form-control @error('notas') is-invalid @enderror" rows="4" maxlength="500">{{ old('notas') }}</textarea>
-                                    @error('notas')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @error('envio')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <!-- Columna 1: Dirección -->
-                                <div class="col-md-6">
-                                    <!-- Fila 3 a 6: Dirección -->
-                                    <div id="direccionWrapper">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <textarea name="direccion" id="direccion" class="form-control @error('direccion') is-invalid @enderror" rows="4" maxlength="500">{{ old('direccion') }}</textarea>
-                                        @error('direccion')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="row mt-3" id="envioWrapper" class="mt-2 d-none">
-                                <!-- Columna 1: ¿Quién paga el envío? -->
-                                <div class="col-md-6">
+                                <div class="col-md-6" id="envioWrapper" class="mt-2 d-none">
                                     <label class="form-label">¿Quién paga el envío?</label>
                                     <div class="d-flex align-items-center">
                                         <div class="form-check custom-radio-wrapper me-3">
@@ -255,10 +239,34 @@
                                         @enderror
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- Columna 2: Precio del envío -->
+                            <div class="row mt-3">
+                                <!-- Columna 2: Notas -->
                                 <div class="col-md-6">
-                                    <!-- Fila 7 y 8: Precio del envío -->
+                                    <!-- Fila 3 a 6: Notas -->
+                                    <label for="notas" class="form-label">Notas</label>
+                                    <textarea name="notas" id="notas" class="form-control @error('notas') is-invalid @enderror" rows="4" maxlength="500">{{ old('notas') }}</textarea>
+                                    @error('notas')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Columna 1: Dirección -->
+                                <div class="col-md-6">
+                                    <div id="direccionWrapper">
+                                        <label for="direccion" class="form-label">Dirección</label>
+                                        <textarea name="direccion" id="direccion" class="form-control @error('direccion') is-invalid @enderror" rows="4" maxlength="500">{{ old('direccion') }}</textarea>
+                                        @error('direccion')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-3">
+                                <!-- Precio del envío -->
+                                <div class="col-md-6">
                                     <div id="precioEnvioWrapper">
                                         <label for="precio_envio" class="form-label">Precio de Envío</label>
                                         <input type="number"
@@ -271,7 +279,6 @@
                                         @enderror
                                     </div>
                                 </div>
-
                             </div>
 
                             <!-- Botones -->
@@ -288,6 +295,160 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal de advertencia de libras fuera de rango -->
+    <div class="modal fade" id="modalLibrasFueraDeRango" tabindex="-1" aria-labelledby="modalLibrasFueraDeRangoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLibrasFueraDeRangoLabel">Advertencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>La cantidad de libras que ingresaste (<strong><span id="librasIngresadas"></span> lbs</strong>) no está dentro del rango permitido para esta promoción.</p>
+                    <p>El rango de libras permitido para esta promoción es de <strong><span id="rangoLibrasDesde"></span> lbs a <span id="rangoLibrasHasta"></span> lbs</strong>.</p>
+                    <p>Por favor, ajusta la cantidad de libras dentro de este rango para poder aplicar la promoción.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de advertencia por día -->
+    <div class="modal fade" id="modalDiaNoDisponible" tabindex="-1" aria-labelledby="modalDiaNoDisponibleLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalDiaNoDisponibleLabel">Advertencia</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>La promoción seleccionada no es válida para el día de hoy (<strong><span id="diaActual"></span></strong>).</p>
+                    <p>Los días en los que esta promoción es válida son: <strong><span id="diasPromocion"></span></strong>.</p>
+                    <p>Por favor, elige un día en que la promoción sea válida.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const promoSelect = document.getElementById('promo_id');
+            const librasInput = document.getElementById('libras');
+            const form = document.getElementById('servicioForm');
+
+            // Función para obtener el nombre del día actual en español
+            function obtenerNombreDia() {
+                const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+                const hoy = new Date();
+                return dias[hoy.getDay()]; // Devuelve el nombre del día actual
+            }
+
+            // Función para verificar si la promoción seleccionada aplica para el día actual
+            function verificarDiaPromocion(promo) {
+                const diasPromocion = JSON.parse(promo.dataset.dias); // Los días de la promoción como array
+                const diaActual = obtenerNombreDia(); // Día actual en nombre (por ejemplo, "Lunes")
+
+                // Mostrar los días completos en el modal
+                document.getElementById('diasPromocion').innerText = diasPromocion.join(', '); // Nombres completos de los días
+                document.getElementById('diaActual').innerText = diaActual;
+
+                // Compara el nombre del día actual con los días de la promoción
+                return diasPromocion.includes(diaActual);
+            }
+
+            // Función para verificar si las libras están dentro del rango
+            function verificarLibrasEnRango(promo) {
+                const libras = parseInt(librasInput.value);
+                const desde = parseInt(promo.dataset.desde);
+                const hasta = parseInt(promo.dataset.hasta);
+
+                // Mostrar el rango en el modal
+                document.getElementById('rangoLibrasDesde').innerText = desde;
+                document.getElementById('rangoLibrasHasta').innerText = hasta;
+                document.getElementById('librasIngresadas').innerText = libras; // Mostrar libras ingresadas
+
+                return libras >= desde && libras <= hasta;
+            }
+
+            // Deshabilitar la selección de la promoción hasta que se ingrese libras
+            librasInput.addEventListener('input', function() {
+                if (librasInput.value) {
+                    promoSelect.disabled = false; // Habilitar el select de promoción
+                } else {
+                    promoSelect.disabled = true; // Deshabilitar el select de promoción si no se ingresaron libras
+                }
+
+                // Solo realizar las validaciones si ambos campos tienen datos
+                if (librasInput.value && promoSelect.value) {
+                    const promo = promoSelect.options[promoSelect.selectedIndex];
+
+                    // Verificar si las libras están dentro del rango
+                    if (!verificarLibrasEnRango(promo)) {
+                        $('#modalLibrasFueraDeRango').modal('show'); // Mostrar modal si las libras no están en rango
+                        librasInput.value = ''; // Limpiar el input de libras
+                        promoSelect.value = ''; // Limpiar la selección del select
+                    } else {
+                        $('#modalLibrasFueraDeRango').modal('hide'); // Ocultar modal si las libras están dentro del rango
+                    }
+
+                    // Verificar si la promoción es válida para el día actual
+                    if (!verificarDiaPromocion(promo)) {
+                        $('#modalDiaNoDisponible').modal('show'); // Mostrar modal si no aplica para el día
+                        promoSelect.value = ''; // Limpiar la selección del select
+                    } else {
+                        $('#modalDiaNoDisponible').modal('hide'); // Ocultar modal si la promoción es válida para el día
+                    }
+                }
+            });
+
+            // Evento cuando se cambia la promoción
+            promoSelect.addEventListener('change', function() {
+                // Solo realizar las validaciones si ambos campos tienen datos
+                if (librasInput.value && promoSelect.value) {
+                    const promo = promoSelect.options[promoSelect.selectedIndex];
+
+                    // Verificar si las libras están dentro del rango
+                    if (!verificarLibrasEnRango(promo)) {
+                        $('#modalLibrasFueraDeRango').modal('show'); // Mostrar modal si las libras no están en rango
+                        librasInput.value = ''; // Limpiar el input de libras
+                        promoSelect.value = ''; // Limpiar la selección del select
+                    } else {
+                        $('#modalLibrasFueraDeRango').modal('hide'); // Ocultar modal si las libras están dentro del rango
+                    }
+
+                    // Verificar si la promoción es válida para el día actual
+                    if (!verificarDiaPromocion(promo)) {
+                        $('#modalDiaNoDisponible').modal('show'); // Mostrar modal si no aplica para el día
+                        promoSelect.value = ''; // Limpiar la selección del select
+                    } else {
+                        $('#modalDiaNoDisponible').modal('hide'); // Ocultar modal si la promoción es válida para el día
+                    }
+                }
+            });
+
+            // Validación al intentar enviar el formulario
+            form.addEventListener('submit', function(e) {
+                const promo = promoSelect.options[promoSelect.selectedIndex];
+
+                // Si la promoción no es válida para el día o las libras no están en rango, evitar el envío
+                if (!verificarDiaPromocion(promo) || !verificarLibrasEnRango(promo)) {
+                    e.preventDefault(); // Evitar el envío del formulario si hay error
+                }
+
+                // Verificar si algún modal está visible y evitar el envío del formulario
+                if ($('#modalDiaNoDisponible').hasClass('show') || $('#modalLibrasFueraDeRango').hasClass('show')) {
+                    e.preventDefault(); // Si algún modal está visible, prevenir el envío del formulario
+                }
+            });
+        });
+
+    </script>
 
     <script>
         $(document).ready(function () {
@@ -311,7 +472,7 @@
                     $('#precioEnvioWrapper').addClass('d-none');
                     // Mantener el precio de envío si existe, no resetear
                     if ($('#precio_envio').val() === "") {
-                        $('#precio_envio').val(0); // Reset envio price si está vacío
+                        $('#precio_envio').val(''); // Reset envio price si está vacío
                     }
                     calculateTotal(); // Recalculate total
                 }
@@ -347,7 +508,7 @@
                     var precioEnvio = parseFloat($('#precio_envio').val()) || 0;
                     total += precioEnvio;
                 } else if ($('#envio_local').is(':checked') || $('#envio_cliente').is(':checked')) {
-                    $('#precio_envio').val(0); // Set envio price to 0.00
+                    $('#precio_envio').val(''); // Set envio price to 0.00
                 }
 
                 // Validación: Si hay un error, mantener el valor del precio de envío
@@ -362,6 +523,11 @@
             $('#envio_local, #envio_domicilio').on('change', function () {
                 toggleEnvioFields();
                 calculateTotal();
+
+                // Si se selecciona "Envío: Local", quitar la selección de "¿Quién paga el envío?"
+                if ($('#envio_local').is(':checked')) {
+                    $('#envio_cliente, #envio_empresa').prop('checked', false); // Desmarcar ambos
+                }
             });
 
             $('#envio_cliente, #envio_empresa').on('change', function () {
@@ -375,8 +541,13 @@
             // Limpiar el formulario
             $('#clearButton').on('click', function () {
                 $('#servicioForm')[0].reset();
-                $('#total').val('0.00');
+                $('#libras').val('');
+                $('#total').val('');
+                $('#direccion').val('');
                 $('#no_aplica').prop('checked', false);
+                $('#envio_local').prop('checked', false);
+                $('#envio_domicilio').prop('checked', false);
+                $('#servicio_id').prop('disabled', false).val('');
                 $('#promo_id').prop('disabled', false).val('');
                 $('#direccionWrapper, #envioWrapper, #precioEnvioWrapper').addClass('d-none');
             });

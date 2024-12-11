@@ -106,18 +106,15 @@
                     nombre: "{{ old('nombre', $producto->nombre) }}",
                     precio: "{{ old('precio', $producto->precio) }}",
                     proveedor_id: "{{ old('proveedor_id', $producto->proveedor_id) }}",
-                    cantidad: "{{ old('cantidad', $producto->cantidad) }}",
                     presentacion: "{{ old('presentacion', $producto->presentacion) }}",
                     descripcion: `{{ old('descripcion', $producto->descripcion) }}`
                 };
 
                 // Función para restablecer el formulario
                 const resetForm = () => {
-                    // Restablecer campos de texto
                     document.getElementById('nombre').value = originalData.nombre;
                     document.getElementById('precio').value = originalData.precio;
                     document.getElementById('proveedor_id').value = originalData.proveedor_id;
-                    document.getElementById('cantidad').value = originalData.cantidad;
                     document.getElementById('descripcion').value = originalData.descripcion;
 
                     // Restablecer select de presentación
@@ -128,9 +125,23 @@
                 };
 
                 reloadButton.addEventListener('click', resetForm);
+
+                // Validación del campo de precio
+                const precioInput = document.getElementById('precio');
+                precioInput.addEventListener('input', () => {
+                    const value = precioInput.value.replace(/[^\d.]/g, ''); // Eliminar caracteres no numéricos
+                    const parts = value.split('.');
+
+                    if (parts.length > 2) {
+                        precioInput.value = parts[0] + '.' + parts[1]; // Solo permitir un punto decimal
+                    } else if (parts.length === 2) {
+                        parts[1] = parts[1].slice(0, 2); // Limitar a dos decimales
+                        precioInput.value = parts.join('.');
+                    } else {
+                        precioInput.value = parts[0].slice(0, 4); // Limitar a 4 dígitos antes del punto
+                    }
+                });
             });
-
         </script>
-
     </section>
 @endsection

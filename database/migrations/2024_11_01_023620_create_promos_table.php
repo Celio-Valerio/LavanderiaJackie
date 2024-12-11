@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('image');
             $table->string('name');
             $table->string('promo');
+            $table->integer('desde');
+            $table->integer('hasta');
             $table->text('notes')->nullable();
             $table->json('days');
             $table->timestamps();

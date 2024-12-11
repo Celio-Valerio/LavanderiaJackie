@@ -79,14 +79,22 @@
                             <div class="col-md-6">
                                 <label class="form-label">
                                     <strong>Pagará el envío:</strong>
-                                    {{ $servicioEfectuado->pago_envio }}
+                                    @if($servicioEfectuado->pago_envio !== null)
+                                        {{ $servicioEfectuado->pago_envio }}
+                                    @else
+                                        No se pagrá envió
+                                    @endif
                                 </label>
                             </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">
                                     <strong>Precio de envio:</strong>
-                                    {{ $servicioEfectuado->precio_envio }}
+                                    @if($servicioEfectuado->precio_envio !== null)
+                                        L. {{ number_format($servicioEfectuado->precio_envio, 2) }}
+                                    @else
+                                        No se pagrá envió
+                                    @endif
                                 </label>
                             </div>
                         </div>
@@ -130,7 +138,7 @@
 
                             <div class="row mb-3">
                                 <div class="col-md-12">
-                                    <label class="form-label"><strong>Dirección:</strong> {{ $servicioEfectuado->dirección ?? 'El cliente recogerá, en la empresa.' }}</label>
+                                    <label class="form-label"><strong>Dirección:</strong> {{ $servicioEfectuado->direccion ?? 'El cliente recogerá, en la empresa.' }}</label>
                                 </div>
                             </div>
                         </div>

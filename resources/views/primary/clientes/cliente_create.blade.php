@@ -13,6 +13,7 @@
                         <!-- Inicio del formulario -->
                         <form id="clienteForm" action="{{ route('clientes.store') }}" method="POST" novalidate>
                             @csrf <!-- Protección contra CSRF -->
+                            <input type="hidden" name="redirect_to" value="{{ old('redirect_to', url()->previous()) }}">
 
                             <div class="row mb-3">
                                 <!-- Campo de Nombre -->
@@ -82,7 +83,7 @@
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
                                 <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
-                                <a href="{{ route('clientes.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                                <a href="{{ url()->previous() }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>
                         </form>
                         <!-- Fin del formulario -->

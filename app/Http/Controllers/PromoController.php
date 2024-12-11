@@ -75,6 +75,18 @@ class PromoController extends Controller
                 'min:5',
                 'max:500',
             ],
+            'desde' => [
+                'required',
+                'numeric',
+                'gt:0', // mayor que 0 (mayor que 1)
+                'lt:999', // menor que 999
+            ],
+            'hasta' => [
+                'required',
+                'numeric',
+                'gt:desde', // debe ser mayor que 'desde'
+                'lt:999', // menor que 999
+            ],
         ], [
             'name.required' => 'El nombre de la promoción es obligatorio.',
             'name.string' => 'El nombre de la promoción debe ser una cadena de texto válida.',
@@ -97,6 +109,16 @@ class PromoController extends Controller
             'notes.string' => 'Las notas deben ser una cadena de texto válida.',
             'notes.min' => 'Las notas deben tener al menos 5 caracteres.',
             'notes.max' => 'Las notas no pueden exceder los 500 caracteres.',
+
+            'desde.required' => 'El campo "desde" es obligatorio.',
+            'desde.numeric' => 'El campo "desde" debe ser un número.',
+            'desde.gt' => 'El valor de "desde" debe ser mayor que 1.',
+            'desde.lt' => 'El valor de "desde" debe ser menor que 999.',
+
+            'hasta.required' => 'El campo "hasta" es obligatorio.',
+            'hasta.numeric' => 'El campo "hasta" debe ser un número.',
+            'hasta.gt' => 'El valor de "hasta" debe ser mayor que "desde".',
+            'hasta.lt' => 'El valor de "hasta" debe ser menor que 999.',
         ]);
 
         // Guardar promoción en la base de datos
@@ -105,6 +127,8 @@ class PromoController extends Controller
         $promo->discount = $request->discount;
         $promo->promo = $request->promo;
         $promo->notes = $request->notes;
+        $promo->desde = $request->desde;
+        $promo->hasta = $request->hasta;
 
         // Guardar imagen
         if ($request->hasFile('image')) {
@@ -123,7 +147,7 @@ class PromoController extends Controller
             $promo->image = $imageName;
         }
 
-
+        // Guardar los días en formato JSON
         $promo->days = json_encode($request->days);
         $promo->save();
 
