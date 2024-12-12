@@ -150,7 +150,7 @@
                                 <!-- Libras -->
                                 <div class="col-md-3">
                                     <label for="libras" class="form-label">Libras</label>
-                                    <input type="number" name="libras" id="libras" class="form-control @error('libras') is-invalid @enderror" value="{{ old('libras') }}" min="1" max="99" required>
+                                    <input type="number" name="libras" id="libras" class="form-control @error('libras') is-invalid @enderror" value="{{ old('libras') }}" maxlength="5" required>
                                     @error('libras')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -273,7 +273,7 @@
                                                name="precio_envio"
                                                id="precio_envio"
                                                class="form-control @error('precio_envio') is-invalid @enderror"
-                                               value="{{ old('precio_envio', 0) }}">
+                                               value="{{ old('precio_envio', 0) }}" oninput="limitInputToFiveDigits(this)">
                                         @error('precio_envio')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -341,6 +341,16 @@
             const promoSelect = document.getElementById('promo_id');
             const librasInput = document.getElementById('libras');
             const form = document.getElementById('servicioForm');
+
+
+            librasInput.addEventListener('input', (event) => {
+                // Elimina cualquier carácter no numérico
+                let value = event.target.value.replace(/\D/g, '');
+                // Limita la longitud del valor a 3 caracteres
+                value = value.substring(0, 3);
+                // Actualiza el valor del input
+                event.target.value = value;
+            });
 
             // Función para obtener el nombre del día actual en español
             function obtenerNombreDia() {
@@ -448,6 +458,54 @@
             });
         });
 
+        // Formatear número con separadores de miles
+        function formatNumberWithCommas(number) {
+            if (!number) return ''; // Manejar valores vacíos o nulos
+            // Convertir a string y aplicar el formato
+            return parseFloat(number).toLocaleString('en-US');
+        }
+
+        // Función para actualizar el campo 'total'
+        function updateTotalField() {
+            const totalInput = document.getElementById('total');
+
+            // Obtener el valor del campo (en bruto)
+            let rawValue = totalInput.value.replace(/,/g, ''); // Quitar comas previas
+            if (rawValue) {
+                // Formatear y asignar el valor formateado
+                totalInput.value = formatNumberWithCommas(rawValue);
+            }
+        }
+
+        // Formatear número con separadores de miles, puntos y dos decimales
+        function formatNumberWithCommasAndDecimals(number) {
+            if (!number || isNaN(number)) return '0.00'; // Manejar valores vacíos o no numéricos
+            // Convertir a float y aplicar formato con 2 decimales
+            return parseFloat(number).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Función para actualizar el campo 'total'
+        function updateTotalField() {
+            const totalInput = document.getElementById('total');
+
+            // Obtener el valor del campo (en bruto)
+            let rawValue = totalInput.value.replace(/,/g, ''); // Quitar comas previas
+            if (rawValue) {
+                // Formatear y asignar el valor formateado con decimales
+                totalInput.value = formatNumberWithCommasAndDecimals(rawValue);
+            }
+        }
+
+        // Ejecución inicial al cargar la página
+        document.addEventListener('DOMContentLoaded', function () {
+            updateTotalField();
+
+            // Si el valor se actualiza dinámicamente, puedes usar un intervalo o un observador
+            const totalInput = document.getElementById('total');
+            setInterval(() => {
+                updateTotalField();
+            }, 500); // Verificar cada 500ms
+        });
     </script>
 
     <script>
@@ -556,5 +614,26 @@
             toggleEnvioFields();
             togglePrecioEnvio();
         });
+    </script>
+
+    <script>
+        // Limitar la entrada a un máximo de 5 dígitos
+        function limitInputToFiveDigits(input) {
+            const maxDigits = 5;
+
+            // Eliminar valores no numéricos (seguridad adicional)
+            input.value = input.value.replace(/\D/g, '');
+
+            // Si la longitud excede el máximo, cortar la entrada
+            if (input.value.length > maxDigits) {
+                input.value = input.value.slice(0, maxDigits);
+            }
+
+            // Asegurarse de que no supere el valor máximo permitido
+            const maxValue = 99999;
+            if (parseInt(input.value, 10) > maxValue) {
+                input.value = maxValue;
+            }
+        }
     </script>
 @endsection

@@ -145,7 +145,8 @@ class MantenimientoController extends Controller
 
             'price.required' => 'El precio es obligatorio.',
             'price.numeric' => 'El precio debe ser un número válido.',
-            'price.between' => 'El precio debe estar entre L. 1.00 y L. 99,999.00.',
+            'price.min' => 'El precio debe ser mayor que L. 0.00.',
+            'price.max' => 'El precio debe ser menor que L. 100,000.00.',
         ]);
 
         // Buscar el mantenimiento en la base de datos
