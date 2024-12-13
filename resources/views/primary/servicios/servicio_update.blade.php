@@ -99,10 +99,10 @@
                                 <!-- Columnas de contenido -->
                                 <div class="col-md-12">
                                     <div class="row mb-3">
-                                        <!-- Campo de Nombre del Servicio -->
-                                        <div class="col-md-9">
+                                        <!-- Campo de Nombre del Producto -->
+                                        <div class="col-md-6">
                                             <label for="nombre" class="form-label">Nombre del servicio</label>
-                                            <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre', $servicio->nombre) }}" placeholder="Ej: Lavado, Planchado" maxlength="100" required>
+                                            <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre', $servicio->nombre) }}" placeholder="Ej: Jabón Líquido" maxlength="50" required>
                                             @error('nombre')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -130,7 +130,13 @@
                                     </div>
 
                                     <div class="row mb-3">
-                                        <!-- Columna de Artículos -->
+                                        @php
+                                            $articulosSeleccionados = old('articulos', json_decode($servicio->articulos, true) ?? []);
+                                            $extrasSeleccionados = old('extras', json_decode($servicio->extras, true) ?? []);
+                                        @endphp
+
+
+                                            <!-- Columna de Artículos -->
                                         <div class="col-md-6">
                                             <label class="form-label">Servicios</label>
                                             <div class="col-md-12 d-flex flex-column">
@@ -205,21 +211,28 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const reloadButton = document.getElementById('reloadButton');
                 const form = document.getElementById('servicioForm');
-                const imagePreview = document.getElementById('imagePreview');
-                const imageInput = document.getElementById('image');
-                const imagePreviewContainer = document.getElementById('imagePreviewContainer');
 
                 // Valores originales del formulario
                 const originalData = {
-                    nombre: "{{ old('nombre', $servicio->nombre) }}",
-                    precio: "{{ old('precio', $servicio->precio) }}",
-                    descripcion: `{{ old('descripcion', $servicio->descripcion) }}`,
+                    nombre: "{{ $servicio->nombre }}",
+                    precio: "{{ $servicio->precio }}",
+                    descripcion: `{{ $servicio->descripcion }}`,
                     articulos: @json(json_decode($servicio->articulos, true) ?? []),
                     extras: @json(json_decode($servicio->extras, true) ?? [])
                 };
 
+                // Función para limpiar validaciones
+                const resetValidation = () => {
+                    const inputs = form.querySelectorAll('.is-invalid');
+                    inputs.forEach(input => input.classList.remove('is-invalid'));
+
+                    const invalidFeedbacks = form.querySelectorAll('.invalid-feedback');
+                    invalidFeedbacks.forEach(feedback => feedback.innerHTML = '');
+                };
+
                 // Función para restablecer el formulario
                 const resetForm = () => {
+                    resetValidation();
                     // Restablecer campos de texto
                     document.getElementById('nombre').value = originalData.nombre;
                     document.getElementById('precio').value = originalData.precio;
@@ -242,56 +255,12 @@
                             checkbox.checked = originalData.extras.includes(extra);
                         }
                     });
-
-                    // Limpiar input de archivo
-                    if (imageInput) {
-                        imageInput.value = '';
-                    }
-
-                    // Restablecer imagen (si aplica)
-                    if (imagePreview) {
-                        imagePreview.src = '#'; // Cambiar a una ruta base si necesitas imagen inicial
-                        imagePreview.style.display = 'none';
-                    }
                 };
 
                 // Asignar función de restablecer al botón
                 if (reloadButton) {
                     reloadButton.addEventListener('click', resetForm);
                 }
-
-                // Vista previa de la imagen cargada
-                if (imageInput && imagePreview) {
-                    imageInput.addEventListener('change', function (event) {
-                        const file = event.target.files[0];
-                        if (file) {
-                            const reader = new FileReader();
-                            reader.onload = (e) => {
-                                imagePreview.src = e.target.result;
-                                imagePreview.style.display = 'block';
-                            };
-                            reader.readAsDataURL(file);
-                        } else {
-                            imagePreview.src = '#';
-                            imagePreview.style.display = 'none';
-                        }
-                    });
-                }
-
-                // Función para capitalizar la primera letra de los inputs de texto
-                const capitalizeFirstLetter = (e) => {
-                    const input = e.target;
-                    input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
-                };
-
-                // Aplicar capitalización en los campos de texto específicos
-                const camposCapitalizar = ['nombre', 'descripcion'];
-                camposCapitalizar.forEach(id => {
-                    const campo = document.getElementById(id);
-                    if (campo) {
-                        campo.addEventListener('input', capitalizeFirstLetter);
-                    }
-                });
 
                 // Validar campo de precio: solo números y un punto decimal
                 const precioInput = document.getElementById('precio');
@@ -301,7 +270,7 @@
                     });
                 }
             });
-        </script>
 
+        </script>
     </section>
 @endsection

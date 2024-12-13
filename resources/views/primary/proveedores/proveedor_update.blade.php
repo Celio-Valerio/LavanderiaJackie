@@ -179,12 +179,20 @@
 
         <script>
             document.getElementById('reloadButton').addEventListener('click', function () {
-                const proveedorId = "{{ $proveedor->id }}"; // Obtener el ID del cliente
+                const proveedorId = "{{ $proveedor->id }}"; // Obtener el ID del proveedor
 
-                // Hacer una solicitud AJAX para obtener los datos más recientes del cliente
+                // Hacer una solicitud AJAX para obtener los datos más recientes del proveedor
                 fetch(`/proveedores/${proveedorId}/reload`)
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Error al cargar los datos: ${response.status}`);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
+                        // Limpiar todas las validaciones previas
+                        resetValidation();
+
                         // Actualizar los valores del formulario con los datos del servidor
                         document.getElementById('full_name').value = data.full_name;
                         document.getElementById('phone').value = data.phone;
@@ -195,14 +203,32 @@
 
                         // Actualizar el select de categoría
                         const categoriaSelect = document.getElementById('categoria_id');
-                        categoriaSelect.value = data.categoria_id; // Asignar el valor actual de la categoría
+                        categoriaSelect.value = data.categoria_id;
 
-                        // Actualizar el select de categoría
+                        // Actualizar el select de ciudad
                         const ciudadSelect = document.getElementById('city');
-                        ciudadSelect.value = data.city; // Asignar el valor actual de la categoría
+                        ciudadSelect.value = data.city;
 
+                        console.log('Formulario restablecido con datos del servidor.');
                     })
+                    .catch(error => {
+                        console.error('Hubo un problema con la solicitud:', error);
+                        alert('No se pudieron cargar los datos. Por favor, inténtalo de nuevo.');
+                    });
             });
+
+            // Función para limpiar validaciones
+            function resetValidation() {
+                const form = document.getElementById('proveedorForm'); // Cambiar al ID correcto si es diferente
+                const inputs = form.querySelectorAll('.is-invalid');
+                inputs.forEach(input => input.classList.remove('is-invalid'));
+
+                const invalidFeedbacks = form.querySelectorAll('.invalid-feedback');
+                invalidFeedbacks.forEach(feedback => {
+                    feedback.innerHTML = ''; // Eliminar el mensaje
+                    feedback.style.display = 'none'; // Asegurar que no sea visible
+                });
+            }
         </script>
 
     </section>

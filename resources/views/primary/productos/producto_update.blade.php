@@ -84,27 +84,40 @@
                 const form = document.getElementById('productoForm');
                 const reloadButton = document.getElementById('reloadButton');
 
-                // Valores originales para restablecer el formulario
+                // Valores originales directamente desde la base de datos
                 const originalData = {
-                    nombre: "{{ old('nombre', $producto->nombre) }}",
-                    precio: "{{ old('precio', $producto->precio) }}",
-                    presentacion: "{{ old('presentacion', $producto->presentacion) }}",
-                    descripcion: `{{ old('descripcion', $producto->descripcion) }}`
+                    nombre: @json($producto->nombre),
+                    precio: @json($producto->precio),
+                    presentacion: @json($producto->presentacion),
+                    descripcion: @json($producto->descripcion)
                 };
 
-                // Función para restablecer el formulario
+                // Función para limpiar validaciones
+                const resetValidation = () => {
+                    const inputs = form.querySelectorAll('.is-invalid');
+                    inputs.forEach(input => input.classList.remove('is-invalid'));
+
+                    const invalidFeedbacks = form.querySelectorAll('.invalid-feedback');
+                    invalidFeedbacks.forEach(feedback => feedback.innerHTML = '');
+                };
+
+                // Función para reestablecer los valores originales
                 const resetForm = () => {
+                    resetValidation();
+
+                    // Restaurar valores de los inputs
                     document.getElementById('nombre').value = originalData.nombre;
                     document.getElementById('precio').value = originalData.precio;
                     document.getElementById('descripcion').value = originalData.descripcion;
 
-                    // Restablecer select de presentación
+                    // Restaurar el valor seleccionado del select
                     const presentacionSelect = document.getElementById('presentacion');
                     Array.from(presentacionSelect.options).forEach(option => {
                         option.selected = option.value === originalData.presentacion;
                     });
                 };
 
+                // Asociar el botón de reestablecer
                 reloadButton.addEventListener('click', resetForm);
 
                 // Validación del campo de precio
@@ -124,5 +137,6 @@
                 });
             });
         </script>
+
     </section>
 @endsection
