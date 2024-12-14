@@ -273,7 +273,7 @@
                                                name="precio_envio"
                                                id="precio_envio"
                                                class="form-control @error('precio_envio') is-invalid @enderror"
-                                               value="{{ old('precio_envio', 0) }}" oninput="limitInputToFiveDigits(this)">
+                                               value="{{ old('precio_envio') }}" oninput="limitInputToFiveDigits(this)">
                                         @error('precio_envio')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -630,7 +630,7 @@
             }
 
             // Asegurarse de que no supere el valor máximo permitido
-            const maxValue = 99999;
+            const maxValue = 999;
             if (parseInt(input.value, 10) > maxValue) {
                 input.value = maxValue;
             }
