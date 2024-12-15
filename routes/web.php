@@ -158,4 +158,3 @@ Route::get('/inventarios', [InventarioController::class, 'index'])->name('invent
 
 // Rutas de recursos para inventarios
 Route::resource('inventarios', InventarioController::class);
-

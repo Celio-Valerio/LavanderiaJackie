@@ -5,7 +5,7 @@
 <style>
     .transparent-table {
         background-color: rgba(255, 255, 255, 0);
-        border: 1px solid rgba(0, 0, 0, 0.1); /* Agregar un borde sutil si lo necesitas */
+        border: 1px solid rgba(0, 0, 0, 0.1); 
     }
 
     .transparent-table td, .transparent-table th {

@@ -21,6 +21,7 @@ return new class extends Migration
 
             // Definir la relación con la tabla proveedores
             $table->foreign('proveedor_id')->references('id')->on('proveedors')->onDelete('cascade');
+            
         });
     }
 

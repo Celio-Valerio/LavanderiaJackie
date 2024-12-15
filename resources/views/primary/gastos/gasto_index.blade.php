@@ -14,22 +14,8 @@
                         @endphp
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de gastos</h1>
-                            <!-- Botón registrar gasto -->
-                            <div class="button-group d-flex gap-2">
-                                <a href="{{ route('gastos.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Agregar gasto</a>
-                                <a href="{{ route('inventarios.index') }}" class="btn btn-dark btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Ver inventario</a>
-                            </div>
                             <!-- Botón agregar gasto -->
-                            @if($ultimoGasto)
-                                @php
-                                    $fechaGas = $ultimoGasto->fecha;
-                                @endphp
-                                @if($fechaGas < $primerDiaMes)
-                                    <a href="{{ route('gastos.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar gasto</a>
-                                @endif
-                            @else
-                                <a href="{{ route('gastos.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar gasto</a>
-                            @endif
+                            <a href="{{ route('gastos.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar gasto</a>
                         </div>
 
                         @if(session('success'))
@@ -50,35 +36,27 @@
 
         <table id="gastosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
         <thead class="table table-bordered table-dark">
-                <tr></tr>
-        <th style="width: 5%;">N°</th>
-        <th style="width: 20%;">Fecha</th>
-        <th style="width: 20%;">Gastos fijos</th>
-        <th style="width: 20%;">Gastos por compras</th>
-        <th style="width: 20%;">Total</th>
-        <th style="width: 15%;">Acciones</th>
-    </tr>
-    </thead>
+            <th style="width: 5%;">N°</th>
+            <th style="width: 20%;">Fecha</th>
+                <th style="width: 20%;">Descripción</th>
+            <th style="width: 20%;">Gastos fijos</th>
+            <th style="width: 15%;">Acciones</th>
+        </thead>
     <tbody>
 
     @forelse($gastos as $gasto)
-        @php
-            $total = 0;
-        @endphp
-        @foreach($gasto->detalles as $detalle)
-            @php
-             $total = $total + ($detalle->cantidad * $detalle->precio - ($detalle->descuento / 100 * ($detalle->cantidad * $detalle->precio)));
-                @endphp
-        @endforeach
     <tr data-fecha="{{ \Carbon\Carbon::parse($gasto->fecha)->format('Y-m-d') }}">
         <td class="row-index small-text-field"></td>
         <td class="small-text-field">{{ \Carbon\Carbon::parse($gasto->fecha)->translatedFormat('l d \d\e F, Y') }}</td>
-        <td class="small-text-field">L.{{number_format($gasto->energia + $gasto->internet + $gasto->renta + $gasto->agua + $gasto->nomina, 2, '.', ',')}}</td>
-        <td class="small-text-field">L.{{number_format($total, 2, '.', ',')}}</td>
+        <td class="small-text-field">{{$gasto->descripcion}}</td>
         <td class="small-text-field">L.{{number_format($gasto->totalG, 2, '.', ',')}}</td>
         <td class="text-center small-text-field">
             <a href="{{ route('gastos.show', $gasto->id) }}" class="btn btn-info btn-sm">Ver</a>
-            <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
+            @if(!$gasto->detalles->isEmpty())
+                <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
+            @else
+                <span class="btn btn-warning btn-sm invisible">Editar</span>
+            @endif
         </td>
     </tr>
     @empty

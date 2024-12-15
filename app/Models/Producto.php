@@ -41,15 +41,8 @@ class Producto extends Model
      * Relación con el modelo `DetalleCompra`.
      * Un producto puede aparecer en múltiples detalles de compra.
      */
-    public function detallesCompra()
+    public function detallesGasto()
     {
-        return $this->hasMany(DetalleCompra::class);
+        return $this->hasMany(DetalleGastos::class);
     }
-
-    // En el modelo Producto
-    public function historialPrecios()
-    {
-        return $this->hasMany(ProductoPrecioHistorial::class);
-    }
-
 }

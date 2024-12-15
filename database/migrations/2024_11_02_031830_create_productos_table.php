@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('proveedor_id');
             $table->string('nombre', 100); // Nombre del producto
             $table->text('descripcion')->nullable(); // Descripción del producto
             $table->decimal('precio', 10, 2); // Precio del producto
@@ -23,8 +24,9 @@ return new class extends Migration
 
             // Relaciones con las tablas categorias y proveedores
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
+            
         });
-    }
+    }   
 
     /**
      * Reverse the migrations.

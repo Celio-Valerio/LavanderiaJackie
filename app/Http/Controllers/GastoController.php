@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Compra;
+use App\Models\DetalleGastos;
 use App\Models\Detalles_gasto;
 use App\Models\Gasto;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use function Webmozart\Assert\Tests\StaticAnalysis\length;
 
 class GastoController extends Controller
 {
@@ -24,94 +26,57 @@ class GastoController extends Controller
         return response()->json($gasto);
     }
 
-
-
-
-
     public function create()
     {
         // Obtener los productos registrados
         $productos = Producto::all(); // Asegúrate de que 'Producto' sea el modelo correcto
         $compras = Compra::all();
+        $gastos = Gasto::all();
 
-        return view('primary.gastos.gasto_create', compact('productos', 'compras'));
+        return view('primary.gastos.gasto_create', compact('productos', 'compras', 'gastos'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'luz' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto de energía eléctrica debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-            'descripcion' => ['required', 'regex:/^[\pLáéíóúüñ]+(?:\s[\pLáéíóúüñ]+)*$/u'],
-            'agua' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto de agua debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-            'renta' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto por la renta debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-            'nomina' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto por la nómina debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-            'internet' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto por el internet debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-        ], [
-            'descripcion.required' => 'La descripción es obligatoria.',
-            'descripcion.regex' => 'La descripción contiene caracteres no válidos.',
-            'luz.required' => 'El gasto de energía eléctrica es obligatorio.',
-            'agua.required' => 'El gasto de agua es obligatorio.',
-            'renta.required' => 'El gasto por la renta es obligatorio.',
-            'nomina.required' => 'El gasto por la nomina es obligatorio.',
-            'internet.required' => 'El gasto por el internet es obligatorio.',
-
-        ]);
 
         $gasto = new Gasto();
         $gasto->fecha = date('Y-m-d');
         $gasto->descripcion = $request->input('descripcion');
-        $gasto->energia = $request->input('luz');
-        $gasto->agua  = $request->input('agua');
-        $gasto->renta = $request->input('renta');
-        $gasto->nomina = $request->input('nomina');
-        $gasto->internet  = $request->input('internet');
-        $gasto->totalG = $request->input('total');
-        $suma = $request->input('suma');
+        if ($request->input('hayGastos') == 0){
+            $gasto->energia = $request->input('luz') ?? 0;
+            $gasto->agua = $request->input('agua') ?? 0;
+            $gasto->renta = $request->input('renta') ?? 0;
+            $gasto->nomina = $request->input('nomina') ?? 0;
+            $gasto->internet = $request->input('internet') ?? 0;
+            $gasto->totalG = $request->input('TotalF') ?? 0;
+        }
+        else{
+            $gasto->energia = 0;
+            $gasto->agua = 0;
+            $gasto->renta = 0;
+            $gasto->nomina = 0;
+            $gasto->internet = 0;
+            $gasto->totalG = 0;
+        }
 
-        $detallesRecibidos = $request->input('detalles');
-        $detalles = json_decode($detallesRecibidos, true); // decodificamos el arreglo enviado desde la vista de planillas
+        $detallesRecibidos = $request->input('detallesMandar');
+        $detalles = json_decode($detallesRecibidos, true);// decodificamos el arreglo enviado desde la vista de planillas
+        $suma = count($detalles);
         if ($gasto->save()){
             if ($suma > 0){
                 foreach ($detalles as $detalle) {
-                    $detalleGasto = new Detalles_gasto();
-                    $detalleGasto->fecha = $detalle['fecha'];
-                    $detalleGasto->producto = $detalle['producto'];
-                    $detalleGasto->numFactura = $detalle['numero'];
+                    $detalleGasto = new DetalleGastos();
+                    $detalleGasto->producto_id = $detalle['producto_id'];
                     $detalleGasto->cantidad = $detalle['cantidad'];
-                    $detalleGasto->precio = $detalle['precio'];
-                    $detalleGasto->descuento = $detalle['descuento'];
                     $detalleGasto->gasto_id = $gasto->id;
                     $detalleGasto->save();
+                    $producto = Producto::find($detalle['producto_id']);
+                    $cantidad = $detalle['cantidad'];
+
+                    if ($producto) {
+                        $producto->stock -= $cantidad;
+                    }
+                    $producto->save();
                 }
             }
             return redirect()->route('gastos.index')->with('success', 'Gastos registrados exitosamente.');
@@ -126,8 +91,8 @@ class GastoController extends Controller
     {
         $gasto = Gasto::findOrFail($id);
         $gastosFijos = Gasto::all();
-        $detallesCompras = Detalles_gasto::where('gasto_id', $id)->get();
-        return view('primary.gastos.gasto_show', compact('gasto', 'gastosFijos', 'detallesCompras'));
+        $detallesGastos = DetalleGastos::where('gasto_id', $id)->get();
+        return view('primary.gastos.gasto_show', compact('gasto', 'gastosFijos', 'detallesGastos'));
 
     }
 
@@ -135,92 +100,45 @@ class GastoController extends Controller
     {
         $gasto = Gasto::findOrFail($id);
         $productos = Producto::all();
-        $compras = Compra::all();
-        return view('primary.gastos.gasto_create', compact('gasto', 'productos', 'compras'));
+        $detalles = $gasto->detalles;
+        return view('primary.gastos.gasto_update', compact('gasto', 'productos', 'detalles'));
     }
 
     public function update(Request $request, string $id)
     {
-
         $gasto = Gasto::findOrFail($id);
-        $request->validate([
-            'luz' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto de energía eléctrica debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-            'descripcion' => ['required', 'regex:/^[\pLáéíóúüñ]+(?:\s[\pLáéíóúüñ]+)*$/u'],
-            'agua' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto de agua debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-            'renta' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto por la renta debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-            'nomina' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto por la nómina debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-            'internet' => ['required', function ($attribute, $value, $fail) use ($request){
-                $validar = str_replace(',', '', $value);
-                if ($validar < 100) {
-                    $fail("El gasto por el internet debe ser de al menos L.100.00.");
-                }
-            }
-            ],
-        ], [
-            'descripcion.required' => 'La descripción es obligatoria.',
-            'descripcion.regex' => 'La descripción contiene caracteres no válidos.',
-            'luz.required' => 'El gasto de energía eléctrica es obligatorio.',
-            'agua.required' => 'El gasto de agua es obligatorio.',
-            'renta.required' => 'El gasto por la renta es obligatorio.',
-            'nomina.required' => 'El gasto por la nomina es obligatorio.',
-            'internet.required' => 'El gasto por el internet es obligatorio.',
 
-        ]);
-        $gasto->fecha = date('Y-m-d');
-        $gasto->descripcion = $request->input('descripcion');
-        $gasto->energia = $request->input('luz');
-        $gasto->agua  = $request->input('agua');
-        $gasto->renta = $request->input('renta');
-        $gasto->nomina = $request->input('nomina');
-        $gasto->internet  = $request->input('internet');
-        $gasto->totalG = $request->input('total');
-        $suma = $request->input('suma');
-        $gasto->detalles()->delete();
-
-        $detallesRecibidos = $request->input('detalles');
+        $detallesRecibidos = $request->input('detallesMandar');
+        if (empty($detallesRecibidos)) {
+            return redirect()->route('gastos.index')->with('success', 'No se han efectuado cambios en los gastos.');
+        }
         $detalles = json_decode($detallesRecibidos, true); // decodificamos el arreglo enviado desde la vista de planillas
-        if ($gasto->save()){
-            if ($suma > 0){
-                foreach ($detalles as $detalle) {
-                    $detalleGasto = new Detalles_gasto();
-                    $detalleGasto->fecha = $detalle['fecha'];
-                    $detalleGasto->producto = $detalle['producto'];
-                    $detalleGasto->numFactura = $detalle['numero'];
-                    $detalleGasto->cantidad = $detalle['cantidad'];
-                    $detalleGasto->precio = $detalle['precio'];
-                    $detalleGasto->descuento = $detalle['descuento'];
-                    $detalleGasto->gasto_id = $gasto->id;
-                    $detalleGasto->save();
+        $detalleGastos = $gasto->detalles;
+        $suma = count($detalles);
+        if($suma > 0){
+            foreach ($detalleGastos as $detalleGasto) {
+                foreach ($detalles as $detallerec){
+                    if($detalleGasto->producto_id == $detallerec['producto_id']){
+                        $detalleGasto->cantidad = $detalleGasto->cantidad + $detallerec['cantidad'] ;
+                        if($detalleGasto->save()){
+                            $producto = Producto::find($detallerec['producto_id']);
+                            $cantidad = $detallerec['cantidad'];
+
+                            if ($producto) {
+                                $producto->stock -= $cantidad;
+                            }
+                            $producto->save();
+                        }
+                    }
                 }
+
             }
             return redirect()->route('gastos.index')->with('success', 'Gastos actualizados exitosamente.');
-        } else {
-            return redirect()->route('gastos.index')->with('success', 'Error. La compra no pudo ser guardada');
         }
+        if ($suma <= 0){
+            return redirect()->route('gastos.index')->with('success', 'No se han registrado actualizaciones de consumo.');
+        }
+
 
         //return redirect()->route('gastos.index')->with('success', 'Gasto actualizado exitosamente.');
 

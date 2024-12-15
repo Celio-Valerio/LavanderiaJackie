@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Gasto extends Model
 {
     use HasFactory;
@@ -18,7 +19,6 @@ class Gasto extends Model
         'totalAmount',
         'fecha',
         'categoria_id',
-        
     ];
 
     // Relación con la tabla de categorías
@@ -32,8 +32,10 @@ class Gasto extends Model
     {
         return number_format($this->monto, 2);
     }
+
     public function detalles()
     {
-        return $this->hasMany(Detalles_gasto::class);
+        return $this->hasMany(DetalleGastos::class);
     }
+
 }
