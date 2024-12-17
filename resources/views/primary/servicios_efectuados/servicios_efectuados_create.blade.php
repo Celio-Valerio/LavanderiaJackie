@@ -523,7 +523,7 @@
                 // Asignar el total formateado
                 $('#total').val(totalFormateado);
             }
-            
+
             // Actualizar campos de envío al cambiar opciones
             $('#envio_local, #envio_domicilio').on('change', function () {
                 toggleEnvioFields();

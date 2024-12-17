@@ -3,7 +3,6 @@
 @section('content')
 
     <section class="section">
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -57,7 +56,6 @@
                                     @enderror
                                 </div>
 
-
                                 <!-- Campo de Fecha -->
                                 <div class="col-md-6">
                                     <label for="date" class="form-label">Fecha del mantenimiento</label>
@@ -85,7 +83,6 @@
                             </div>
                         </form>
                         <!-- Fin del formulario -->
-
                     </div>
                 </div>
             </div>
@@ -94,40 +91,16 @@
         <script>
             // Función para reestablecer los valores del formulario
             document.getElementById('resetButton').addEventListener('click', function () {
-                const form = document.getElementById('mantenimientoForm');
-
-                // Reestablecer los valores a los iniciales (antes de la edición)
-                form.reset();
-
-                // Remover clases de validación (is-invalid) y ocultar mensajes de error
-                const invalidElements = form.querySelectorAll('.is-invalid');
-                invalidElements.forEach(function (element) {
-                    element.classList.remove('is-invalid');
-                });
-
-                // Limpiar el campo de descripción (en caso de que se haya modificado)
-                document.getElementById('description').value = '{{ old('description', $mantenimiento->description) }}';
-
-                // Limpiar el campo de precio
-                document.getElementById('price').value = '{{ old('price', $mantenimiento->price) }}';
-
-                // Limpiar el campo de maquinaria (si es necesario)
-                document.getElementById('maquinaria_id').value = '{{ old('maquinaria_id', $mantenimiento->maquinaria_id) }}';
-
-                // Limpiar el select de tipo de mantenimiento
-                document.getElementById('maintenance_type').value = '{{ old('maintenance_type', $mantenimiento->maintenance_type) }}';
-
-                // Limpiar el campo de fecha
-                document.getElementById('date').value = '{{ old('date', $mantenimiento->date) }}';
+                // Recargar la página para restaurar todos los valores
+                window.location.reload();
             });
-        </script>
 
-        <script>
+            // Validación del campo de precio (permitir hasta 2 decimales)
             document.getElementById('price').addEventListener('input', function (event) {
                 const input = event.target;
-                let value = input.value.replace(/,/g, ''); // Eliminar comas temporalmente para procesar el número crudo
+                let value = input.value.replace(/,/g, ''); // Eliminar comas para procesar el número crudo
 
-                // Validar número con hasta 5 dígitos antes del punto, un punto, y hasta 2 dígitos después
+                // Validar el formato: hasta 5 dígitos antes del punto, y hasta 2 dígitos después
                 const regex = /^\d{0,5}(\.\d{0,2})?$/;
 
                 if (regex.test(value)) {
