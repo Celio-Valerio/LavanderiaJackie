@@ -296,38 +296,25 @@
         </div>
     </section>
 
-    <!-- Modal de advertencia de libras fuera de rango -->
-    <div class="modal fade" id="modalLibrasFueraDeRango" tabindex="-1" aria-labelledby="modalLibrasFueraDeRangoLabel" aria-hidden="true">
+    <!-- Modal de advertencia general (Libras fuera de rango o Día no disponible) -->
+    <div class="modal fade" id="modalAdvertencia" tabindex="-1" aria-labelledby="modalAdvertenciaLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalLibrasFueraDeRangoLabel">Advertencia</h5>
+                    <h5 class="modal-title" id="modalAdvertenciaLabel">Advertencia</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>La cantidad de libras que ingresaste (<strong><span id="librasIngresadas"></span> lbs</strong>) no está dentro del rango permitido para esta promoción.</p>
-                    <p>El rango de libras permitido para esta promoción es de <strong><span id="rangoLibrasDesde"></span> lbs a <span id="rangoLibrasHasta"></span> lbs</strong>.</p>
-                    <p>Por favor, ajusta la cantidad de libras dentro de este rango para poder aplicar la promoción.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <div id="mensajeLibras" class="d-none">
+                        <p>La cantidad de libras que ingresaste (<strong><span id="librasIngresadas"></span> lbs</strong>) no está dentro del rango permitido para esta promoción. El rango de libras permitido para esta promoción es de <strong><span id="rangoLibrasDesde"></span> lbs a <span id="rangoLibrasHasta"></span> lbs</strong>.</p>
+                        <p>Por favor, ajusta la cantidad de libras dentro de este rango para poder aplicar la promoción.</p>
+                    </div>
 
-    <!-- Modal de advertencia por día -->
-    <div class="modal fade" id="modalDiaNoDisponible" tabindex="-1" aria-labelledby="modalDiaNoDisponibleLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalDiaNoDisponibleLabel">Advertencia</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>La promoción seleccionada no es válida para el día de hoy (<strong><span id="diaActual"></span></strong>).</p>
-                    <p>Los días en los que esta promoción es válida son: <strong><span id="diasPromocion"></span></strong>.</p>
-                    <p>Por favor, elige un día en que la promoción sea válida.</p>
+                    <div id="mensajeDia" class="d-none">
+                        <hr>
+                        <p>La promoción seleccionada no es válida para el día de hoy (<strong><span id="diaActual"></span></strong>). Los días en los que esta promoción es válida son: <strong><span id="diasPromocion"></span></strong>.</p>
+                        <p>Por favor, elige un día en que la promoción sea válida.</p>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -342,7 +329,6 @@
             const librasInput = document.getElementById('libras');
             const form = document.getElementById('servicioForm');
 
-
             librasInput.addEventListener('input', (event) => {
                 // Elimina cualquier carácter no numérico
                 let value = event.target.value.replace(/\D/g, '');
@@ -352,27 +338,24 @@
                 event.target.value = value;
             });
 
-            // Función para obtener el nombre del día actual en español
             function obtenerNombreDia() {
                 const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
                 const hoy = new Date();
-                return dias[hoy.getDay()]; // Devuelve el nombre del día actual
+                return dias[hoy.getDay()];
             }
 
-            // Función para verificar si la promoción seleccionada aplica para el día actual
             function verificarDiaPromocion(promo) {
                 const diasPromocion = JSON.parse(promo.dataset.dias); // Los días de la promoción como array
-                const diaActual = obtenerNombreDia(); // Día actual en nombre (por ejemplo, "Lunes")
+                const diaActual = obtenerNombreDia(); // Día actual en nombre
 
                 // Mostrar los días completos en el modal
-                document.getElementById('diasPromocion').innerText = diasPromocion.join(', '); // Nombres completos de los días
+                document.getElementById('diasPromocion').innerText = diasPromocion.join(', ');
                 document.getElementById('diaActual').innerText = diaActual;
 
                 // Compara el nombre del día actual con los días de la promoción
                 return diasPromocion.includes(diaActual);
             }
 
-            // Función para verificar si las libras están dentro del rango
             function verificarLibrasEnRango(promo) {
                 const libras = parseInt(librasInput.value);
                 const desde = parseInt(promo.dataset.desde);
@@ -381,131 +364,91 @@
                 // Mostrar el rango en el modal
                 document.getElementById('rangoLibrasDesde').innerText = desde;
                 document.getElementById('rangoLibrasHasta').innerText = hasta;
-                document.getElementById('librasIngresadas').innerText = libras; // Mostrar libras ingresadas
+                document.getElementById('librasIngresadas').innerText = libras;
 
                 return libras >= desde && libras <= hasta;
             }
 
-            // Deshabilitar la selección de la promoción hasta que se ingrese libras
             librasInput.addEventListener('input', function() {
                 if (librasInput.value) {
-                    promoSelect.disabled = false; // Habilitar el select de promoción
+                    promoSelect.disabled = false;
                 } else {
-                    promoSelect.disabled = true; // Deshabilitar el select de promoción si no se ingresaron libras
+                    promoSelect.disabled = true;
                 }
 
-                // Solo realizar las validaciones si ambos campos tienen datos
                 if (librasInput.value && promoSelect.value) {
                     const promo = promoSelect.options[promoSelect.selectedIndex];
 
+                    let mostrarModal = false;
                     // Verificar si las libras están dentro del rango
                     if (!verificarLibrasEnRango(promo)) {
-                        $('#modalLibrasFueraDeRango').modal('show'); // Mostrar modal si las libras no están en rango
-                        librasInput.value = ''; // Limpiar el input de libras
-                        promoSelect.value = ''; // Limpiar la selección del select
+                        mostrarModal = true;
+                        document.getElementById('mensajeLibras').classList.remove('d-none');
                     } else {
-                        $('#modalLibrasFueraDeRango').modal('hide'); // Ocultar modal si las libras están dentro del rango
+                        document.getElementById('mensajeLibras').classList.add('d-none');
                     }
 
                     // Verificar si la promoción es válida para el día actual
                     if (!verificarDiaPromocion(promo)) {
-                        $('#modalDiaNoDisponible').modal('show'); // Mostrar modal si no aplica para el día
-                        promoSelect.value = ''; // Limpiar la selección del select
+                        mostrarModal = true;
+                        document.getElementById('mensajeDia').classList.remove('d-none');
                     } else {
-                        $('#modalDiaNoDisponible').modal('hide'); // Ocultar modal si la promoción es válida para el día
+                        document.getElementById('mensajeDia').classList.add('d-none');
+                    }
+
+                    // Si alguno de los casos falla, mostrar el modal
+                    if (mostrarModal) {
+                        $('#modalAdvertencia').modal('show');
+                        librasInput.value = '';
+                        promoSelect.value = '';
+                    } else {
+                        $('#modalAdvertencia').modal('hide');
                     }
                 }
             });
 
-            // Evento cuando se cambia la promoción
             promoSelect.addEventListener('change', function() {
-                // Solo realizar las validaciones si ambos campos tienen datos
                 if (librasInput.value && promoSelect.value) {
                     const promo = promoSelect.options[promoSelect.selectedIndex];
 
-                    // Verificar si las libras están dentro del rango
+                    let mostrarModal = false;
                     if (!verificarLibrasEnRango(promo)) {
-                        $('#modalLibrasFueraDeRango').modal('show'); // Mostrar modal si las libras no están en rango
-                        librasInput.value = ''; // Limpiar el input de libras
-                        promoSelect.value = ''; // Limpiar la selección del select
+                        mostrarModal = true;
+                        document.getElementById('mensajeLibras').classList.remove('d-none');
                     } else {
-                        $('#modalLibrasFueraDeRango').modal('hide'); // Ocultar modal si las libras están dentro del rango
+                        document.getElementById('mensajeLibras').classList.add('d-none');
                     }
 
-                    // Verificar si la promoción es válida para el día actual
                     if (!verificarDiaPromocion(promo)) {
-                        $('#modalDiaNoDisponible').modal('show'); // Mostrar modal si no aplica para el día
-                        promoSelect.value = ''; // Limpiar la selección del select
+                        mostrarModal = true;
+                        document.getElementById('mensajeDia').classList.remove('d-none');
                     } else {
-                        $('#modalDiaNoDisponible').modal('hide'); // Ocultar modal si la promoción es válida para el día
+                        document.getElementById('mensajeDia').classList.add('d-none');
+                    }
+
+                    if (mostrarModal) {
+                        $('#modalAdvertencia').modal('show');
+                        librasInput.value = '';
+                        promoSelect.value = '';
+                    } else {
+                        $('#modalAdvertencia').modal('hide');
                     }
                 }
             });
 
-            // Validación al intentar enviar el formulario
             form.addEventListener('submit', function(e) {
                 const promo = promoSelect.options[promoSelect.selectedIndex];
 
-                // Si la promoción no es válida para el día o las libras no están en rango, evitar el envío
                 if (!verificarDiaPromocion(promo) || !verificarLibrasEnRango(promo)) {
-                    e.preventDefault(); // Evitar el envío del formulario si hay error
+                    e.preventDefault();
                 }
 
-                // Verificar si algún modal está visible y evitar el envío del formulario
-                if ($('#modalDiaNoDisponible').hasClass('show') || $('#modalLibrasFueraDeRango').hasClass('show')) {
-                    e.preventDefault(); // Si algún modal está visible, prevenir el envío del formulario
+                if ($('#modalAdvertencia').hasClass('show')) {
+                    e.preventDefault();
                 }
             });
         });
 
-        // Formatear número con separadores de miles
-        function formatNumberWithCommas(number) {
-            if (!number) return ''; // Manejar valores vacíos o nulos
-            // Convertir a string y aplicar el formato
-            return parseFloat(number).toLocaleString('en-US');
-        }
-
-        // Función para actualizar el campo 'total'
-        function updateTotalField() {
-            const totalInput = document.getElementById('total');
-
-            // Obtener el valor del campo (en bruto)
-            let rawValue = totalInput.value.replace(/,/g, ''); // Quitar comas previas
-            if (rawValue) {
-                // Formatear y asignar el valor formateado
-                totalInput.value = formatNumberWithCommas(rawValue);
-            }
-        }
-
-        // Formatear número con separadores de miles, puntos y dos decimales
-        function formatNumberWithCommasAndDecimals(number) {
-            if (!number || isNaN(number)) return '0.00'; // Manejar valores vacíos o no numéricos
-            // Convertir a float y aplicar formato con 2 decimales
-            return parseFloat(number).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        // Función para actualizar el campo 'total'
-        function updateTotalField() {
-            const totalInput = document.getElementById('total');
-
-            // Obtener el valor del campo (en bruto)
-            let rawValue = totalInput.value.replace(/,/g, ''); // Quitar comas previas
-            if (rawValue) {
-                // Formatear y asignar el valor formateado con decimales
-                totalInput.value = formatNumberWithCommasAndDecimals(rawValue);
-            }
-        }
-
-        // Ejecución inicial al cargar la página
-        document.addEventListener('DOMContentLoaded', function () {
-            updateTotalField();
-
-            // Si el valor se actualiza dinámicamente, puedes usar un intervalo o un observador
-            const totalInput = document.getElementById('total');
-            setInterval(() => {
-                updateTotalField();
-            }, 500); // Verificar cada 500ms
-        });
     </script>
 
     <script>
@@ -574,9 +517,13 @@
                     total = parseFloat($('#total').val()) || 0; // Mantener el total previo
                 }
 
-                $('#total').val(total.toFixed(2));
-            }
+                // Formatear el total con comas para miles y punto para decimales
+                var totalFormateado = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+                // Asignar el total formateado
+                $('#total').val(totalFormateado);
+            }
+            
             // Actualizar campos de envío al cambiar opciones
             $('#envio_local, #envio_domicilio').on('change', function () {
                 toggleEnvioFields();

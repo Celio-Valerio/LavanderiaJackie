@@ -27,7 +27,6 @@
                                 <th style="width: 25%;">Producto</th>
                                 <th style="width: 15%;">Precio de compra</th>
                                 <th style="width: 15%;">Existencia</th>
-                                <th style="width: 25`%;">Proveedor</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
@@ -37,8 +36,7 @@
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field"><b>{{ $producto->nombre }}</b></td>
                                     <td class="small-text-field">L. {{ $producto->precio }}</td>
-                                    <td class="small-text-field">{{ $producto->stock }}</td>
-                                    <td class="small-text-field">{{ $producto->proveedor->full_name }}</td>
+                                    <td class="small-text-field">{{ $producto->stock }} unidades</td>
                                     <td class="text-center small-text-field">
                                         @if($producto->stock > 0)
                                             <button

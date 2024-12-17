@@ -125,7 +125,7 @@ class ServicioEfectuadoController extends Controller
         $servicioEfectuado->direccion = $request->direccion; // Guardar la dirección
         $servicioEfectuado->precio_envio = $request->precio_envio; // Guardar el precio de envío
         $servicioEfectuado->pago_envio = $request->pago_envio; // Guardar quién paga el envío
-        $servicioEfectuado->total = $request->total; // Guardar el total
+        $servicioEfectuado->total = str_replace(',', '', $request->total); // Eliminar las comas
         $servicioEfectuado->save();
 
         return redirect()->route('servicios_efectuados.index')->with('success', 'El servicio efectuado ha sido registrado exitosamente.');
