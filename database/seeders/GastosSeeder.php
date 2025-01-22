@@ -14,6 +14,6 @@ class GastosSeeder extends Seeder
     public function run(): void
     {
         //Gasto::factory(10)->create();
-      
+
     }
 }

@@ -42,22 +42,43 @@ class GastoController extends Controller
         $gasto = new Gasto();
         $gasto->fecha = date('Y-m-d');
         $gasto->descripcion = $request->input('descripcion');
-        if ($request->input('hayGastos') == 0){
-            $gasto->energia = $request->input('luz') ?? 0;
-            $gasto->agua = $request->input('agua') ?? 0;
-            $gasto->renta = $request->input('renta') ?? 0;
-            $gasto->nomina = $request->input('nomina') ?? 0;
-            $gasto->internet = $request->input('internet') ?? 0;
-            $gasto->totalG = $request->input('TotalF') ?? 0;
-        }
-        else{
-            $gasto->energia = 0;
+        $detallesRecibidos2 = $request->input('detallesMandar2');
+        $detalles2 = json_decode($detallesRecibidos2, true);// decodificamos el arreglo enviado desde la vista de planillas
+        $suma2 = count($detalles2);
+        if($suma2 > 0){
             $gasto->agua = 0;
-            $gasto->renta = 0;
             $gasto->nomina = 0;
+            $gasto->renta = 0;
             $gasto->internet = 0;
+            $gasto->energia = 0;
+
+            foreach ($detalles2 as $detalle) {
+                if ($detalle['valor'] === 'agua') {
+                    $gasto->agua = $detalle['monto'] ?? 0;
+                }
+                if ($detalle['valor'] === 'nomina') {
+                    $gasto->nomina = $detalle['monto'] ?? 0;
+                }
+                if ($detalle['valor'] === 'renta') {
+                    $gasto->renta = $detalle['monto'] ?? 0;
+                }
+                if ($detalle['valor'] === 'internet') {
+                    $gasto->internet = $detalle['monto'] ?? 0;
+                }
+                if ($detalle['valor'] === 'luz') {
+                    $gasto->energia = $detalle['monto'] ?? 0;
+                }
+            }
+            $gasto->totalG = $request->input('totalFij');
+        } else {
+            $gasto->agua = 0;
+            $gasto->nomina = 0;
+            $gasto->renta = 0;
+            $gasto->internet = 0;
+            $gasto->energia = 0;
             $gasto->totalG = 0;
         }
+
 
         $detallesRecibidos = $request->input('detallesMandar');
         $detalles = json_decode($detallesRecibidos, true);// decodificamos el arreglo enviado desde la vista de planillas
@@ -107,11 +128,14 @@ class GastoController extends Controller
     public function update(Request $request, string $id)
     {
         $gasto = Gasto::findOrFail($id);
+        $gasto->energia = $request->input('luz') ?? 0;
+        $gasto->agua = $request->input('agua') ?? 0;
+        $gasto->renta = $request->input('renta') ?? 0;
+        $gasto->nomina = $request->input('nomina') ?? 0;
+        $gasto->internet = $request->input('internet') ?? 0;
+        $gasto->totalG = $request->input('totalG') ?? 0;
 
         $detallesRecibidos = $request->input('detallesMandar');
-        if (empty($detallesRecibidos)) {
-            return redirect()->route('gastos.index')->with('success', 'No se han efectuado cambios en los gastos.');
-        }
         $detalles = json_decode($detallesRecibidos, true); // decodificamos el arreglo enviado desde la vista de planillas
         $detalleGastos = $gasto->detalles;
         $suma = count($detalles);
@@ -133,14 +157,22 @@ class GastoController extends Controller
                 }
 
             }
+        }
+        if($gasto->save()){
             return redirect()->route('gastos.index')->with('success', 'Gastos actualizados exitosamente.');
         }
-        if ($suma <= 0){
-            return redirect()->route('gastos.index')->with('success', 'No se han registrado actualizaciones de consumo.');
+        else{
+
+            return redirect()->route('gastos.index')->with('success', 'Error, no se actualizaron gastos.');
         }
 
 
         //return redirect()->route('gastos.index')->with('success', 'Gasto actualizado exitosamente.');
 
     }
-}
+        //return redirect()->route('gastos.index')->with('success', 'Gasto actualizado exitosamente.');
+
+    }
+
+
+        //return redirect()->route('gastos.index')->with('success', 'Gasto actualizado exitosamente.');

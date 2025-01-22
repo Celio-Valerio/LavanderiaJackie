@@ -24,9 +24,6 @@
                         <div class="row mb-3">
                             <!-- Proveedor y Descripción de la Compra -->
                             <div class="col-md-6">
-                                <label class="form-label small-text-field"><strong>Proveedor:</strong> {{ $compra->proveedor->full_name }}</label>
-                            </div>
-                            <div class="col-md-6">
                                 <label class="form-label small-text-field"><strong>Descripción:</strong> {{ $compra->descripcion ?? 'No especificada' }}</label>
                             </div>
                         </div>
@@ -37,18 +34,28 @@
                                 <thead>
                                 <tr>
                                     <th style="width: 60%;">Producto</th>
+                                    <th style="width: 60%;">Proveedor</th>
                                     <th style="width: 10%;">Cantidad</th>
                                     <th style="width: 15%;">Precio</th>
+                                    <th style="width: 15%;">Descuento</th>
                                     <th style="width: 15%;">Total</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                @php
+                                    $suma = 0
+                                @endphp
                                 @foreach ($compra->detalles as $detalle)
                                     <tr>
+                                        @php
+                                            $suma = $suma + ($detalle->precio * $detalle->cantidad) - $detalle->descuento;
+                                        @endphp
                                         <td class="text-start">{{ $detalle->producto->nombre }}</td>
+                                        <td class="small-text-field">{{ $detalle->producto->proveedor->full_name ?? 'Sin proveedor' }}</td>
                                         <td>{{ $detalle->cantidad }}</td>
-                                        <td>{!! formatCurrency($detalle->precio) !!}</td>
-                                        <td>{!! formatCurrency(($detalle->precio * $detalle->cantidad) - $detalle->descuento) !!}</td>
+                                        <td>{{ number_format($detalle->precio ?? 0, 2) }}</td>
+                                        <td>{{ number_format($detalle->descuento ?? 0, 2) }}%</td>
+                                        <td>{{ number_format(($detalle->precio * $detalle->cantidad) - $detalle->descuento) ?? 0, 2 }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -58,9 +65,7 @@
                         <!-- Total de la Compra -->
                         <div class="row mb-3">
                             <div class="col-md-12 text-end">
-                                <h4><strong>Total:</strong> {!! formatCurrency($compra->detalles->sum(function($detalle) {
-                                return ($detalle->precio * $detalle->cantidad) - $detalle->descuento;
-                            })) !!}</h4>
+                                <h4><strong>Total:</strong>{{ number_format($suma ?? 0, 2) }} </h4>
                             </div>
                         </div>
 
@@ -78,13 +83,4 @@
             </div>
         </div>
     </section>
-
-    @php
-        function formatCurrency($amount) {
-            // Formatear la cantidad con el formato L. y con espacios para alinear
-            $formattedAmount = number_format($amount, 2, '.', ',');
-            $spaces = str_repeat('&nbsp;', 12 - strlen($formattedAmount));
-            return "<span class='currency'>L.$spaces$formattedAmount</span>";
-        }
-    @endphp
 @endsection

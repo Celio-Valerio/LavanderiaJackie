@@ -16,12 +16,7 @@ return new class extends Migration
             $table->string('numero_factura', 20)->unique(); // Número de factura único, hasta 20 caracteres
             $table->date('fecha_compra'); // Fecha de la compra
             $table->text('descripcion')->nullable(); // Descripción opcional
-            $table->unsignedBigInteger('proveedor_id'); // Referencia al proveedor
             $table->timestamps();
-
-            // Definir la relación con la tabla proveedores
-            $table->foreign('proveedor_id')->references('id')->on('proveedors')->onDelete('cascade');
-            
         });
     }
 

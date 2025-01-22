@@ -79,8 +79,11 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label for="detalles[0][producto_id]">Producto:</label>
-                    <select name="productos" class="form-control" id="productos" required>
+                    <select name="productos" class="form-control" id="productos">
                         <option value=""></option>
+                        @foreach($productos as $producto)
+                            <option value="{{$producto->id}}">{{$producto->nombre}}</option>
+                        @endforeach
                     </select>
                     <div class="invalid-feedback" id="productoVacio"></div>
 
@@ -146,52 +149,6 @@
         </div>
     </div>
 </div>
-
-    <script>
-        function mostrarProductos(select) {
-            var productosJson = select.options[select.selectedIndex].getAttribute('data-productos');
-
-            if (productosJson) {
-                localStorage.setItem('productosSeleccionados', productosJson);
-            }
-
-            var product = document.getElementById('productos');
-
-            if (productosJson) {
-                var productos = JSON.parse(productosJson);
-                var selectProductos = document.querySelector('select[name="productos"]');
-                selectProductos.innerHTML = '<option value=""></option>';
-
-                productos.forEach(function(producto) {
-                    var option = document.createElement('option');
-                    option.value = producto.id;
-                    option.textContent = producto.nombre;
-                    selectProductos.appendChild(option);
-                });
-            } else {
-                var selectProductos = document.querySelector('select[name="productos"]');
-                selectProductos.innerHTML = '<option value=""></option>';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            let savedProductos = localStorage.getItem('productosSeleccionados');
-
-            if (savedProductos) {
-                var productos = JSON.parse(savedProductos);
-                var selectProductos = document.querySelector('select[name="productos"]');
-                selectProductos.innerHTML = '<option value=""></option>';
-
-                productos.forEach(function(producto) {
-                    var option = document.createElement('option');
-                    option.value = producto.id;
-                    option.textContent = producto.nombre;
-                    selectProductos.appendChild(option);
-                });
-            }
-        });
-    </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             let savedDetalles = localStorage.getItem('detallesCompra');
@@ -415,7 +372,6 @@
         numF.value = '';
         descrip.value = '';
         detallesCompra = [];
-        localStorage.removeItem('productosSeleccionados');
         localStorage.removeItem('detallesCompra');
         var invalidFeedbacks = document.querySelectorAll('.invalid-feedback');
         invalidFeedbacks.forEach(function(feedback) {
@@ -433,22 +389,5 @@
         actualizarTabla();
     });
 </script>
-    <script>
-        function bloquearProveedor() {
-            var prove = document.getElementById('proveedor_id');
-            if(prove.value !== ''){
-                prove.disabled = true;
-            }
-        }
-    </script>
-
-    <script>
-        window.onload = function (){
-            var prove = document.getElementById('proveedor_id');
-            if(prove.value !== ''){
-                prove.disabled = true;
-            }
-        }
-    </script>
 </section>
 @endsection

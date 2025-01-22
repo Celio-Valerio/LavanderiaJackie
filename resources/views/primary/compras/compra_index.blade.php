@@ -9,19 +9,16 @@
                 localStorage.removeItem('productosSeleccionados');
             </script>
         @endif
-        <div class="row">   
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Compras</h1>
                             <!-- Botón agregar compra -->
-                            <div class="button-group d-flex gap-2">
-                                <a href="{{ route('compras.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Agregar Compra</a>
-                                <a href="{{ route('inventarios.index') }}" class="btn btn-dark btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Ver inventario</a>
-                            </div>
+                            <a href="{{ route('compras.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Compra</a>
                         </div>
- 
+
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
                                 {{ session('success') }}
@@ -44,7 +41,6 @@
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 20%;">Factura</th>
                                 <th style="width: 15%;">Fecha</th>
-                                <th style="width: 25%;">Proveedor</th>
                                 <th style="width: 20%;">Total en Lempiras</th>
                                 <th style="width: 15%;">Acciones</th>
                             </tr>
@@ -55,7 +51,6 @@
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field">{{ $compra->numero_factura }}</td>
                                     <td class="small-text-field">{{ ucfirst(\Carbon\Carbon::parse($compra->fecha_compra)->translatedFormat('l d \d\e F, Y')) }}</td>
-                                    <td class="small-text-field">{{ $compra->proveedor->full_name ?? 'Sin proveedor' }}</td>
                                     <td class="small-text-field">
                                         L. {{ number_format($compra->detalles->sum(function($detalle) {
                                             return ($detalle->cantidad * $detalle->precio) - ( ($detalle->descuento / 100) * ($detalle->cantidad * $detalle->precio));

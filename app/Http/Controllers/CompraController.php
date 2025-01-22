@@ -49,7 +49,7 @@ class CompraController extends Controller
         // Validar los datos de entrada
         $request->validate([
             'proveedor_id' => 'required|exists:proveedors,id',
-            'numero_factura' => 'required|string|size:16|unique:compras,numero_factura',
+            'numero_factura' => 'required|string|size:16',
             'fecha_compra' => 'required|date|before_or_equal:today',
             'descripcion' => 'required|string',
         ], [
@@ -66,7 +66,6 @@ class CompraController extends Controller
             'precio.max' => 'El precio no puede ser mayor que 10000.',
             'numero_factura.required' => 'El número de factura es obligatorio.',
             'numero_factura.size' => 'El número de factura es inválido.',
-            'numero_factura.unique' => 'El número de factura ya existe.',
             'fecha_compra.required' => 'La fecha de compra es obligatoria.',
             'fecha_compra.before_or_equal' => 'La fecha de compra no es válida.',
             'descripcion.required' => 'La descripción es obligatoria.',
@@ -77,7 +76,6 @@ class CompraController extends Controller
 
         // Crear una nueva compra
         $compra = new Compra();
-        $compra->proveedor_id = $request->input('proveedor_id');
         $compra->numero_factura = $request->input('numero_factura');
         $compra->descripcion = $request->input('descripcion');
         $compra->fecha_compra = $request->input('fecha_compra');
@@ -113,8 +111,8 @@ class CompraController extends Controller
      */
     public function show($id)
     {
-        // Busca la compra por su ID, incluyendo las relaciones con el proveedor y detalles de compra
-        $compra = Compra::with(['proveedor', 'detalles.producto'])->findOrFail($id);
+
+        $compra = Compra::findOrFail($id);
 
         // Retorna la vista 'compras.show' y le pasa los datos de la compra
         return view('primary.compras.compra_show', compact('compra'));

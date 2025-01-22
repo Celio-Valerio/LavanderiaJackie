@@ -21,10 +21,6 @@ class Compra extends Model
      * Relación con el modelo `Proveedor`.
      * Una compra pertenece a un proveedor.
      */
-    public function proveedor()
-    {
-        return $this->belongsTo(Proveedor::class);
-    }
 
     /**
      * Relación con el modelo `DetalleCompra`.

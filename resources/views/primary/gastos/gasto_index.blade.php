@@ -52,11 +52,7 @@
         <td class="small-text-field">L.{{number_format($gasto->totalG, 2, '.', ',')}}</td>
         <td class="text-center small-text-field">
             <a href="{{ route('gastos.show', $gasto->id) }}" class="btn btn-info btn-sm">Ver</a>
-            @if(!$gasto->detalles->isEmpty())
-                <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
-            @else
-                <span class="btn btn-warning btn-sm invisible">Editar</span>
-            @endif
+            <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
         </td>
     </tr>
     @empty

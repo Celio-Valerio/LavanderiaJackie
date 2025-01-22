@@ -19,141 +19,101 @@
                             $renta = 0;
                             $nomina = 0;
                             $internet = 0;
+                            $hayluz = false;
+                            $hayagua = false;
+                            $hayrenta = false;
+                            $haynomina = false;
+                            $hayinternet = false;
                         @endphp
                         @foreach($gastos as $gasto)
                             @if($gasto->fecha >= $primerDiaMes && $gasto->fecha <= $ultimoDiaMes)
-                                @if($gasto->totalG > 0)
+                                @if($gasto->energia > 0)
+                                    @php
+                                        $hayluz = true;
+                                        $luz = $gasto->energia;
+                                    @endphp
+                                @endif
+                                @if($gasto->agua > 0)
+                                    @php
+                                        $hayagua = true;
+                                        $agua = $gasto->agua;
+                                    @endphp
+                                @endif
+                                @if($gasto->renta > 0)
+                                    @php
+                                        $hayrenta = true;
+                                        $renta = $gasto->renta;
+                                    @endphp
+                                @endif
+                                @if($gasto->nomina > 0)
+                                    @php
+                                        $haynomina = true;
+                                        $nomina = $gasto->nomina;
+                                    @endphp
+                                @endif
+                                @if($gasto->internet > 0)
+                                    @php
+                                        $hayinternet = true;
+                                        $internet = $gasto->internet;
+                                    @endphp
+                                @endif
+                                @if($hayluz && $hayinternet && $hayrenta && $hayagua && $haynomina)
                                     @php
                                         $hayGastos = true;
-                                        $fechaRegistro = $gasto->fecha;
-                                        $luz = $gasto->energia;
-                                        $agua = $gasto->agua;
-                                        $renta = $gasto->renta;
-                                        $nomina = $gasto->nomina;
-                                        $internet = $gasto->internet;
                                     @endphp
                                 @endif
                             @endif
                         @endforeach
                         <h1 class="card-title" style="font-size: 30px !important;">Registrar gastos</h1>
                         @if($hayGastos === true)
-                            <label for="lblInfo" class="card-title">Los gastos fijos ya han sido registrados el día {{ \Carbon\Carbon::parse($fechaRegistro)->translatedFormat('l d \d\e F, Y') }}</label>
+                            <label for="lblInfo" class="card-title">Los gastos fijos ya han sido registrados.</label>
                         @endif
                         <div class="invalid-feedback" id="formularioVacio"></div>
                         <hr>
                         <form id="gastoForm" action="{{ route('gastos.store') }}" method="POST" novalidate>
                             @csrf
-
                             <!-- Gastos fijos -->
                             <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Gastos fijos</strong></h2>
                             <div class="row">
-                                @if($hayGastos === false)
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblDescripcion">Descripción:</label>
-                                            <input type="text" name="descripcion" id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" maxlength="50" value="{{old('descripcion')}}">
-                                            <div class="invalid-feedback" id="descripcionVacio"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblLuz">Energía eléctrica:</label>
-                                            <input type="text" name="luz" id="luz" class="form-control @error('luz') is-invalid @enderror" maxlength="6" value="{{old('luz')}}" oninput="validarSoloNumeros2(this); calcular(this)">
-                                            <div class="invalid-feedback" id="luzVacio"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblAgua">Agua:</label>
-                                            <input type="text" name="agua" id="agua" class="form-control @error('agua') is-invalid @enderror" maxlength="6" value="{{old('agua')}}" oninput="validarSoloNumeros2(this); calcular(this)">
-                                            <div class="invalid-feedback" id="aguaVacio"></div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                    <div class="row" style="margin-top: 20px">
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="lblRenta">Renta:</label>
-                                                <input type="text" name="renta" id="renta" class="form-control @error('renta') is-invalid @enderror" maxlength="6" value="{{old('renta')}}" oninput="validarSoloNumeros2(this); calcular(this)">
-                                                <div class="invalid-feedback" id="rentaVacio"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="lblNomina">Nómina:</label>
-                                                <input type="text" name="nomina" id="nomina" class="form-control @error('nomina') is-invalid @enderror" maxlength="6" value="{{old('nomina')}}" oninput="validarSoloNumeros2(this); calcular(this)">
-                                                <div class="invalid-feedback" id="nominaVacio"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label for="lblInternet">Internet:</label>
-                                                <input type="text" name="internet" id="internet" class="form-control @error('internet') is-invalid @enderror" maxlength="6" value="{{old('internet')}}" oninput="validarSoloNumeros2(this); calcular(this)">
-                                                <div class="invalid-feedback" id="internetVacio"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row" style="margin-top: 20px">
-                                        <div class="col-md-4">
-                                            <label for="totalF">Total gastos fijos:</label>
-                                            <input type="text" id="TotalF" name="TotalF" class="form-control" readonly>
-                                        </div>
-                                    </div>
-                                @else
-                                <div class="row" style="margin-top: 20px">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblDescripcion">Descripción:</label>
-                                            <input type="text" name="descripcion" id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" maxlength="50" value="{{old('descripcion')}}">
-                                            <div class="invalid-feedback" id="descripcionVacio"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblLuz">Energía eléctrica:</label>
-                                            <input type="text" name="luz" id="luz" class="form-control" maxlength="6" value="{{isset($gasto) ? $luz : old('luz')}}" readonly>
-                                            <div class="invalid-feedback" id="luzVacio"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblAgua">Agua:</label>
-                                            <input type="text" name="agua" id="agua" class="form-control" maxlength="6" value="{{isset($gasto) ? $agua : old('agua')}}" readonly>
-                                            <div class="invalid-feedback" id="aguaVacio"></div>
-                                        </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="lblDescripcion">Descripción:</label>
+                                        <input type="text" name="descripcion" id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" maxlength="50" value="{{old('descripcion')}}">
+                                        <div class="invalid-feedback" id="descripcionVacio"></div>
                                     </div>
                                 </div>
-                                <div class="row" style="margin-top: 20px">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblRenta">Renta:</label>
-                                            <input type="text" name="renta" id="renta" class="form-control" maxlength="6" value="{{isset($gasto) ? $renta : old('renta')}}" readonly>
-                                            <div class="invalid-feedback" id="rentaVacio"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblNomina">Nómina:</label>
-                                            <input type="text" name="nomina" id="nomina" class="form-control" maxlength="6" value="{{isset($gasto) ? $nomina : old('nomina')}}" readonly>
-                                            <div class="invalid-feedback" id="nominaVacio"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblInternet">Internet:</label>
-                                            <input type="text" name="internet" id="internet" class="form-control" maxlength="6" value="{{isset($gasto) ? $internet : old('internet')}}" readonly>
-                                            <div class="invalid-feedback" id="internetVacio"></div>
-                                        </div>
+                                <div class="col-md-4">
+                                    <label for="lblProducto">Gastos fijos:</label>
+                                    <select name="gastosfijos" class="form-control @error('gastosfijos') is-invalid @enderror" id="gastosfijos" >
+                                    </select>
+                                    <div class="invalid-feedback" id="gastofijoVacio"></div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="lblValor">Monto:</label>
+                                        <input type="text" name="monto" id="monto" class="form-control" maxlength="6" value="{{old('monto')}}" oninput="validarSoloNumeros2(this)">
+                                        <div class="invalid-feedback" id="montoVacio"></div>
                                     </div>
                                 </div>
-                                <div class="row" style="margin-top: 20px">
-                                    <div class="col-md-4">
-                                        <label for="totalF">Total gastos fijos:</label>
-                                        <input type="text" id="TotalF" name="TotalF" class="form-control" readonly value="{{ number_format(($luz ?? 0) + ($agua ?? 0) + ($nomina ?? 0) + ($renta ?? 0) + ($internet ?? 0), 2) }}">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label for="opcion">Acción:</label> <br>
+                                        <button class="btn btn-success" name="agreGasto" id="agreGasto">Agregar gasto</button>
                                     </div>
                                 </div>
-                                @endif
+                            </div>
+                            <hr style="margin-top: 40px">
+                            <div class="table-responsive">
+                                <div class="invalid-feedback" id="tableVacia2"></div>
+                                <table class="table table-hover" id="tablaGasto" style="font-size: 16px;">
+                                    <thead>
+                                        <th class="color">Opción</th>
+                                        <th class="color">Gasto fijo</th>
+                                        <th class="color">Monto</th>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
                             <hr style="margin-top: 40px">
                             <!-- Consumo -->
                             <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Agregar consumo de productos</strong></h2>
@@ -185,7 +145,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="opcion">Acción:</label> <br>
+                                        <label for="opcion">Acción:</label>
                                         <button class="btn btn-success" name="agrePro" id="agrePro">Agregar consumo</button>
                                     </div>
                                 </div>
@@ -193,7 +153,7 @@
                             <hr style="margin-top: 40px">
                             <div class="table-responsive">
                                 <div class="invalid-feedback" id="tableVacia"></div>
-                                <table class="table table-hover" style="font-size: 16px;">
+                                <table class="table table-hover" id="tablaConsumo" style="font-size: 16px;">
                                     <thead>
                                         <th class="color">Opción</th>
                                         <th class="color">Producto</th>
@@ -204,8 +164,15 @@
                                     </tbody>
                                 </table>
                                 <div>
+                                    <input type="hidden" name="totalFij" id="totalFij" value="">
+                                    <input type="hidden" name="detallesMandar2" id="detallesMandar2" value="">
                                     <input type="hidden" name="detallesMandar" id="detallesMandar" value="">
-                                    <input type="hidden" name="hayGastos" id="hayGastos" value="{{$hayGastos}}">
+                                    <input type="hidden" name="hayinternet" id="hayinternet" value="{{$hayinternet ? $hayinternet : 0}}">
+                                    <input type="hidden" name="haynomina" id="haynomina" value="{{$haynomina ? $haynomina : 0}}">
+                                    <input type="hidden" name="hayrenta" id="hayrenta" value="{{$hayrenta ? $hayrenta : 0}}">
+                                    <input type="hidden" name="hayagua" id="hayagua" value="{{$hayagua ? $hayagua : 0}}">
+                                    <input type="hidden" name="hayluz" id="hayluz" value="{{$hayluz ? $hayluz : 0}}">
+                                    <input type="hidden" name="hayGastos" id="hayGastos" value="{{$hayGastos ? $hayGastos : 0}}">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between">
@@ -242,31 +209,50 @@
                 };
             });
         </script>
-        <script>
-            function calcular(){
-                var luz = parseInt(document.getElementById('luz').value) || 0;
-                var agua = parseInt(document.getElementById('agua').value) || 0;
-                var renta = parseInt(document.getElementById('renta').value) || 0;
-                var nomina = parseInt(document.getElementById('nomina').value) || 0;
-                var internet = parseInt(document.getElementById('internet').value) || 0;
-                var total = document.getElementById('TotalF');
-
-                total.value = luz + agua + renta + nomina + internet;
-            }
-        </script>
         <!-- Manejo de la tabla -->
         <script>
             let detallesCompra = [];
+            let detallesFijos = [];
             document.addEventListener('DOMContentLoaded', function () {
-                if (detallesCompra.length === 0) {
-                    const tbody = document.querySelector('table tbody');
+                // Simula el arreglo de detallesCompra
+                const hayGastos = document.getElementById('hayGastos').value;
+                if(parseInt(hayGastos) === 1){
+                    const tbody = document.querySelector('#tablaGasto tbody'); // Selecciona el tbody de la tabla
                     const trVacio = document.createElement('tr');
+
                     trVacio.innerHTML = `
-            <td colspan="3" style="text-align: center; color: grey;">No hay productos aún</td>
+            <td colspan="2" style="text-align: center; color: grey;">Los gastos fijos ya han sido registrados este mes</td>
         `;
+
+                    tbody.appendChild(trVacio);
+                }
+
+                if (detallesFijos.length === 0 && parseInt(hayGastos) === 0) {
+                    const tbody = document.querySelector('#tablaGasto tbody'); // Selecciona el tbody de la tabla
+                    const trVacio = document.createElement('tr');
+
+                    trVacio.innerHTML = `
+            <td colspan="3" style="text-align: center; color: grey;">No hay gastos fijos</td>
+        `;
+
                     tbody.appendChild(trVacio);
                 }
             });
+            document.addEventListener('DOMContentLoaded', function () {
+                // Simula el arreglo de detallesCompra
+
+                if (detallesCompra.length === 0) {
+                    const tbody = document.querySelector('#tablaConsumo tbody'); // Selecciona el tbody de la tabla
+                    const trVacio = document.createElement('tr');
+
+                    trVacio.innerHTML = `
+            <td colspan="3" style="text-align: center; color: grey;">No hay productos aún</td>
+        `;
+
+                    tbody.appendChild(trVacio);
+                }
+            });
+
 
             document.getElementById('agrePro').addEventListener('click', function (e) {
                 e.preventDefault();
@@ -374,44 +360,150 @@
                 }
             });
 
+            document.getElementById('agreGasto').addEventListener('click', function(e) {
+                e.preventDefault();
+                const gastosfijos = document.querySelector('select[name="gastosfijos"]')
+                const gastosfijosInput = document.getElementById("gastosfijos");
+                const gastofijoVacio = document.getElementById('gastofijoVacio');
+                const monto = document.getElementById('monto').value;
+                const montoInput = document.getElementById("monto");
+                const montoVacio = document.getElementById('montoVacio');
+
+                gastofijoVacio.style.display = 'none';
+                gastofijoVacio.textContent = '';
+                montoVacio.style.display = 'none';
+                montoVacio.textContent = '';
+
+                let hayError = false;
+
+
+                if (!gastosfijos.value) {
+                    gastosfijos.classList.add('is-invalid');
+                    gastofijoVacio.style.display = 'block';
+                    gastofijoVacio.textContent = 'Por favor, seleccione un gasto fijo.';
+                    hayError = true;
+                }
+                else{
+                    gastosfijosInput.classList.remove('is-invalid');
+                }
+
+                if (monto === '' || monto <= 0 || isNaN(monto)) {
+                    montoVacio.style.display = 'block';
+                    montoInput.classList.add('is-invalid');
+                    if(monto === ''){
+                        montoVacio.textContent = 'Por favor, ingrese el monto.';
+                        hayError = true;
+                    }
+                    else if(monto <= 0){
+                        montoVacio.textContent = 'Por favor, ingrese un monto mayor a 0.';
+                        hayError = true;
+                    }
+                }
+
+                else if(monto > 0 && !gastosfijos.value){
+                    montoVacio.style.display = 'block';
+                    montoInput.classList.add('is-invalid');
+                    montoVacio.textContent = 'Por favor, seleccione un gasto fijo antes de ingresar el monto.';
+                    hayError = true;
+                }
+
+                else if(monto < 100){
+                    montoVacio.style.display = 'block';
+                    montoInput.classList.add('is-invalid');
+                    montoVacio.textContent = 'El monto debe ser mayor o igual a L. 100.00.';
+                    hayError = true;
+
+                }
+                else{
+                    montoInput.classList.remove('is-invalid');
+                }
+
+                if (hayError) {
+                    return;
+                }
+
+
+                if (gastosfijos.value && monto) {
+                    const productoNombre = gastosfijos.options[gastosfijos.selectedIndex].textContent;
+                    const productoExistente = detallesFijos.find(detalle => detalle.gastosfijos === productoNombre);
+
+                    // Agregar un nuevo producto si no existe
+                    const detalle = {
+                        valor: gastosfijos.value,
+                        gastosfijos: productoNombre,
+                        monto : parseFloat(monto),
+                    };
+
+                    detallesFijos.push(detalle);
+
+                    actualizarTabla2();
+                    selectVacio();
+                    gastosfijos.selectedIndex = 0;
+                    monto.value = "";
+                    document.querySelector('input[name="monto"]').value = "";
+
+                }
+
+            });
+
+            function selectVacio(){
+                // Elemento del select donde se agregarán las opciones
+                const selectElement = document.getElementById("gastosfijos");
+                const hayluz = document.getElementById("hayluz");
+                const hayagua = document.getElementById("hayagua");
+                const hayrenta = document.getElementById("hayrenta");
+                const haynomina = document.getElementById("haynomina");
+                const hayinternet = document.getElementById("hayinternet");
+
+                // Función para agregar una opción al select
+                function agregarOpcion(value, texto) {
+                    const option = document.createElement("option");
+                    option.value = value;
+                    option.textContent = texto;
+                    selectElement.appendChild(option);
+                }
+
+                    // Limpiar las opciones previas (si es necesario)
+                    selectElement.innerHTML = "";
+
+                    // Agregar la opción vacía
+                    agregarOpcion("", "");
+
+                    // Agregar opciones según los valores de los gastos
+                    if (parseInt(hayluz.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Energía eléctrica")) {
+                        agregarOpcion("luz", "Energía eléctrica");
+                    }
+                    if (parseInt(hayagua.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Agua")) {
+                        agregarOpcion("agua", "Agua");
+                    }
+                    if (parseInt(haynomina.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Nómina")) {
+                        agregarOpcion("nomina", "Nómina");
+                    }
+                    if (parseInt(hayrenta.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Renta")) {
+                        agregarOpcion("renta", "Renta");
+                    }
+                    if (parseInt(hayinternet.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Internet")) {
+                        agregarOpcion("internet", "Internet");
+                    }
+
+            }
+
+
             document.getElementById('agregar').addEventListener('click', function(e) {
                 e.preventDefault();
                 const hayGastos = document.getElementById('hayGastos').value;
                 const tableVacia = document.getElementById('tableVacia');
+                const totalFij = document.getElementById('totalFij');
+                const detallesMandar2 = document.getElementById('detallesMandar2');
                 const detallesMandar = document.getElementById('detallesMandar');
                 const descripcion = document.getElementById('descripcion').value;
                 const descripcionInput = document.getElementById("descripcion");
-                const luz = document.getElementById('luz').value;
-                const agua = document.getElementById('agua').value;
-                const renta = document.getElementById('renta').value;
-                const nomina = document.getElementById('nomina').value;
-                const internet = document.getElementById('internet').value;
-                const luzInput = document.getElementById("luz");
-                const aguaInput = document.getElementById("agua");
-                const rentaInput = document.getElementById("renta");
-                const nominaInput = document.getElementById("nomina");
-                const internetInput = document.getElementById("internet");
-                const luzVacio = document.getElementById('luzVacio');
-                const aguaVacio = document.getElementById('aguaVacio');
-                const rentaVacio = document.getElementById('rentaVacio');
-                const nominaVacio = document.getElementById('nominaVacio');
-                const internetVacio = document.getElementById('internetVacio');
                 const descripcionVacio = document.getElementById('descripcionVacio');
                 const formularioVacio = document.getElementById('formularioVacio');
                 const regex = /^[\p{L}áéíóúüñ]+(?: [\p{L}áéíóúüñ]+)*$/u;
 
                 descripcionVacio.style.display = 'none';
                 descripcionVacio.textContent = '';
-                luzVacio.style.display = 'none';
-                luzVacio.textContent = '';
-                aguaVacio.style.display = 'none';
-                aguaVacio.textContent = '';
-                rentaVacio.style.display = 'none';
-                rentaVacio.textContent = '';
-                nominaVacio.style.display = 'none';
-                nominaVacio.textContent = '';
-                internetVacio.style.display = 'none';
-                internetVacio.textContent = '';
                 formularioVacio.style.display = 'none';
                 formularioVacio.textContent = '';
                 tableVacia.style.display = 'none';
@@ -435,93 +527,8 @@
                 else{
                     descripcionInput.classList.remove('is-invalid');
                 }
-                if(luz !== '' || agua !== '' || renta !== '' || nomina !== '' || internet !== ''){
+                if(detallesFijos.length > 0){
                     hayDato = true;
-                }
-
-                if(hayDato){
-                    if(luz === '' || luz < 100){
-                        luzVacio.style.display = 'block';
-                        luzInput.classList.add('is-invalid');
-                        if(luz === ''){
-                            luzVacio.textContent = 'Si se ingresa un gasto fijo, los demás son obligatorios.';
-                            hayError = true;
-                        }
-                        else if(parseFloat(luz) < 100){
-                            luzVacio.textContent = 'El gasto de energía eléctrica debe ser de al menos L.100.00.';
-                            hayError = true;
-                        }
-                    }
-                    else{
-                        luzInput.classList.remove('is-invalid');
-                    }
-                    if(agua === '' || agua < 100){
-                        aguaVacio.style.display = 'block';
-                        aguaInput.classList.add('is-invalid');
-                        if(agua === ''){
-                            aguaVacio.textContent = 'Si se ingresa un gasto fijo, los demás son obligatorios.';
-                            hayError = true;
-                        }
-                        else if(parseFloat(agua) < 100){
-                            aguaVacio.textContent = 'El gasto de agua debe ser de al menos L.100.00.';
-                            hayError = true;
-                        }
-                    }
-                    else{
-                        aguaInput.classList.remove('is-invalid');
-                    }
-                    if(renta === '' || renta < 100){
-                        rentaVacio.style.display = 'block';
-                        rentaInput.classList.add('is-invalid');
-                        if(renta === ''){
-                            rentaVacio.textContent = 'Si se ingresa un gasto fijo, los demás son obligatorios.';
-                            hayError = true;
-                        }
-                        else if(parseFloat(renta) < 100){
-                            rentaVacio.textContent = 'El gasto por la renta debe ser de al menos L.100.00.';
-                            hayError = true;
-                        }
-                    }
-                    else{
-                        rentaInput.classList.remove('is-invalid');
-                    }
-                    if(nomina === '' || nomina < 100){
-                        nominaVacio.style.display = 'block';
-                        nominaInput.classList.add('is-invalid');
-                        if(nomina === ''){
-                            nominaVacio.textContent = 'Si se ingresa un gasto fijo, los demás son obligatorios.';
-                            hayError = true;
-                        }
-                        else if(parseFloat(nomina) < 100){
-                            nominaVacio.textContent = 'El gasto por la nómina debe ser de al menos L.100.00.';
-                            hayError = true;
-                        }
-                    }
-                    else{
-                        nominaInput.classList.remove('is-invalid');
-                    }
-                    if(internet === '' || internet < 100){
-                        internetVacio.style.display = 'block';
-                        internetInput.classList.add('is-invalid');
-                        if(internet === ''){
-                            internetVacio.textContent = 'Si se ingresa un gasto fijo, los demás son obligatorios.';
-                            hayError = true;
-                        }
-                        else if(parseFloat(internet) < 100){
-                            internetVacio.textContent = 'El gasto por el internet debe ser de al menos L.100.00.';
-                            hayError = true;
-                        }
-                    }
-                    else{
-                        internetInput.classList.remove('is-invalid');
-                    }
-                }
-                else{
-                    aguaInput.classList.remove('is-invalid');
-                    luzInput.classList.remove('is-invalid');
-                    nominaInput.classList.remove('is-invalid');
-                    rentaInput.classList.remove('is-invalid');
-                    internetInput.classList.remove('is-invalid');
                 }
 
                 if(parseInt(hayGastos) === 1){
@@ -536,19 +543,66 @@
                     if ((!detallesCompra || detallesCompra.length === 0 && !hayDato) || hayError) {
                         if(!detallesCompra || detallesCompra.length === 0 && !hayDato){
                             formularioVacio.style.display = 'block';
-                            formularioVacio.textContent = 'Por favor, ingrese los gastos fijos o al menos un comsumo de producto.';
+                            formularioVacio.textContent = 'Por favor, ingrese al menos un gasto fijo o un consumo de producto.';
                         }
                         return;
                     }
                 }
-
+                const totalMonto = detallesFijos.reduce((suma, detalle) => suma + parseFloat(detalle.monto), 0);
+                totalFij.value = totalMonto;
+                detallesMandar2.value = JSON.stringify(detallesFijos);
                 detallesMandar.value = JSON.stringify(detallesCompra);
 
                 document.querySelector('form').submit();
             });
 
+            function actualizarTabla2() {
+                // Selecciona el tbody de la tabla correspondiente
+                const tbody = document.querySelector('#tablaGasto tbody');
+                tbody.innerHTML = ''; // Limpia el contenido del tbody
+
+                // Si no hay datos en detallesFijos, muestra el mensaje de "No hay gastos fijos registrados"
+                if (detallesFijos.length === 0) {
+                    const trVacio = document.createElement('tr');
+                    trVacio.innerHTML = `
+                        <td colspan="2" style="text-align: center; color: grey;">No hay gastos fijos</td>
+                    `;
+                    tbody.appendChild(trVacio);
+                    return;
+                }
+
+                // Recorre el array detallesFijos y genera las filas para la tabla
+                detallesFijos.forEach(function (detalle, index) {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                    <td><button type="button" class="btn-eliminar2 btn btn-danger flex-fill" data-index="${index}">Eliminar</button></td>
+                    <td>${detalle.gastosfijos}</td>
+                    <td>L ${detalle.monto}</td>
+                `;
+                    tbody.appendChild(tr);
+                });
+                const totalMonto = detallesFijos.reduce((suma, detalle) => suma + parseFloat(detalle.monto), 0);
+
+                // Agrega una fila al final de la tabla para mostrar el total
+                const trTotal = document.createElement('tr');
+                trTotal.innerHTML = `
+                    <td style="font-weight: bold; text-align: right;" colspan="2">Total:</td>
+                    <td style="font-weight: bold;">L ${totalMonto.toFixed(2)}</td>
+                `;
+                tbody.appendChild(trTotal);
+                document.querySelectorAll('.btn-eliminar2').forEach(function (boton, index) {
+                    boton.setAttribute('data-index', index);
+                    boton.addEventListener('click', function () {
+                        const index = boton.getAttribute('data-index');
+                        detallesFijos.splice(index, 1);
+                        actualizarTabla2();
+                        selectVacio();
+                    });
+                });
+            }
+
             function actualizarTabla() {
-                const tbody = document.querySelector('table tbody');
+                const tbody = document.querySelector('#tablaConsumo tbody');
                 tbody.innerHTML = '';
 
                 if (detallesCompra.length === 0) {
@@ -585,15 +639,9 @@
         <script>
             document.getElementById('clearButton').addEventListener('click', function () {
                 location.reload();
-                calcular();
             });
         </script>
 
-        <script>
-            window.onload = function (){
-                calcular();
-            }
-        </script>
         <script>
             function mostrarStock(){
                 const select = document.getElementById('productos');
@@ -604,9 +652,12 @@
 
             }
         </script>
+        <script>
+            window.onload = function (){
+                selectVacio();
+            }
+        </script>
+
 
     </section>
 @endsection
-
-
-

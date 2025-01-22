@@ -21,54 +21,54 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="lblDescripcion">Descripción:</label>
-                                        <input type="text" name="descripcion" id="descripcion" class="form-control" maxlength="100" value="{{isset($gasto) ? $gasto->descripcion : old('descripcion')}}" readonly>
-                                        <div class="invalid-feedback" id="descripcionVacio"></div>
+                                        <label for="lblDescripcion"><strong>Descripción: </strong><br>{{$gasto->descripcion}}</label>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblLuz">Energía eléctrica:</label>
-                                        <input type="text" name="luz" id="luz" class="form-control" maxlength="6" value="{{isset($gasto) ? $gasto->energia : old('luz')}}" readonly>
-                                        <div class="invalid-feedback" id="luzVacio"></div>
+                                @if($gasto->energia > 0)
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="lblLuz"><strong>Energía eléctrica:</strong><br>L. {{ number_format($gasto->energia ?? 0, 2) }}</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblAgua">Agua:</label>
-                                        <input type="text" name="agua" id="agua" class="form-control" maxlength="6" value="{{isset($gasto) ? $gasto->agua : old('agua')}}" readonly>
-                                        <div class="invalid-feedback" id="aguaVacio"></div>
+                                @endif
+                                @if($gasto->agua > 0)
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="lblAgua"><strong>Agua:</strong><br>L. {{ number_format($gasto->agua ?? 0, 2) }}</label>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row" style="margin-top: 20px">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblRenta">Renta:</label>
-                                        <input type="text" name="renta" id="renta" class="form-control" maxlength="6" value="{{isset($gasto) ? $gasto->renta : old('renta')}}" readonly>
-                                        <div class="invalid-feedback" id="rentaVacio"></div>
+                                @endif
+                                @if($gasto->renta > 0)
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="lblRenta"><strong>Renta:</strong><br>L. {{ number_format($gasto->renta ?? 0, 2) }}</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblNomina">Nómina:</label>
-                                        <input type="text" name="nomina" id="nomina" class="form-control" maxlength="6" value="{{isset($gasto) ? $gasto->nomina : old('nomina')}}" readonly>
-                                        <div class="invalid-feedback" id="nominaVacio"></div>
+                                @endif
+                                @if($gasto->nomina > 0)
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="lblNomina"><strong>Nómina:</strong><br>L. {{ number_format($gasto->nomina ?? 0, 2) }}</label>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblInternet">Internet:</label>
-                                        <input type="text" name="internet" id="internet" class="form-control" maxlength="6" value="{{isset($gasto) ? $gasto->internet : old('internet')}}" readonly>
-                                        <div class="invalid-feedback" id="internetVacio"></div>
+                                @endif
+                                @if($gasto->internet > 0)
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="lblInternet"><strong>Internet:</strong><br>L. {{ number_format($gasto->internet ?? 0, 2) }}</label>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row" style="margin-top: 20px">
-                                <div class="col-md-4">
-                                    <label for="totalF">Total gastos fijos:</label>
-                                    <input type="text" id="TotalF" name="TotalF" class="form-control" readonly value="{{ number_format(($gasto->energia ?? 0) + ($gasto->agua ?? 0) + ($gasto->nomina ?? 0) + ($gasto->renta ?? 0) + ($gasto->internet ?? 0), 2) }}">
-                                </div>
+                                @endif
+                                @if($gasto->totalG > 0)
+                                    <div class="col-md-4">
+                                        <label for="totalF"><strong>Total gastos fijos:</strong><br>L. {{ number_format($gasto->totalG ?? 0, 2) }}</label>
+                                    </div>
+                                @else
+                                    <div class="col-md-4">
+                                        <label for="totalF"><strong>Ningún gasto fijo fue registrado en este registro.</strong></label>
+                                    </div>
+                                @endif
+
                             </div>
                             <hr style="margin-top: 40px">
                             <!-- Consumo -->
@@ -101,7 +101,7 @@
                                     <th class="color">Opción</th>
                                     <th class="color">Producto</th>
                                     <th class="color">Cantidad consumida</th>
-                                    <th class="color">Stock disponible</th>
+                                    <th class="color">Cantidad disponible</th>
                                     <th class="color">Consumo adicional</th>
                                     </thead>
                                     <tbody>
@@ -140,6 +140,7 @@
                             </div>
                             <div class="d-flex justify-content-between">
                                 <button name="agregar" type="button" id="agregar" class="btn btn-primary flex-fill me-1">Actualizar</button>
+                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Restablecer</button>
                                 <a href="{{ route('gastos.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>
                         </form>
@@ -282,6 +283,11 @@
                         .replace(/^0+(?=\d)/, "0") // Permite un solo 0 al inicio, seguido de más números
                         .replace(/^0+(?!\.|$)/g, "") // Elimina ceros iniciales si no hay un punto o es solo un 0
                 };
+            });
+        </script>
+        <script>
+            document.getElementById('clearButton').addEventListener('click', function () {
+                location.reload();
             });
         </script>
     </section>

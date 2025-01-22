@@ -25,7 +25,7 @@
                             <tr>
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 30%;">Producto</th>
-                                <th style="width: 15%;">Cantidad existente</th>
+                                <th style="width: 15%;">Cantidad disponible</th>
                             </tr>
                             </thead>
                             <tbody>
