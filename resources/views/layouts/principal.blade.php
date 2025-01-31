@@ -309,14 +309,20 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="/productos">
-                        <i class="bi bi-circle"></i><span>Productos</span>
+                    <a href="{{ route('servicios_efectuados.index') }}">
+                        <i class="bi bi-circle"></i><span>Servicios pendientes</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="/servicios">
                         <i class="bi bi-circle"></i><span>Servicios</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/productos">
+                        <i class="bi bi-circle"></i><span>Productos</span>
                     </a>
                 </li>
 
@@ -330,12 +336,6 @@
                 <li>
                     <a href="/compras">
                         <i class="bi bi-circle"></i><span>Compras</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ route('servicios_efectuados.index') }}">
-                        <i class="bi bi-circle"></i><span>Venta de servicios</span>
                     </a>
                 </li>
 

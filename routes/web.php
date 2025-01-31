@@ -153,6 +153,12 @@ Route::get('/servicios-efectuados/{id}/reload', [ServicioEfectuadoController::cl
 // Ruta para cambiar el estado de un servicio efectuado (activar/desactivar)
 Route::post('/servicios-efectuados/{id}/toggle', [ServicioEfectuadoController::class, 'toggleStatus'])->name('servicios_efectuados.toggle');
 
+// Ruta para mostrar el formulario de edición de un servicio efectuado
+Route::get('/servicios-efectuados/{id}/edit', [ServicioEfectuadoController::class, 'edit'])->name('servicios_efectuados.edit');
+
+// Ruta para actualizar un servicio efectuado existente
+Route::put('/servicios-efectuados/{id}', [ServicioEfectuadoController::class, 'update'])->name('servicios_efectuados.update');
+
 // Rutas para manejar inventarios
 Route::get('/inventarios', [InventarioController::class, 'index'])->name('inventarios.inventarios_index'); // Lista de productos
 
