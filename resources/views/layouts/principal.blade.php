@@ -309,8 +309,14 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ route('servicios_efectuados.index') }}">
+                    <a href="{{ route('servicios_pendientes.index') }}">
                         <i class="bi bi-circle"></i><span>Servicios pendientes</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ route('servicios_efectuados.index') }}">
+                        <i class="bi bi-circle"></i><span>Servicios efectuados</span>
                     </a>
                 </li>
 

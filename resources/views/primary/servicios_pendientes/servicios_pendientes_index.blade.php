@@ -1,5 +1,5 @@
 @extends('layouts.principal')
-@section('title', 'Lista de Servicios Efectuados')
+@section('title', 'Lista de Servicios Pendientes')
 @section('content')
 
     <section class="section">
@@ -8,9 +8,9 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios efectuados</h1>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios pendientes</h1>
                             <div class="button-group d-flex gap-2">
-                                <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
+                                <a href="{{ route('servicios_pendientes.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
                             </div>
                         </div>
 
@@ -28,39 +28,37 @@
                             <tr>
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 20%;">Cliente</th>
-                                <th style="width: 30%;">Servicio</th>
+                                <th style="width: 20%;">Servicio</th>
+                                <th style="width: 20%;">Fecha y hora</th>
                                 <th style="width: 10%;">Estado</th>
                                 <th style="width: 10%;">Total</th>
                                 <th style="width: 15%;">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($serviciosEfectuados as $servicioEfectuado)
+                            @forelse($serviciosEfectuados->where('estado', 'Pendiente') as $servicioEfectuado)
                                 <tr>
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field"><b>{{ $servicioEfectuado->cliente->first_name }} {{ $servicioEfectuado->cliente->last_name }}</b></td>
                                     <td class="small-text-field">{{ $servicioEfectuado->servicio->nombre }}</td>
                                     <td class="small-text-field">
-
-                                        @if($servicioEfectuado->estado == 'Pendiente')
-                                            <span class="badge bg-danger">{{ $servicioEfectuado->estado }}</span>
-                                        @elseif($servicioEfectuado->estado == 'Entregado')
-                                            <span class="badge bg-primary">{{ $servicioEfectuado->estado }}</span>
-                                        @else
-                                            <span class="badge bg-success">{{ $servicioEfectuado->estado }}</span>
-                                        @endif
+                                        {{ \Carbon\Carbon::parse($servicioEfectuado->fecha)->locale('es')->isoFormat('LL') }} <!-- Fecha en español -->
+                                        {{ \Carbon\Carbon::parse($servicioEfectuado->hora)->format('h:i A') }} <!-- Hora en formato 12 horas -->
+                                    </td>
+                                    <td class="small-text-field">
+                                        <span class="badge bg-danger">{{ $servicioEfectuado->estado }}</span>
                                     </td>
 
                                     <td class="small-text-field">L. {{ number_format($servicioEfectuado->total, 2) }}</td>
                                     <td class="text-center small-text-field">
-                                        <a href="{{ route('servicios_efectuados.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{{ route('servicios_pendientes.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
 
-                                        <a href="{{ route('servicios_efectuados.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                        <a href="{{ route('servicios_pendientes.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center">No hay servicios efectuados registrados</td>
+                                    <td colspan="7" class="text-center">No hay servicios pendientes registrados</td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -82,12 +80,12 @@
                     "lengthMenu": [5, 10, 25, 50],
                     "language": {
                         "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ servicios efectuados",
+                        "sLengthMenu": "Mostrar _MENU_ servicios pendientes",
                         "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún servicio efectuado disponible en esta tabla",
-                        "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ servicios efectuados",
+                        "sEmptyTable": "Ningún servicio pendiente disponible en esta tabla",
+                        "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ servicios pendientes",
                         "sInfoEmpty": "No hay resultados",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ servicios efectuados)",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ servicios pendientes)",
                         "sSearch": "",
                         "oPaginate": {
                             "sFirst": "Primero",
