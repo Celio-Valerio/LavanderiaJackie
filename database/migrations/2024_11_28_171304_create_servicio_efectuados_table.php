@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->unsignedInteger('libras'); // Libras para el servicio
             $table->text('notas')->nullable(); // Notas adicionales
-            $table->enum('estado', ['Pendiente', 'Terminado', 'Entregado']); // Estado del servicio
+            $table->enum('estado', ['Pendiente', 'Terminado', 'Entregado'])->nullable(); // Estado del servicio
             $table->enum('envio', ['A domicilio', 'Local']); // Envío a domicilio o local
             $table->decimal('total', 8, 2); // Total del servicio basado en libras y precio del servicio
 
