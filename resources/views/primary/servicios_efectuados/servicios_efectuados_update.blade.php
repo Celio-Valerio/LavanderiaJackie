@@ -42,6 +42,7 @@
             height: 20px;
             border: 2px solid #007bff;
             border-radius: 5px;
+            border-radius: 5px;
             transform: translateY(-50%);
             background-color: #fff;
             transition: background-color 0.3s;
@@ -100,7 +101,7 @@
                         <hr>
 
                         <!-- Formulario -->
-                        <form id="servicioForm" action="{{ route('servicios_efectuados.update', $servicioEfectuado->id) }}" method="POST" enctype="multipart/form-data" novalidate>
+                        <form id="servicioForm" action="{{ route('servicios_efectuados.update', $servicioPendiente->id) }}" method="POST" enctype="multipart/form-data" novalidate>
                             @csrf
                             @method('PUT')
 
@@ -113,7 +114,7 @@
                                         <select name="cliente_id" id="cliente_id" class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
                                             <option value="">Seleccione un cliente</option>
                                             @foreach($clientes as $cliente)
-                                                <option value="{{ $cliente->id }}" {{ $servicioEfectuado->cliente_id == $cliente->id ? 'selected' : '' }}>
+                                                <option value="{{ $cliente->id }}" {{ $servicioPendiente->cliente_id == $cliente->id ? 'selected' : '' }}>
                                                     {{ $cliente->first_name }} {{ $cliente->last_name }}
                                                 </option>
                                             @endforeach
@@ -135,7 +136,7 @@
                                     <select name="servicio_id" id="servicio_id" class="form-control @error('servicio_id') is-invalid @enderror" required>
                                         <option value="">Seleccione un servicio</option>
                                         @foreach($servicios as $servicio)
-                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}" {{ $servicioEfectuado->servicio_id == $servicio->id ? 'selected' : '' }}>
+                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}" {{ $servicioPendiente->servicio_id == $servicio->id ? 'selected' : '' }}>
                                                 {{ $servicio->nombre }} <strong> - L. {{ $servicio->precio }}</strong>
                                             </option>
                                         @endforeach
@@ -146,42 +147,40 @@
                                 </div>
                             </div>
 
-                            <!-- ACTUAL -->
+                            <!-- Libras y Total -->
                             <div class="row mt-3">
-                                <!-- Libras -->
                                 <div class="col-md-3">
                                     <label for="libras" class="form-label">Libras</label>
-                                    <input type="number" name="libras" id="libras" class="form-control @error('libras') is-invalid @enderror" value="{{ $servicioEfectuado->libras }}" maxlength="5" required>
+                                    <input type="number" name="libras" id="libras" class="form-control @error('libras') is-invalid @enderror" value="{{ $servicioPendiente->libras }}" maxlength="5" required>
                                     @error('libras')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
-                                <!-- Total -->
                                 <div class="col-md-3">
                                     <label for="total" class="form-label">Total</label>
-                                    <input type="text" name="total" id="total" class="form-control" value="{{ number_format($servicioEfectuado->total, 2) }}" readonly>
+                                    <input type="text" name="total" id="total" class="form-control" value="{{ $servicioPendiente->total }}" readonly>
                                 </div>
 
                                 <!-- Promoción -->
                                 <div class="col-md-6">
                                     <label class="form-label">Promoción</label>
                                     <div class="d-flex align-items-center">
-                                        <select name="promo_id" id="promo_id" class="form-control @error('promo_id') is-invalid @enderror me-2" {{ $servicioEfectuado->promo_id ? '' : 'disabled' }}>
+                                        <select name="promo_id" id="promo_id" class="form-control @error('promo_id') is-invalid @enderror me-2" {{ $servicioPendiente->promo_id ? '' : 'disabled' }}>
                                             <option value="">Seleccione una promoción</option>
                                             @foreach($promos as $promo)
                                                 @php
-                                                    $diasPromo = json_decode($promo->days); // Decodificar el JSON en un array
+                                                    $diasPromo = json_decode($promo->days);
                                                     $diasAbreviados = implode(', ', array_map(function($dia) {
-                                                        return substr($dia, 0, 1); // Obtener solo la primera letra de cada día
-                                                    }, $diasPromo)); // Convertir los días en las primeras letras
+                                                        return substr($dia, 0, 1);
+                                                    }, $diasPromo));
                                                 @endphp
                                                 <option value="{{ $promo->id }}"
                                                         data-descuento="{{ $promo->discount }}"
                                                         data-dias="{{ json_encode($diasPromo) }}"
                                                         data-desde="{{ $promo->desde }}"
                                                         data-hasta="{{ $promo->hasta }}"
-                                                    {{ $servicioEfectuado->promo_id == $promo->id ? 'selected' : '' }}>
+                                                    {{ $servicioPendiente->promo_id == $promo->id ? 'selected' : '' }}>
                                                     {{ $promo->name }} ({{ $promo->desde }} lbs -{{ $promo->hasta }} lbs
                                                     {{ $diasAbreviados }})
                                                     <strong>{{ $promo->discount }}%</strong>
@@ -190,10 +189,9 @@
                                         </select>
 
                                         <div class="form-check">
-                                            <input class="form-check-input custom-checkbox-input" type="checkbox" id="no_aplica" name="no_aplica" {{ $servicioEfectuado->promo_id ? '' : 'checked' }}>
+                                            <input class="form-check-input custom-checkbox-input" type="checkbox" id="no_aplica" name="no_aplica" {{ $servicioPendiente->promo_id ? '' : 'checked' }}>
                                             <label class="form-check-label custom-checkbox-label ms-1" for="no_aplica"></label>
                                         </div>
-
                                     </div>
                                     @error('promo_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -201,25 +199,92 @@
                                 </div>
                             </div>
 
-                            <!-- Resto del formulario (envío, notas, dirección, etc.) -->
-                            <!-- ... (copia el resto del formulario de creación aquí) ... -->
+                            <!-- Envío -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Envio</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check custom-radio-wrapper me-3">
+                                            <input class="form-check-input custom-radio-input" type="radio" name="envio" id="envio_local" value="Local" {{ $servicioPendiente->envio == 'Local' ? 'checked' : '' }}>
+                                            <label class="form-check-label custom-radio-label" for="envio_local">Local</label>
+                                        </div>
+                                        <div class="form-check custom-radio-wrapper">
+                                            <input class="form-check-input custom-radio-input" type="radio" name="envio" id="envio_domicilio" value="A domicilio" {{ $servicioPendiente->envio == 'A domicilio' ? 'checked' : '' }}>
+                                            <label class="form-check-label custom-radio-label" for="envio_domicilio">A domicilio</label>
+                                        </div>
+                                    </div>
+                                    @error('envio')
+                                    <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6" id="envioWrapper" class="mt-2 {{ $servicioPendiente->envio == 'A domicilio' ? '' : 'd-none' }}">
+                                    <label class="form-label">¿Quién paga el envío?</label>
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check custom-radio-wrapper me-3">
+                                            <input class="form-check-input custom-radio-input" type="radio" name="pago_envio" id="envio_cliente" value="Cliente" {{ $servicioPendiente->pago_envio == 'Cliente' ? 'checked' : '' }}>
+                                            <label class="form-check-label custom-radio-label" for="envio_cliente">Cliente</label>
+                                        </div>
+                                        <div class="form-check custom-radio-wrapper">
+                                            <input class="form-check-input custom-radio-input" type="radio" name="pago_envio" id="envio_empresa" value="Empresa" {{ $servicioPendiente->pago_envio == 'Empresa' ? 'checked' : '' }}>
+                                            <label class="form-check-label custom-radio-label" for="envio_empresa">Empresa</label>
+                                        </div>
+                                        @error('pago_envio')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notas y Dirección -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="notas" class="form-label">Notas</label>
+                                    <textarea name="notas" id="notas" class="form-control @error('notas') is-invalid @enderror" rows="4" maxlength="500">{{ $servicioPendiente->notas }}</textarea>
+                                    @error('notas')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div id="direccionWrapper" class="{{ $servicioPendiente->envio == 'A domicilio' ? '' : 'd-none' }}">
+                                        <label for="direccion" class="form-label">Dirección</label>
+                                        <textarea name="direccion" id="direccion" class="form-control @error('direccion') is-invalid @enderror" rows="4" maxlength="500">{{ $servicioPendiente->direccion }}</textarea>
+                                        @error('direccion')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Precio del Envío -->
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div id="precioEnvioWrapper" class="{{ $servicioPendiente->pago_envio == 'Empresa' ? '' : 'd-none' }}">
+                                        <label for="precio_envio" class="form-label">Precio de Envío</label>
+                                        <input type="number" name="precio_envio" id="precio_envio" class="form-control @error('precio_envio') is-invalid @enderror" value="{{ $servicioPendiente->precio_envio }}" oninput="limitInputToFiveDigits(this)">
+                                        @error('precio_envio')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Botones -->
                             <div class="d-flex justify-content-between mt-4">
                                 <button type="submit" class="btn btn-primary flex-fill me-1">Actualizar</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
-                                <a href="{{ route('servicios_efectuados.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                                <button type="button" class="btn btn-warning flex-fill me-1" id="reestablecerButton">Reestablecer</button>
+                                <a href="{{ route('servicios_pendientes.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>
                         </form>
                         <!-- Fin del formulario -->
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Modal de advertencia general (Libras fuera de rango o Día no disponible) -->
+    <!-- Modal de advertencia -->
     <div class="modal fade" id="modalAdvertencia" tabindex="-1" aria-labelledby="modalAdvertenciaLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -248,16 +313,47 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const servicioPendiente = @json($servicioPendiente); // Datos del servicio pendiente
+
+            // Función para reestablecer el formulario
+            document.getElementById('reestablecerButton').addEventListener('click', function() {
+                // Recargar los datos originales desde la base de datos
+                document.getElementById('cliente_id').value = servicioPendiente.cliente_id;
+                document.getElementById('servicio_id').value = servicioPendiente.servicio_id;
+                document.getElementById('libras').value = servicioPendiente.libras;
+                document.getElementById('total').value = servicioPendiente.total;
+                document.getElementById('promo_id').value = servicioPendiente.promo_id;
+                document.getElementById('no_aplica').checked = !servicioPendiente.promo_id;
+                document.getElementById('envio_local').checked = servicioPendiente.envio === 'Local';
+                document.getElementById('envio_domicilio').checked = servicioPendiente.envio === 'A domicilio';
+                document.getElementById('envio_cliente').checked = servicioPendiente.pago_envio === 'Cliente';
+                document.getElementById('envio_empresa').checked = servicioPendiente.pago_envio === 'Empresa';
+                document.getElementById('notas').value = servicioPendiente.notas;
+                document.getElementById('direccion').value = servicioPendiente.direccion;
+                document.getElementById('precio_envio').value = servicioPendiente.pago_envio === 'Empresa' ? servicioPendiente.precio_envio : '';
+
+                // Actualizar campos dinámicos
+                toggleEnvioFields();
+                togglePrecioEnvio();
+                calculateTotal();
+            });
+
+            // Resto del código JavaScript (igual que en el formulario de creación)
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
             const promoSelect = document.getElementById('promo_id');
             const librasInput = document.getElementById('libras');
             const form = document.getElementById('servicioForm');
 
+            // Guardar la promoción inicial seleccionada
+            const initialPromo = promoSelect.value;
+
             librasInput.addEventListener('input', (event) => {
-                // Elimina cualquier carácter no numérico
                 let value = event.target.value.replace(/\D/g, '');
-                // Limita la longitud del valor a 3 caracteres
                 value = value.substring(0, 3);
-                // Actualiza el valor del input
                 event.target.value = value;
             });
 
@@ -268,14 +364,12 @@
             }
 
             function verificarDiaPromocion(promo) {
-                const diasPromocion = JSON.parse(promo.dataset.dias); // Los días de la promoción como array
-                const diaActual = obtenerNombreDia(); // Día actual en nombre
+                const diasPromocion = JSON.parse(promo.dataset.dias);
+                const diaActual = obtenerNombreDia();
 
-                // Mostrar los días completos en el modal
                 document.getElementById('diasPromocion').innerText = diasPromocion.join(', ');
                 document.getElementById('diaActual').innerText = diaActual;
 
-                // Compara el nombre del día actual con los días de la promoción
                 return diasPromocion.includes(diaActual);
             }
 
@@ -284,7 +378,6 @@
                 const desde = parseInt(promo.dataset.desde);
                 const hasta = parseInt(promo.dataset.hasta);
 
-                // Mostrar el rango en el modal
                 document.getElementById('rangoLibrasDesde').innerText = desde;
                 document.getElementById('rangoLibrasHasta').innerText = hasta;
                 document.getElementById('librasIngresadas').innerText = libras;
@@ -292,67 +385,50 @@
                 return libras >= desde && libras <= hasta;
             }
 
-            librasInput.addEventListener('input', function() {
-                if (librasInput.value) {
-                    promoSelect.disabled = false;
+            function mostrarAdvertenciaDia(promo) {
+                if (!verificarDiaPromocion(promo)) {
+                    document.getElementById('mensajeDia').classList.remove('d-none');
+                    return true; // Mostrar advertencia
                 } else {
-                    promoSelect.disabled = true;
+                    document.getElementById('mensajeDia').classList.add('d-none');
+                    return false; // No mostrar advertencia
                 }
+            }
 
-                if (librasInput.value && promoSelect.value) {
-                    const promo = promoSelect.options[promoSelect.selectedIndex];
+            function mostrarAdvertenciaLibras(promo) {
+                if (!verificarLibrasEnRango(promo)) {
+                    document.getElementById('mensajeLibras').classList.remove('d-none');
+                    return true; // Mostrar advertencia
+                } else {
+                    document.getElementById('mensajeLibras').classList.add('d-none');
+                    return false; // No mostrar advertencia
+                }
+            }
 
+            promoSelect.addEventListener('change', function() {
+                const promo = promoSelect.options[promoSelect.selectedIndex];
+
+                // Solo validar si la promoción ha cambiado
+                if (promoSelect.value !== initialPromo) {
                     let mostrarModal = false;
-                    // Verificar si las libras están dentro del rango
-                    if (!verificarLibrasEnRango(promo)) {
+
+                    if (mostrarAdvertenciaLibras(promo)) {
                         mostrarModal = true;
-                        document.getElementById('mensajeLibras').classList.remove('d-none');
-                    } else {
-                        document.getElementById('mensajeLibras').classList.add('d-none');
                     }
 
-                    // Verificar si la promoción es válida para el día actual
-                    if (!verificarDiaPromocion(promo)) {
+                    if (mostrarAdvertenciaDia(promo)) {
                         mostrarModal = true;
-                        document.getElementById('mensajeDia').classList.remove('d-none');
-                    } else {
-                        document.getElementById('mensajeDia').classList.add('d-none');
                     }
 
-                    // Si alguno de los casos falla, mostrar el modal
                     if (mostrarModal) {
                         $('#modalAdvertencia').modal('show');
-                        librasInput.value = '';
-                        promoSelect.value = '';
                     } else {
                         $('#modalAdvertencia').modal('hide');
                     }
-                }
-            });
-
-            promoSelect.addEventListener('change', function() {
-                if (librasInput.value && promoSelect.value) {
-                    const promo = promoSelect.options[promoSelect.selectedIndex];
-
-                    let mostrarModal = false;
-                    if (!verificarLibrasEnRango(promo)) {
-                        mostrarModal = true;
-                        document.getElementById('mensajeLibras').classList.remove('d-none');
-                    } else {
-                        document.getElementById('mensajeLibras').classList.add('d-none');
-                    }
-
-                    if (!verificarDiaPromocion(promo)) {
-                        mostrarModal = true;
-                        document.getElementById('mensajeDia').classList.remove('d-none');
-                    } else {
-                        document.getElementById('mensajeDia').classList.add('d-none');
-                    }
-
-                    if (mostrarModal) {
+                } else {
+                    // Si no ha cambiado, solo mostrar advertencia de día si es necesario
+                    if (mostrarAdvertenciaDia(promo)) {
                         $('#modalAdvertencia').modal('show');
-                        librasInput.value = '';
-                        promoSelect.value = '';
                     } else {
                         $('#modalAdvertencia').modal('hide');
                     }
@@ -362,12 +438,12 @@
             form.addEventListener('submit', function(e) {
                 const promo = promoSelect.options[promoSelect.selectedIndex];
 
-                if (!verificarDiaPromocion(promo) || !verificarLibrasEnRango(promo)) {
-                    e.preventDefault();
-                }
-
-                if ($('#modalAdvertencia').hasClass('show')) {
-                    e.preventDefault();
+                // Solo validar si la promoción ha cambiado
+                if (promoSelect.value !== initialPromo) {
+                    if (!verificarDiaPromocion(promo) || !verificarLibrasEnRango(promo)) {
+                        e.preventDefault();
+                        $('#modalAdvertencia').modal('show');
+                    }
                 }
             });
         });
@@ -506,4 +582,5 @@
             }
         }
     </script>
+    <!-- Resto del código JavaScript (igual que en el formulario de creación) -->
 @endsection
