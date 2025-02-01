@@ -11,6 +11,7 @@ use App\Http\Controllers\CompraController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\ServicioEfectuadoController;
+use App\Http\Controllers\ServicioPendienteController;
 use App\Http\Controllers\GastoController;
 use App\Http\Controllers\InventarioController;
 
@@ -135,6 +136,30 @@ Route::get('/servicios/buscar', [ServicioController::class, 'search'])->name('se
 Route::get('/servicios/activos', [ServicioController::class, 'active'])->name('servicios.active');
 
 // Ruta para la lista de servicios efectuados
+Route::get('/servicios-pendientes', [ServicioPendienteController::class, 'index'])->name('servicios_pendientes.index');
+
+// Ruta para crear un nuevo servicio pendiente
+Route::get('/servicios-pendientes/create', [ServicioPendienteController::class, 'create'])->name('servicios_pendientes.create');
+
+// Ruta para almacenar un nuevo servicio pendiente
+Route::post('/servicios-pendientes', [ServicioPendienteController::class, 'store'])->name('servicios_pendientes.store');
+
+// Ruta para la visualización de un servicio pendiente
+Route::get('/servicios-pendientes/show/{id}', [ServicioPendienteController::class, 'show'])->name('servicios_pendientes.show');
+
+// Ruta para recargar el formulario de editar servicio pendiente
+Route::get('/servicios-pendientes/{id}/reload', [ServicioPendienteController::class, 'reload'])->name('servicios_pendientes.reload');
+
+// Ruta para cambiar el estado de un servicio pendiente (activar/desactivar)
+Route::post('/servicios-pendientes/{id}/toggle', [ServicioPendienteController::class, 'toggleStatus'])->name('servicios_pendientes.toggle');
+
+// Ruta para mostrar el formulario de edición de un servicio pendiente
+Route::get('/servicios-pendientes/{id}/edit', [ServicioPendienteController::class, 'edit'])->name('servicios_pendientes.edit');
+
+// Ruta para actualizar un servicio pendiente existente
+Route::put('/servicios-pendientes/{id}', [ServicioPendienteController::class, 'update'])->name('servicios_pendientes.update');
+
+// Ruta para la lista de servicios efectuados
 Route::get('/servicios-efectuados', [ServicioEfectuadoController::class, 'index'])->name('servicios_efectuados.index');
 
 // Ruta para crear un nuevo servicio efectuado
@@ -151,6 +176,12 @@ Route::get('/servicios-efectuados/{id}/reload', [ServicioEfectuadoController::cl
 
 // Ruta para cambiar el estado de un servicio efectuado (activar/desactivar)
 Route::post('/servicios-efectuados/{id}/toggle', [ServicioEfectuadoController::class, 'toggleStatus'])->name('servicios_efectuados.toggle');
+
+// Ruta para mostrar el formulario de edición de un servicio efectuado
+Route::get('/servicios-efectuados/{id}/edit', [ServicioEfectuadoController::class, 'edit'])->name('servicios_efectuados.edit');
+
+// Ruta para actualizar un servicio efectuado existente
+Route::put('/servicios-efectuados/{id}', [ServicioEfectuadoController::class, 'update'])->name('servicios_efectuados.update');
 
 // Rutas para manejar inventarios
 Route::get('/inventarios', [InventarioController::class, 'index'])->name('inventarios.inventarios_index'); // Lista de productos

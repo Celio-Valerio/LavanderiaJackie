@@ -8,7 +8,7 @@ use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
 use Illuminate\Http\Request;
 
-class ServicioEfectuadoController extends Controller
+class ServicioPendienteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class ServicioEfectuadoController extends Controller
     {
         // Obtener todos los servicios efectuados
         $serviciosEfectuados = ServicioEfectuado::all();
-        return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados'));
+        return view('primary.servicios_pendientes.servicios_pendientes_index', compact('serviciosEfectuados'));
     }
 
     /**
@@ -29,7 +29,7 @@ class ServicioEfectuadoController extends Controller
         $clientes = Cliente::all();
         $servicios = Servicio::all();
         $promos = Promo::all();  // Si no se quiere usar, puede ser `nullable` en la migración
-        return view('primary.servicios_efectuados.servicios_efectuados_create', compact('clientes', 'servicios', 'promos'));
+        return view('primary.servicios_pendientes.servicios_pendientes_create', compact('clientes', 'servicios', 'promos'));
     }
 
     /**
@@ -131,7 +131,7 @@ class ServicioEfectuadoController extends Controller
         $servicioEfectuado->hora = now()->toTimeString(); // Hora actual en formato H:i:s
         $servicioEfectuado->save();
 
-        return redirect()->route('servicios_efectuados.index')->with('success', 'El servicio efectuado ha sido registrado exitosamente.');
+        return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido registrado exitosamente.');
     }
 
 
@@ -144,12 +144,9 @@ class ServicioEfectuadoController extends Controller
         $servicioEfectuado = ServicioEfectuado::findOrFail($id);
 
         // Pasar los datos a la vista y renderizarla
-        return view('primary.servicios_efectuados.servicios_efectuados_show', compact('servicioEfectuado'));
+        return view('primary.servicios_pendientes.servicios_pendientes_show', compact('servicioEfectuado'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     /**
      * Show the form for editing the specified resource.
      */
@@ -164,7 +161,7 @@ class ServicioEfectuadoController extends Controller
         $promos = Promo::all();
 
         // Retornar la vista de edición con los datos
-        return view('primary.servicios_efectuados.servicios_efectuados_update', compact('servicioPendiente', 'clientes', 'servicios', 'promos'));
+        return view('primary.servicios_pendientes.servicios_pendientes_update', compact('servicioPendiente', 'clientes', 'servicios', 'promos'));
     }
 
     /**

@@ -19,6 +19,8 @@ class ServicioEfectuado extends Model
         'estado',
         'envio',
         'total',
+        'fecha',
+        'hora',
     ];
 
     // Relación con el modelo Cliente

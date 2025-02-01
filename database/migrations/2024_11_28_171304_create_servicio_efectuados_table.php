@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->unsignedInteger('libras'); // Libras para el servicio
             $table->text('notas')->nullable(); // Notas adicionales
-            $table->enum('estado', ['Pendiente', 'Terminado', 'Entregado']); // Estado del servicio
+            $table->enum('estado', ['Pendiente', 'Terminado', 'Entregado'])->nullable(); // Estado del servicio
             $table->enum('envio', ['A domicilio', 'Local']); // Envío a domicilio o local
             $table->decimal('total', 8, 2); // Total del servicio basado en libras y precio del servicio
 
@@ -27,6 +27,8 @@ return new class extends Migration
             $table->decimal('precio_envio', 8, 2)->nullable()->default(0); // Precio del envío
             $table->enum('pago_envio', ['Cliente', 'Empresa'])->nullable(); // ¿Quién paga el envío?
 
+            $table->date('fecha')->nullable(); // Fecha en que se realizó el servicio
+            $table->time('hora')->nullable(); // Hora en que se realizó el servicio
             $table->timestamps();
         });
     }

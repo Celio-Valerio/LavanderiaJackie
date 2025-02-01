@@ -1,5 +1,5 @@
 @extends('layouts.principal')
-@section('title', 'Registrar Servicio Efectuado')
+@section('title', 'Registrar Servicio Pendiente')
 @section('content')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
@@ -96,11 +96,11 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar servicio a efectuar</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Programar un nuevo servicio</h1>
                         <hr>
 
                         <!-- Formulario -->
-                        <form id="servicioForm" action="{{ route('servicios_efectuados.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+                        <form id="servicioForm" action="{{ route('servicios_pendientes.store') }}" method="POST" enctype="multipart/form-data" novalidate>
                             @csrf
 
                             <div class="row">
@@ -285,7 +285,7 @@
                             <div class="d-flex justify-content-between mt-4">
                                 <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
                                 <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
-                                <a href="{{ route('servicios_efectuados.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                                <a href="{{ route('servicios_pendientes.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>
                         </form>
                         <!-- Fin del formulario -->
