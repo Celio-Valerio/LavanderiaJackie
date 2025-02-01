@@ -14,6 +14,7 @@ use App\Http\Controllers\ServicioEfectuadoController;
 use App\Http\Controllers\GastoController;
 use App\Http\Controllers\InventarioController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,8 +42,6 @@ Route::resource('clientes', ClienteController::class);
 
 // Ruta para recargar el formulario de editar cliente
 Route::get('/clientes/{id}/reload', [ClienteController::class, 'reload'])->name('clientes.reload');
-
-
 
 // Rutas para manejar empleados
 Route::get('/empleados', [EmpleadoController::class, 'index'])->name('empleados.index'); // Lista de empleados

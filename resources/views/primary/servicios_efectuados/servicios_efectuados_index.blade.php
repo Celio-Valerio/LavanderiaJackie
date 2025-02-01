@@ -11,9 +11,7 @@
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios efectuados</h1>
                             <div class="button-group d-flex gap-2">
                                <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Efectuar Servicio</a>
-                            </div>
-                        </div>
-
+                            </div>,
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
                                 {{ session('success') }}
