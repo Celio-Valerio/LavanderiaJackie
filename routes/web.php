@@ -147,6 +147,9 @@ Route::post('/servicios-pendientes', [ServicioPendienteController::class, 'store
 // Ruta para la visualización de un servicio pendiente
 Route::get('/servicios-pendientes/show/{id}', [ServicioPendienteController::class, 'show'])->name('servicios_pendientes.show');
 
+// Ruta para la visualización de un servicio pendiente factura
+Route::get('/servicios-pendientes/factura/{id}', [ServicioPendienteController::class, 'factura'])->name('servicios_pendientes.factura');
+
 // Ruta para recargar el formulario de editar servicio pendiente
 Route::get('/servicios-pendientes/{id}/reload', [ServicioPendienteController::class, 'reload'])->name('servicios_pendientes.reload');
 
@@ -170,6 +173,9 @@ Route::post('/servicios-efectuados', [ServicioEfectuadoController::class, 'store
 
 // Ruta para la visualización de un servicio efectuado
 Route::get('/servicios-efectuados/show/{id}', [ServicioEfectuadoController::class, 'show'])->name('servicios_efectuados.show');
+
+// Ruta para la visualización de un servicio efectuado en factura
+Route::get('/servicios-efectuados/factura/{id}', [ServicioEfectuadoController::class, 'factura'])->name('servicios_efectuados.factura');
 
 // Ruta para recargar el formulario de editar servicio efectuado
 Route::get('/servicios-efectuados/{id}/reload', [ServicioEfectuadoController::class, 'reload'])->name('servicios_efectuados.reload');

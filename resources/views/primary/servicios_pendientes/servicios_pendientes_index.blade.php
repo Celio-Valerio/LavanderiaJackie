@@ -27,12 +27,12 @@
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
-                                <th style="width: 20%;">Cliente</th>
+                                <th style="width: 15%;">Cliente</th>
                                 <th style="width: 20%;">Servicio</th>
                                 <th style="width: 20%;">Fecha y hora</th>
                                 <th style="width: 10%;">Estado</th>
                                 <th style="width: 10%;">Total</th>
-                                <th style="width: 15%;">Acciones</th>
+                                <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -52,8 +52,8 @@
                                     <td class="small-text-field">L. {{ number_format($servicioEfectuado->total, 2) }}</td>
                                     <td class="text-center small-text-field">
                                         <a href="{{ route('servicios_pendientes.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
-
                                         <a href="{{ route('servicios_pendientes.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                        <a href="{{ route('servicios_pendientes.factura', $servicioEfectuado->id) }}" class="btn btn-success btn-sm">Factura</a>
                                     </td>
                                 </tr>
                             @empty

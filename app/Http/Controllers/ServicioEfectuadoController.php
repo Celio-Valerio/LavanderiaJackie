@@ -148,6 +148,18 @@ class ServicioEfectuadoController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function factura($id)
+    {
+        // Buscar el servicio efectuado por su ID
+        $servicioEfectuado = ServicioEfectuado::findOrFail($id);
+
+        // Pasar los datos a la vista y renderizarla
+        return view('primary.servicios_efectuados.servicios_efectuados_factura', compact('servicioEfectuado'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     /**
