@@ -14,6 +14,8 @@ use App\Http\Controllers\ServicioEfectuadoController;
 use App\Http\Controllers\ServicioPendienteController;
 use App\Http\Controllers\GastoController;
 use App\Http\Controllers\InventarioController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EnviarCorreo;
 
 
 /*
@@ -188,3 +190,19 @@ Route::get('/inventarios', [InventarioController::class, 'index'])->name('invent
 
 // Rutas de recursos para inventarios
 Route::resource('inventarios', InventarioController::class);
+
+//Ruta de historial de clientes
+Route::get('/historial_Cliente/{id}', [\App\Http\Controllers\HistorialCliente::class, 'historialCliente'])->name('historial.ver');
+
+//Ruta actualizar estado
+Route::post('actualizarEstado/{id}', [ServicioPendienteController::class, 'actualizarEstado'])
+    ->name('actualizarEstado');
+
+//Ruta actualizar estado de efectuados
+Route::post('actualizarEstadoE/{id}', [ServicioEfectuadoController::class, 'actualizarEstadoe'])
+    ->name('actualizarEstadoE');
+
+//Enviar correo
+Route::post('enviar_correo', function (Request $request) {
+
+})->name('enviar_correo');

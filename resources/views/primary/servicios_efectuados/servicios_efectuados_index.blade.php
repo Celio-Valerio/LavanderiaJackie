@@ -3,70 +3,99 @@
 @section('content')
 
     <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios efectuados</h1>
-                            <div class="button-group d-flex gap-2">
-                                <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
-                            </div>,
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-                        <hr>
+        <div class="row"></div>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios efectuados</h1>
+                        <div class="button-group d-flex gap-2">
+                            <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
+                        </div>
+                    </div>
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+                    <hr>
 
-                        <table id="serviciosEfectuadosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
-                            <br>
-                            <thead class="table table-bordered table-dark">
-                            <tr>
-                                <th style="width: 5%;">N°</th>
-                                <th style="width: 20%;">Cliente</th>
-                                <th style="width: 30%;">Servicio</th>
-                                <th style="width: 10%;">Estado</th>
-                                <th style="width: 10%;">Total</th>
-                                <th style="width: 15%;">Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($serviciosEfectuados as $servicioEfectuado)
+                    <table id="serviciosEfectuadosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
+                        <thead class="table table-bordered table-dark">
+                        <tr>
+                            <th style="width: 5%;">N°</th>
+                            <th style="width: 20%;">Cliente</th>
+                            <th style="width: 30%;">Servicio</th>
+                            <th style="width: 10%;">Estado</th>
+                            <th style="width: 10%;">Total</th>
+                            <th style="width: 15%;">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @forelse($serviciosEfectuados as $servicioEfectuado)
+                            @if($servicioEfectuado->estado != 'Pendiente')
                                 <tr>
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field"><b>{{ $servicioEfectuado->cliente->first_name }} {{ $servicioEfectuado->cliente->last_name }}</b></td>
                                     <td class="small-text-field">{{ $servicioEfectuado->servicio->nombre }}</td>
                                     <td class="small-text-field">
-
                                         @if($servicioEfectuado->estado == 'Pendiente')
                                             <span class="badge bg-danger">{{ $servicioEfectuado->estado }}</span>
                                         @elseif($servicioEfectuado->estado == 'Entregado')
-                                            <span class="badge bg-primary">{{ $servicioEfectuado->estado }}</span>
-                                        @else
                                             <span class="badge bg-success">{{ $servicioEfectuado->estado }}</span>
+                                        @else
+                                            <span class="badge bg-warning">{{ $servicioEfectuado->estado }}</span>
                                         @endif
                                     </td>
 
                                     <td class="small-text-field">L. {{ number_format($servicioEfectuado->total, 2) }}</td>
                                     <td class="text-center small-text-field">
-                                        <a href="{{ route('servicios_efectuados.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                        <div class="d-flex gap-2">
+                                            <a href="{{ route('servicios_efectuados.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
 
-                                        <a href="{{ route('servicios_efectuados.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                            <a href="{{ route('servicios_efectuados.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                            @if($servicioEfectuado->estado == 'Terminado')
+                                                <button type="submit" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{$servicioEfectuado->id}}">
+                                                    Entregar
+                                                </button>
+                                                <div class="modal fade" id="modal{{$servicioEfectuado->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmación de Entrega</h1>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Se procederá con la confirmación de entrega. ¿Desea continuar?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form action="{{ route('actualizarEstadoE', ['id' => $servicioEfectuado->id]) }}" method="post" style="display: inline-block;">
+                                                                    @csrf
+                                                                    <input type="submit" value="Terminado" class="btn btn-primary">
+                                                                </form>
+                                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+
                                     </td>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">No hay servicios efectuados registrados</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
+                            @endif
+                        @empty
+                            <tr>
+                                <td colspan="6" class="text-center">No hay servicios efectuados registrados</td>
+                            </tr>
+                        @endforelse
+                        </tbody>
+                    </table>
 
-                    </div>
                 </div>
             </div>
+        </div>
         </div>
 
         <script>
