@@ -284,6 +284,15 @@ class ServicioEfectuadoController extends Controller
         return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido actualizado exitosamente.');
     }
 
+    public function actualizarEstadoE(Request $request, $id)
+    {
+        $servicioPendiente = ServicioEfectuado::findOrFail($id);
+        $servicioPendiente->estado = 'Entregado';
+        $servicioPendiente->save();
+
+        return redirect()->route('servicios_efectuados.index')->with('success', 'Estado actualizado con exito.');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
