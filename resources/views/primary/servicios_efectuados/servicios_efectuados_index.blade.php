@@ -36,10 +36,10 @@
                             <tr>
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 15%;">Cliente</th>
-                                <th style="width: 20%;">Servicio</th>
+                                <th style="width: 15%;">Servicio</th>
                                 <th style="width: 15%;">Fecha y hora</th>
                                 <th style="width: 10%;">Estado</th>
-                                <th style="width: 10%;">Total</th>
+                                <th style="width: 15%;">Total</th>
                                 <th style="width: 25%;">Acciones</th>
                             </tr>
                             </thead>
@@ -67,7 +67,7 @@
                                     <td class="text-center small-text-field">
                                         <a href="{{ route('servicios_efectuados.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                         <a href="{{ route('servicios_efectuados.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('servicios_efectuados.factura', $servicioEfectuado->id) }}" class="btn btn-success btn-sm">Factura</a>
+                                        <button class="btn btn-secondary btn-sm imprimir-btn" data-id="{{ $servicioEfectuado->id }}" data-bs-toggle="modal" data-bs-target="#imprimirModal">Imprimir</button>
                                     </td>
                                 </tr>
                             @empty
@@ -78,6 +78,25 @@
                             </tbody>
                         </table>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de confirmación para imprimir -->
+        <div class="modal fade" id="imprimirModal" tabindex="-1" aria-labelledby="imprimirModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirmar Impresión</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Está seguro de que desea imprimir la factura?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="confirmarImpresion">Imprimir</button>
                     </div>
                 </div>
             </div>
@@ -115,39 +134,35 @@
                     "drawCallback": function(settings) {
                         var api = this.api();
                         var startIndex = 1;
-
                         api.rows({ search: 'applied' }).every(function(rowIdx) {
                             $(this.node()).find('td.row-index').html(startIndex++);
                         });
                     },
-                    "responsive": true // Hacer la tabla responsiva
+                    "responsive": true
                 });
 
-                // Filtro de fechas con valores predeterminados
-                var fechaInicial = '2025-01-01';
-                var fechaFinal = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
-                $('#fecha-desde').val(fechaInicial);
-                $('#fecha-hasta').val(fechaFinal);
-
-                $('#fecha-desde, #fecha-hasta').change(function() {
+                function filterByDate() {
                     var fechaDesde = $('#fecha-desde').val();
                     var fechaHasta = $('#fecha-hasta').val();
 
-                    table.rows().every(function() {
-                        var row = this.node();
-                        var fechaServicio = $(row).data('fecha');
+                    table.draw();
+                }
 
-                        if (fechaDesde && fechaHasta) {
-                            if (fechaServicio >= fechaDesde && fechaServicio <= fechaHasta) {
-                                $(row).show();
-                            } else {
-                                $(row).hide();
-                            }
-                        } else {
-                            $(row).show(); // Si no se aplica filtro, mostrar todas las filas
+                $.fn.dataTable.ext.search.push(
+                    function(settings, data, dataIndex) {
+                        var fechaDesde = $('#fecha-desde').val();
+                        var fechaHasta = $('#fecha-hasta').val();
+                        var fechaServicio = $(table.row(dataIndex).node()).data('fecha');
+
+                        if (!fechaDesde || !fechaHasta) {
+                            return true;
                         }
-                    });
-                });
+
+                        return fechaServicio >= fechaDesde && fechaServicio <= fechaHasta;
+                    }
+                );
+
+                $('#fecha-desde, #fecha-hasta').change(filterByDate);
 
                 $('#serviciosEfectuadosTable_length').addClass('text-end').css('float', 'right');
                 $('#serviciosEfectuadosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
@@ -156,6 +171,17 @@
                     'width': '300px',
                     'border-radius': '5px',
                     'padding': '5px'
+                });
+
+                // Funcionalidad de impresión
+                let servicioId;
+                $('.imprimir-btn').on('click', function() {
+                    servicioId = $(this).data('id');
+                });
+
+                $('#confirmarImpresion').on('click', function() {
+                    window.open(`{{ url('servicios-efectuados/factura') }}/${servicioId}`, '_blank');
+                    $('#imprimirModal').modal('hide');
                 });
             });
         </script>

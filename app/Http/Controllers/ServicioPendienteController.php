@@ -18,10 +18,14 @@ class ServicioPendienteController extends Controller
      */
     public function index()
     {
-        // Obtener todos los servicios efectuados
-        $serviciosEfectuados = ServicioEfectuado::all();
-        return view('primary.servicios_pendientes.servicios_pendientes_index', compact('serviciosEfectuados'));
+        // Obtener los servicios con estado "Pendiente" y ordenarlos por fecha ascendente
+        $serviciosPendientes = ServicioEfectuado::where('estado', 'Pendiente')
+            ->orderBy('fecha', 'desc') // Usa 'desc' si prefieres orden descendente
+            ->get();
+
+        return view('primary.servicios_pendientes.servicios_pendientes_index', compact('serviciosPendientes'));
     }
+
 
     /**
      * Show the form for creating a new resource.
