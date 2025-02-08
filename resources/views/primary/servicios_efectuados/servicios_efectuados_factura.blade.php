@@ -2,32 +2,11 @@
 @section('title', 'Factura de Venta de Servicios')
 @section('content')
 
-    <style>
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            .factura, .factura * {
-                visibility: visible;
-            }
-            .factura {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-            /* Oculta los botones al imprimir */
-            .factura .btn {
-                display: none !important;
-            }
-        }
-    </style>
-
     <section class="section">
         <div class="row justify-content-center">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body factura">
+                    <div class="card-body">
                         <h1 class="card-title" style="font-size: 30px !important;">Factura de Venta de Servicios</h1>
                         <hr>
 
@@ -114,11 +93,4 @@
             </div>
         </div>
     </section>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            window.print();
-        });
-    </script>
-
 @endsection
