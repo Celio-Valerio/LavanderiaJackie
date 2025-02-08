@@ -18,9 +18,24 @@ class ServicioPendienteController extends Controller
      */
     public function index()
     {
-        // Obtener todos los servicios efectuados
-        $serviciosEfectuados = ServicioEfectuado::all();
+        // Obtener los servicios con estado "Pendiente" y ordenarlos por fecha ascendente
+        $serviciosEfectuados = ServicioEfectuado::where('estado', 'Pendiente')
+            ->orderBy('fecha', 'desc') // Usa 'desc' si prefieres orden descendente
+            ->get();
+
         return view('primary.servicios_pendientes.servicios_pendientes_index', compact('serviciosEfectuados'));
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function factura($id)
+    {
+        // Buscar el servicio efectuado por su ID
+        $servicioEfectuado = ServicioEfectuado::findOrFail($id);
+
+        // Pasar los datos a la vista y renderizarla
+        return view('primary.servicios_pendientes.servicios_pendientes_factura', compact('servicioEfectuado'));
     }
 
     /**
@@ -282,7 +297,7 @@ class ServicioPendienteController extends Controller
 
         $correoCliente = $servicioPendiente->cliente->email;
         $nombreCliente = $servicioPendiente->cliente->first_name . ' ' . $servicioPendiente->cliente->last_name;
-        Mail::to($correoCliente)->send(new EnviarCorreo($nombreCliente));
+        //Mail::to($correoCliente)->send(new EnviarCorreo($nombreCliente));
 
         return redirect()->route('servicios_pendientes.index')->with('success', 'Se ha notificado al cliente.');
     }

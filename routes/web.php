@@ -161,6 +161,9 @@ Route::get('/servicios-pendientes/{id}/edit', [ServicioPendienteController::clas
 // Ruta para actualizar un servicio pendiente existente
 Route::put('/servicios-pendientes/{id}', [ServicioPendienteController::class, 'update'])->name('servicios_pendientes.update');
 
+// Ruta para la visualización de un servicio pendiente factura
+Route::get('/servicios-pendientes/factura/{id}', [ServicioPendienteController::class, 'factura'])->name('servicios_pendientes.factura');
+
 // Ruta para la lista de servicios efectuados
 Route::get('/servicios-efectuados', [ServicioEfectuadoController::class, 'index'])->name('servicios_efectuados.index');
 
