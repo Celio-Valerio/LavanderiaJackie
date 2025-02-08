@@ -28,34 +28,62 @@
                             <tr>
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 15%;">Cliente</th>
-                                <th style="width: 20%;">Servicio</th>
-                                <th style="width: 20%;">Fecha y hora</th>
+                                <th style="width: 15%;">Servicio</th>
+                                <th style="width: 15%;">Fecha y hora</th>
                                 <th style="width: 10%;">Estado</th>
                                 <th style="width: 10%;">Total</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($serviciosEfectuados->where('estado', 'Pendiente') as $servicioEfectuado)
-                                <tr>
-                                    <td class="row-index small-text-field"></td>
-                                    <td class="small-text-field"><b>{{ $servicioEfectuado->cliente->first_name }} {{ $servicioEfectuado->cliente->last_name }}</b></td>
-                                    <td class="small-text-field">{{ $servicioEfectuado->servicio->nombre }}</td>
-                                    <td class="small-text-field">
-                                        {{ \Carbon\Carbon::parse($servicioEfectuado->fecha)->locale('es')->isoFormat('LL') }} <!-- Fecha en español -->
-                                        {{ \Carbon\Carbon::parse($servicioEfectuado->hora)->format('h:i A') }} <!-- Hora en formato 12 horas -->
-                                    </td>
-                                    <td class="small-text-field">
-                                        <span class="badge bg-danger">{{ $servicioEfectuado->estado }}</span>
-                                    </td>
+                            @forelse($serviciosEfectuados as $servicioEfectuado)
+                                @if($servicioEfectuado->estado == 'Pendiente')
+                                    <tr>
+                                        <td class="row-index small-text-field"></td>
+                                        <td class="small-text-field"><b>{{ $servicioEfectuado->cliente->first_name }} {{ $servicioEfectuado->cliente->last_name }}</b></td>
+                                        <td class="small-text-field">{{ $servicioEfectuado->servicio->nombre }}</td>
+                                        <td class="small-text-field">
+                                            {{ \Carbon\Carbon::parse($servicioEfectuado->fecha)->locale('es')->isoFormat('LL') }} <!-- Fecha en español -->
+                                            {{ \Carbon\Carbon::parse($servicioEfectuado->hora)->format('h:i A') }} <!-- Hora en formato 12 horas -->
+                                        </td>
+                                        <td class="small-text-field">
+                                            <span class="badge {{ $servicioEfectuado->estado == 'Terminado' ? 'bg-warning' : ($servicioEfectuado->estado == 'Entregado' ? 'bg-success' : 'bg-danger') }}">{{ $servicioEfectuado->estado }}</span>
+                                        </td>
 
-                                    <td class="small-text-field">L. {{ number_format($servicioEfectuado->total, 2) }}</td>
-                                    <td class="text-center small-text-field">
-                                        <a href="{{ route('servicios_pendientes.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                        <a href="{{ route('servicios_pendientes.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('servicios_pendientes.factura', $servicioEfectuado->id) }}" class="btn btn-success btn-sm">Factura</a>
-                                    </td>
-                                </tr>
+                                        <td class="small-text-field">L. {{ number_format($servicioEfectuado->total, 2) }}</td>
+                                        <td class="text-center small-text-field">
+                                            <div class="d-flex gap-2">
+                                                <a href="{{ route('servicios_pendientes.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                                <a href="{{ route('servicios_pendientes.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                                @if($servicioEfectuado->estado == 'Pendiente')
+                                                    <button type="submit" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{$servicioEfectuado->id}}">
+                                                        Terminar
+                                                    </button>
+                                                    <div class="modal fade" id="modal{{$servicioEfectuado->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmación de Notificación al Cliente</h1>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    El cliente será notificado por correo de que su servicio ha sido terminado. ¿Desea continuar?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <form action="{{ route('actualizarEstado', ['id' => $servicioEfectuado->id]) }}" method="post" style="display: inline-block;">
+                                                                        @csrf
+                                                                        <input type="submit" value="Terminado" class="btn btn-primary">
+                                                                    </form>
+                                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center">No hay servicios pendientes registrados</td>

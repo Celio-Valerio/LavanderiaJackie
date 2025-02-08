@@ -14,6 +14,8 @@ use App\Http\Controllers\ServicioEfectuadoController;
 use App\Http\Controllers\ServicioPendienteController;
 use App\Http\Controllers\GastoController;
 use App\Http\Controllers\InventarioController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EnviarCorreo;
 
 
 /*
@@ -147,9 +149,6 @@ Route::post('/servicios-pendientes', [ServicioPendienteController::class, 'store
 // Ruta para la visualización de un servicio pendiente
 Route::get('/servicios-pendientes/show/{id}', [ServicioPendienteController::class, 'show'])->name('servicios_pendientes.show');
 
-// Ruta para la visualización de un servicio pendiente factura
-Route::get('/servicios-pendientes/factura/{id}', [ServicioPendienteController::class, 'factura'])->name('servicios_pendientes.factura');
-
 // Ruta para recargar el formulario de editar servicio pendiente
 Route::get('/servicios-pendientes/{id}/reload', [ServicioPendienteController::class, 'reload'])->name('servicios_pendientes.reload');
 
@@ -174,9 +173,6 @@ Route::post('/servicios-efectuados', [ServicioEfectuadoController::class, 'store
 // Ruta para la visualización de un servicio efectuado
 Route::get('/servicios-efectuados/show/{id}', [ServicioEfectuadoController::class, 'show'])->name('servicios_efectuados.show');
 
-// Ruta para la visualización de un servicio efectuado en factura
-Route::get('/servicios-efectuados/factura/{id}', [ServicioEfectuadoController::class, 'factura'])->name('servicios_efectuados.factura');
-
 // Ruta para recargar el formulario de editar servicio efectuado
 Route::get('/servicios-efectuados/{id}/reload', [ServicioEfectuadoController::class, 'reload'])->name('servicios_efectuados.reload');
 
@@ -194,3 +190,19 @@ Route::get('/inventarios', [InventarioController::class, 'index'])->name('invent
 
 // Rutas de recursos para inventarios
 Route::resource('inventarios', InventarioController::class);
+
+//Ruta de historial de clientes
+Route::get('/historial_Cliente/{id}', [\App\Http\Controllers\HistorialCliente::class, 'historialCliente'])->name('historial.ver');
+
+//Ruta actualizar estado
+Route::post('actualizarEstado/{id}', [ServicioPendienteController::class, 'actualizarEstado'])
+    ->name('actualizarEstado');
+
+//Ruta actualizar estado de efectuados
+Route::post('actualizarEstadoE/{id}', [ServicioEfectuadoController::class, 'actualizarEstadoe'])
+    ->name('actualizarEstadoE');
+
+//Enviar correo
+Route::post('enviar_correo', function (Request $request) {
+
+})->name('enviar_correo');

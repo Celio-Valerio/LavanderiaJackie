@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EnviarCorreo;
 use App\Models\Cliente;
 use App\Models\Promo;
 use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
 
 class ServicioPendienteController extends Controller
 {
@@ -49,7 +52,7 @@ class ServicioPendienteController extends Controller
             'direccion' => 'nullable|string|max:500', // Validación para direccion
             'precio_envio' => 'nullable|numeric|min:1|max:999', // Validación para precio_envio
             'pago_envio' => 'nullable|in:Cliente,Empresa', // Validación para pago_envio
-            ], [
+        ], [
             'cliente_id.required' => 'El cliente es obligatorio.',
             'cliente_id.exists' => 'El cliente seleccionado no existe.',
 
@@ -148,18 +151,6 @@ class ServicioPendienteController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function factura($id)
-    {
-        // Buscar el servicio efectuado por su ID
-        $servicioEfectuado = ServicioEfectuado::findOrFail($id);
-
-        // Pasar los datos a la vista y renderizarla
-        return view('primary.servicios_pendientes.servicios_pendientes_factura', compact('servicioEfectuado'));
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
@@ -181,6 +172,7 @@ class ServicioPendienteController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $terminar = $request->input('TerminarS');
         // Validación de los datos
         $request->validate([
             'cliente_id' => 'required|exists:clientes,id',
@@ -245,6 +237,7 @@ class ServicioPendienteController extends Controller
             ]);
         }
 
+
         if ($request->pago_envio === 'Empresa') {
             // Si el pago del envío es "Empresa", el precio de envío debe estar entre 0 y 999
             $request->validate([
@@ -259,7 +252,6 @@ class ServicioPendienteController extends Controller
 
         // Buscar el servicio efectuado existente
         $servicioPendiente = ServicioEfectuado::findOrFail($id);
-
         // Actualizar los datos del servicio efectuado solo si se envían en el request
         $servicioPendiente->cliente_id = $request->cliente_id ?? $servicioPendiente->cliente_id;
         $servicioPendiente->servicio_id = $request->servicio_id ?? $servicioPendiente->servicio_id;
@@ -279,7 +271,25 @@ class ServicioPendienteController extends Controller
 
 
         return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido actualizado exitosamente.');
+
+
     }
+    public function actualizarEstado(Request $request, $id)
+    {
+        $servicioPendiente = ServicioEfectuado::findOrFail($id);
+        $servicioPendiente->estado = 'Terminado';
+        $servicioPendiente->save();
+
+        $correoCliente = $servicioPendiente->cliente->email;
+        $nombreCliente = $servicioPendiente->cliente->first_name . ' ' . $servicioPendiente->cliente->last_name;
+        Mail::to($correoCliente)->send(new EnviarCorreo($nombreCliente));
+
+        return redirect()->route('servicios_pendientes.index')->with('success', 'Se ha notificado al cliente.');
+    }
+
+    /**
+     * Update the status of the specified resource to 'Terminado' or 'Entregado'.
+     */
 
     /**
      * Remove the specified resource from storage.
