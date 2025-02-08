@@ -33,9 +33,6 @@
                             </thead>
                             <tbody>
                             @forelse($clientes as $cliente)
-                                @php
-                                    $cantSer = $cliente->servicios->count();
-                                @endphp
                                 <tr>
                                     <td class="row-index small-text-field"></td>
 
@@ -50,11 +47,6 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if($cantSer > 0)
-                                            <a href="{{ route('historial.ver', $cliente->id) }}" class="btn btn-dark btn-sm">Historial</a>
-                                        @else
-                                            <span class="btn btn-dark btn-sm invisible">Historial</span>
-                                        @endif
                                         <a href="{{ route('clientes.show', $cliente->id) }}" class="btn btn-info btn-sm">Ver</a>
                                         <a href="{{ route('clientes.edit', $cliente->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                     </td>
