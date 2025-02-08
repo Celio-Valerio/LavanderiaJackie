@@ -42,7 +42,12 @@ class ServicioEfectuadoFactory extends Factory
             'direccion' => $this->faker->address, // Dirección aleatoria
             'precio_envio' => $this->faker->randomFloat(2, 0, 50), // Precio de envío aleatorio entre 0 y 50
             'pago_envio' => $this->faker->randomElement(['Cliente', 'Empresa']), // Quien paga el envío aleatorio
-            'fecha' => $this->faker->date(), // Fecha aleatoria
+            'fecha' => $this->faker->randomElement([
+                now()->subDay()->toDateString(),  // Ayer
+                now()->toDateString(),            // Hoy
+                now()->addDay()->toDateString(),  // Mañana
+                now()->addDays(2)->toDateString() // Pasado mañana
+            ]),
             'hora' => $this->faker->time('H:i'), // Hora aleatoria en formato 24 horas
         ];
     }

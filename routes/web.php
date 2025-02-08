@@ -185,6 +185,9 @@ Route::get('/servicios-efectuados/{id}/edit', [ServicioEfectuadoController::clas
 // Ruta para actualizar un servicio efectuado existente
 Route::put('/servicios-efectuados/{id}', [ServicioEfectuadoController::class, 'update'])->name('servicios_efectuados.update');
 
+// Ruta para la visualización de un servicio efectuado en factura
+Route::get('/servicios-efectuados/factura/{id}', [ServicioEfectuadoController::class, 'factura'])->name('servicios_efectuados.factura');
+
 // Rutas para manejar inventarios
 Route::get('/inventarios', [InventarioController::class, 'index'])->name('inventarios.inventarios_index'); // Lista de productos
 
