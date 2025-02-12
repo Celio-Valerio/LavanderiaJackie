@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductoSeeder::class);
         $this->call(CompraSeeder::class);
         $this->call(ServicioSeeder::class);
-        $this->call(ServicioEfectuadoSeeder::class);
+        //$this->call(ServicioEfectuadoSeeder::class);
         $this->call(GastosSeeder::class);
 
         // Crear productos con historial de precios

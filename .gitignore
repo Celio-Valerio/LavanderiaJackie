@@ -17,3 +17,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+resources/views/primary/servicios_pendientes/servicios_pendientes_update.blade.php

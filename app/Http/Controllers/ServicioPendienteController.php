@@ -145,6 +145,7 @@ class ServicioPendienteController extends Controller
         $servicioEfectuado->pago_envio = $request->pago_envio; // Guardar quién paga el envío
         $servicioEfectuado->total = str_replace(',', '', $request->total); // Eliminar las comas
         // Asignar fecha y hora actual
+        date_default_timezone_set('America/Tegucigalpa');
         $servicioEfectuado->fecha = now()->toDateString(); // Fecha actual en formato Y-m-d
         $servicioEfectuado->hora = now()->toTimeString(); // Hora actual en formato H:i:s
         $servicioEfectuado->save();
@@ -190,7 +191,7 @@ class ServicioPendienteController extends Controller
         $terminar = $request->input('TerminarS');
         // Validación de los datos
         $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
+            'cliente_id' => 'exists:clientes,id',
             'servicio_id' => 'required|exists:servicios,id',
             'promo_id' => 'nullable|exists:promos,id',
             'libras' => 'required|integer|min:1',
@@ -201,7 +202,6 @@ class ServicioPendienteController extends Controller
             'precio_envio' => 'nullable|numeric|min:1|max:999', // Validación para precio_envio
             'pago_envio' => 'nullable|in:Cliente,Empresa', // Validación para pago_envio
         ], [
-            'cliente_id.required' => 'El cliente es obligatorio.',
             'cliente_id.exists' => 'El cliente seleccionado no existe.',
 
             'servicio_id.required' => 'El servicio es obligatorio.',
@@ -252,7 +252,6 @@ class ServicioPendienteController extends Controller
             ]);
         }
 
-
         if ($request->pago_envio === 'Empresa') {
             // Si el pago del envío es "Empresa", el precio de envío debe estar entre 0 y 999
             $request->validate([
@@ -268,7 +267,7 @@ class ServicioPendienteController extends Controller
         // Buscar el servicio efectuado existente
         $servicioPendiente = ServicioEfectuado::findOrFail($id);
         // Actualizar los datos del servicio efectuado solo si se envían en el request
-        $servicioPendiente->cliente_id = $request->cliente_id ?? $servicioPendiente->cliente_id;
+        //$servicioPendiente->cliente_id = $request->cliente_id ?? $servicioPendiente->cliente_id;
         $servicioPendiente->servicio_id = $request->servicio_id ?? $servicioPendiente->servicio_id;
         $servicioPendiente->promo_id = $request->promo_id ?? $servicioPendiente->promo_id;
         $servicioPendiente->libras = $request->libras ?? $servicioPendiente->libras;
@@ -279,6 +278,7 @@ class ServicioPendienteController extends Controller
         $servicioPendiente->precio_envio = $request->precio_envio ?? $servicioPendiente->precio_envio;
         $servicioPendiente->pago_envio = $request->pago_envio ?? $servicioPendiente->pago_envio;
         $servicioPendiente->total = isset($request->total) ? str_replace(',', '', $request->total) : $servicioPendiente->total;
+        date_default_timezone_set('America/Tegucigalpa');
         $servicioPendiente->fecha = now()->toDateString(); // Siempre actualiza la fecha
         $servicioPendiente->hora = now()->toTimeString(); // Siempre actualiza la hora
 

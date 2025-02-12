@@ -139,6 +139,7 @@ class ServicioEfectuadoController extends Controller
         $servicioEfectuado->pago_envio = $request->pago_envio; // Guardar quién paga el envío
         $servicioEfectuado->total = str_replace(',', '', $request->total); // Eliminar las comas
         // Asignar fecha y hora actual
+        date_default_timezone_set('America/Tegucigalpa');
         $servicioEfectuado->fecha = now()->toDateString(); // Fecha actual en formato Y-m-d
         $servicioEfectuado->hora = now()->toTimeString(); // Hora actual en formato H:i:s
         $servicioEfectuado->save();
@@ -275,6 +276,8 @@ class ServicioEfectuadoController extends Controller
         $servicioPendiente->precio_envio = $request->precio_envio ?? $servicioPendiente->precio_envio;
         $servicioPendiente->pago_envio = $request->pago_envio ?? $servicioPendiente->pago_envio;
         $servicioPendiente->total = isset($request->total) ? str_replace(',', '', $request->total) : $servicioPendiente->total;
+
+        date_default_timezone_set('America/Tegucigalpa');
         $servicioPendiente->fecha = now()->toDateString(); // Siempre actualiza la fecha
         $servicioPendiente->hora = now()->toTimeString(); // Siempre actualiza la hora
 

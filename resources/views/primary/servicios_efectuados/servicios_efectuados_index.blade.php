@@ -11,6 +11,9 @@
                         <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios efectuados</h1>
                         <div class="button-group d-flex gap-2">
                             <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
+                            <button id="reload-button" class="btn btn-primary d-inline-block w-auto" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 5px;">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
                         </div>
                     </div>
                     @if(session('success'))
@@ -23,9 +26,9 @@
 
                     <!-- Filtros de fechas -->
                     <div class="mb-3">
-                        <label for="fecha-desde" class="form-label">Desde:</label>
+                        <label for="fecha-desde" class="form-label">Buscar desde</label>
                         <input type="date" id="fecha-desde" class="form-control" style="display: inline-block; width: auto;">
-                        <label for="fecha-hasta" class="form-label">Hasta:</label>
+                        <label for="fecha-hasta" class="form-label">hasta</label>
                         <input type="date" id="fecha-hasta" class="form-control" style="display: inline-block; width: auto;">
                     </div>
 
@@ -171,7 +174,6 @@
                 function filterByDate() {
                     var fechaDesde = $('#fecha-desde').val();
                     var fechaHasta = $('#fecha-hasta').val();
-
                     table.draw();
                 }
 
@@ -210,6 +212,21 @@
                     window.open(`{{ url('servicios-efectuados/factura') }}/${servicioId}`, '_blank');
                     $('#imprimirModal').modal('hide');
                 });
+
+                // Botón de recarga
+                $('#reload-button').on('click', function() {
+                    location.reload();
+                });
+
+                // Inicializar filtros de fechas
+                const today = new Date();
+                const desde = new Date(today);
+                desde.setDate(today.getDate() - 25);
+                const hasta = new Date(today);
+                hasta.setDate(today.getDate() + 25);
+
+                $('#fecha-desde').val(desde.toISOString().split('T')[0]);
+                $('#fecha-hasta').val(hasta.toISOString().split('T')[0]);
             });
         </script>
 

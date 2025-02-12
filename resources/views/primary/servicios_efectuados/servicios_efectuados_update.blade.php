@@ -313,274 +313,136 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const servicioPendiente = @json($servicioPendiente); // Datos del servicio pendiente
+            // Datos originales del servidor
+            const initialData = @json($servicioPendiente);
 
-            // Función para reestablecer el formulario
-            document.getElementById('reestablecerButton').addEventListener('click', function() {
-                // Recargar los datos originales desde la base de datos
-                document.getElementById('cliente_id').value = servicioPendiente.cliente_id;
-                document.getElementById('servicio_id').value = servicioPendiente.servicio_id;
-                document.getElementById('libras').value = servicioPendiente.libras;
-                document.getElementById('total').value = servicioPendiente.total;
-                document.getElementById('promo_id').value = servicioPendiente.promo_id;
-                document.getElementById('no_aplica').checked = !servicioPendiente.promo_id;
-                document.getElementById('envio_local').checked = servicioPendiente.envio === 'Local';
-                document.getElementById('envio_domicilio').checked = servicioPendiente.envio === 'A domicilio';
-                document.getElementById('envio_cliente').checked = servicioPendiente.pago_envio === 'Cliente';
-                document.getElementById('envio_empresa').checked = servicioPendiente.pago_envio === 'Empresa';
-                document.getElementById('notas').value = servicioPendiente.notas;
-                document.getElementById('direccion').value = servicioPendiente.direccion;
-                document.getElementById('precio_envio').value = servicioPendiente.pago_envio === 'Empresa' ? servicioPendiente.precio_envio : '';
-
-                // Actualizar campos dinámicos
-                toggleEnvioFields();
-                togglePrecioEnvio();
-                calculateTotal();
-            });
-
-            // Resto del código JavaScript (igual que en el formulario de creación)
-        });
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoSelect = document.getElementById('promo_id');
-            const librasInput = document.getElementById('libras');
+            // Elementos clave del formulario
             const form = document.getElementById('servicioForm');
+            const resetButton = document.getElementById('reestablecerButton');
+            const envioRadios = document.querySelectorAll('input[name="envio"]');
+            const pagoEnvioRadios = document.querySelectorAll('input[name="pago_envio"]');
 
-            // Guardar la promoción inicial seleccionada
-            const initialPromo = promoSelect.value;
+            // Configuración inicial
+            initializeForm();
 
-            librasInput.addEventListener('input', (event) => {
-                let value = event.target.value.replace(/\D/g, '');
-                value = value.substring(0, 3);
-                event.target.value = value;
+            /* EVENT LISTENERS PRINCIPALES */
+            // Reestablecer formulario
+            resetButton.addEventListener('click', resetFormToInitialState);
+
+            // Cambios en envío
+            envioRadios.forEach(radio => {
+                radio.addEventListener('change', handleEnvioChange);
             });
 
-            function obtenerNombreDia() {
-                const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-                const hoy = new Date();
-                return dias[hoy.getDay()];
-            }
-
-            function verificarDiaPromocion(promo) {
-                const diasPromocion = JSON.parse(promo.dataset.dias);
-                const diaActual = obtenerNombreDia();
-
-                document.getElementById('diasPromocion').innerText = diasPromocion.join(', ');
-                document.getElementById('diaActual').innerText = diaActual;
-
-                return diasPromocion.includes(diaActual);
-            }
-
-            function verificarLibrasEnRango(promo) {
-                const libras = parseInt(librasInput.value);
-                const desde = parseInt(promo.dataset.desde);
-                const hasta = parseInt(promo.dataset.hasta);
-
-                document.getElementById('rangoLibrasDesde').innerText = desde;
-                document.getElementById('rangoLibrasHasta').innerText = hasta;
-                document.getElementById('librasIngresadas').innerText = libras;
-
-                return libras >= desde && libras <= hasta;
-            }
-
-            function mostrarAdvertenciaDia(promo) {
-                if (!verificarDiaPromocion(promo)) {
-                    document.getElementById('mensajeDia').classList.remove('d-none');
-                    return true; // Mostrar advertencia
-                } else {
-                    document.getElementById('mensajeDia').classList.add('d-none');
-                    return false; // No mostrar advertencia
-                }
-            }
-
-            function mostrarAdvertenciaLibras(promo) {
-                if (!verificarLibrasEnRango(promo)) {
-                    document.getElementById('mensajeLibras').classList.remove('d-none');
-                    return true; // Mostrar advertencia
-                } else {
-                    document.getElementById('mensajeLibras').classList.add('d-none');
-                    return false; // No mostrar advertencia
-                }
-            }
-
-            promoSelect.addEventListener('change', function() {
-                const promo = promoSelect.options[promoSelect.selectedIndex];
-
-                // Solo validar si la promoción ha cambiado
-                if (promoSelect.value !== initialPromo) {
-                    let mostrarModal = false;
-
-                    if (mostrarAdvertenciaLibras(promo)) {
-                        mostrarModal = true;
-                    }
-
-                    if (mostrarAdvertenciaDia(promo)) {
-                        mostrarModal = true;
-                    }
-
-                    if (mostrarModal) {
-                        $('#modalAdvertencia').modal('show');
-                    } else {
-                        $('#modalAdvertencia').modal('hide');
-                    }
-                } else {
-                    // Si no ha cambiado, solo mostrar advertencia de día si es necesario
-                    if (mostrarAdvertenciaDia(promo)) {
-                        $('#modalAdvertencia').modal('show');
-                    } else {
-                        $('#modalAdvertencia').modal('hide');
-                    }
-                }
+            // Cambios en pago de envío
+            pagoEnvioRadios.forEach(radio => {
+                radio.addEventListener('change', handlePagoEnvioChange);
             });
 
-            form.addEventListener('submit', function(e) {
-                const promo = promoSelect.options[promoSelect.selectedIndex];
+            // Cambios en campos relacionados con el cálculo
+            document.getElementById('libras').addEventListener('input', calculateTotal);
+            document.getElementById('servicio_id').addEventListener('change', calculateTotal);
+            document.getElementById('promo_id').addEventListener('change', calculateTotal);
+            document.getElementById('no_aplica').addEventListener('change', togglePromocion);
+            document.getElementById('precio_envio').addEventListener('input', calculateTotal);
 
-                // Solo validar si la promoción ha cambiado
-                if (promoSelect.value !== initialPromo) {
-                    if (!verificarDiaPromocion(promo) || !verificarLibrasEnRango(promo)) {
-                        e.preventDefault();
-                        $('#modalAdvertencia').modal('show');
-                    }
-                }
-            });
-        });
+            /* FUNCIONES PRINCIPALES */
+            function initializeForm() {
+                // Cargar estado inicial de promoción
+                togglePromocion();
 
-    </script>
+                // Configurar visibilidad inicial
+                handleEnvioChange();
+                handlePagoEnvioChange();
 
-    <script>
-        $(document).ready(function () {
-            function toggleEnvioFields() {
-                if ($('#envio_domicilio').is(':checked')) {
-                    $('#direccionWrapper').removeClass('d-none');
-                    $('#envioWrapper').removeClass('d-none');
-                } else {
-                    $('#direccionWrapper').addClass('d-none');
-                    $('#envioWrapper').addClass('d-none');
-                    $('#precioEnvioWrapper').addClass('d-none');
-
-                    calculateTotal(); // Recalculate total
-                }
+                // Calcular total inicial
+                calculateTotal();
             }
 
-            function togglePrecioEnvio() {
-                if ($('#envio_empresa').is(':checked')) {
-                    $('#precioEnvioWrapper').removeClass('d-none');
-                } else {
-                    $('#precioEnvioWrapper').addClass('d-none');
-                    // Mantener el precio de envío si existe, no resetear
-                    if ($('#precio_envio').val() === "") {
-                        $('#precio_envio').val(''); // Reset envio price si está vacío
-                    }
-                    calculateTotal(); // Recalculate total
-                }
+            function resetFormToInitialState() {
+                // Restaurar valores desde el servidor
+                document.getElementById('cliente_id').value = initialData.cliente_id;
+                document.getElementById('servicio_id').value = initialData.servicio_id;
+                document.getElementById('libras').value = initialData.libras;
+                document.getElementById('total').value = initialData.total;
+                document.getElementById('promo_id').value = initialData.promo_id;
+                document.getElementById('no_aplica').checked = !initialData.promo_id;
+                document.querySelector(`input[name="envio"][value="${initialData.envio}"]`).checked = true;
+                document.querySelector(`input[name="pago_envio"][value="${initialData.pago_envio}"]`).checked = true;
+                document.getElementById('notas').value = initialData.notas;
+                document.getElementById('direccion').value = initialData.direccion;
+                document.getElementById('precio_envio').value = initialData.precio_envio;
+
+                // Restaurar estados visuales
+                togglePromocion();
+                handleEnvioChange();
+                handlePagoEnvioChange();
+                calculateTotal();
             }
 
-            // Control de "No Aplica" para la promoción
-            $('#no_aplica').change(function () {
-                if ($(this).prop('checked')) {
-                    $('#promo_id').val('');
-                    $('#promo_id').prop('disabled', true); // Deshabilitar selección
-                    $('#promo_id').trigger('change');
-                } else {
-                    $('#promo_id').prop('disabled', false); // Habilitar si aplica
-                    $('#promo_id').trigger('change');
-                }
-            });
+            function handleEnvioChange() {
+                const isDomicilio = document.getElementById('envio_domicilio').checked;
 
-            // Función para calcular el total
+                // Mostrar/ocultar secciones
+                document.getElementById('direccionWrapper').classList.toggle('d-none', !isDomicilio);
+                document.getElementById('envioWrapper').classList.toggle('d-none', !isDomicilio);
+
+                // Limpiar campos si se ocultan
+                if (!isDomicilio) {
+                    document.getElementById('direccion').value = '';
+                    document.querySelectorAll('input[name="pago_envio"]').forEach(radio => radio.checked = false);
+                    document.getElementById('precio_envio').value = '';
+                    document.getElementById('precioEnvioWrapper').classList.add('d-none');
+                }
+
+                calculateTotal();
+            }
+
+            function handlePagoEnvioChange() {
+                const isEmpresa = document.getElementById('envio_empresa').checked;
+                document.getElementById('precioEnvioWrapper').classList.toggle('d-none', !isEmpresa);
+
+                // Limpiar precio si se oculta
+                if (!isEmpresa) document.getElementById('precio_envio').value = '';
+
+                calculateTotal();
+            }
+
+            function togglePromocion() {
+                const noAplica = document.getElementById('no_aplica').checked;
+                document.getElementById('promo_id').disabled = noAplica;
+
+                if (noAplica) {
+                    document.getElementById('promo_id').value = '';
+                }
+
+                calculateTotal();
+            }
+
             function calculateTotal() {
-                var precio = $('#servicio_id option:selected').data('precio') || 0;
-                var libras = parseFloat($('#libras').val()) || 0;
-                var total = precio * libras;
-                var descuento = 0;
+                const precio = parseFloat(document.getElementById('servicio_id').selectedOptions[0]?.dataset.precio) || 0;
+                const libras = parseFloat(document.getElementById('libras').value) || 0;
+                const descuento = parseFloat(document.getElementById('promo_id').selectedOptions[0]?.dataset.descuento) || 0;
+                const precioEnvio = parseFloat(document.getElementById('precio_envio').value) || 0;
 
-                if (!$('#no_aplica').prop('checked')) {
-                    var descuentoPromo = $('#promo_id option:selected').data('descuento') || 0;
-                    descuento = (total * descuentoPromo) / 100;
-                    total -= descuento;
+                let total = precio * libras;
+
+                // Aplicar descuento si hay promoción
+                if (!document.getElementById('no_aplica').checked && descuento > 0) {
+                    total -= total * (descuento / 100);
                 }
 
-                // Añadir precio de envío si aplica
-                if ($('#envio_empresa').is(':checked')) {
-                    var precioEnvio = parseFloat($('#precio_envio').val()) || 0;
+                // Agregar envío si corresponde
+                if (document.getElementById('envio_empresa').checked) {
                     total += precioEnvio;
-                } else if ($('#envio_local').is(':checked') || $('#envio_cliente').is(':checked')) {
-                    $('#precio_envio').val(''); // Set envio price to 0.00
                 }
 
-                // Validación: Si hay un error, mantener el valor del precio de envío
-                if (isNaN(total)) {
-                    total = parseFloat($('#total').val()) || 0; // Mantener el total previo
-                }
-
-                // Formatear el total con comas para miles y punto para decimales
-                var totalFormateado = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-                // Asignar el total formateado
-                $('#total').val(totalFormateado);
+                // Formatear y actualizar total
+                document.getElementById('total').value = total.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
             }
-
-            // Actualizar campos de envío al cambiar opciones
-            $('#envio_local, #envio_domicilio').on('change', function () {
-                toggleEnvioFields();
-                calculateTotal();
-
-                // Si se selecciona "Envío: Local", quitar la selección de "¿Quién paga el envío?"
-                if ($('#envio_local').is(':checked')) {
-                    $('#envio_cliente, #envio_empresa').prop('checked', false); // Desmarcar ambos
-                }
-            });
-
-            $('#envio_cliente, #envio_empresa').on('change', function () {
-                togglePrecioEnvio();
-                calculateTotal();
-            });
-
-            // Actualizar el total al cambiar valores relevantes
-            $('#libras, #servicio_id, #promo_id, #precio_envio').on('input change', calculateTotal);
-
-            // Limpiar el formulario
-            $('#clearButton').on('click', function () {
-                $('#servicioForm')[0].reset();
-                $('#libras').val('');
-                $('#total').val('');
-                $('#direccion').val('');
-                $('#no_aplica').prop('checked', false);
-                $('#envio_local').prop('checked', false);
-                $('#envio_domicilio').prop('checked', false);
-                $('#servicio_id').prop('disabled', false).val('');
-                $('#promo_id').prop('disabled', false).val('');
-                $('#direccionWrapper, #envioWrapper, #precioEnvioWrapper').addClass('d-none');
-            });
-
-            // Inicializar
-            toggleEnvioFields();
-            togglePrecioEnvio();
         });
     </script>
-
-    <script>
-        // Limitar la entrada a un máximo de 5 dígitos
-        function limitInputToFiveDigits(input) {
-            const maxDigits = 5;
-
-            // Eliminar valores no numéricos (seguridad adicional)
-            input.value = input.value.replace(/\D/g, '');
-
-            // Si la longitud excede el máximo, cortar la entrada
-            if (input.value.length > maxDigits) {
-                input.value = input.value.slice(0, maxDigits);
-            }
-
-            // Asegurarse de que no supere el valor máximo permitido
-            const maxValue = 999;
-            if (parseInt(input.value, 10) > maxValue) {
-                input.value = maxValue;
-            }
-        }
-    </script>
-    <!-- Resto del código JavaScript (igual que en el formulario de creación) -->
 @endsection
