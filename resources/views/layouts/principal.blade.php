@@ -321,6 +321,12 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('servicios_efectuados.ventas') }}">
+                        <i class="bi bi-circle"></i><span>Venta de servicios</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="/servicios">
                         <i class="bi bi-circle"></i><span>Servicios</span>
                     </a>

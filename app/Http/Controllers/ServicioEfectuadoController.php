@@ -20,6 +20,14 @@ class ServicioEfectuadoController extends Controller
         return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados'));
     }
 
+    public function ventas()
+    {
+        $serviciosEfectuados = ServicioEfectuado::where('estado', 'Entregado')
+            ->get();
+
+        return view('primary.servicios_venta.servicios_ventas_index', compact('serviciosEfectuados'));
+    }
+
     /**
      * Display the specified resource.
      */

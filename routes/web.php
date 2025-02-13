@@ -191,6 +191,10 @@ Route::put('/servicios-efectuados/{id}', [ServicioEfectuadoController::class, 'u
 // Ruta para la visualización de un servicio efectuado en factura
 Route::get('/servicios-efectuados/factura/{id}', [ServicioEfectuadoController::class, 'factura'])->name('servicios_efectuados.factura');
 
+// Ruta para la lista de servicios efectuados
+Route::get('/servicios-ventas', [ServicioEfectuadoController::class, 'ventas'])->name('servicios_efectuados.ventas');
+
+
 // Rutas para manejar inventarios
 Route::get('/inventarios', [InventarioController::class, 'index'])->name('inventarios.inventarios_index'); // Lista de productos
 
@@ -212,3 +216,4 @@ Route::post('actualizarEstadoE/{id}', [ServicioEfectuadoController::class, 'actu
 Route::post('enviar_correo', function (Request $request) {
 
 })->name('enviar_correo');
+
