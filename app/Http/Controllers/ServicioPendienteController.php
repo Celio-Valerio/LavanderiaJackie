@@ -150,7 +150,8 @@ class ServicioPendienteController extends Controller
         $servicioEfectuado->hora = now()->toTimeString(); // Hora actual en formato H:i:s
         $servicioEfectuado->save();
 
-        return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido registrado exitosamente.');
+        //return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido registrado exitosamente.');
+        return redirect()->route('servicios_pendientes.factura', $servicioEfectuado->id);
     }
 
 

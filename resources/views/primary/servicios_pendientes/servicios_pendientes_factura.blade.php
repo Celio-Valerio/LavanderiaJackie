@@ -23,7 +23,6 @@
         }
     </style>
 
-
     <section class="section">
         <div class="row justify-content-center">
             <div class="col-lg-12">
@@ -104,10 +103,10 @@
                         <!-- Botones de Acción -->
                         <div class="row">
                             <div class="col-md-6">
-                                <a href="{{ route('servicios_efectuados.index') }}" class="btn btn-secondary w-100">Volver a la Lista</a>
+                                <a href="{{ route('servicios_pendientes.index') }}" class="btn btn-secondary w-100">Volver a la Lista</a>
                             </div>
                             <div class="col-md-6">
-                                <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-warning w-100">Nuevo Servicio</a>
+                                <a href="{{ route('servicios_pendientes.create') }}" class="btn btn-warning w-100">Nuevo Servicio</a>
                             </div>
                         </div>
                     </div>
@@ -115,6 +114,7 @@
             </div>
         </div>
     </section>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             window.print();

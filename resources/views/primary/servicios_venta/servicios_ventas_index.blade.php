@@ -130,8 +130,8 @@
                         ¿Está seguro de que desea imprimir la factura?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" id="confirmarImpresion">Imprimir</button>
+                        <button type="button" class="btn btn-primary" id="confirmarImpresion">Sí</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                     </div>
                 </div>
             </div>
