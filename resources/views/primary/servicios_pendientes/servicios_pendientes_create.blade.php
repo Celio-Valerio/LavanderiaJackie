@@ -283,7 +283,8 @@
 
                             <!-- Botones -->
                             <div class="d-flex justify-content-between mt-4">
-                                <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
+                                <button type="submit" class="btn btn-primary flex-fill me-1" name="action" value="registrar">Registrar</button>
+                                <button type="submit" class="btn btn-success flex-fill me-1" name="action" value="registrar_imprimir">Registrar e imprimir</button>
                                 <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
                                 <a href="{{ route('servicios_pendientes.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>

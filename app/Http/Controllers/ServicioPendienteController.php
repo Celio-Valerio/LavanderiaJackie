@@ -150,10 +150,15 @@ class ServicioPendienteController extends Controller
         $servicioEfectuado->hora = now()->toTimeString(); // Hora actual en formato H:i:s
         $servicioEfectuado->save();
 
-        //return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido registrado exitosamente.');
-        return redirect()->route('servicios_pendientes.factura', $servicioEfectuado->id);
+        // Verificar qué botón fue presionado
+        if ($request->action === 'registrar_imprimir') {
+            // Redirigir a la factura si se presionó "Registrar e imprimir"
+            return redirect()->route('servicios_pendientes.factura', $servicioEfectuado->id);
+        } else {
+            // Redirigir al índice si se presionó "Registrar"
+            return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido registrado exitosamente.');
+        }
     }
-
 
     /**
      * Display the specified resource.
