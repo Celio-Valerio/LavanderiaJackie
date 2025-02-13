@@ -15,10 +15,22 @@
                 left: 0;
                 top: 0;
                 width: 100%;
+                height: 100%;
+                font-size: 12px;
             }
             /* Oculta los botones al imprimir */
             .factura .btn {
                 display: none !important;
+            }
+            .factura .header-info {
+                font-size: 14px;
+            }
+            .factura table {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .factura table th, .factura table td {
+                padding: 5px;
             }
         }
     </style>
@@ -28,8 +40,24 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body factura">
-                        <h1 class="card-title" style="font-size: 30px !important;">Factura de Venta de Servicios</h1>
+                        <!-- Encabezado -->
+                        <h1 class="card-title text-center" style="font-size: 25px !important; margin-bottom: -15px;">Lavandería Jackie</h1>
+                        <h2 class="card-title text-center" style="font-size: 20px !important; margin-bottom: -15px;">Factura de Venta de Servicios</h2>
+
+                        <div class="header-info mb-3">
+                            <h3 class="text-center" style="font-size: 20px; margin-bottom: 5px;">Prop. Matilde Jackeline Moncada Zelaya</h3>
+                            <p class="text-center" style="font-size: 14px; margin: 0;">Bo. Tierra Blanca, media cuadra antes de Pintogama, Danlí, El Paraíso.</p>
+                            <p class="text-center" style="font-size: 14px; margin: 0;">R.T.N.: 07031985048849 / Cel: 9608-5567</p>
+                            <p class="text-center" style="font-size: 14px; margin: 0;">E-mail: jacky.moncada25@gmail.com</p>
+                        </div>
+
                         <hr>
+
+                        <div class="row mb-12">
+                            <div class="col-md-6">
+                                <label class="form-label"><strong>CAI:</strong> #### - #### - #### - ####</label>
+                            </div>
+                        </div>
 
                         <!-- Información de la Factura -->
                         <div class="row mb-3">
@@ -47,8 +75,8 @@
                                 <thead>
                                 <tr>
                                     <th>Servicio</th>
-                                    <th>Estado</th>
-                                    <th>Precio</th>
+                                    <th>Libras</th>
+                                    <th>Precio por Libra</th>
                                     <th>Promoción</th>
                                     <th>Descuento</th>
                                     <th>Total</th>
@@ -57,14 +85,21 @@
                                 <tbody>
                                 <tr>
                                     <td>{{ $servicioEfectuado->servicio->nombre }}</td>
-                                    <td>{{ $servicioEfectuado->estado }}</td>
-                                    <td>L. {{ number_format($servicioEfectuado->total, 2) }}</td>
+                                    <td>{{ $servicioEfectuado->libras }}</td>
+                                    <td>L. {{ number_format($servicioEfectuado->total / $servicioEfectuado->libras, 2) }}</td>
                                     <td>{{ $servicioEfectuado->promo->name ?? 'No aplica' }}</td>
                                     <td>{{ $servicioEfectuado->promo->discount ?? '0' }}%</td>
                                     <td>L. {{ number_format($servicioEfectuado->total - ($servicioEfectuado->total * ($servicioEfectuado->promo->discount ?? 0) / 100), 2) }}</td>
                                 </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Total de la Factura -->
+                        <div class="row mb-3">
+                            <div class="col-md-12 text-end">
+                                <h4><strong>Total a Pagar:</strong> L. {{ number_format(($servicioEfectuado->total - ($servicioEfectuado->total * ($servicioEfectuado->promo->discount ?? 0) / 100)) + ($servicioEfectuado->precio_envio ?? 0), 2) }}</h4>
+                            </div>
                         </div>
 
                         <!-- Información de Envío -->
@@ -90,13 +125,6 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <label class="form-label"><strong>Notas:</strong> {{ $servicioEfectuado->notas ?? 'No hay notas disponibles.' }}</label>
-                            </div>
-                        </div>
-
-                        <!-- Total de la Factura -->
-                        <div class="row mb-3">
-                            <div class="col-md-12 text-end">
-                                <h4><strong>Total a Pagar:</strong> L. {{ number_format(($servicioEfectuado->total - ($servicioEfectuado->total * ($servicioEfectuado->promo->discount ?? 0) / 100)) + ($servicioEfectuado->precio_envio ?? 0), 2) }}</h4>
                             </div>
                         </div>
 
