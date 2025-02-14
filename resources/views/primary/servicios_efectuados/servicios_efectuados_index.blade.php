@@ -92,7 +92,7 @@
                                                             <div class="modal-footer">
                                                                 <form action="{{ route('actualizarEstadoE', ['id' => $servicioEfectuado->id]) }}" method="post" style="display: inline-block;">
                                                                     @csrf
-                                                                    <input type="submit" value="Terminado" class="btn btn-primary">
+                                                                    <input type="submit" value="Si" class="btn btn-primary">
                                                                 </form>
                                                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                                                             </div>

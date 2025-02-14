@@ -296,7 +296,7 @@ class ServicioPendienteController extends Controller
 
         $correoCliente = $servicioPendiente->cliente->email;
         $nombreCliente = $servicioPendiente->cliente->first_name . ' ' . $servicioPendiente->cliente->last_name;
-        //Mail::to($correoCliente)->send(new EnviarCorreo($nombreCliente));
+        Mail::to($correoCliente)->send(new EnviarCorreo($nombreCliente));
 
         return redirect()->route('servicios_pendientes.index')->with('success', 'Se ha notificado al cliente.');
     }
