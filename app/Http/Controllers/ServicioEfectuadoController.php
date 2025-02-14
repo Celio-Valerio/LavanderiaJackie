@@ -202,7 +202,7 @@ class ServicioEfectuadoController extends Controller
     {
         // Validación de los datos
         $request->validate([
-            'cliente_id' => 'required|exists:clientes,id',
+            'cliente_id' => 'exists:clientes,id',
             'servicio_id' => 'required|exists:servicios,id',
             'promo_id' => 'nullable|exists:promos,id',
             'libras' => 'required|integer|min:1',
@@ -213,7 +213,6 @@ class ServicioEfectuadoController extends Controller
             'precio_envio' => 'nullable|numeric|min:1|max:999', // Validación para precio_envio
             'pago_envio' => 'nullable|in:Cliente,Empresa', // Validación para pago_envio
         ], [
-            'cliente_id.required' => 'El cliente es obligatorio.',
             'cliente_id.exists' => 'El cliente seleccionado no existe.',
 
             'servicio_id.required' => 'El servicio es obligatorio.',
@@ -280,7 +279,6 @@ class ServicioEfectuadoController extends Controller
         $servicioPendiente = ServicioEfectuado::findOrFail($id);
 
         // Actualizar los datos del servicio efectuado solo si se envían en el request
-        $servicioPendiente->cliente_id = $request->cliente_id ?? $servicioPendiente->cliente_id;
         $servicioPendiente->servicio_id = $request->servicio_id ?? $servicioPendiente->servicio_id;
         $servicioPendiente->promo_id = $request->promo_id ?? $servicioPendiente->promo_id;
         $servicioPendiente->libras = $request->libras ?? $servicioPendiente->libras;
@@ -291,15 +289,10 @@ class ServicioEfectuadoController extends Controller
         $servicioPendiente->precio_envio = $request->precio_envio ?? $servicioPendiente->precio_envio;
         $servicioPendiente->pago_envio = $request->pago_envio ?? $servicioPendiente->pago_envio;
         $servicioPendiente->total = isset($request->total) ? str_replace(',', '', $request->total) : $servicioPendiente->total;
-
-        date_default_timezone_set('America/Tegucigalpa');
-        $servicioPendiente->fecha = now()->toDateString(); // Siempre actualiza la fecha
-        $servicioPendiente->hora = now()->toTimeString(); // Siempre actualiza la hora
-
         $servicioPendiente->save();
 
 
-        return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido actualizado exitosamente.');
+        return redirect()->route('servicios_efectuados.index')->with('success', 'El servicio pendiente ha sido actualizado exitosamente.');
     }
 
     public function actualizarEstadoE(Request $request, $id)

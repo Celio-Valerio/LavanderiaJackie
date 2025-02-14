@@ -11,9 +11,6 @@
                         <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios vendidos</h1>
                         <div class="button-group d-flex gap-2">
                             <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
-                            <button id="reload-button" class="btn btn-primary d-inline-block w-auto" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 5px;">
-                                <i class="bi bi-arrow-clockwise"></i>
-                            </button>
                         </div>
                     </div>
                     @if(session('success'))
@@ -26,12 +23,18 @@
 
                     <!-- Filtros de fechas -->
                     <div class="mb-3 d-flex justify-content-between align-items-center">
-                        <div>
+                        <div class="mb-3 d-flex align-items-center gap-2">
                             <label for="fecha-desde" class="form-label">Buscar desde</label>
                             <input type="date" id="fecha-desde" class="form-control d-inline-block" style="width: auto;">
                             <label for="fecha-hasta" class="form-label">hasta</label>
                             <input type="date" id="fecha-hasta" class="form-control d-inline-block" style="width: auto;">
+
+                            <!-- Botón de recargar -->
+                            <button id="reload-button" class="btn btn-link p-0" style="color: #007bff; font-size: 24px; margin-top: 5px;">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
                         </div>
+
                         <div>
                             <h4>Total: <strong><span id="totalServicios">L. 0.00</span></strong></h4>
                         </div>
@@ -181,8 +184,9 @@
                             total += totalServicio;
                         });
 
-                        // Actualizar el elemento HTML con el total
-                        $('#totalServicios').text('L. ' + total.toFixed(2));
+// Actualizar el elemento HTML con el total formateado
+                        $('#totalServicios').text('L. ' + total.toLocaleString('es-HN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
                     },
                     "responsive": true
                 });
@@ -229,9 +233,11 @@
                     $('#imprimirModal').modal('hide');
                 });
 
-                // Botón de recarga
+                // Botón de recargar
                 $('#reload-button').on('click', function() {
-                    location.reload();
+                    $('#fecha-desde').val('');
+                    $('#fecha-hasta').val('');
+                    table.search('').draw(); // Limpiar búsqueda y recargar tabla
                 });
 
                 // Inicializar filtros de fechas

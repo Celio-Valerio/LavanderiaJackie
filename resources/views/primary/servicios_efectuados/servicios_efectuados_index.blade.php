@@ -11,9 +11,6 @@
                         <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios efectuados</h1>
                         <div class="button-group d-flex gap-2">
                             <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
-                            <button id="reload-button" class="btn btn-primary d-inline-block w-auto" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 5px;">
-                                <i class="bi bi-arrow-clockwise"></i>
-                            </button>
                         </div>
                     </div>
                     @if(session('success'))
@@ -24,12 +21,18 @@
                     @endif
                     <hr>
 
-                    <!-- Filtros de fechas -->
-                    <div class="mb-3">
-                        <label for="fecha-desde" class="form-label">Buscar desde</label>
-                        <input type="date" id="fecha-desde" class="form-control" style="display: inline-block; width: auto;">
-                        <label for="fecha-hasta" class="form-label">hasta</label>
-                        <input type="date" id="fecha-hasta" class="form-control" style="display: inline-block; width: auto;">
+                    <!-- Filtros de fechas y botón de recargar -->
+                    <div class="mb-3 d-flex align-items-center gap-2">
+                        <div>
+                            <label for="fecha-desde" class="form-label">Buscar desde</label>
+                            <input type="date" id="fecha-desde" class="form-control" style="display: inline-block; width: auto;">
+                            <label for="fecha-hasta" class="form-label">hasta</label>
+                            <input type="date" id="fecha-hasta" class="form-control" style="display: inline-block; width: auto;">
+                        </div>
+                        <!-- Botón de recargar -->
+                        <button id="reload-button" class="btn btn-link p-0" style="color: #007bff; font-size: 24px; margin-top: 5px;">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
                     </div>
 
                     <table id="serviciosEfectuadosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
@@ -68,8 +71,9 @@
                                         <div class="d-flex gap-2">
                                             <button class="btn btn-secondary btn-sm imprimir-btn" data-id="{{ $servicioEfectuado->id }}" data-bs-toggle="modal" data-bs-target="#imprimirModal">Imprimir</button>
 
-                                            <a href="{{ route('servicios_efectuados.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
-
+                                            @if($servicioEfectuado->estado == 'Terminado')
+                                                <a href="{{ route('servicios_efectuados.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                            @endif
                                             <a href="{{ route('servicios_efectuados.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
                                             @if($servicioEfectuado->estado == 'Terminado')
                                                 <button type="submit" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{$servicioEfectuado->id}}">
@@ -213,9 +217,11 @@
                     $('#imprimirModal').modal('hide');
                 });
 
-                // Botón de recarga
+                // Botón de recargar
                 $('#reload-button').on('click', function() {
-                    location.reload();
+                    $('#fecha-desde').val('');
+                    $('#fecha-hasta').val('');
+                    table.search('').draw(); // Limpiar búsqueda y recargar tabla
                 });
 
                 // Inicializar filtros de fechas

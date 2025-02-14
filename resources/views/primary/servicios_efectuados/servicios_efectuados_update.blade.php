@@ -111,7 +111,7 @@
                                     <label for="cliente_id" class="form-label">Cliente</label>
                                     <div class="d-flex align-items-start">
                                         <!-- Select de cliente -->
-                                        <select name="cliente_id" id="cliente_id" class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
+                                        <select name="cliente_id" id="cliente_id" disabled class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
                                             <option value="">Seleccione un cliente</option>
                                             @foreach($clientes as $cliente)
                                                 <option value="{{ $cliente->id }}" {{ $servicioPendiente->cliente_id == $cliente->id ? 'selected' : '' }}>
@@ -119,11 +119,6 @@
                                                 </option>
                                             @endforeach
                                         </select>
-
-                                        <!-- Botón para agregar cliente -->
-                                        <a href="{{ route('clientes.create') }}" class="btn btn-primary ms-2" title="Agregar nuevo cliente">
-                                            <i class="bi bi-plus-circle"></i>
-                                        </a>
                                     </div>
                                     @error('cliente_id')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -151,7 +146,7 @@
                             <div class="row mt-3">
                                 <div class="col-md-3">
                                     <label for="libras" class="form-label">Libras</label>
-                                    <input type="number" name="libras" id="libras" class="form-control @error('libras') is-invalid @enderror" value="{{ $servicioPendiente->libras }}" maxlength="5" required>
+                                    <input type="number" name="libras" id="libras" class="form-control @error('libras') is-invalid @enderror" value="{{ $servicioPendiente->libras }}" max="999" min="1" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3);" required>
                                     @error('libras')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -262,7 +257,7 @@
                                 <div class="col-md-6">
                                     <div id="precioEnvioWrapper" class="{{ $servicioPendiente->pago_envio == 'Empresa' ? '' : 'd-none' }}">
                                         <label for="precio_envio" class="form-label">Precio de Envío</label>
-                                        <input type="number" name="precio_envio" id="precio_envio" class="form-control @error('precio_envio') is-invalid @enderror" value="{{ $servicioPendiente->precio_envio }}" oninput="limitInputToFiveDigits(this)">
+                                        <input type="text" name="precio_envio" id="precio_envio" class="form-control @error('precio_envio') is-invalid @enderror" value="{{ $servicioPendiente->precio_envio }}" oninput="validatePrecioEnvio(this)" required>
                                         @error('precio_envio')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -310,6 +305,43 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('notas').addEventListener('input', function() {
+            this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
+        });
+
+        document.getElementById('direccion').addEventListener('input', function() {
+            this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
+        });
+
+        function validatePrecioEnvio(input) {
+            // Elimina caracteres no válidos (solo permite números y un punto)
+            input.value = input.value.replace(/[^0-9.]/g, '');
+
+            // Divide el valor en parte entera y decimal
+            let parts = input.value.split('.');
+
+            // Limita la parte entera a 3 dígitos (máximo 999)
+            if (parts[0].length > 3) {
+                parts[0] = parts[0].slice(0, 3);
+            }
+
+            // Limita la parte decimal a 2 dígitos
+            if (parts.length > 1 && parts[1].length > 2) {
+                parts[1] = parts[1].slice(0, 2);
+            }
+
+            // Vuelve a unir las partes
+            input.value = parts.join('.');
+
+            // Limita el valor máximo a 999.99
+            let value = parseFloat(input.value);
+            if (value > 999.99) {
+                input.value = '999.99';
+            }
+        }
+    </script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
