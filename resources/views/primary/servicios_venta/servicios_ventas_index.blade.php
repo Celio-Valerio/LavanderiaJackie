@@ -75,9 +75,6 @@
                                     <td class="text-center small-text-field">
                                         <div class="d-flex gap-2">
                                             <button class="btn btn-secondary btn-sm imprimir-btn" data-id="{{ $servicioEfectuado->id }}" data-bs-toggle="modal" data-bs-target="#imprimirModal">Imprimir</button>
-
-                                            <a href="{{ route('servicios_efectuados.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
-
                                             <a href="{{ route('servicios_efectuados.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
                                             @if($servicioEfectuado->estado == 'Terminado')
                                                 <button type="submit" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{$servicioEfectuado->id}}">
@@ -184,7 +181,7 @@
                             total += totalServicio;
                         });
 
-// Actualizar el elemento HTML con el total formateado
+                        // Actualizar el elemento HTML con el total formateado
                         $('#totalServicios').text('L. ' + total.toLocaleString('es-HN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
                     },
