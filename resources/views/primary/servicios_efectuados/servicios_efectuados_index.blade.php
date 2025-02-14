@@ -223,16 +223,6 @@
                     $('#fecha-hasta').val('');
                     table.search('').draw(); // Limpiar búsqueda y recargar tabla
                 });
-
-                // Inicializar filtros de fechas
-                const today = new Date();
-                const desde = new Date(today);
-                desde.setDate(today.getDate() - 25);
-                const hasta = new Date(today);
-                hasta.setDate(today.getDate() + 25);
-
-                $('#fecha-desde').val(desde.toISOString().split('T')[0]);
-                $('#fecha-hasta').val(hasta.toISOString().split('T')[0]);
             });
         </script>
 

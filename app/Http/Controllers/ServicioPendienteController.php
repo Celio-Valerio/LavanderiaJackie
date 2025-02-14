@@ -286,10 +286,7 @@ class ServicioPendienteController extends Controller
         $servicioPendiente->total = isset($request->total) ? str_replace(',', '', $request->total) : $servicioPendiente->total;
         $servicioPendiente->save();
 
-
         return redirect()->route('servicios_pendientes.index')->with('success', 'El servicio pendiente ha sido actualizado exitosamente.');
-
-
     }
     public function actualizarEstado(Request $request, $id)
     {
