@@ -284,10 +284,6 @@ class ServicioPendienteController extends Controller
         $servicioPendiente->precio_envio = $request->precio_envio ?? $servicioPendiente->precio_envio;
         $servicioPendiente->pago_envio = $request->pago_envio ?? $servicioPendiente->pago_envio;
         $servicioPendiente->total = isset($request->total) ? str_replace(',', '', $request->total) : $servicioPendiente->total;
-        date_default_timezone_set('America/Tegucigalpa');
-        $servicioPendiente->fecha = now()->toDateString(); // Siempre actualiza la fecha
-        $servicioPendiente->hora = now()->toTimeString(); // Siempre actualiza la hora
-
         $servicioPendiente->save();
 
 
