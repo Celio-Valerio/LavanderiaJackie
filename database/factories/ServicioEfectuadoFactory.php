@@ -30,7 +30,7 @@ class ServicioEfectuadoFactory extends Factory
             'promo_id' => $promo ? $promo->id : null, // Promoción aleatoria o null si no aplica
             'libras' => $this->faker->numberBetween(1, 10), // Número aleatorio de libras (1-10)
             'notas' => $this->faker->text(200), // Notas aleatorias
-            'estado' => $this->faker->randomElement(['Pendiente', 'Terminado', 'Entregado']), // Estado aleatorio
+            'estado' => $this->faker->randomElement(['Pendiente', 'Terminado']), // Estado aleatorio
             'envio' => $this->faker->randomElement(['A domicilio', 'Local']), // Tipo de envío aleatorio
             'total' => function (array $attributes) {
                 // Calcular el total basado en las libras y el precio del servicio
@@ -43,10 +43,8 @@ class ServicioEfectuadoFactory extends Factory
             'precio_envio' => $this->faker->randomFloat(2, 0, 50), // Precio de envío aleatorio entre 0 y 50
             'pago_envio' => $this->faker->randomElement(['Cliente', 'Empresa']), // Quien paga el envío aleatorio
             'fecha' => $this->faker->randomElement([
-                now()->subDay()->toDateString(),  // Ayer
+
                 now()->toDateString(),            // Hoy
-                now()->addDay()->toDateString(),  // Mañana
-                now()->addDays(2)->toDateString() // Pasado mañana
             ]),
             'hora' => $this->faker->time('H:i'), // Hora aleatoria en formato 24 horas
         ];

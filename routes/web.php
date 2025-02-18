@@ -14,6 +14,7 @@ use App\Http\Controllers\ServicioEfectuadoController;
 use App\Http\Controllers\ServicioPendienteController;
 use App\Http\Controllers\GastoController;
 use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\GastoDiarioController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCorreo;
 
@@ -194,7 +195,6 @@ Route::get('/servicios-efectuados/factura/{id}', [ServicioEfectuadoController::c
 // Ruta para la lista de servicios efectuados
 Route::get('/servicios-ventas', [ServicioEfectuadoController::class, 'ventas'])->name('servicios_efectuados.ventas');
 
-
 // Rutas para manejar inventarios
 Route::get('/inventarios', [InventarioController::class, 'index'])->name('inventarios.inventarios_index'); // Lista de productos
 
@@ -213,7 +213,9 @@ Route::post('actualizarEstadoE/{id}', [ServicioEfectuadoController::class, 'actu
     ->name('actualizarEstadoE');
 
 //Enviar correo
-Route::post('enviar_correo', function (Request $request) {
+Route::post('enviar_correo', function (Request $request) { })->name('enviar_correo');
 
-})->name('enviar_correo');
-
+// Ruta para la lista de gastos diarios
+Route::get('/gastos-diarios', [GastoDiarioController::class, 'index'])->name('gastos_diarios.index');
+Route::get('/gastos-diarios/create', [GastoDiarioController::class, 'create'])->name('gastos_diarios.create');
+Route::put('/gastos-diarios/{id}', [GastoDiarioController::class, 'update'])->name('gastos_diarios.update');

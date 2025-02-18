@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\GastoDiario;
 use App\Models\Promo;
 use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
@@ -298,11 +299,21 @@ class ServicioEfectuadoController extends Controller
     public function actualizarEstadoE(Request $request, $id)
     {
         $servicioPendiente = ServicioEfectuado::findOrFail($id);
+
+        // Actualizar estado a "Entregado"
         $servicioPendiente->estado = 'Entregado';
         $servicioPendiente->save();
 
-        return redirect()->route('servicios_efectuados.index')->with('success', 'Estado actualizado con exito.');
+        // Crear un registro en la tabla gasto_diarios
+        GastoDiario::create([
+            'servicio_efectuado_id' => $servicioPendiente->id,
+            'estado' => 'Pendiente', // Estado inicial del gasto
+            'fecha' => $servicioPendiente->fecha, // Tomamos la fecha del servicio
+        ]);
+
+        return redirect()->route('servicios_efectuados.index')->with('success', 'Estado actualizado y gasto diario registrado.');
     }
+
 
     /**
      * Remove the specified resource from storage.

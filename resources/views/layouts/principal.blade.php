@@ -309,6 +309,12 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
+                    <a href="{{ route('gastos_diarios.index') }}">
+                        <i class="bi bi-circle"></i><span>Gastos diarios</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ route('servicios_pendientes.index') }}">
                         <i class="bi bi-circle"></i><span>Servicios pendientes</span>
                     </a>

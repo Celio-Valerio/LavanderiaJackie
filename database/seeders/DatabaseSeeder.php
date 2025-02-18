@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ServicioSeeder::class);
         $this->call(ServicioEfectuadoSeeder::class);
         $this->call(GastosSeeder::class);
+        //$this->call(GastoDiarioSeeder::class);
 
         // Crear productos con historial de precios
         Producto::all()->each(function ($producto) {

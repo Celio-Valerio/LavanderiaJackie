@@ -24,12 +24,12 @@ class ServicioEfectuado extends Model
     ];
 
     // Relación con el modelo Cliente
+    // ServicioEfectuado.php
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
     }
 
-    // Relación con el modelo Servicio
     public function servicio()
     {
         return $this->belongsTo(Servicio::class);
@@ -39,6 +39,11 @@ class ServicioEfectuado extends Model
     public function promo()
     {
         return $this->belongsTo(Promo::class);
+    }
+
+    public function gastosDiarios()
+    {
+        return $this->hasMany(GastoDiario::class);
     }
 
     // Método para calcular el total en base a las libras y el precio del servicio

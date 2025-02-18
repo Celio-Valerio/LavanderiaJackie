@@ -45,4 +45,9 @@ class Producto extends Model
     {
         return $this->hasMany(DetalleGastos::class);
     }
+
+    public function detallesGastoDiario()
+    {
+        return $this->hasMany(DetalleGastoDiario::class);
+    }
 }
