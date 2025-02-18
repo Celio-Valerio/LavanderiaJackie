@@ -68,8 +68,21 @@
                                                         <option value="Kilogramos" {{ $detalle->unidad_medida == 'Kilogramos' ? 'selected' : '' }}>Kilogramos</option>
                                                         <option value="Kilos" {{ $detalle->unidad_medida == 'Kilos' ? 'selected' : '' }}>Kilos</option>
                                                         <option value="Gramos" {{ $detalle->unidad_medida == 'Gramos' ? 'selected' : '' }}>Gramos</option>
+                                                        <option value="Libras" {{ $detalle->unidad_medida == 'Libras' ? 'selected' : '' }}>Libras</option>
+                                                        <option value="Onzas" {{ $detalle->unidad_medida == 'Onzas' ? 'selected' : '' }}>Onzas</option>
+                                                        <option value="Litros" {{ $detalle->unidad_medida == 'Litros' ? 'selected' : '' }}>Litros</option>
+                                                        <option value="Mililitros" {{ $detalle->unidad_medida == 'Mililitros' ? 'selected' : '' }}>Mililitros</option>
+                                                        <option value="Galones" {{ $detalle->unidad_medida == 'Galones' ? 'selected' : '' }}>Galones</option>
+                                                        <option value="Cucharadas" {{ $detalle->unidad_medida == 'Cucharadas' ? 'selected' : '' }}>Cucharadas</option>
+                                                        <option value="Cucharaditas" {{ $detalle->unidad_medida == 'Cucharaditas' ? 'selected' : '' }}>Cucharaditas</option>
                                                         <option value="Gotas" {{ $detalle->unidad_medida == 'Gotas' ? 'selected' : '' }}>Gotas</option>
                                                         <option value="Unidades" {{ $detalle->unidad_medida == 'Unidades' ? 'selected' : '' }}>Unidades</option>
+                                                        <option value="Bolsas" {{ $detalle->unidad_medida == 'Bolsas' ? 'selected' : '' }}>Bolsas</option>
+                                                        <option value="Sobres" {{ $detalle->unidad_medida == 'Sobres' ? 'selected' : '' }}>Sobres</option>
+                                                        <option value="Frascos" {{ $detalle->unidad_medida == 'Frascos' ? 'selected' : '' }}>Frascos</option>
+                                                        <option value="Bidones" {{ $detalle->unidad_medida == 'Bidones' ? 'selected' : '' }}>Bidones</option>
+                                                        <option value="Cubetas" {{ $detalle->unidad_medida == 'Cubetas' ? 'selected' : '' }}>Cubetas</option>
+
                                                     </select>
                                                 </td>
                                                 <td>

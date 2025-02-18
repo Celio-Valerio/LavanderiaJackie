@@ -59,4 +59,9 @@ class GastoDiario extends Model
         return $this->hasMany(DetalleGastoDiario::class);
     }
 
+    // Método para obtener la suma total en gramos
+    public function getTotalGramosAttribute()
+    {
+        return $this->detalle->sum('cantidad');
+    }
 }

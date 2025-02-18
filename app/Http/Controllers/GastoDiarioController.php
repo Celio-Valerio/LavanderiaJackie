@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\DetalleGastoDiario;
@@ -9,6 +10,28 @@ use Illuminate\Http\Request;
 class GastoDiarioController extends Controller
 {
     /**
+     * Muestra la lista de gastos diarios.
+     */
+    public function index()
+    {
+        // Verificar si hay gastos diarios pendientes para hoy
+        $pendientesHoy = GastoDiario::whereDate('fecha', now()->toDateString())
+            ->where('estado', 'Pendiente')
+            ->exists();
+
+        // Si hay pendientes, redirigir directamente al formulario de creación
+        if ($pendientesHoy) {
+            return redirect()->route('gastos_diarios.create');
+        }
+
+        // Si no hay pendientes, mostrar la lista de gastos diarios
+        $gastosDiarios = GastoDiario::with('servicioEfectuado.cliente')->get();
+
+        return view('primary.gastos_diarios.gastos_diarios_index', compact('gastosDiarios'));
+    }
+
+
+    /**
      * Muestra el formulario para crear un nuevo gasto diario.
      */
     public function create()
@@ -18,6 +41,11 @@ class GastoDiarioController extends Controller
             ->where('estado', 'Pendiente')
             ->with('servicioEfectuado.cliente')
             ->get();
+
+        // Si no hay gastos pendientes hoy, redirigir al índice
+        if ($gastosDiarios->isEmpty()) {
+            return redirect()->route('gastos_diarios.index')->with('info', 'No hay gastos diarios pendientes para hoy.');
+        }
 
         // Obtener el primer gasto diario (si existe)
         $gastoDiario = $gastosDiarios->first();
@@ -64,6 +92,17 @@ class GastoDiarioController extends Controller
         // Cambiar el estado del gasto diario actual a 'Terminado'
         $gastoDiario->update(['estado' => 'Terminado']);
 
-        return redirect()->route('gastos_diarios.create')->with('success', 'Gasto diario actualizado y finalizado.');
+        // Verificar si aún hay más gastos pendientes para hoy
+        $pendientesHoy = GastoDiario::whereDate('fecha', now()->toDateString())
+            ->where('estado', 'Pendiente')
+            ->exists();
+
+        // Si hay más pendientes, recargar el formulario
+        if ($pendientesHoy) {
+            return redirect()->route('gastos_diarios.create')->with('success', 'Productos actualizados y gasto diario finalizado.');
+        }
+
+        // Si no hay más pendientes, redirigir al índice
+        return redirect()->route('gastos_diarios.index')->with('success', 'Todos los gastos diarios han sido finalizados.');
     }
 }
