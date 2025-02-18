@@ -71,9 +71,7 @@
                                         <div class="d-flex gap-2">
                                             <button class="btn btn-secondary btn-sm imprimir-btn" data-id="{{ $servicioEfectuado->id }}" data-bs-toggle="modal" data-bs-target="#imprimirModal">Imprimir</button>
 
-                                            @if($servicioEfectuado->estado == 'Terminado')
-                                                <a href="{{ route('servicios_efectuados.edit', $servicioEfectuado->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                            @endif
+                                            
                                             <a href="{{ route('servicios_efectuados.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
                                             @if($servicioEfectuado->estado == 'Terminado')
                                                 <button type="submit" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{$servicioEfectuado->id}}">
@@ -90,11 +88,11 @@
                                                                 Se procederá con la confirmación de entrega. ¿Desea continuar?
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <form action="{{ route('actualizarEstadoE', ['id' => $servicioEfectuado->id]) }}" method="post" style="display: inline-block;">
+                                                                <form action="{{ route('actualizarEstadoE', ['id' => $servicioEfectuado->id]) }}" method="post" style="display: inline-block; width: 20%;">
                                                                     @csrf
-                                                                    <input type="submit" value="Si" class="btn btn-primary">
+                                                                    <input type="submit" value="Si" class="btn btn-primary w-100">
                                                                 </form>
-                                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                                                <button type="button" class="btn btn-danger w-20" data-bs-dismiss="modal">Cancelar</button>
                                                             </div>
                                                         </div>
                                                     </div>

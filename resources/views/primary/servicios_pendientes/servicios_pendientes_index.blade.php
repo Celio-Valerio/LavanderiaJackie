@@ -83,11 +83,11 @@
                                                                 El cliente será notificado por correo de que su servicio ha sido terminado. ¿Desea continuar?
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <form action="{{ route('actualizarEstado', ['id' => $servicioEfectuado->id]) }}" method="post" style="display: inline-block;">
+                                                                <form action="{{ route('actualizarEstado', ['id' => $servicioEfectuado->id]) }}" method="post" style="display: inline-block; width: 20%; ">
                                                                     @csrf
-                                                                    <input type="submit" value="si" class="btn btn-primary">
+                                                                    <input type="submit" value="Si" class="btn btn-primary w-100">
                                                                 </form>
-                                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                                                                <button type="button" class="btn btn-danger w-20" data-bs-dismiss="modal">Cancelar</button>
                                                             </div>
                                                         </div>
                                                     </div>
