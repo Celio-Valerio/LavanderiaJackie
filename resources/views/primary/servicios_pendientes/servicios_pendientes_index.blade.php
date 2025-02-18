@@ -1,8 +1,6 @@
 @extends('layouts.principal')
 @section('title', 'Lista de Servicios Pendientes')
 @section('content')
-
-    <section class="section">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -121,8 +119,8 @@
                         ¿Desea imprimir la factura?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="confirmarImpresion">Sí</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary btn-lg" id="confirmarImpresion">Sí</button>
+                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">No</button>
                     </div>
                 </div>
             </div>
@@ -199,14 +197,21 @@
                     });
 
                     // Funcionalidad de impresión
-                    let servicioId;
-                    $('.imprimir-btn').on('click', function() {
-                        servicioId = $(this).data('id');
+                    let servicioId = null; // Inicializa la variable
+
+                    // Captura el ID del servicio al hacer clic en el botón de imprimir
+                    $(document).on('click', '.imprimir-btn', function() {
+                        servicioId = $(this).data('id'); // Obtiene el ID del servicio
+                        console.log("Servicio ID seleccionado: ", servicioId); // Depuración
                     });
 
                     $('#confirmarImpresion').on('click', function() {
-                        window.open(`{{ url('servicios-pendientes/factura') }}/${servicioId}`, '_blank');
-                        $('#imprimirModal').modal('hide');
+                        if (servicioId) { // Verifica que el ID no sea undefined
+                            window.open(`{{ url('servicios-pendientes/factura') }}/${servicioId}`, '_blank');
+                            $('#imprimirModal').modal('hide');
+                        } else {
+                            alert('Error: No se pudo obtener el ID del servicio. Inténtelo de nuevo.');
+                        }
                     });
 
                     // Botón de recargar
@@ -217,8 +222,6 @@
                     });
                 });
             </script>
-
-
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -231,5 +234,5 @@
                 }
             });
         </script>
-    </section>
+
 @endsection

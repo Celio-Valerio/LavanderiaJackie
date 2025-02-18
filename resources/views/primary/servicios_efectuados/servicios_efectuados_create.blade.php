@@ -330,6 +330,14 @@
             const librasInput = document.getElementById('libras');
             const form = document.getElementById('servicioForm');
 
+            document.getElementById('notas').addEventListener('input', function() {
+                this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
+            });
+
+            document.getElementById('direccion').addEventListener('input', function() {
+                this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
+            });
+
             librasInput.addEventListener('input', (event) => {
                 // Elimina cualquier carácter no numérico
                 let value = event.target.value.replace(/\D/g, '');

@@ -20,7 +20,8 @@ class ServicioPendienteController extends Controller
     {
         // Obtener los servicios con estado "Pendiente" y ordenarlos por fecha ascendente
         $serviciosEfectuados = ServicioEfectuado::where('estado', 'Pendiente')
-            ->orderBy('fecha', 'desc') // Usa 'desc' si prefieres orden descendente
+            ->orderBy('fecha', 'asc') // Primero ordena por fecha ascendente (más antiguo a más nuevo)
+            ->orderBy('hora', 'asc')  // Luego ordena por hora ascendente dentro de cada fecha
             ->get();
 
         return view('primary.servicios_pendientes.servicios_pendientes_index', compact('serviciosEfectuados'));

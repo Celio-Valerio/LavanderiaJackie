@@ -71,7 +71,7 @@
                                         <div class="d-flex gap-2">
                                             <button class="btn btn-secondary btn-sm imprimir-btn" data-id="{{ $servicioEfectuado->id }}" data-bs-toggle="modal" data-bs-target="#imprimirModal">Imprimir</button>
 
-                                            
+
                                             <a href="{{ route('servicios_efectuados.show', $servicioEfectuado->id) }}" class="btn btn-info btn-sm">Ver</a>
                                             @if($servicioEfectuado->estado == 'Terminado')
                                                 <button type="submit" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modal{{$servicioEfectuado->id}}">
@@ -127,8 +127,8 @@
                         ¿Desea imprimir la factura?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="confirmarImpresion">Sí</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                        <button type="button" class="btn btn-primary btn-lg" id="confirmarImpresion">Sí</button>
+                        <button type="button" class="btn btn-secondary btn-lg" data-bs-dismiss="modal">No</button>
                     </div>
                 </div>
             </div>
@@ -205,14 +205,21 @@
                 });
 
                 // Funcionalidad de impresión
-                let servicioId;
-                $('.imprimir-btn').on('click', function() {
-                    servicioId = $(this).data('id');
+                let servicioId = null; // Inicializa la variable
+
+                // Captura el ID del servicio al hacer clic en el botón de imprimir
+                $(document).on('click', '.imprimir-btn', function() {
+                    servicioId = $(this).data('id'); // Obtiene el ID del servicio
+                    console.log("Servicio ID seleccionado: ", servicioId); // Depuración
                 });
 
                 $('#confirmarImpresion').on('click', function() {
-                    window.open(`{{ url('servicios-efectuados/factura') }}/${servicioId}`, '_blank');
-                    $('#imprimirModal').modal('hide');
+                    if (servicioId) { // Verifica que el ID no sea undefined
+                        window.open(`{{ url('servicios-efectuados/factura') }}/${servicioId}`, '_blank');
+                        $('#imprimirModal').modal('hide');
+                    } else {
+                        alert('Error: No se pudo obtener el ID del servicio. Inténtelo de nuevo.');
+                    }
                 });
 
                 // Botón de recargar
