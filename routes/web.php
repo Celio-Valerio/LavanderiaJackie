@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ControlCuentaController;
 use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\MaquinariaController;
 use App\Http\Controllers\PromoController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\ServicioPendienteController;
 use App\Http\Controllers\GastoController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\GastoDiarioController;
+use App\Http\Controllers\CuentaBancoController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCorreo;
 
@@ -219,3 +221,51 @@ Route::post('enviar_correo', function (Request $request) { })->name('enviar_corr
 Route::get('/gastos-diarios', [GastoDiarioController::class, 'index'])->name('gastos_diarios.index');
 Route::get('/gastos-diarios/create', [GastoDiarioController::class, 'create'])->name('gastos_diarios.create');
 Route::put('/gastos-diarios/{id}', [GastoDiarioController::class, 'update'])->name('gastos_diarios.update');
+
+
+
+
+// Ruta para listar todas las cuentas bancarias
+Route::get('/cuenta-bancos', [CuentaBancoController::class, 'index'])->name('cuenta_bancos.index');
+
+// Ruta para mostrar el formulario de creación de una nueva cuenta bancaria
+Route::get('/cuenta-bancos/create', [CuentaBancoController::class, 'create'])->name('cuenta_bancos.create');
+
+// Ruta para almacenar una nueva cuenta bancaria
+Route::post('/cuenta-bancos', [CuentaBancoController::class, 'store'])->name('cuenta_bancos.store');
+
+// Ruta para mostrar los detalles de una cuenta bancaria específica
+Route::get('/cuenta-bancos/{id}', [CuentaBancoController::class, 'show'])->name('cuenta_bancos.show');
+
+// Ruta para mostrar el formulario de edición de una cuenta bancaria
+Route::get('/cuenta-bancos/{id}/edit', [CuentaBancoController::class, 'edit'])->name('cuenta_bancos.edit');
+
+// Ruta para actualizar una cuenta bancaria existente
+Route::put('/cuenta-bancos/{id}', [CuentaBancoController::class, 'update'])->name('cuenta_bancos.update');
+
+// Ruta para eliminar una cuenta bancaria
+Route::delete('/cuenta-bancos/{id}', [CuentaBancoController::class, 'destroy'])->name('cuenta_bancos.destroy');
+
+// Ruta para recargar los datos de una cuenta bancaria (puede ser usada en AJAX)
+Route::get('/cuenta-bancos/{id}/reload', [CuentaBancoController::class, 'reload'])->name('cuenta_bancos.reload');
+
+// Ruta para cambiar el estado de una cuenta bancaria (ejemplo: activar/desactivar)
+Route::post('/cuenta-bancos/{id}/toggle', [CuentaBancoController::class, 'toggleStatus'])->name('cuenta_bancos.toggle');
+
+// Ruta para visualizar un extracto o transacciones de la cuenta bancaria
+Route::get('/cuenta-bancos/{id}/extracto', [CuentaBancoController::class, 'extracto'])->name('cuenta_bancos.extracto');
+
+// Ruta para hacer un depósito en la cuenta bancaria
+Route::post('/cuenta-bancos/{id}/deposito', [CuentaBancoController::class, 'depositar'])->name('cuenta_bancos.depositar');
+
+// Ruta para hacer un retiro de la cuenta bancaria
+Route::post('/cuenta-bancos/{id}/retiro', [CuentaBancoController::class, 'retirar'])->name('cuenta_bancos.retirar');
+
+// Ruta para listar todas las cuentas bancarias
+Route::get('/control-cuentas', [ControlCuentaController::class, 'index'])->name('control_cuentas.index');
+
+// Ruta para mostrar el formulario de creación de una nueva cuenta bancaria
+Route::get('/control-cuentas/create', [ControlCuentaController::class, 'create'])->name('control_cuentas.create');
+
+// Ruta para mostrar los detalles de una cuenta bancaria específica
+Route::get('/control-cuentas/{id}', [ControlCuentaController::class, 'show'])->name('control_cuentas.show');
