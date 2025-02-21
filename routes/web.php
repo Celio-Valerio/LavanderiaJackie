@@ -267,5 +267,9 @@ Route::get('/control-cuentas', [ControlCuentaController::class, 'index'])->name(
 // Ruta para mostrar el formulario de creación de una nueva cuenta bancaria
 Route::get('/control-cuentas/create', [ControlCuentaController::class, 'create'])->name('control_cuentas.create');
 
+// Ruta para almacenar una nueva cuenta bancaria
+Route::post('/control-cuentas', [ControlCuentaController::class, 'store'])->name('control_cuentas.store');
+
+
 // Ruta para mostrar los detalles de una cuenta bancaria específica
 Route::get('/control-cuentas/{id}', [ControlCuentaController::class, 'show'])->name('control_cuentas.show');

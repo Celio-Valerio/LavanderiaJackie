@@ -28,11 +28,15 @@ class CuentaBanco extends Model
     {
         if ($tipo === 'Deposito') {
             $this->saldo += $monto;
-        } elseif ($tipo === 'Retiro' && $this->saldo >= $monto) {
-            $this->saldo -= $monto;
-        } else {
-            throw new \Exception("Saldo insuficiente para el retiro.");
+        } elseif ($tipo === 'Retiro') {
+            if ($this->saldo >= $monto) {
+                $this->saldo -= $monto;
+            } else {
+                return false; // Indica que no hay saldo suficiente
+            }
         }
         $this->save();
+        return true; // Indica que la operación fue exitosa
     }
+
 }
