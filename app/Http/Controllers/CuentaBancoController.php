@@ -20,4 +20,20 @@ class CuentaBancoController extends Controller
         // Pasar los bancos y las cuentas a la vista
         return view('primary.cuentas_bancos.cuentas_bancos_index', compact('bancos', 'cuentaBanco'));
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'banco' => 'required|string|max:100',
+            'cuenta' => 'required|string|max:50|unique:cuenta_bancos,cuenta',
+            'saldo' => 'required|numeric|min:0'
+        ]);
+
+        $cuenta = CuentaBanco::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'cuenta' => $cuenta
+        ]);
+    }
 }
