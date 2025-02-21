@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar Transacción</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Registrar transacción</h1>
                         <hr>
 
                         @if(session('success'))
