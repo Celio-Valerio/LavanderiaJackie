@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('compras', function (Blueprint $table) {
+        Schema::create('presupuestos', function (Blueprint $table) {
             $table->id();
-            $table->string('numero_factura', 20)->unique(); // Número de factura único, hasta 20 caracteres
-            $table->date('fecha_compra'); // Fecha de la compra
-            $table->text('descripcion')->nullable(); // Descripción opcional
-            $table->unsignedBigInteger('presupuesto_id');
+            $table->decimal('cantidad', 9, 2);
+            $table->decimal('gastado', 9 , 2)->nullable();
+            $table->date('fecha');
+            $table->text('descripcion');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('compras');
+        Schema::dropIfExists('presupuestos');
     }
 };

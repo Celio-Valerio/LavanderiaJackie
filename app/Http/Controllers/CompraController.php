@@ -6,6 +6,7 @@ use App\Models\Compra;
 use App\Models\Proveedor;
 use App\Models\Producto;
 use App\Models\DetalleCompra;
+use App\Models\Presupuesto;
 use Illuminate\Http\Request;
 
 
@@ -18,11 +19,12 @@ class CompraController extends Controller
     {
         // Obtener todos los compras de la base de datos
         $compras = Compra::all();
+        $presupuestos = Presupuesto::all();
 
         session()->flash('clearLocalStorage', true);
 
         // Retornar una vista con los compras
-        return view('primary.compras.compra_index', compact('compras'));
+        return view('primary.compras.compra_index', compact('compras', 'presupuestos'));
     }
 
 
@@ -36,9 +38,12 @@ class CompraController extends Controller
 
         // Obtener todos los productos para el select
         $productos = Producto::all();
+        $presupuestos = Presupuesto::all();
+        $id = $presupuestos->last()->id;
+        $presupuesto = Presupuesto::findOrFail($id);
 
         // Retornar la vista del formulario de creación con los datos necesarios
-        return view('primary.compras.compra_create', compact('proveedores', 'productos'));
+        return view('primary.compras.compra_create', compact('proveedores', 'productos', 'presupuesto'));
     }
 
     /**
@@ -73,24 +78,33 @@ class CompraController extends Controller
             'detalles.array' => 'Los detalles deben ser un arreglo.',
         ]);
 
+        $presupuestos = Presupuesto::all();
+        $dato = $presupuestos->last()->id;
+        $presupuesto = Presupuesto::findOrFail($dato);
+        $gasto = $presupuesto->gastado;
+
 
         // Crear una nueva compra
         $compra = new Compra();
         $compra->numero_factura = $request->input('numero_factura');
         $compra->descripcion = $request->input('descripcion');
         $compra->fecha_compra = $request->input('fecha_compra');
+        $compra->presupuesto_id = $presupuesto->id;
 
         $detallesRecibidos = $request->input('detallesMandar');
         $detalles = json_decode($detallesRecibidos, true);
 
         if ($compra->save()){
             foreach ($detalles as $detalle) {
+                $descuento = 0;
                 $compra_detalle = new DetalleCompra();
                 $compra_detalle->compra_id = $compra->id;
                 $compra_detalle->producto_id = $detalle['producto_id'];
                 $compra_detalle->cantidad = $detalle['cantidad'];
                 $compra_detalle->precio = $detalle['precio'];
                 $compra_detalle->descuento = $detalle['descuento'];
+                $descuento = $compra_detalle->cantidad * $compra_detalle->precio * ($compra_detalle->descuento / 100);
+                $gasto = $gasto + ($compra_detalle->cantidad * $compra_detalle->precio -$descuento);
                 $compra_detalle->save();
 
                 $producto = Producto::find($detalle['producto_id']);
@@ -100,6 +114,8 @@ class CompraController extends Controller
                     $producto->save();
                 }
             }
+            $presupuesto->gastado = $gasto;
+            $presupuesto->save();
             return redirect()->route('compras.index')->with('success', 'Compra guardada exitosamente.')->with('clearLocalStorage', true);
         } else {
             return redirect()->route('compras.index')->with('success', 'Error. La compra no pudo ser guardada');

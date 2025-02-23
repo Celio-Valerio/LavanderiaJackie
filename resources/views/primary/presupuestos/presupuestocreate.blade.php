@@ -1,0 +1,93 @@
+@extends('layouts.principal')
+@section('title', 'Registrar Presupuesto')
+@section('content')
+
+    <section class="section">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title" style="font-size: 30px !important;">Registrar presupuesto</h1>
+                        <hr>
+                        <form id="presupuestoForm" action="{{ route('presupuestos.store') }}" method="POST" novalidate>
+                            @csrf
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="descripcion">Descripción:</label>
+                                        <textarea name="descripcion" id="descripcion" maxlength="200" class="form-control @error('descripcion') is-invalid @enderror" required>{{  old('descripcion') }}</textarea>
+                                        @error('descripcion')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="monto">Monto:</label>
+                                        <input type="text" name="monto" id="monto" class="form-control @error('monto') is-invalid @enderror" maxlength="7" value="{{old('monto')}}" oninput="validarSoloNumeros(this)">
+                                        @error('monto')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="fecha">Fecha:</label>
+                                        <input type="date" class="form-control" readonly value="{{ date('Y-m-d') }}">
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="d-flex justify-content-between">
+                                <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
+                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
+                                <a href="{{ route('presupuestos.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Función para permitir solo números decimales válidos
+                window.validarSoloNumeros = function (input) {
+                    input.value = input.value
+                        .replace(/[^0-9.]/g, "") // Permite solo números y un punto decimal
+                        .replace(/^\./, "") // Elimina el punto si está al inicio
+                        .replace(/^0+(?!\.|$)/g, "") // Elimina ceros iniciales innecesarios
+                        .replace(/(\.)(?=.*\.)/g, ""); // Permite solo un punto decimal
+                };
+            });
+        </script>
+
+        <script>
+            // Función para limpiar los campos del formulario y eliminar los errores de validación
+            document.getElementById('clearButton').addEventListener('click', function () {
+                const form = document.getElementById('presupuestoForm');
+
+                // Limpiar los valores del formulario
+                form.reset();
+
+                // Limpiar los campos manualmente para evitar restauración por old()
+                form.querySelectorAll('input, textarea, select').forEach(function (input) {
+                    if (input.type !== 'hidden') { // No limpiar campos ocultos
+                        input.value = '';
+                    }
+                });
+
+                // También puedes eliminar las clases de error de validación
+                form.querySelectorAll('.is-invalid').forEach(function (input) {
+                    input.classList.remove('is-invalid');
+                });
+            });
+        </script>
+
+
+    </section>
+@endsection

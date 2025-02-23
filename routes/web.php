@@ -17,6 +17,7 @@ use App\Http\Controllers\GastoController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\GastoDiarioController;
 use App\Http\Controllers\CuentaBancoController;
+use App\Http\Controllers\PresupuestoController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCorreo;
 
@@ -273,3 +274,9 @@ Route::post('/control-cuentas', [ControlCuentaController::class, 'store'])->name
 
 // Ruta para mostrar los detalles de una cuenta bancaria específica
 Route::get('/control-cuentas/{id}', [ControlCuentaController::class, 'show'])->name('control_cuentas.show');
+
+// Rutas para manejar gastos
+Route::get('/presupuestos', [PresupuestoController::class, 'index'])->name('presupuestos.index'); // Lista de gastos
+
+// Rutas de recursos para gastos
+Route::resource('presupuestos', PresupuestoController::class);

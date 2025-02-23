@@ -55,6 +55,12 @@
                 @enderror
             </div>
         </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="presupuesto">Presupuesto disponible:</label>
+                <input type="text" class="form-control" value="L. {{number_format($presupuesto->cantidad - $presupuesto->gastado, 2, '.', ',')}}" readonly>
+            </div>
+        </div>
 
     </div>
     <!-- Descripción de la Compra -->

@@ -16,7 +16,12 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Compras</h1>
                             <!-- Botón agregar compra -->
-                            <a href="{{ route('compras.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Compra</a>
+                            @if ($presupuestos->count() > 0)
+                                <a href="{{ route('compras.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Compra</a>
+                            @else
+                            <label for="lblInfo" class="card-title">Antes de registrar una compra debe tener un presupuesto registrado.</label>
+                            @endif
+
                         </div>
 
                         @if(session('success'))

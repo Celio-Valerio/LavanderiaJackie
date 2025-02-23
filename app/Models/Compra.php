@@ -30,4 +30,8 @@ class Compra extends Model
     {
         return $this->hasMany(DetalleCompra::class);
     }
+    public function presupuesto()
+    {
+        return $this->belongsTo(Presupuesto::class);
+    }
 }

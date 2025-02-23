@@ -411,6 +411,11 @@
                         <i class="bi bi-circle"></i><span>Maquinarias</span>
                     </a>
                 </li>
+                <li>
+                    <a href="/presupuestos">
+                        <i class="bi bi-circle"></i><span>Presupuestos</span>
+                    </a>
+                </li>
             </ul>
         </li><!-- End Forms Nav -->
 
