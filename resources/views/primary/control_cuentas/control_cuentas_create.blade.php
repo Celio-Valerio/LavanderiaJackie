@@ -24,8 +24,6 @@
                             </div>
                         @endif
 
-
-
                         <!-- Formulario Principal -->
                         <form action="{{ route('control_cuentas.store') }}" method="POST">
                             @csrf
@@ -38,7 +36,7 @@
                                         <select name="cuenta_banco_id" id="cuenta_banco_id" class="form-select" required>
                                             <option value="">Seleccione una cuenta</option>
                                             @foreach($cuentasBancos as $cuenta)
-                                                <option value="{{ $cuenta->id }}">{{ $cuenta->banco }} - {{ $cuenta->cuenta }}</option>
+                                                <option value="{{ $cuenta->id }}">{{ $cuenta->banco }} - {{ $cuenta->cuenta }} (L. {{ $cuenta->saldo }})</option>
                                             @endforeach
                                         </select>
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCuentaModal">

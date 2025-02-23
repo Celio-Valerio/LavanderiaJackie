@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('control_cuentas', function (Blueprint $table) {
             $table->id();
             $table->date('fecha'); // Fecha de la transacción
-            $table->enum('transaccion', ['Retiro', 'Deposito']); // Tipo de transacción
+            $table->enum('transaccion', ['Retiro', 'Deposito', 'Saldo inicial']); // Tipo de transacción
             $table->decimal('monto', 10, 2)->check('monto >= 0.01 AND monto <= 99999.99'); // Monto con validación
             $table->text('notas')->nullable(); // Notas opcionales
 

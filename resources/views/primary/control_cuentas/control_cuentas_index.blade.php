@@ -75,6 +75,8 @@
                                         <span class="badge bg-danger">{{ $transaccion->transaccion }}</span>
                                     @elseif($transaccion->transaccion == 'Deposito')
                                         <span class="badge bg-success">{{ $transaccion->transaccion }}</span>
+                                    @elseif($transaccion->transaccion == 'Saldo inicial')
+                                        <span class="badge bg-primary">{{ $transaccion->transaccion }}</span>
                                     @endif
                                 </td>
                                 <td class="small-text-field">L. {{ number_format($transaccion->monto, 2) }}</td>
