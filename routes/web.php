@@ -271,9 +271,11 @@ Route::get('/control-cuentas/create', [ControlCuentaController::class, 'create']
 // Ruta para almacenar una nueva cuenta bancaria
 Route::post('/control-cuentas', [ControlCuentaController::class, 'store'])->name('control_cuentas.store');
 
-
 // Ruta para mostrar los detalles de una cuenta bancaria específica
 Route::get('/control-cuentas/{id}', [ControlCuentaController::class, 'show'])->name('control_cuentas.show');
+
+// Ruta para la visualización de un servicio pendiente
+Route::get('/control-cuentas/show/{id}', [ControlCuentaController::class, 'show'])->name('control_cuentas.show');
 
 // Rutas para manejar gastos
 Route::get('/presupuestos', [PresupuestoController::class, 'index'])->name('presupuestos.index'); // Lista de gastos

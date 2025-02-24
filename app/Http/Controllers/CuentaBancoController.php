@@ -64,4 +64,14 @@ class CuentaBancoController extends Controller
     }
 
 
+    public function show($id)
+    {
+
+        $cuenta = CuentaBanco::findOrFail($id);
+
+        // Retorna la vista 'compras.show' y le pasa los datos de la compra
+        return view('primary.cuentas_bancos.cuenta_bancos_show', compact('cuenta'));
+    }
+
+
 }
