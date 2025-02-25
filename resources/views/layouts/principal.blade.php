@@ -309,12 +309,6 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ route('cuenta_bancos.index') }}">
-                        <i class="bi bi-circle"></i><span>Cuentas de banco</span>
-                    </a>
-                </li>
-
-                <li>
                     <a href="{{ route('control_cuentas.index') }}">
                         <i class="bi bi-circle"></i><span>Control de cuentas</span>
                     </a>

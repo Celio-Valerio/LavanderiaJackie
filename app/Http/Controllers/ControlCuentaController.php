@@ -53,8 +53,12 @@ class ControlCuentaController extends Controller
         return redirect()->route('control_cuentas.index')->with('success', 'Transacción registrada correctamente');
     }
 
-    public function show()
+    public function show($id)
     {
-        // Función show si es necesario
+        $transaccion = ControlCuenta::with('cuentaBanco')->findOrFail($id);
+
+        return view('primary.control_cuentas.control_cuentas_show', compact('transaccion'));
     }
+
+
 }

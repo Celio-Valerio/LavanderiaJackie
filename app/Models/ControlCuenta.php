@@ -12,8 +12,10 @@ class ControlCuenta extends Model
     protected $fillable = ['fecha', 'transaccion', 'monto', 'notas', 'cuenta_banco_id'];
 
     // Relación inversa: una transacción pertenece a una sola cuenta bancaria
+
+
     public function cuentaBanco()
     {
-        return $this->belongsTo(CuentaBanco::class, 'cuenta_banco_id');
+        return $this->belongsTo(CuentaBanco::class, 'cuenta_banco_id')->withDefault();
     }
 }
