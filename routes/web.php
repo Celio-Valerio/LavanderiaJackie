@@ -282,3 +282,9 @@ Route::get('/presupuestos', [PresupuestoController::class, 'index'])->name('pres
 
 // Rutas de recursos para gastos
 Route::resource('presupuestos', PresupuestoController::class);
+
+// Ruta para mostrar el formulario de edición de un presupuesto
+Route::get('/presupuestos/{id}/edit', [PresupuestoController::class, 'edit'])->name('presupuestos.edit');
+
+// Ruta para actualizar un presupuesto existente
+Route::put('/presupuestos/{id}', [PresupuestoController::class, 'update'])->name('presupuestos.update');

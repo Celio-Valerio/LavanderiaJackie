@@ -72,9 +72,13 @@ class PresupuestoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(string $id)
     {
-        //
+        $presupuesto = Presupuesto::findOrFail($id);
+        return view('primary.presupuestos.presupuesto_edit', compact('presupuesto'));
     }
 
     /**
@@ -82,7 +86,31 @@ class PresupuestoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'descripcion' => 'required|string|max:200',
+            'monto' => ['required',
+                function ($attribute, $value, $fail) {
+                    if ($value < 1000) {
+                        $fail("El monto debe ser mayor o igual a L. 1,000.00.");
+                    }
+                },],
+            'fecha' => 'required|date', // Asegurar que la fecha es obligatoria y válida
+        ], [
+            'monto.required' => 'El monto es obligatorio.',
+            'descripcion.required' => 'La descripción es obligatoria.',
+            'fecha.required' => 'La fecha es obligatoria.', // Mensaje de validación para la fecha
+        ]);
+
+        $presupuesto = Presupuesto::findOrFail($id);
+        $presupuesto->cantidad = $request->input('monto');
+        $presupuesto->descripcion = $request->input('descripcion');
+        $presupuesto->fecha = $request->input('fecha'); // Asegurar que la fecha se actualiza
+
+        if ($presupuesto->save()) {
+            return redirect()->route('presupuestos.index')->with('success', 'Presupuesto actualizado exitosamente.');
+        } else {
+            return redirect()->route('presupuestos.index')->with('error', 'Error. El presupuesto no pudo ser actualizado.');
+        }
     }
 
     /**

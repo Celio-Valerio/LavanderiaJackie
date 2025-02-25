@@ -64,7 +64,8 @@
         <td class="small-text-field">L.{{number_format($presupuesto->cantidad - $presupuesto->gastado, 2, '.', ',')}}</td>
         <td class="text-center small-text-field">
             <a href="{{ route('presupuestos.show', $presupuesto->id) }}" class="btn btn-info btn-sm">Ver</a>
-            <a href="" class="btn btn-warning btn-sm">Editar</a>
+            <a href="{{ route('presupuestos.edit', $presupuesto->id) }}" class="btn btn-warning btn-sm">Editar</a>
+
         </td>
     </tr>
     @empty
