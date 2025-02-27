@@ -185,6 +185,18 @@
                     'border-radius': '5px',
                     'padding': '5px'
                 });
+
+                function reordenarNumeracion() {
+                    $('#transaccionesTable tbody tr').each(function(index) {
+                        $(this).find('td:first').text(index + 1);
+                    });
+                }
+
+// Reordenar la numeración cada vez que la tabla se redibuje
+                $('#transaccionesTable').on('draw.dt', function() {
+                    reordenarNumeracion();
+                });
+
             });
         </script>
 

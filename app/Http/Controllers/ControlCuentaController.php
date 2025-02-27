@@ -39,8 +39,11 @@ class ControlCuentaController extends Controller
         $cuenta = CuentaBanco::find($request->cuenta_banco_id);
 
         if (!$cuenta->actualizarSaldo($request->monto, $request->transaccion)) {
-            return redirect()->back()->with('error', 'Saldo insuficiente para realizar el retiro, tu saldo actual es de ' . number_format($cuenta->saldo, 2) . '.');
+            return redirect()->back()
+                ->withInput() // <-- Asegura que los valores del formulario sean preservados
+                ->with('error', 'Saldo insuficiente para realizar el retiro, tu saldo actual es de ' . number_format($cuenta->saldo, 2) . '.');
         }
+
 
         ControlCuenta::create([
             'cuenta_banco_id' => $request->cuenta_banco_id,

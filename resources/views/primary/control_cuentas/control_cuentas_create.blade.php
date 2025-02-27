@@ -36,9 +36,12 @@
                                         <select name="cuenta_banco_id" id="cuenta_banco_id" class="form-select" required>
                                             <option value="">Seleccione una cuenta</option>
                                             @foreach($cuentasBancos as $cuenta)
-                                                <option value="{{ $cuenta->id }}">{{ $cuenta->banco }} - {{ $cuenta->cuenta }} (L. {{ $cuenta->saldo }})</option>
+                                                <option value="{{ $cuenta->id }}" {{ old('cuenta_banco_id') == $cuenta->id ? 'selected' : '' }}>
+                                                    {{ $cuenta->banco }} - {{ $cuenta->cuenta }} (L. {{ $cuenta->saldo }})
+                                                </option>
                                             @endforeach
                                         </select>
+
                                         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarCuentaModal">
                                             <i class="bi bi-plus-lg"></i>
                                         </button>
@@ -48,7 +51,7 @@
                                 <!-- Campo de Fecha -->
                                 <div class="col-md-6">
                                     <label for="fecha" class="form-label">Fecha</label>
-                                    <input type="date" name="fecha" class="form-control" required>
+                                    <input type="text" name="fecha" class="form-control" value="{{ date('Y-m-d') }}" readonly>
                                 </div>
                             </div>
 
@@ -58,28 +61,32 @@
                                     <label for="transaccion" class="form-label">Tipo de Transacción</label>
                                     <select name="transaccion" class="form-select" required>
                                         <option value="">Seleccione tipo</option>
-                                        <option value="Retiro">Retiro</option>
-                                        <option value="Deposito">Depósito</option>
+                                        <option value="Retiro" {{ old('transaccion') == 'Retiro' ? 'selected' : '' }}>Retiro</option>
+                                        <option value="Deposito" {{ old('transaccion') == 'Deposito' ? 'selected' : '' }}>Depósito</option>
                                     </select>
                                 </div>
 
                                 <!-- Monto -->
                                 <div class="col-md-6">
                                     <label for="monto" class="form-label">Monto</label>
-                                    <input type="number" step="0.01" min="0.01" max="99999.99" name="monto" class="form-control" required>
+                                    <input type="number" step="0.01" min="0.01" max="99999.99" name="monto" class="form-control" value="{{ old('monto') }}" required>
                                 </div>
                             </div>
 
                             <!-- Notas -->
                             <div class="mb-3">
                                 <label for="notas" class="form-label">Notas</label>
-                                <textarea name="notas" class="form-control" rows="3"></textarea>
+                                <textarea name="notas" class="form-control @error('notas') is-invalid @enderror" id="notas" placeholder="Escribe tus notas aquí..." maxlength="500" rows="3">{{ old('notas') }}</textarea>
+                                @error('notas')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
                             </div>
 
                             <!-- Botones -->
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-primary">Guardar Transacción</button>
-                                <a href="{{ route('control_cuentas.index') }}" class="btn btn-secondary">Cancelar</a>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary flex-fill">Guardar Transacción</button>
+                                <button type="button" class="btn btn-warning flex-fill" id="limpiarFormulario">Limpiar</button>
+                                <a href="{{ route('control_cuentas.index') }}" class="btn btn-secondary flex-fill">Cancelar</a>
                             </div>
                         </form>
                     </div>
@@ -269,6 +276,30 @@
             });
         });
 
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const formularioPrincipal = document.querySelector('form');
+            const formularioModal = document.getElementById('formCuentaBanco');
+            const limpiarBtn = document.getElementById('limpiarFormulario');
+
+            limpiarBtn.addEventListener('click', function () {
+                if (formularioPrincipal) {
+                    formularioPrincipal.reset();
+                    // Si la fecha se establece por defecto, restáurala
+                    const fechaInput = formularioPrincipal.querySelector('input[name="fecha"]');
+                    if (fechaInput) fechaInput.value = new Date().toISOString().split('T')[0];
+                }
+
+                if (formularioModal) {
+                    formularioModal.reset();
+                    // Si el saldo en el modal tiene un valor predeterminado, restáuralo
+                    const saldoInput = formularioModal.querySelector('input[name="saldo"]');
+                    if (saldoInput) saldoInput.value = "0.00";
+                }
+            });
+        });
     </script>
 
 @endsection
