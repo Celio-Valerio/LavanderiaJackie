@@ -51,7 +51,7 @@
                                 <!-- Campo de Fecha -->
                                 <div class="col-md-6">
                                     <label for="fecha" class="form-label">Fecha</label>
-                                    <input type="text" name="fecha" class="form-control" value="{{ date('Y-m-d') }}" readonly>
+                                    <input type="text" name="fecha" class="form-control" value="{{ \Carbon\Carbon::now('America/Tegucigalpa')->format('Y-m-d') }}" readonly>
                                 </div>
                             </div>
 
@@ -287,14 +287,18 @@
             limpiarBtn.addEventListener('click', function () {
                 if (formularioPrincipal) {
                     formularioPrincipal.reset();
-                    // Si la fecha se establece por defecto, restáurala
-                    const fechaInput = formularioPrincipal.querySelector('input[name="fecha"]');
-                    if (fechaInput) fechaInput.value = new Date().toISOString().split('T')[0];
+
+                    // Restablecer todos los selects a su primera opción
+                    const selects = formularioPrincipal.querySelectorAll('select');
+                    selects.forEach(select => {
+                        select.selectedIndex = 0;
+                    });
                 }
 
                 if (formularioModal) {
                     formularioModal.reset();
-                    // Si el saldo en el modal tiene un valor predeterminado, restáuralo
+
+                    // Restablecer el saldo en el modal
                     const saldoInput = formularioModal.querySelector('input[name="saldo"]');
                     if (saldoInput) saldoInput.value = "0.00";
                 }
