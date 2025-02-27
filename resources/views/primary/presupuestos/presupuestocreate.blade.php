@@ -36,7 +36,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="fecha">Fecha:</label>
-                                        <input type="date" class="form-control" readonly value="{{ date('Y-m-d') }}">
+                                        <input type="date" class="form-control" readonly value="{{ isset($yourVariable) ? $yourVariable->fecha : date('Y-m-d') }}">
                                     </div>
                                 </div>
                             </div>

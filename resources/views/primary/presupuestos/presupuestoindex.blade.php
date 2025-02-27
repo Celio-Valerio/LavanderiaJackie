@@ -7,9 +7,9 @@
             @php
                 $fechaAc = date('Y-m-d');
                 $primerDiaMes = date('Y-m-01');
-                $ultimoPre = $presupuestos->last()->fecha;
+                $ultimoPre = $presupuestos->isNotEmpty() ? $presupuestos->last()->fecha : null;
             @endphp
-            <div class="col-lg-12">
+            <div class="col-lg-12"> 
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
