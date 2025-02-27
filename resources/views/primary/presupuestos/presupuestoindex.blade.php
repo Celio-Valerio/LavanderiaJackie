@@ -76,106 +76,88 @@
     </tbody>
     </table>
 
-<script>
-            $(document).ready(function() {
-                var table = $('#gastosTable').DataTable({
-                    "paging": true,
-                    "pageLength": 5,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "lengthMenu": [5, 10, 25, 50],
-                    "language": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ gastos",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ninguna gasto disponible en esta tabla",
-                        "sInfo": "Se muestran los gastos del _START_ al _END_ de _TOTAL_.",
-                        "sInfoEmpty": "No hay resultados ",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ gastos)",
-                        "sSearch": "",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
-                        }
-                    },
-                    "columnDefs": [{
-                        "targets": 0,
-                        "orderable": false // Deshabilitar ordenamiento en la columna del índice
-                    }],
-                    "drawCallback": function(settings) {
-                        var api = this.api();
-                        var startIndex = 1; // Comenzar el índice en 1
+                        <script>
+                            $(document).ready(function() {
+                                var table = $('#gastosTable').DataTable({
+                                    "paging": true,
+                                    "pageLength": 5,
+                                    "lengthChange": true,
+                                    "searching": true,
+                                    "ordering": true,
+                                    "lengthMenu": [5, 10, 25, 50],
+                                    "language": {
+                                        "sProcessing": "Procesando...",
+                                        "sLengthMenu": "Mostrar _MENU_ presupuestos",
+                                        "sZeroRecords": "No se encontraron resultados",
+                                        "sEmptyTable": "No hay presupuestos registrados",
+                                        "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ presupuestos",
+                                        "sInfoEmpty": "Mostrando 0 a 0 de 0 presupuestos",
+                                        "sInfoFiltered": "(filtrado de _MAX_ presupuestos en total)",
+                                        "sSearch": "Buscar:",
+                                        "oPaginate": {
+                                            "sFirst": "Primero",
+                                            "sLast": "Último",
+                                            "sNext": "Siguiente",
+                                            "sPrevious": "Anterior"
+                                        }
+                                    },
+                                    "columnDefs": [{
+                                        "targets": 0,
+                                        "orderable": false
+                                    }],
+                                    "drawCallback": function(settings) {
+                                        var api = this.api();
+                                        var startIndex = settings._iDisplayStart + 1;
 
-                        // Actualizar el índice en la columna correspondiente
-                        api.rows({ search: 'applied' }).every(function(rowIdx) {
-                            $(this.node()).find('td.row-index').html(startIndex++); // Incrementar el índice
-                        });
+                                        // Actualizar la numeración de filas
+                                        api.rows({ page: 'current' }).every(function(rowIdx) {
+                                            $(this.node()).find('td.row-index').html(startIndex++);
+                                        });
 
-                        var total = api.column(2, { page: 'current' }).data().reduce(function(a, b) {
-                            return a + b * 1; // Sumar los montos
-                        }, 0);
-                        $('#totalMonto').html(total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",")); // Mostrar el total con comas
-                    }
-                });
+                                        // Calcular el total de montos visibles en la página actual
+                                        var total = api.column(3, { page: 'current' }).data().reduce(function(a, b) {
+                                            return parseFloat(a) + parseFloat(b.replace(/,/g, ''));
+                                        }, 0);
 
+                                        $('#totalMonto').html(total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                                    }
+                                });
 
+                                // Estilo para mover el select de paginación y búsqueda
+                                $('#gastosTable_length').addClass('text-end').css('float', 'right');
+                                $('#gastosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                                $('#gastosTable_filter input').attr('placeholder', 'Buscar por todos los datos').css({
+                                    'width': '300px',
+                                    'border-radius': '5px',
+                                    'padding': '5px'
+                                });
 
+                                // Filtro de fechas
+                                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                                    var fechaDesde = $('#fecha-desde').val();
+                                    var fechaHasta = $('#fecha-hasta').val();
+                                    var fechaGasto = $(table.row(dataIndex).node()).data('fecha');
 
+                                    if (fechaDesde && fechaHasta) {
+                                        return fechaGasto >= fechaDesde && fechaGasto <= fechaHasta;
+                                    }
+                                    return true;
+                                });
 
-                // Estilo para mover el select a la derecha
-                $('#gastosTable_length').addClass('text-end').css('float', 'right');
+                                $('#fecha-desde, #fecha-hasta').change(function() {
+                                    table.draw();
+                                });
+                            });
 
-                // Mover el input de búsqueda a la izquierda y agregar placeholder
-                $('#gastosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#gastosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#gastosTable_filter input').css({
-                    'width': '300px',
-                    'border-radius': '5px',
-                    'padding': '5px'
-                });
+                            document.addEventListener('DOMContentLoaded', () => {
+                                const alert = document.getElementById('success-message');
+                                if (alert) {
+                                    setTimeout(() => {
+                                        alert.classList.remove('show');
+                                        alert.style.display = 'none';
+                                    }, 5000);
+                                }
+                            });
+                        </script>
 
-                // Filtro de fechas con valores predeterminados
-                var fechaInicial = '2000-01-01';
-                var fechaFinal = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
-                $('#fecha-desde').val(fechaInicial);
-                $('#fecha-hasta').val(fechaFinal);
-
-                $('#fecha-desde, #fecha-hasta').change(function() {
-                    var fechaDesde = $('#fecha-desde').val();
-                    var fechaHasta = $('#fecha-hasta').val();
-
-                    table.rows().every(function() {
-                        var row = this.node();
-                        var fechaGasto = $(row).data('fecha');
-
-                        if (fechaDesde && fechaHasta) {
-                            if (fechaGasto >= fechaDesde && fechaGasto <= fechaHasta) {
-                                $(row).show();
-                            } else {
-                                $(row).hide();
-                            }
-                        } else {
-                            $(row).show(); // Si no se aplica filtro, mostrar todas las filas
-                        }
-                    });
-                });
-            });
-
-
-        </script>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', (event) => {
-                const alert = document.getElementById('success-message');
-                if (alert) {
-                    setTimeout(() => {
-                        alert.classList.remove('show');
-                        alert.style.display = 'none';
-                    }, 5000);
-                }
-            });
-</script>
 @endsection

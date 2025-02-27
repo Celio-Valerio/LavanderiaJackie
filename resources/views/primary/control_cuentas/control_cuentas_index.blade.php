@@ -192,7 +192,7 @@
                     });
                 }
 
-// Reordenar la numeración cada vez que la tabla se redibuje
+                // Reordenar la numeración cada vez que la tabla se redibuje
                 $('#transaccionesTable').on('draw.dt', function() {
                     reordenarNumeracion();
                 });

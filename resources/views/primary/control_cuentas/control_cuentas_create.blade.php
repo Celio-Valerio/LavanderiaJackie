@@ -275,7 +275,6 @@
                 cuentaInput.value = valor;
             });
         });
-
     </script>
 
     <script>
@@ -288,10 +287,24 @@
                 if (formularioPrincipal) {
                     formularioPrincipal.reset();
 
-                    // Restablecer todos los selects a su primera opción
+                    // Restablecer los selects a su primera opción
                     const selects = formularioPrincipal.querySelectorAll('select');
                     selects.forEach(select => {
                         select.selectedIndex = 0;
+                    });
+
+                    // Restablecer los inputs de tipo texto y número, excepto el de fecha
+                    const inputs = formularioPrincipal.querySelectorAll('input:not([type="hidden"]):not([name="fecha"])');
+                    inputs.forEach(input => {
+                        if (input.type === "text" || input.type === "number") {
+                            input.value = "";
+                        }
+                    });
+
+                    // Restablecer los textareas
+                    const textareas = formularioPrincipal.querySelectorAll('textarea');
+                    textareas.forEach(textarea => {
+                        textarea.value = "";
                     });
                 }
 

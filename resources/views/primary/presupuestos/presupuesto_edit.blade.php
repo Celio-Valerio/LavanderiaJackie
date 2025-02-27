@@ -45,7 +45,7 @@
 
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary flex-fill me-1">Actualizar</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="reloadButton">Reestablecer</button>
+                                <button type="button" class="btn btn-warning flex-fill me-1" id="reloadButton" formnovalidate>Reestablecer</button>
                                 <a href="{{ route('presupuestos.index') }}" class="btn btn-danger flex-fill">Cancelar</a>
                             </div>
                         </form>
@@ -57,35 +57,47 @@
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
-                // Guardar valores originales al cargar la página
-                const originalData = {
-                    descripcion: document.getElementById('descripcion').value,
-                    monto: document.getElementById('monto').value,
-                    fecha: document.getElementById('fecha').value
+                // Obtener la fecha de Honduras (UTC-6) correctamente
+                const getHondurasDate = () => {
+                    let ahora = new Date();
+                    let utcOffset = ahora.getTimezoneOffset() * 60000; // Offset local en ms
+                    let hondurasOffset = -6 * 60 * 60000; // UTC-6 en ms
+                    return new Date(ahora.getTime() + utcOffset + hondurasOffset);
                 };
 
-                // Permitir solo números en el campo de monto
+                // Capturar los valores originales SOLO en la primera carga de la página
+                if (!sessionStorage.getItem("originalDataStored")) {
+                    sessionStorage.setItem("originalDescripcion", document.getElementById('descripcion').value);
+                    sessionStorage.setItem("originalMonto", document.getElementById('monto').value);
+                    sessionStorage.setItem("originalFecha", document.getElementById('fecha').value);
+                    sessionStorage.setItem("originalDataStored", "true"); // Bandera para evitar sobreescribir
+                }
+
+                // Restaurar valores desde sessionStorage
+                document.getElementById('reloadButton').addEventListener('click', function () {
+                    document.getElementById('descripcion').value = sessionStorage.getItem("originalDescripcion") || "";
+                    document.getElementById('monto').value = sessionStorage.getItem("originalMonto") || "";
+                    document.getElementById('fecha').value = sessionStorage.getItem("originalFecha") || getHondurasDate().toISOString().split('T')[0];
+                });
+
+                // Validación numérica
                 window.validarSoloNumeros = function (input) {
                     input.value = input.value.replace(/\D/g, '').slice(0, 8);
                 };
 
-                // Capitalizar la primera letra de la descripción
+                // Capitalizar la primera letra
                 document.getElementById('descripcion').addEventListener('input', function (e) {
-                    let value = e.target.value;
+                    let value = e.target.value.trim();
                     e.target.value = value.charAt(0).toUpperCase() + value.slice(1);
                 });
 
-                document.getElementById('reloadButton').addEventListener('click', function () {
-                    document.getElementById('descripcion').value = originalData.descripcion;
-                    document.getElementById('monto').value = originalData.monto;
-
-                    // Convertir la fecha al formato correcto antes de asignarla
-                    let fechaOriginal = new Date(originalData.fecha);
-                    let fechaFormateada = fechaOriginal.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-                    document.getElementById('fecha').value = fechaFormateada;
-                });
-
+                // Si la fecha está vacía, asignar la fecha de Honduras
+                if (!document.getElementById('fecha').value) {
+                    document.getElementById('fecha').value = getHondurasDate().toISOString().split('T')[0];
+                }
             });
         </script>
+
+
     </section>
 @endsection
