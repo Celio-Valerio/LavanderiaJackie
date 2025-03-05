@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Detalles del presupuesto</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Detalles del presupuesto de {{ \Carbon\Carbon::parse($presupuesto->fecha)->translatedFormat('F Y') }}</h1>
                         <hr>
                         <div class="row mb-3">
                             <!-- Proveedor y Descripción de la Compra -->
@@ -34,7 +34,7 @@
                         </div>
 
 
-                        <h4 class="card-title" style="font-size: 20px !important;">Compras realizadas</h4>
+                        <h4 class="card-title" style="font-size: 20px !important;">Compras realizadas en {{ \Carbon\Carbon::parse($presupuesto->fecha)->translatedFormat('F Y') }}</h4>
                         <hr>
                         <!-- Tabla de Detalles de la Compra -->
                         <div class="table-responsive mb-3">

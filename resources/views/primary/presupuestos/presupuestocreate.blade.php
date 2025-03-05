@@ -1,14 +1,19 @@
 @extends('layouts.principal')
 @section('title', 'Registrar Presupuesto')
 @section('content')
-
+    @php
+        use Carbon\Carbon;
+        Carbon::setLocale('es');
+        setlocale(LC_TIME, 'es_ES.UTF-8', 'es_ES', 'Spanish_Spain', 'es');
+        Carbon::setUTF8(true);
+    @endphp
     <section class="section">
 
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar presupuesto</h1>
+                    <div class="card-body"></div>
+                        <h1 class="card-title" style="font-size: 30px !important;">Registro de presupuesto del mes de {{ ucfirst(Carbon::now()->locale('es')->monthName) }}</h1>
                         <hr>
                         <form id="presupuestoForm" action="{{ route('presupuestos.store') }}" method="POST" novalidate>
                             @csrf
@@ -27,7 +32,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label for="monto">Monto:</label>
-                                        <input type="text" name="monto" id="monto" class="form-control @error('monto') is-invalid @enderror" maxlength="7" value="{{old('monto')}}" oninput="validarSoloNumeros(this)">
+                                        <input type="text" name="monto" id="monto" class="form-control @error('monto') is-invalid @enderror" maxlength="5" value="{{old('monto')}}" oninput="validarSoloNumeros(this)">
                                         @error('monto')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
