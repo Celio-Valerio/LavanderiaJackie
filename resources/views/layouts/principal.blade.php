@@ -309,6 +309,12 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
+                    <a href="{{ route('cupones.index') }}">
+                        <i class="bi bi-circle"></i><span>Cupones</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ route('control_cuentas.index') }}">
                         <i class="bi bi-circle"></i><span>Control de cuentas</span>
                     </a>

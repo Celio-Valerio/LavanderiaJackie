@@ -7,6 +7,7 @@ use App\Models\GastoDiario;
 use App\Models\Promo;
 use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
+use App\Models\Visita;
 use Illuminate\Http\Request;
 
 class ServicioEfectuadoController extends Controller
@@ -131,6 +132,22 @@ class ServicioEfectuadoController extends Controller
                 'precio_envio.numeric' => 'El precio de envío debe ser un número.',
                 'precio_envio.min' => 'El precio de envío debe ser al menos L. 1.00.',
                 'precio_envio.max' => 'El precio de envío debe ser menor o igual a L. 999.00.',
+            ]);
+        }
+
+        // Registrar o actualizar la visita del cliente
+        $visita = Visita::where('cliente_id', $request->cliente_id)->first();
+
+        if ($visita) {
+            // Si ya existe, incrementar las visitas
+            $visita->increment('visitas_totales');
+            $visita->increment('visitas_disponibles');
+        } else {
+            // Si no existe, crear un nuevo registro
+            Visita::create([
+                'cliente_id' => $request->cliente_id,
+                'visitas_totales' => 1,
+                'visitas_disponibles' => 1,
             ]);
         }
 

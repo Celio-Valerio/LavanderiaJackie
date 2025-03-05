@@ -18,6 +18,7 @@ use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\GastoDiarioController;
 use App\Http\Controllers\CuentaBancoController;
 use App\Http\Controllers\PresupuestoController;
+use App\Http\Controllers\CuponController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCorreo;
 
@@ -223,9 +224,6 @@ Route::get('/gastos-diarios', [GastoDiarioController::class, 'index'])->name('ga
 Route::get('/gastos-diarios/create', [GastoDiarioController::class, 'create'])->name('gastos_diarios.create');
 Route::put('/gastos-diarios/{id}', [GastoDiarioController::class, 'update'])->name('gastos_diarios.update');
 
-
-
-
 // Ruta para listar todas las cuentas bancarias
 Route::get('/cuenta-bancos', [CuentaBancoController::class, 'index'])->name('cuenta_bancos.index');
 
@@ -288,3 +286,21 @@ Route::get('/presupuestos/{id}/edit', [PresupuestoController::class, 'edit'])->n
 
 // Ruta para actualizar un presupuesto existente
 Route::put('/presupuestos/{id}', [PresupuestoController::class, 'update'])->name('presupuestos.update');
+
+// Ruta para listar todas las cuentas bancarias
+Route::get('/cupones', [CuponController::class, 'index'])->name('cupones.index');
+
+// Ruta para mostrar el formulario de creación de una nueva cuenta bancaria
+Route::get('/cupones/create', [CuponController::class, 'create'])->name('cupones.create');
+
+// Ruta para almacenar una nueva cuenta bancaria
+Route::post('/cupones', [CuponController::class, 'store'])->name('cupones.store');
+
+// Ruta para mostrar los detalles de una cuenta bancaria específica
+Route::get('/cupones/{id}', [CuponController::class, 'show'])->name('cupones.show');
+
+// Ruta para mostrar el formulario de edición de un cupon
+Route::get('/cupones/{id}/edit', [CuponController::class, 'edit'])->name('cupones.edit');
+
+// Ruta para actualizar un cupon existente
+Route::put('/cupones/{id}', [CuponController::class, 'update'])->name('cupones.update');
