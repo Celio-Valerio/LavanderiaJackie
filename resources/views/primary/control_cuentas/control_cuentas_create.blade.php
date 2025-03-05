@@ -51,7 +51,15 @@
                                 <!-- Campo de Fecha -->
                                 <div class="col-md-6">
                                     <label for="fecha" class="form-label">Fecha</label>
-                                    <input type="text" name="fecha" class="form-control" value="{{ \Carbon\Carbon::now('America/Tegucigalpa')->format('Y-m-d') }}" readonly>
+                                    <!-- Campo visible con formato bonito -->
+                                    <input type="text" class="form-control"
+                                           value="{{ \Carbon\Carbon::now('America/Tegucigalpa')->translatedFormat('j \d\e F, Y h:i A') }}"
+                                           readonly>
+
+                                    <!-- Campo oculto con formato compatible con la base de datos -->
+                                    <input type="hidden" name="fecha"
+                                           value="{{ \Carbon\Carbon::now('America/Tegucigalpa')->format('Y-m-d H:i:s') }}">
+
                                 </div>
                             </div>
 
