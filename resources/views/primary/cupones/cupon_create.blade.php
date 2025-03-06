@@ -168,13 +168,32 @@
 
             document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('cuponForm');
-                form.reset();
-                var cliente = document.getElementById('cliente_id');
-                cliente.selectedIndex = 0;
-                document.getElementById('visitas_disponibles').value = "0";
-                form.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
-            });
 
+                // Limpiar los campos manualmente sin eliminar el token CSRF
+                form.querySelectorAll('input:not([name="_token"]), textarea').forEach(input => input.value = '');
+
+                // Restablecer selección de cliente sin borrar el token
+                const clienteSelect = document.getElementById('cliente_id');
+                clienteSelect.selectedIndex = 0;
+
+                // Restablecer visitas disponibles
+                document.getElementById('visitas_disponibles').value = "0";
+
+                // Restablecer selección de tipo
+                const tipoSelect = document.getElementById('tipo');
+                tipoSelect.selectedIndex = 0;
+
+                // Restablecer etiquetas y placeholders dinámicos
+                const valorInput = document.getElementById('valor');
+                const valorLabel = document.getElementById('valorLabel');
+                valorLabel.textContent = 'Valor del Cupón';
+                valorInput.placeholder = 'Ej: 100';
+
+                // Eliminar clases de validación
+                form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+            });
+            
             document.getElementById('valor').addEventListener('input', function () {
                 let tipo = document.getElementById('tipo').value;
                 let valor = this.value;
