@@ -18,9 +18,10 @@
                                 <div class="col-md-6">
                                     <label for="cliente_id" class="form-label">Cliente</label>
                                     <select name="cliente_id" class="form-control @error('cliente_id') is-invalid @enderror" id="cliente_id" required>
-                                        <option value="" disabled selected>Seleccione un cliente</option>
+                                        <option value="" disabled {{ old('cliente_id') ? '' : 'selected' }}>Seleccione un cliente</option>
                                         @foreach ($clientes as $cliente)
-                                            <option value="{{ $cliente->id }}" data-visitas="{{ $cliente->visitas_disponibles }}">
+                                            <option value="{{ $cliente->id }}" data-visitas="{{ $cliente->visitas_disponibles }}"
+                                                {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
                                                 {{ $cliente->first_name }} {{ $cliente->last_name }} - {{ $cliente->visitas_disponibles }} visitas
                                             </option>
                                         @endforeach
@@ -33,13 +34,14 @@
                                 <!-- Visitas Disponibles (Solo lectura) -->
                                 <div class="col-md-3">
                                     <label for="visitas_disponibles" class="form-label">Puntos (visitas)</label>
-                                    <input type="text" id="visitas_disponibles" class="form-control" value="0" readonly>
+                                    <input type="text" id="visitas_disponibles" class="form-control" value="{{ old('visitas_disponibles', '0') }}" readonly>
                                 </div>
 
                                 <!-- Campo de Cantidad (Para tipo Cantidad) -->
                                 <div class="col-md-3">
                                     <label for="cantidad" class="form-label">Puntos a utilizar</label>
-                                    <input type="number" name="cantidad" class="form-control @error('cantidad') is-invalid @enderror" id="cantidad" value="{{ old('cantidad') }}" placeholder="Ej: 5" min="1">
+                                    <input type="number" name="cantidad" class="form-control @error('cantidad') is-invalid @enderror" id="cantidad"
+                                           value="{{ old('cantidad') }}" placeholder="Ej: 5" min="1">
                                     @error('cantidad')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -93,7 +95,7 @@
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
                                 <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
-                                <a href="{{ url()->previous() }}" class="btn btn-danger flex-fill">Regresar</a>
+                                <a href="{{ route('cupones.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>
                         </form>
                         <!-- Fin del formulario -->
@@ -107,6 +109,35 @@
                 let selectedOption = this.options[this.selectedIndex];
                 let visitasDisponibles = selectedOption.getAttribute('data-visitas') || 0;
                 document.getElementById('visitas_disponibles').value = visitasDisponibles;
+            });
+
+            document.getElementById('nombre').addEventListener('input', function () {
+                this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
+            });
+
+            document.getElementById('descripcion').addEventListener('input', function () {
+                this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
+            });
+
+            document.getElementById('cantidad').addEventListener('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3); // Permite solo números y máximo 3 caracteres
+            });
+
+            document.addEventListener('DOMContentLoaded', function () {
+                let clienteSelect = document.getElementById('cliente_id');
+                let visitasInput = document.getElementById('visitas_disponibles');
+
+                function actualizarVisitas() {
+                    let selectedOption = clienteSelect.options[clienteSelect.selectedIndex];
+                    let visitasDisponibles = selectedOption ? selectedOption.getAttribute('data-visitas') : '0';
+                    visitasInput.value = visitasDisponibles;
+                }
+
+                // Actualizar visitas al cambiar el cliente
+                clienteSelect.addEventListener('change', actualizarVisitas);
+
+                // Mantener visitas seleccionadas después de la recarga
+                actualizarVisitas();
             });
 
             document.getElementById('tipo').addEventListener('change', function() {
@@ -138,6 +169,8 @@
             document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('cuponForm');
                 form.reset();
+                var cliente = document.getElementById('cliente_id');
+                cliente.selectedIndex = 0;
                 document.getElementById('visitas_disponibles').value = "0";
                 form.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
             });

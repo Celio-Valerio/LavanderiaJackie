@@ -55,17 +55,15 @@ class CuponController extends Controller
                 'in:Valor,Descuento,Cantidad',
             ],
             'valor' => [
-                'nullable',
+                'required_if:tipo,Valor,Descuento',
                 'numeric',
                 'min:0',
                 'max:999999.99',
-                'required_if:tipo,Valor,Descuento',
             ],
             'cantidad' => [
-                'nullable',
+                'required_if:tipo,Cantidad',
                 'integer',
                 'min:1',
-                'required_if:tipo,Cantidad',
             ],
             'cliente_id' => [
                 'required',
@@ -82,14 +80,14 @@ class CuponController extends Controller
             'tipo.required' => 'El tipo de cupón es obligatorio.',
             'tipo.in' => 'El tipo de cupón debe ser Valor, Descuento o Cantidad.',
 
+            'valor.required_if' => 'El valor es obligatorio si el tipo de cupón es Valor o Descuento.',
             'valor.numeric' => 'El valor del cupón debe ser un número válido.',
             'valor.min' => 'El valor del cupón no puede ser menor a 0.',
             'valor.max' => 'El valor del cupón no puede exceder 999,999.99.',
-            'valor.required_if' => 'El valor es obligatorio si el tipo de cupón es Valor o Descuento.',
 
+            'cantidad.required_if' => 'La cantidad es obligatoria si el tipo de cupón es Cantidad.',
             'cantidad.integer' => 'La cantidad debe ser un número entero.',
             'cantidad.min' => 'La cantidad debe ser al menos 1.',
-            'cantidad.required_if' => 'La cantidad es obligatoria si el tipo de cupón es Cantidad.',
 
             'cliente_id.required' => 'Debe seleccionar un cliente.',
             'cliente_id.exists' => 'El cliente seleccionado no tiene visitas registradas.',
@@ -106,7 +104,7 @@ class CuponController extends Controller
                 ]);
             }
 
-            // Restar la cantidad de visitas disponibles y dejarlas en 0
+            // Restar la cantidad de visitas disponibles y dejarlas en 0 si es necesario
             $visita->visitas_disponibles = max(0, $visita->visitas_disponibles - $request->cantidad);
             $visita->save();
         }
@@ -119,8 +117,6 @@ class CuponController extends Controller
 
         return redirect()->route('cupones.index')->with('success', $successMessage);
     }
-
-
 
     /**
      * Display the specified resource.
