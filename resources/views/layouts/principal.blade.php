@@ -389,6 +389,12 @@
             </a>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
+                    <a href="/usuarios">
+                        <i class="bi bi-circle"></i><span>Usuarios</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="/clientes">
                         <i class="bi bi-circle"></i><span>Clientes</span>
                     </a>

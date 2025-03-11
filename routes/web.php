@@ -19,6 +19,7 @@ use App\Http\Controllers\GastoDiarioController;
 use App\Http\Controllers\CuentaBancoController;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\CuponController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCorreo;
 
@@ -34,9 +35,24 @@ use App\Mail\EnviarCorreo;
 |
 */
 
+
 Route::get('/', function () {
     return view('pagina_principal');
 });
+
+Route::get('/dashboard', function () {
+    return view('pagina_principal');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+
+
 
 Route::get('/inicio', function () {
     return view('layouts.principal');
@@ -304,3 +320,25 @@ Route::get('/cupones/{id}/edit', [CuponController::class, 'edit'])->name('cupone
 
 // Ruta para actualizar un cupon existente
 Route::put('/cupones/{id}', [CuponController::class, 'update'])->name('cupones.update');
+
+
+// Ruta para mostrar la lista de usuarios
+Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+
+// Ruta para crear un nuevo usuario
+Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
+
+// Ruta para almacenar un nuevo usuario
+Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
+
+// Ruta para mostrar el formulario de edición de un usuario
+Route::get('/usuarios/{id}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+
+// Ruta para actualizar un usuario
+Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
+
+// Ruta para la visualización de un usuario
+Route::get('/usuarios/show/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
+
+// Ruta para recargar el formulario de editar usuario
+Route::get('/usuarios/{id}/reload', [UsuarioController::class, 'reload'])->name('usuarios.reload');
