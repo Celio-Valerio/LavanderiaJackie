@@ -109,8 +109,8 @@ class CuponController extends Controller
             $visita->save();
         }
 
-        // Crear el cupón con los datos validados
-        $cupon = Cupon::create($validated);
+        // Crear el cupón con el estado "Activo" por defecto
+        $cupon = Cupon::create(array_merge($validated, ['estado' => 'Activo']));
 
         // Mensaje de éxito
         $successMessage = 'El cupón "' . $cupon->nombre . '" ha sido registrado exitosamente.';

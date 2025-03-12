@@ -24,9 +24,10 @@
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
-                                <th style="width: 20%;">Cliente</th>
-                                <th style="width: 20%;">Nombre</th>
+                                <th style="width: 15%;">Cliente</th>
+                                <th style="width: 15%;">Nombre</th>
                                 <th style="width: 10%;">Tipo de cupon</th>
+                                <th style="width: 15%;">Estado</th>
                                 <th style="width: 15%;">Valor</th>
                                 <th style="width: 10%;">Puntos utilizados</th>
                                 <th style="width: 20%;">Acciones</th>
@@ -39,12 +40,24 @@
                                     <td class="small-text-field" >{{ $cupon->cliente->first_name }} {{ $cupon->cliente->last_name }}</td>
                                     <td class="small-text-field" >{{ $cupon->nombre }}</td>
                                     <td class="small-text-field">
+                                        @if($cupon->estado == 'Activo')
+                                            <span class="badge bg-success">{{ $cupon->estado }}</span>
+                                        @elseif($cupon->estado == 'Utilizado')
+                                            <span class="badge bg-primary">{{ $cupon->estado }}</span>
+                                        @elseif($cupon->estado == 'Inactivo')
+                                            <span class="badge bg-warning">{{ $cupon->estado }}</span>
+                                        @elseif($cupon->estado == 'Vencido')
+                                            <span class="badge bg-danger">{{ $cupon->estado }}</span>
+                                        @endif
+                                    </td>
+
+                                    <td class="small-text-field">
                                         @if($cupon->tipo == 'Valor')
-                                            <span class="badge bg-primary">{{ $cupon->tipo }}</span>
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
                                         @elseif($cupon->tipo == 'Cantidad')
-                                            <span class="badge bg-success">{{ $cupon->tipo }}</span>
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
                                         @elseif($cupon->tipo == 'Descuento')
-                                            <span class="badge bg-warning">{{ $cupon->tipo }}</span>
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
                                         @endif
                                     </td>
 

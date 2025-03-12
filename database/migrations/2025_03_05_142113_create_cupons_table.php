@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nombre', 100); // Nombre del cupón
             $table->text('descripcion')->nullable(); // Descripción del cupón
             $table->enum('tipo', ['Valor', 'Descuento', 'Cantidad']); // Tipo de cupón
+            $table->enum('estado', ['Activo', 'Inactivo', 'Utilizado', 'Vencido']); // Tipo de cupón
             $table->decimal('valor', 8, 2)->nullable(); // Valor del cupón (monto en lempiras o porcentaje)
             $table->unsignedInteger('cantidad')->nullable(); // Cantidad de lavadas si aplica
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade'); // Relación con Cliente
