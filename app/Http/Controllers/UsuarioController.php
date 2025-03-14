@@ -106,9 +106,15 @@ class UsuarioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        try {
+            $usuario = User::findOrFail($id);
+            return view('primary.usuarios.usuario_show', compact('usuario'));
+        } catch (\Exception $e) {
+            return redirect()->route('usuarios.index')
+                           ->with('error', 'Usuario no encontrado');
+        }
     }
 
     /**

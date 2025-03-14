@@ -338,7 +338,7 @@ Route::get('/usuarios/{id}/edit', [UsuarioController::class, 'edit'])->name('usu
 Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
 
 // Ruta para la visualización de un usuario
-Route::get('/usuarios/show/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
+Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
 
 // Ruta para recargar el formulario de editar usuario
 Route::get('/usuarios/{id}/reload', [UsuarioController::class, 'reload'])->name('usuarios.reload');
