@@ -20,7 +20,7 @@
                         @endif
                         <hr>
 
-                        <table id="cuponesTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
+                        <table id="cuponesTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px; text-align: center;">
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
@@ -39,6 +39,17 @@
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field" >{{ $cupon->cliente->first_name }} {{ $cupon->cliente->last_name }}</td>
                                     <td class="small-text-field" >{{ $cupon->nombre }}</td>
+
+                                    <td class="small-text-field">
+                                        @if($cupon->tipo == 'Valor')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @elseif($cupon->tipo == 'Cantidad')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @elseif($cupon->tipo == 'Descuento')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @endif
+                                    </td>
+
                                     <td class="small-text-field">
                                         @if($cupon->estado == 'Activo')
                                             <span class="badge bg-success">{{ $cupon->estado }}</span>
@@ -48,16 +59,6 @@
                                             <span class="badge bg-warning">{{ $cupon->estado }}</span>
                                         @elseif($cupon->estado == 'Vencido')
                                             <span class="badge bg-danger">{{ $cupon->estado }}</span>
-                                        @endif
-                                    </td>
-
-                                    <td class="small-text-field">
-                                        @if($cupon->tipo == 'Valor')
-                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
-                                        @elseif($cupon->tipo == 'Cantidad')
-                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
-                                        @elseif($cupon->tipo == 'Descuento')
-                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
                                         @endif
                                     </td>
 
