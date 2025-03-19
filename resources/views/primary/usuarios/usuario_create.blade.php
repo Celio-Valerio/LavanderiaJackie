@@ -41,7 +41,7 @@
 
                                     <!-- Nombre completo -->
                                     <div class="mb-3">
-                                        <label for="name" class="form-label">Nombre completo</label>
+                                        <label for="name" class="form-label">Nombre de usuario</label>
                                         <input type="text" name="name" class="form-control small-text-field @error('name') is-invalid @enderror"
                                                id="name" value="{{ old('name') }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
                                         @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
@@ -52,14 +52,14 @@
                                         <div class="col-md-6">
                                             <label for="telefono" class="form-label">Teléfono</label>
                                             <input type="text" name="telefono" class="form-control small-text-field @error('telefono') is-invalid @enderror"
-                                                   id="telefono" value="{{ old('telefono') }}" placeholder="Ej: 90123456" maxlength="8" readonly>
+                                                   id="telefono" value="{{ old('telefono') }}" placeholder="Ej: 90123456" maxlength="8">
                                             @error('telefono')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                         </div>
 
                                         <div class="col-md-6">
                                             <label for="email" class="form-label">Correo electrónico</label>
                                             <input type="email" name="email" class="form-control small-text-field @error('email') is-invalid @enderror"
-                                                   id="email" value="{{ old('email') }}" placeholder="Ej: usuario@mail.com" maxlength="50" readonly>
+                                                   id="email" value="{{ old('email') }}" placeholder="Ej: usuario@mail.com" maxlength="50">
                                             @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                             <div class="mb-3">
                                 <label for="direccion" class="form-label">Dirección</label>
                                 <textarea name="direccion" class="form-control small-text-field @error('direccion') is-invalid @enderror"
-                                          id="direccion" placeholder="Ej: Calle Principal 123" maxlength="500" rows="2" readonly>{{ old('direccion') }}</textarea>
+                                          id="direccion" placeholder="Ej: Calle Principal 123" maxlength="500" rows="2">{{ old('direccion') }}</textarea>
                                 @error('direccion')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
@@ -303,6 +303,11 @@
                 const imageInput = document.getElementById('image');
                 const imagePreview = document.getElementById('imagePreview');
                 const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+                const selectEmpleado = document.getElementById('empleado_id');  // El select del empleado
+                const telefonoInput = document.getElementById('telefono');
+                const emailInput = document.getElementById('email');
+                const nameInput = document.getElementById('name');
+                const addressInput = document.getElementById('direccion');
 
                 clearButton.addEventListener('click', function () {
                     // Resetear el formulario
@@ -316,7 +321,15 @@
                     // Limpiar el input de archivo
                     imageInput.value = '';
 
-                    // Remover clases de validación
+                    telefonoInput.value = '';
+                    emailInput.value = '';
+                    addressInput.value = '';
+                    nameInput.value = '';
+
+                    // Resetear el select de empleado al primer índice (índice 0)
+                    selectEmpleado.selectedIndex = 0;
+
+                    // Remover clases de validación (is-invalid) de todos los campos
                     const inputs = form.querySelectorAll('.form-control');
                     inputs.forEach(input => {
                         input.classList.remove('is-invalid');
@@ -327,8 +340,15 @@
                     errorMessages.forEach(message => {
                         message.style.display = 'none';
                     });
+
+                    // También asegurarse de quitar cualquier error de validación que podría haberse añadido por error
+                    const errorContainers = form.querySelectorAll('.error-container');
+                    errorContainers.forEach(container => {
+                        container.innerHTML = ''; // Limpiar contenido de contenedores de error
+                    });
                 });
             });
+
         </script>
 
 
@@ -400,12 +420,6 @@
                     selectEmpleado.dispatchEvent(new Event('change'));
                 }
 
-                // Evitar que los campos readonly se editen con trucos del navegador
-                [inputDireccion, inputEmail, inputTelefono].forEach(input => {
-                    input.addEventListener('focus', function () {
-                        this.blur(); // Evita que el usuario pueda escribir en el campo
-                    });
-                });
             });
 
         </script>

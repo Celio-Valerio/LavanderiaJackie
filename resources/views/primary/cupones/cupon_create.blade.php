@@ -14,41 +14,6 @@
                             @csrf <!-- Protección contra CSRF -->
 
                             <div class="row mb-3">
-                                <!-- Selección de Cliente -->
-                                <div class="col-md-6">
-                                    <label for="cliente_id" class="form-label">Cliente</label>
-                                    <select name="cliente_id" class="form-control @error('cliente_id') is-invalid @enderror" id="cliente_id" required>
-                                        <option value="" disabled {{ old('cliente_id') ? '' : 'selected' }}>Seleccione un cliente</option>
-                                        @foreach ($clientes as $cliente)
-                                            <option value="{{ $cliente->id }}" data-visitas="{{ $cliente->visitas_disponibles }}"
-                                                {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
-                                                {{ $cliente->first_name }} {{ $cliente->last_name }} - {{ $cliente->visitas_disponibles }} visitas
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('cliente_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Visitas Disponibles (Solo lectura) -->
-                                <div class="col-md-3">
-                                    <label for="visitas_disponibles" class="form-label">Puntos (visitas)</label>
-                                    <input type="text" id="visitas_disponibles" class="form-control" value="{{ old('visitas_disponibles', '0') }}" readonly>
-                                </div>
-
-                                <!-- Campo de Cantidad (Para tipo Cantidad) -->
-                                <div class="col-md-3">
-                                    <label for="cantidad" class="form-label">Puntos a utilizar</label>
-                                    <input type="number" name="cantidad" class="form-control @error('cantidad') is-invalid @enderror" id="cantidad"
-                                           value="{{ old('cantidad') }}" placeholder="Ej: 5" min="1">
-                                    @error('cantidad')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
                                 <!-- Campo de Nombre del Cupón -->
                                 <div class="col-md-6">
                                     <label for="nombre" class="form-label">Nombre del Cupón</label>
@@ -91,6 +56,97 @@
                                 @enderror
                             </div>
 
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="cliente_id" class="form-label">Cliente</label>
+                                    <div class="input-group">
+                                        <select name="cliente_id" class="form-control" id="cliente_id">
+                                            <option value="" disabled selected>Seleccione un cliente</option>
+                                            @foreach ($clientes as $cliente)
+                                                <option value="{{ $cliente->id }}" data-visitas="{{ $cliente->visitas_disponibles }}"
+                                                        @if(old('cliente_id') == $cliente->id) selected @endif
+                                                        @if(in_array($cliente->id, old('clientes', []))) disabled @endif>
+                                                    {{ $cliente->first_name }} {{ $cliente->last_name }} - {{ $cliente->visitas_disponibles }} visitas
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button type="button" class="btn btn-success" id="agregarCliente">
+                                            <i class="bi bi-plus-lg"></i> Agregar
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Fecha Desde -->
+                                <div class="col-md-3">
+                                    <label for="fecha_desde" class="form-label">Desde</label>
+                                    <input type="date" name="fecha_desde" id="fecha_desde" class="form-control @error('fecha_desde') is-invalid @enderror" required value="{{ old('fecha_desde') }}">
+                                    @error('fecha_desde')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Fecha Hasta -->
+                                <div class="col-md-3">
+                                    <label for="fecha_hasta" class="form-label">Hasta</label>
+                                    <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control @error('fecha_hasta') is-invalid @enderror" required value="{{ old('fecha_hasta') }}">
+                                    @error('fecha_hasta')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <script>
+                                    document.getElementById('fecha_desde').addEventListener('change', function() {
+                                        let fecha = this.value; // Formato yyyy-mm-dd
+                                        // No se cambia el valor del input 'fecha_desde', pero se puede mostrar la nueva fecha si se desea
+                                        let partes = fecha.split('-');
+                                        let nuevaFecha = partes[2] + '/' + partes[1] + '/' + partes[0]; // Formato dd/mm/yyyy
+                                        console.log(nuevaFecha); // Imprimir la fecha en el nuevo formato
+                                        // Puedes usar esta fecha para mostrarla en otro lugar o enviarla con otro formato
+                                    });
+
+                                    document.getElementById('fecha_hasta').addEventListener('change', function() {
+                                        let fecha = this.value; // Formato yyyy-mm-dd
+                                        // No se cambia el valor del input 'fecha_hasta', pero se puede mostrar la nueva fecha si se desea
+                                        let partes = fecha.split('-');
+                                        let nuevaFecha = partes[2] + '/' + partes[1] + '/' + partes[0]; // Formato dd/mm/yyyy
+                                        console.log(nuevaFecha); // Imprimir la fecha en el nuevo formato
+                                        // Puedes usar esta fecha para mostrarla en otro lugar o enviarla con otro formato
+                                    });
+                                </script>
+
+                            </div>
+
+                            <!-- Tabla de Clientes Agregados -->
+                            <div class="mb-4" id="clientesContainer" style="display: none;">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-bordered" id="clientesTable">
+                                        <thead class="table-light">
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Visitas Disponibles</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach (old('clientes', []) as $clienteId)
+                                            @php
+                                                $cliente = $clientes->find($clienteId);
+                                            @endphp
+                                            <tr data-cliente-id="{{ $cliente->id }}">
+                                                <td>{{ $cliente->first_name }} {{ $cliente->last_name }}</td>
+                                                <td>{{ $cliente->visitas_disponibles }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-sm removerCliente">
+                                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
@@ -117,10 +173,6 @@
 
             document.getElementById('descripcion').addEventListener('input', function () {
                 this.value = this.value.charAt(0).toUpperCase() + this.value.slice(1);
-            });
-
-            document.getElementById('cantidad').addEventListener('input', function () {
-                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3); // Permite solo números y máximo 3 caracteres
             });
 
             document.addEventListener('DOMContentLoaded', function () {
@@ -158,11 +210,11 @@
                     valorInput.setAttribute('maxlength', '2');
                     valorInput.setAttribute('pattern', '^[0-9]{1,2}$');
                 } else if (tipo === 'Cantidad') {
-                    valorLabel.textContent = 'Cantidad de lavadas';
+                    valorLabel.textContent = 'Cantidad';
                     valorInput.placeholder = 'Ej: 5';
                     valorInput.value = '';
-                    valorInput.setAttribute('maxlength', '3');
-                    valorInput.setAttribute('pattern', '^[0-9]{1,3}$');
+                    valorInput.setAttribute('maxlength', '5');
+                    valorInput.setAttribute('pattern', '^[0-9]{1,5}$');
                 }
             });
 
@@ -193,19 +245,107 @@
                 form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
                 form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
             });
-            
+
             document.getElementById('valor').addEventListener('input', function () {
                 let tipo = document.getElementById('tipo').value;
                 let valor = this.value;
 
                 if (tipo === 'Valor') {
                     this.value = valor.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1').slice(0, 8);
-                } else if (tipo === 'Descuento' || tipo === 'Cantidad') {
+                } else if (tipo === 'Descuento') {
                     this.value = valor.replace(/[^0-9]/g, '').slice(0, tipo === 'Descuento' ? 2 : 3);
                 }
             });
         </script>
 
-    </section>
+        <script>
+            // Clase para gestionar el estado
+            class ClientManager {
+                constructor() {
+                    this.select = document.getElementById('cliente_id');
+                    this.tbody = document.querySelector('#clientesTable tbody');
+                    this.container = document.getElementById('clientesContainer');
+                    this.originalOptions = [...this.select.options]; // Copia original de opciones
+                }
 
+                // Agregar cliente a la tabla
+                addClient() {
+                    const selectedOption = this.select.options[this.select.selectedIndex];
+
+                    if (selectedOption.value && !selectedOption.disabled) {
+                        const clienteId = selectedOption.value;
+                        const clienteNombre = selectedOption.text.split(' - ')[0];
+                        const visitas = selectedOption.getAttribute('data-visitas');
+
+                        // Crear fila
+                        const row = document.createElement('tr');
+                        row.setAttribute('data-cliente-id', clienteId);
+                        row.innerHTML = `
+                <td>${clienteNombre}</td>
+                <td>${visitas}</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm removerCliente">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                </td>
+            `;
+
+                        this.tbody.appendChild(row);
+                        this.container.style.display = 'block';
+
+                        // Crear input hidden
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'clientes[]';
+                        hiddenInput.value = clienteId;
+                        document.getElementById('cuponForm').appendChild(hiddenInput);
+
+                        // Deshabilitar opción en el select
+                        selectedOption.disabled = true;
+                        selectedOption.hidden = true;
+
+                        // Resetear select
+                        this.select.selectedIndex = 0;
+                    }
+                }
+
+                // Remover cliente de la tabla
+                removeClient(clienteId) {
+                    // Eliminar fila
+                    document.querySelector(`tr[data-cliente-id="${clienteId}"]`).remove();
+
+                    // Eliminar input hidden
+                    document.querySelectorAll('input[name="clientes[]"]').forEach(input => {
+                        if (input.value === clienteId) input.remove();
+                    });
+
+                    // Reactivar opción en el select
+                    const option = this.select.querySelector(`option[value="${clienteId}"]`);
+                    if (option) {
+                        option.disabled = false;
+                        option.hidden = false;
+                    }
+
+                    // Ocultar tabla si está vacía
+                    if (this.tbody.children.length === 0) {
+                        this.container.style.display = 'none';
+                    }
+                }
+            }
+
+
+            // Inicializar manager
+            const clientManager = new ClientManager();
+
+            // Event Listeners
+            document.getElementById('agregarCliente').addEventListener('click', () => clientManager.addClient());
+
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('removerCliente')) {
+                    const clienteId = e.target.closest('tr').getAttribute('data-cliente-id');
+                    clientManager.removeClient(clienteId);
+                }
+            });
+        </script>
+    </section>
 @endsection

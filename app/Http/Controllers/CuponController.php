@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Cupon;
 use App\Models\Visita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CuponController extends Controller
 {
@@ -60,14 +61,23 @@ class CuponController extends Controller
                 'min:0',
                 'max:999999.99',
             ],
-            'cantidad' => [
-                'required_if:tipo,Cantidad',
-                'integer',
+            'clientes' => [
+                'required',
+                'array',
                 'min:1',
             ],
-            'cliente_id' => [
-                'required',
+            'clientes.*' => [
                 'exists:visitas,cliente_id',
+            ],
+            'fecha_desde' => [
+                'required',
+                'date',
+                'after_or_equal:today',
+            ],
+            'fecha_hasta' => [
+                'required',
+                'date',
+                'after:fecha_desde',
             ],
         ], [
             'nombre.required' => 'El nombre del cupón es obligatorio.',
@@ -85,37 +95,35 @@ class CuponController extends Controller
             'valor.min' => 'El valor del cupón no puede ser menor a 0.',
             'valor.max' => 'El valor del cupón no puede exceder 999,999.99.',
 
-            'cantidad.required_if' => 'La cantidad es obligatoria si el tipo de cupón es Cantidad.',
-            'cantidad.integer' => 'La cantidad debe ser un número entero.',
-            'cantidad.min' => 'La cantidad debe ser al menos 1.',
+            'fecha_desde.after_or_equal' => 'La fecha de inicio debe ser igual o posterior a hoy.',
+            'fecha_desde.required' => 'La fecha de inicio es obligatoria.',
 
-            'cliente_id.required' => 'Debe seleccionar un cliente.',
-            'cliente_id.exists' => 'El cliente seleccionado no tiene visitas registradas.',
+            'fecha_hasta.required' => 'La fecha de fin es obligatoria.',
+            'fecha_hasta.after' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
+
+            'clientes.required' => 'Debe seleccionar al menos un cliente.',
+            'clientes.*.exists' => 'Uno o más clientes seleccionados no son válidos.',
         ]);
 
-        // Obtener la visita del cliente seleccionado
-        $visita = Visita::where('cliente_id', $request->cliente_id)->first();
+        DB::beginTransaction();
+        try {
+            $cupon = Cupon::create($request->only(
+                    'nombre', 'descripcion', 'tipo', 'valor', 'fecha_desde', 'fecha_hasta'
+                ) + ['estado' => 'Activo']);
 
-        if ($visita && $request->has('cantidad')) {
-            // Validar que la cantidad no sea mayor que las visitas disponibles
-            if ($request->cantidad > $visita->visitas_disponibles) {
-                return redirect()->back()->withInput()->withErrors([
-                    'cantidad' => 'La cantidad no puede ser mayor que las visitas disponibles.'
-                ]);
-            }
+            $cupon->clientes()->attach($request->clientes);
 
-            // Restar la cantidad de visitas disponibles y dejarlas en 0 si es necesario
-            $visita->visitas_disponibles = max(0, $visita->visitas_disponibles - $request->cantidad);
-            $visita->save();
+            DB::commit();
+
+            return redirect()->route('cupones.index')
+                ->with('success', 'Cupón creado exitosamente!');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['error' => 'Error: '.$e->getMessage()]);
         }
-
-        // Crear el cupón con el estado "Activo" por defecto
-        $cupon = Cupon::create(array_merge($validated, ['estado' => 'Activo']));
-
-        // Mensaje de éxito
-        $successMessage = 'El cupón "' . $cupon->nombre . '" ha sido registrado exitosamente.';
-
-        return redirect()->route('cupones.index')->with('success', $successMessage);
     }
 
     /**

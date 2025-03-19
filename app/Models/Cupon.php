@@ -18,7 +18,6 @@ class Cupon extends Model
         'descripcion',
         'tipo',
         'valor',
-        'cantidad',
     ];
 
     /**
@@ -27,5 +26,11 @@ class Cupon extends Model
     public function cliente(): BelongsTo
     {
         return $this->belongsTo(Cliente::class);
+    }
+
+    // En el modelo Cupon
+    public function clientes()
+    {
+        return $this->belongsToMany(Cliente::class);
     }
 }

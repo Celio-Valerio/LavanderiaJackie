@@ -98,7 +98,7 @@
                 // Ajustes en el diseño de DataTable
                 $('#usuariosTable_length').addClass('text-end').css('float', 'right');
                 $('#usuariosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#usuariosTable_filter input').attr('placeholder', 'Buscar usuario');
+                $('#usuariosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
                 $('#usuariosTable_filter input').css({
                     'width': '300px',
                     'border-radius': '5px',

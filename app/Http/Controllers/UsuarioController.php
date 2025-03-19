@@ -53,8 +53,8 @@ class UsuarioController extends Controller
             'direccion' => ['required', 'string', 'min:5', 'max:500'],
             'empleado_id' => ['required', 'exists:puestos,id'],
         ],[
-            'name.required' => 'El nombre completo del vendedor es obligatorio.',
-            'name.regex' => 'El nombre completo puede contener hasta 5 palabras y no debe tener símbolos ni números.',
+            'name.required' => 'El nombre de usuario es obligatorio.',
+            'name.regex' => 'El nombre de usuario puede contener hasta 5 palabras y no debe contener símbolos ni números.',
 
             'email.required' => 'El campo correo electrónico es obligatorio.',
             'email.email' => 'Debe ser un correo electrónico válido.',

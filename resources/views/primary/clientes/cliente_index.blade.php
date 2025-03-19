@@ -26,9 +26,9 @@
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 25%;">Nombre</th>
                                 <th style="width: 25%;">Apellido</th>
-                                <th style="width: 15%;">Teléfono</th>
+                                <th style="width: 10%;">Teléfono</th>
                                 <th style="width: 10%;">Tipo</th>
-                                <th style="width: 20%;">Acciones</th>
+                                <th style="width: 25%;">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
