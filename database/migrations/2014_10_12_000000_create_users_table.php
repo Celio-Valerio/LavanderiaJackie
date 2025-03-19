@@ -20,6 +20,10 @@ return new class extends Migration
             $table->string('direccion', 255);
             $table->string('telefono', 8)->unique();
             $table->string('image');
+
+            // Columna para la relación con el empleado
+            $table->unsignedBigInteger('empleado_id');
+            $table->foreign('empleado_id')->references('id')->on('empleados')->onDelete('cascade'); // Relación foránea, eliminar transacción si se elimina la cuenta
             $table->rememberToken();
             $table->timestamps();
         });

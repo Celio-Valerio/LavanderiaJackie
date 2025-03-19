@@ -26,6 +26,11 @@ class User extends Authenticatable
         'image',
     ];
 
+    public function empleados()
+    {
+        return $this->hasMany(Empleado::class, 'empleado_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -21,8 +21,12 @@ class EmpleadoFactory extends Factory
             'first_name' => $this->faker->firstName,  // Nombres
             'last_name' => $this->faker->lastName,  // Apellidos
             'email' => $this->faker->unique()->userName . '@gmail.com',  // Correo electrónico con dominio fijo
-            'phone' => $this->faker->numberBetween(2, 9) . $this->faker->numerify('#######'),  // Teléfonos que empiezan con 2,3,8,9
-            'address' => $this->faker->address,  // Dirección que parece real
+            'phone' => $this->faker->randomElement([2, 3, 8, 9]) . $this->faker->numerify('#######'),
+            'address' => 'Calle ' . $this->faker->randomDigitNotNull() .
+                ', casa ' . $this->faker->randomNumber(2) .
+                ', Colonia ' . $this->faker->randomElement(['La Concepción', 'Nueva Esperanza', 'Cofradía']) .
+                ', Danlí.',
+
             'hire_date' => $this->faker->date(),  // Fecha de ingreso
             'salary' => $this->faker->randomFloat(2, 1500, 5000),  // Salario entre 1500 y 5000
             'puesto_id' =>  $this->faker->numberBetween(2, 9), // Referencia a un puesto aleatorio

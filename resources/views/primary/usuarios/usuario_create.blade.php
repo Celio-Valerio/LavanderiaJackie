@@ -16,6 +16,29 @@
                             <div class="row g-0 mb-3">  <!-- Removemos gutter global -->
                                 <!-- Columna de inputs (más compacta) -->
                                 <div class="col-md-7 me-md-3">  <!-- Margen derecho para separación -->
+                                    <div class="mb-3">
+                                        <label for="empleado_id" class="form-label">Empleado</label>
+                                        <div class="d-flex align-items-start">
+                                            <!-- Select de cliente -->
+                                            <select name="empleado_id" id="empleado_id" class="form-control select2 @error('empleado_id') is-invalid @enderror" required>
+                                                <option value="">Seleccione un empleado</option>
+                                                @foreach($empleados as $empleado)
+                                                    <option value="{{ $empleado->id }}"
+                                                            data-nombre="{{ $empleado->first_name }} {{ $empleado->last_name }}"
+                                                            data-direccion="{{ $empleado->address }}"
+                                                            data-email="{{ $empleado->email }}"
+                                                            data-telefono="{{ $empleado->phone }}"
+                                                        {{ old('empleado_id') == $empleado->id ? 'selected' : '' }}>
+                                                        {{ $empleado->first_name }} {{ $empleado->last_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('empleado_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                     <!-- Nombre completo -->
                                     <div class="mb-3">
                                         <label for="name" class="form-label">Nombre completo</label>
@@ -29,14 +52,14 @@
                                         <div class="col-md-6">
                                             <label for="telefono" class="form-label">Teléfono</label>
                                             <input type="text" name="telefono" class="form-control small-text-field @error('telefono') is-invalid @enderror"
-                                                   id="telefono" value="{{ old('telefono') }}" placeholder="Ej: 90123456" maxlength="8" required>
+                                                   id="telefono" value="{{ old('telefono') }}" placeholder="Ej: 90123456" maxlength="8" readonly>
                                             @error('telefono')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                         </div>
 
                                         <div class="col-md-6">
                                             <label for="email" class="form-label">Correo electrónico</label>
                                             <input type="email" name="email" class="form-control small-text-field @error('email') is-invalid @enderror"
-                                                   id="email" value="{{ old('email') }}" placeholder="Ej: usuario@mail.com" maxlength="50">
+                                                   id="email" value="{{ old('email') }}" placeholder="Ej: usuario@mail.com" maxlength="50" readonly>
                                             @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                         </div>
                                     </div>
@@ -91,7 +114,7 @@
                             <div class="mb-3">
                                 <label for="direccion" class="form-label">Dirección</label>
                                 <textarea name="direccion" class="form-control small-text-field @error('direccion') is-invalid @enderror"
-                                          id="direccion" placeholder="Ej: Calle Principal 123" maxlength="500" rows="2">{{ old('direccion') }}</textarea>
+                                          id="direccion" placeholder="Ej: Calle Principal 123" maxlength="500" rows="2" readonly>{{ old('direccion') }}</textarea>
                                 @error('direccion')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
@@ -123,8 +146,8 @@
                     var wordArray = lettersAndSpacesOnly.split(' ');
 
                     // Aplica las reglas de la cantidad máxima de palabras (4 palabras como máximo)
-                    if (wordArray.length > 4) {
-                        wordArray = wordArray.slice(0, 4);
+                    if (wordArray.length > 5) {
+                        wordArray = wordArray.slice(0, 5);
                     }
 
                     // Normaliza cada palabra para que tenga la primera letra en mayúscula y las demás en minúscula
@@ -347,6 +370,46 @@
                 imagePreview.addEventListener('load', updateContainerBackground);
             });
         </script>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const selectEmpleado = document.getElementById('empleado_id');
+                const inputNombre = document.getElementById('name');
+                const inputDireccion = document.getElementById('direccion');
+                const inputEmail = document.getElementById('email');
+                const inputTelefono = document.getElementById('telefono');
+
+                selectEmpleado.addEventListener('change', function () {
+                    const selectedOption = this.options[this.selectedIndex];
+
+                    if (selectedOption.value) {
+                        inputNombre.value = selectedOption.getAttribute('data-nombre') || '';
+                        inputDireccion.value = selectedOption.getAttribute('data-direccion') || '';
+                        inputEmail.value = selectedOption.getAttribute('data-email') || '';
+                        inputTelefono.value = selectedOption.getAttribute('data-telefono') || '';
+                    } else {
+                        inputNombre.value = '';
+                        inputDireccion.value = '';
+                        inputEmail.value = '';
+                        inputTelefono.value = '';
+                    }
+                });
+
+                // Disparar el evento change si hay un valor previamente seleccionado
+                if (selectEmpleado.value) {
+                    selectEmpleado.dispatchEvent(new Event('change'));
+                }
+
+                // Evitar que los campos readonly se editen con trucos del navegador
+                [inputDireccion, inputEmail, inputTelefono].forEach(input => {
+                    input.addEventListener('focus', function () {
+                        this.blur(); // Evita que el usuario pueda escribir en el campo
+                    });
+                });
+            });
+
+        </script>
+
 
     </section>
 @endsection

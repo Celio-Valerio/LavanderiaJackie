@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Empleado;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -28,8 +29,15 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        return view('primary.usuarios.usuario_create');
+        // Obtener los empleados que NO tienen un usuario asociado
+        $empleados = Empleado::select('id', 'first_name', 'last_name', 'address', 'email', 'phone')
+            ->whereNotIn('id', function ($query) {
+                $query->select('empleado_id')->from('users'); // Asegura que 'usuarios' es el nombre correcto de la tabla
+            })->get();
+
+        return view('primary.usuarios.usuario_create', compact('empleados'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -38,14 +46,15 @@ class UsuarioController extends Controller
     {
         $request->validate([
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048',],
-            'name' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+){1,3}$/',],
+            'name' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+){1,4}$/',],
             'email' => ['required', 'string', 'email', 'max:100', 'unique:users,email', 'regex:/^(.+)@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com)$/i',],
             'password' => ['required', 'confirmed', 'min:8', 'max:30', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',],
             'telefono' => ['required', 'digits:8', 'regex:/^[2389][0-9]{7}$/', 'unique:users,telefono'],
             'direccion' => ['required', 'string', 'min:5', 'max:500'],
+            'empleado_id' => ['required', 'exists:puestos,id'],
         ],[
             'name.required' => 'El nombre completo del vendedor es obligatorio.',
-            'name.regex' => 'El nombre completo puede contener hasta 4 palabras y no debe tener símbolos ni números.',
+            'name.regex' => 'El nombre completo puede contener hasta 5 palabras y no debe tener símbolos ni números.',
 
             'email.required' => 'El campo correo electrónico es obligatorio.',
             'email.email' => 'Debe ser un correo electrónico válido.',
@@ -72,8 +81,10 @@ class UsuarioController extends Controller
             'image.image' => 'Debes seleccionar una imagen en un formato válido.',
             'image.mimes' => 'La imagen debe estar en formato jpeg, png, jpg o gif.',
             'image.max' => 'La imagen no puede exceder los 2048 KB.',
-        ]);
 
+            'empleado_id.required' => 'El empleado es obligatorio.',
+            'empleado_id.exists' => 'El empleado seleccionado no es válido.',
+        ]);
 
         $user = new User();
         $user->name = $request->name;
@@ -81,6 +92,7 @@ class UsuarioController extends Controller
         $user->password = Hash::make($request->password);
         $user->direccion = $request->direccion;
         $user->telefono = $request->telefono;
+        $user->empleado_id = $request->empleado_id;
 
         // Guardar imagen
         if ($request->hasFile('image')) {
