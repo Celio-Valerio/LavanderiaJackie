@@ -56,10 +56,20 @@ class CuponController extends Controller
                 'in:Valor,Descuento,Cantidad',
             ],
             'valor' => [
-                'required_if:tipo,Valor,Descuento',
+                'required',
                 'numeric',
                 'min:0',
-                'max:999999.99',
+                // Máximo según el tipo
+                function ($attribute, $value, $fail) use ($request) {
+                    $tipo = $request->tipo;
+                    if ($tipo === 'Descuento' && $value > 100) {
+                        $fail('El descuento no puede ser mayor a 100%.');
+                    } elseif ($tipo === 'Valor' && $value > 999999.99) {
+                        $fail('El valor no puede exceder L 999,999.99.');
+                    } elseif ($tipo === 'Cantidad' && $value > 99999) {
+                        $fail('La cantidad no puede exceder 99,999.');
+                    }
+                },
             ],
             'clientes' => [
                 'required',
@@ -67,7 +77,7 @@ class CuponController extends Controller
                 'min:1',
             ],
             'clientes.*' => [
-                'exists:visitas,cliente_id',
+                'exists:clientes,id', // Corregir tabla a clientes
             ],
             'fecha_desde' => [
                 'required',
@@ -90,7 +100,8 @@ class CuponController extends Controller
             'tipo.required' => 'El tipo de cupón es obligatorio.',
             'tipo.in' => 'El tipo de cupón debe ser Valor, Descuento o Cantidad.',
 
-            'valor.required_if' => 'El valor es obligatorio si el tipo de cupón es Valor o Descuento.',
+            'valor.required_if' => 'El valor es obligatorio si el tipo de cupón es Valor, Cantidad o Descuento.',
+            'valor.required' => 'El valor es obligatorio si el tipo de cupón es Valor, Cantidad Descuento.',
             'valor.numeric' => 'El valor del cupón debe ser un número válido.',
             'valor.min' => 'El valor del cupón no puede ser menor a 0.',
             'valor.max' => 'El valor del cupón no puede exceder 999,999.99.',
@@ -101,8 +112,8 @@ class CuponController extends Controller
             'fecha_hasta.required' => 'La fecha de fin es obligatoria.',
             'fecha_hasta.after' => 'La fecha de fin debe ser posterior a la fecha de inicio.',
 
-            'clientes.required' => 'Debe seleccionar al menos un cliente.',
             'clientes.*.exists' => 'Uno o más clientes seleccionados no son válidos.',
+            'clientes.required' => 'Debes seleccionar al menos un cliente.',
         ]);
 
         DB::beginTransaction();

@@ -24,12 +24,12 @@
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
-                                <th style="width: 15%;">Cliente</th>
                                 <th style="width: 15%;">Nombre</th>
-                                <th style="width: 10%;">Tipo de cupon</th>
                                 <th style="width: 15%;">Estado</th>
+                                <th style="width: 10%;">Tipo de cupon</th>
                                 <th style="width: 15%;">Valor</th>
-                                <th style="width: 10%;">Puntos utilizados</th>
+                                <th style="width: 10%;">Inicia</th>
+                                <th style="width: 10%;">Finaliza</th>
                                 <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
@@ -37,18 +37,7 @@
                             @forelse($cupones as $cupon)
                                 <tr>
                                     <td class="row-index small-text-field"></td>
-                                    <td class="small-text-field" >{{ $cupon->cliente->first_name }} {{ $cupon->cliente->last_name }}</td>
                                     <td class="small-text-field" >{{ $cupon->nombre }}</td>
-
-                                    <td class="small-text-field">
-                                        @if($cupon->tipo == 'Valor')
-                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
-                                        @elseif($cupon->tipo == 'Cantidad')
-                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
-                                        @elseif($cupon->tipo == 'Descuento')
-                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
-                                        @endif
-                                    </td>
 
                                     <td class="small-text-field">
                                         @if($cupon->estado == 'Activo')
@@ -64,6 +53,17 @@
 
                                     <td class="small-text-field">
                                         @if($cupon->tipo == 'Valor')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @elseif($cupon->tipo == 'Cantidad')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @elseif($cupon->tipo == 'Descuento')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @endif
+                                    </td>
+
+
+                                    <td class="small-text-field">
+                                        @if($cupon->tipo == 'Valor')
                                             <span>L. {{ $cupon->valor }}</span> <!-- Redondear el valor -->
                                         @elseif($cupon->tipo == 'Cantidad')
                                             <span>{{ round($cupon->valor) }} lavadas</span> <!-- Redondear el valor -->
@@ -72,7 +72,10 @@
                                         @endif
                                     </td>
 
-                                    <td class="small-text-field" >{{ $cupon->cantidad }}</td>
+                                    <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('d/m/Y') }}</td>
+                                    <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_hasta)->format('d/m/Y') }}</td>
+
+
                                     <td class="text-center">
                                         <a href="{{ route('cupones.show', $cupon->id) }}" class="btn btn-info btn-sm">Ver</a>
                                         <a href="{{ route('cupones.edit', $cupon->id) }}" class="btn btn-warning btn-sm">Editar</a>

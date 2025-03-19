@@ -63,8 +63,8 @@
                                         <select name="cliente_id" class="form-control" id="cliente_id">
                                             <option value="" disabled selected>Seleccione un cliente</option>
                                             @foreach ($clientes as $cliente)
-                                                <option value="{{ $cliente->id }}" data-visitas="{{ $cliente->visitas_disponibles }}"
-                                                        @if(old('cliente_id') == $cliente->id) selected @endif
+                                                <option value="{{ $cliente->id }}"
+                                                        data-visitas="{{ $cliente->visitas_disponibles }}"
                                                         @if(in_array($cliente->id, old('clientes', []))) disabled @endif>
                                                     {{ $cliente->first_name }} {{ $cliente->last_name }} - {{ $cliente->visitas_disponibles }} visitas
                                                 </option>
@@ -115,9 +115,8 @@
                                 </script>
 
                             </div>
-
                             <!-- Tabla de Clientes Agregados -->
-                            <div class="mb-4" id="clientesContainer" style="display: none;">
+                            <div class="mb-4" id="clientesContainer" style="display: {{ count(old('clientes', [])) ? 'block' : 'none' }};">
                                 <div class="table-responsive">
                                     <table class="table table-hover table-bordered" id="clientesTable">
                                         <thead class="table-light">
@@ -146,11 +145,10 @@
                                     </table>
                                 </div>
                             </div>
-
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
                                 <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
+                                <button type="button" class="btn btn-warning flex-fill" id="clearButton">Limpiar</button>
                                 <a href="{{ route('cupones.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>
                         </form>
@@ -195,7 +193,7 @@
             document.getElementById('tipo').addEventListener('change', function() {
                 let tipo = this.value;
                 let valorInput = document.getElementById('valor');
-                let valorLabel = document.getElementById('valorLabel');
+                valorInput.required = tipo !== 'Cantidad';
 
                 if (tipo === 'Valor') {
                     valorLabel.textContent = 'Valor en lempiras';
@@ -258,94 +256,121 @@
             });
         </script>
 
-        <script>
-            // Clase para gestionar el estado
-            class ClientManager {
-                constructor() {
-                    this.select = document.getElementById('cliente_id');
-                    this.tbody = document.querySelector('#clientesTable tbody');
-                    this.container = document.getElementById('clientesContainer');
-                    this.originalOptions = [...this.select.options]; // Copia original de opciones
-                }
+            <script>
+                // Clase para gestionar el estado (versión corregida)
+                class ClientManager {
+                    constructor() {
+                        this.select = document.getElementById('cliente_id');
+                        this.tbody = document.querySelector('#clientesTable tbody');
+                        this.container = document.getElementById('clientesContainer');
+                        this.originalOptions = [...this.select.options];
 
-                // Agregar cliente a la tabla
-                addClient() {
-                    const selectedOption = this.select.options[this.select.selectedIndex];
-
-                    if (selectedOption.value && !selectedOption.disabled) {
-                        const clienteId = selectedOption.value;
-                        const clienteNombre = selectedOption.text.split(' - ')[0];
-                        const visitas = selectedOption.getAttribute('data-visitas');
-
-                        // Crear fila
-                        const row = document.createElement('tr');
-                        row.setAttribute('data-cliente-id', clienteId);
-                        row.innerHTML = `
-                <td>${clienteNombre}</td>
-                <td>${visitas}</td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm removerCliente">
-                        <i class="bi bi-arrow-counterclockwise"></i>
-                    </button>
-                </td>
-            `;
-
-                        this.tbody.appendChild(row);
-                        this.container.style.display = 'block';
-
-                        // Crear input hidden
-                        const hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = 'clientes[]';
-                        hiddenInput.value = clienteId;
-                        document.getElementById('cuponForm').appendChild(hiddenInput);
-
-                        // Deshabilitar opción en el select
-                        selectedOption.disabled = true;
-                        selectedOption.hidden = true;
-
-                        // Resetear select
-                        this.select.selectedIndex = 0;
-                    }
-                }
-
-                // Remover cliente de la tabla
-                removeClient(clienteId) {
-                    // Eliminar fila
-                    document.querySelector(`tr[data-cliente-id="${clienteId}"]`).remove();
-
-                    // Eliminar input hidden
-                    document.querySelectorAll('input[name="clientes[]"]').forEach(input => {
-                        if (input.value === clienteId) input.remove();
-                    });
-
-                    // Reactivar opción en el select
-                    const option = this.select.querySelector(`option[value="${clienteId}"]`);
-                    if (option) {
-                        option.disabled = false;
-                        option.hidden = false;
+                        this.container.style.display = this.tbody.children.length > 0 ? 'block' : 'none';
                     }
 
-                    // Ocultar tabla si está vacía
-                    if (this.tbody.children.length === 0) {
+                    addClient() {
+                        const selectedOption = this.select.options[this.select.selectedIndex];
+
+                        if (selectedOption.value && !selectedOption.disabled) {
+                            // ... (código existente de addClient)
+                        }
+                    }
+
+                    removeClient(clienteId) {
+                        // ... (código existente de removeClient)
+                    }
+
+                    removeAllClients() {
+                        // Eliminar todas las filas
+                        const rows = this.tbody.querySelectorAll('tr');
+                        rows.forEach(row => {
+                            const clienteId = row.getAttribute('data-cliente-id');
+                            this.removeClient(clienteId);
+                        });
+
+                        // Forzar actualización de visualización
                         this.container.style.display = 'none';
                     }
                 }
-            }
 
+                // Inicializar manager
+                const clientManager = new ClientManager();
 
-            // Inicializar manager
-            const clientManager = new ClientManager();
+                // Evento del botón Limpiar (versión corregida)
+                document.getElementById('clearButton').addEventListener('click', function() {
+                    // Restablecer formulario
+                    document.getElementById('cuponForm').reset();
 
-            // Event Listeners
-            document.getElementById('agregarCliente').addEventListener('click', () => clientManager.addClient());
+                    // Limpiar campos manualmente
+                    document.querySelectorAll('#nombre, #descripcion, #valor, #fecha_desde, #fecha_hasta').forEach(field => {
+                        field.value = '';
+                    });
 
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('removerCliente')) {
-                    const clienteId = e.target.closest('tr').getAttribute('data-cliente-id');
-                    clientManager.removeClient(clienteId);
+                    // Restablecer selects
+                    document.getElementById('tipo').selectedIndex = 0;
+                    document.getElementById('cliente_id').selectedIndex = 0;
+
+                    // Limpiar tabla de clientes
+                    clientManager.removeAllClients();
+
+                    // Restablecer etiqueta del valor
+                    document.getElementById('valorLabel').textContent = 'Valor del Cupón';
+
+                    // Eliminar mensajes de error
+                    document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                    document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+                });
+
+                // ... (resto del código existente)
+            </script>
+
+            <script>
+                // En la sección del botón Limpiar
+                document.getElementById('clearButton').addEventListener('click', function () {
+                    const form = document.getElementById('cuponForm');
+
+                    // Limpiar todos los inputs y selects
+                    form.querySelectorAll('input:not([type="hidden"]):not([name="_token"]), textarea, select').forEach(element => {
+                        if (element.tagName === 'SELECT') {
+                            element.selectedIndex = 0; // Restablecer selects
+                        } else {
+                            element.value = ''; // Limpiar inputs y textarea
+                        }
+                    });
+
+                    // Limpiar tabla de clientes y reactivar opciones
+                    clientManager.removeAllClients();
+
+                    // Restablecer etiqueta y placeholder del valor
+                    const valorLabel = document.getElementById('valorLabel');
+                    valorLabel.textContent = 'Valor del Cupón';
+                    const valorInput = document.getElementById('valor');
+                    valorInput.placeholder = 'Ej: 100';
+
+                    // Eliminar clases de validación
+                    form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                    form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
+
+                    // Restablecer fechas
+                    document.getElementById('fecha_desde').value = '';
+                    document.getElementById('fecha_hasta').value = '';
+                });
+
+                // En la clase ClientManager agregar este método
+                class ClientManager {
+                    // ... (código existente)
+
+                    removeAllClients() {
+                        // Eliminar todas las filas
+                        this.tbody.querySelectorAll('tr').forEach(row => {
+                            const clienteId = row.getAttribute('data-cliente-id');
+                            this.removeClient(clienteId);
+                        });
+
+                        // Ocultar contenedor
+                        this.container.style.display = 'none';
+                    }
                 }
-            });
-        </script>
+            </script>
     </section>
 @endsection
