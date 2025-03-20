@@ -9,7 +9,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de cupones</h1>
                             <!-- Botón agregar cupones -->
-                            <a href="{{ route('cupones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Cupon</a>
+                            <a href="{{ route('cupones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar cupón</a>
                         </div>
 
                         @if(session('success'))
@@ -20,13 +20,27 @@
                         @endif
                         <hr>
 
+                        <!-- Filtros de fechas y botón de recargar -->
+                        <div class="mb-3 d-flex align-items-center gap-2">
+                            <div>
+                                <label for="fecha-desde" class="form-label">Buscar desde</label>
+                                <input type="date" id="fecha-desde" class="form-control" style="display: inline-block; width: auto;">
+                                <label for="fecha-hasta" class="form-label">hasta</label>
+                                <input type="date" id="fecha-hasta" class="form-control" style="display: inline-block; width: auto;">
+                            </div>
+                            <!-- Botón de recargar -->
+                            <button id="reload-button" class="btn btn-link p-0" style="color: #007bff; font-size: 24px; margin-top: 5px;">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
+                        </div>
+
                         <table id="cuponesTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px; text-align: center;">
                             <thead class="table table-bordered table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 15%;">Nombre</th>
                                 <th style="width: 15%;">Estado</th>
-                                <th style="width: 10%;">Tipo de cupon</th>
+                                <th style="width: 10%;">Tipo de cupón</th>
                                 <th style="width: 15%;">Valor</th>
                                 <th style="width: 10%;">Inicia</th>
                                 <th style="width: 10%;">Finaliza</th>
@@ -35,7 +49,7 @@
                             </thead>
                             <tbody>
                             @forelse($cupones as $cupon)
-                                <tr>
+                                <tr data-fecha="{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('Y-m-d') }}">
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field" >{{ $cupon->nombre }}</td>
 
@@ -107,7 +121,7 @@
                         "sProcessing": "Procesando...",
                         "sLengthMenu": "Mostrar _MENU_ cupones",
                         "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún cupon disponible en esta tabla",
+                        "sEmptyTable": "Ningún cupón disponible en esta tabla",
                         "sInfo": "Se muestran los cupones del _START_ al _END_ de _TOTAL_.",
                         "sInfoEmpty": "No hay resultados ",
                         "sInfoFiltered": "(filtrado de un total de _MAX_ cupones)",
@@ -121,23 +135,50 @@
                     },
                     "columnDefs": [{
                         "targets": 0,
-                        "orderable": false // Deshabilitar ordenamiento en la columna del índice
+                        "orderable": false
                     }],
                     "drawCallback": function(settings) {
                         var api = this.api();
-                        var startIndex = 1; // Comenzar el índice en 1
-
-                        // Actualizar el índice en la columna correspondiente
+                        var startIndex = 1;
                         api.rows({ search: 'applied' }).every(function(rowIdx) {
-                            $(this.node()).find('td.row-index').html(startIndex++); // Incrementar el índice
+                            $(this.node()).find('td.row-index').html(startIndex++);
                         });
                     }
                 });
 
-                // Estilo para mover el select a la derecha
-                $('#cuponesTable_length').addClass('text-end').css('float', 'right');
+                // Filtro por fechas
+                function filterByDate() {
+                    var fechaDesde = $('#fecha-desde').val();
+                    var fechaHasta = $('#fecha-hasta').val();
+                    table.draw();
+                }
 
-                // Mover el input de búsqueda a la izquierda y agregar placeholder
+                $.fn.dataTable.ext.search.push(
+                    function(settings, data, dataIndex) {
+                        var fechaDesde = $('#fecha-desde').val();
+                        var fechaHasta = $('#fecha-hasta').val();
+                        var row = table.row(dataIndex).node();
+                        var fechaCupon = $(row).data('fecha');
+
+                        if (!fechaDesde || !fechaHasta) {
+                            return true;
+                        }
+
+                        return fechaCupon >= fechaDesde && fechaCupon <= fechaHasta;
+                    }
+                );
+
+                $('#fecha-desde, #fecha-hasta').on('change', filterByDate);
+
+                // Botón de recargar
+                $('#reload-button').on('click', function() {
+                    $('#fecha-desde').val('');
+                    $('#fecha-hasta').val('');
+                    table.search('').draw();
+                });
+
+                // Estilos para DataTables
+                $('#cuponesTable_length').addClass('text-end').css('float', 'right');
                 $('#cuponesTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
                 $('#cuponesTable_filter input').attr('placeholder', 'Buscar por todos los datos');
                 $('#cuponesTable_filter input').css({

@@ -207,6 +207,44 @@
         </div>
 
         <script>
+            // Función para capitalizar solo la primera letra de la primera palabra
+            function capitalizeFirstLetter(input) {
+                let value = input.value.trimStart(); // Evita espacios iniciales
+                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            }
+
+            // Función para restringir caracteres y evitar dos espacios seguidos
+            function restrictInput(e) {
+                let key = e.key;
+                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.]*$/;
+
+                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                    e.preventDefault();
+                }
+            }
+
+            // Función para evitar dos espacios seguidos
+            function preventDoubleSpaces(input) {
+                input.value = input.value.replace(/\s{2,}/g, ' ');
+            }
+
+            // Asignar eventos a los campos nombre y descripción
+            ['nombre', 'descripcion'].forEach(id => {
+                let element = document.getElementById(id);
+
+                element.addEventListener('input', function(e) {
+                    capitalizeFirstLetter(e.target);
+                    preventDoubleSpaces(e.target);
+                });
+
+                element.addEventListener('keydown', function(e) {
+                    restrictInput(e);
+                });
+            });
+        </script>
+
+
+        <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Almacenar estado inicial para el botón limpiar
                 const initialAvailable = document.getElementById('availableClientsTable').innerHTML;
@@ -366,19 +404,6 @@
                     let lastValid = input.dataset.lastValid || '';
 
                     switch(input.id) {
-                        case 'nombre':
-                        case 'descripcion':
-                            // Capitalizar primera letra y eliminar espacios múltiples
-                            value = value.replace(/^[a-záéíóúñü]/, match => match.toUpperCase())
-                                .replace(/  +/g, ' ');
-
-                            if (!config.validacion[input.id].regex.test(value) ||
-                                value.length > config.validacion[input.id].maxLength) {
-                                input.value = lastValid;
-                                return;
-                            }
-                            break;
-
                         case 'valor':
                             const pattern = config.validacion.valor.patterns[tipo];
 
