@@ -51,7 +51,7 @@ class UsuarioController extends Controller
             'password' => ['required', 'confirmed', 'min:8', 'max:30', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/',],
             'telefono' => ['required', 'digits:8', 'regex:/^[2389][0-9]{7}$/', 'unique:users,telefono'],
             'direccion' => ['required', 'string', 'min:5', 'max:500'],
-            'empleado_id' => ['required', 'exists:puestos,id'],
+            'empleado_id' => ['required', 'exists:empleados,id'],
         ],[
             'name.required' => 'El nombre de usuario es obligatorio.',
             'name.regex' => 'El nombre de usuario puede contener hasta 5 palabras y no debe contener símbolos ni números.',
@@ -86,33 +86,40 @@ class UsuarioController extends Controller
             'empleado_id.exists' => 'El empleado seleccionado no es válido.',
         ]);
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->direccion = $request->direccion;
-        $user->telefono = $request->telefono;
-        $user->empleado_id = $request->empleado_id;
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->direccion = $request->direccion;
+            $user->telefono = $request->telefono;
+            $user->empleado_id = $request->empleado_id;
 
-        // Guardar imagen
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $extension = $image->getClientOriginalExtension();
+            // Guardar imagen
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $extension = $image->getClientOriginalExtension();
 
-            // Generar el nombre en el formato deseado
-            $timestamp = now()->format('d-m-Y_H-i-s');
-            $randomNumber = str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
-            $imageName = "perfiles_{$timestamp}_{$randomNumber}.{$extension}";
+                // Generar el nombre en el formato deseado
+                $timestamp = now()->format('d-m-Y_H-i-s');
+                $randomNumber = str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+                $imageName = "perfiles_{$timestamp}_{$randomNumber}.{$extension}";
 
-            // Guardar la imagen directamente en la carpeta public/assets/img/promociones
-            $image->move(public_path('assets/img/perfiles'), $imageName);
+                // Guardar la imagen directamente en la carpeta public/assets/img/promociones
+                $image->move(public_path('assets/img/perfiles'), $imageName);
 
-            // Almacenar el nombre en la base de datos
-            $user->image = $imageName;
+                // Almacenar el nombre en la base de datos
+                $user->image = $imageName;
+            }
+
+            $user->save();
+            return redirect()->route('usuarios.index')
+                ->with('success', 'El usuario ' . $user->name . ' ha sido registrado exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error al guardar el usuario: ' . $e->getMessage());
         }
-
-        $user->save();
-        return redirect()->route('usuarios.index')->with('success', 'El usuario ' . $user->name . ' ha sido registrado exitosamente.');
     }
 
     /**
@@ -121,7 +128,8 @@ class UsuarioController extends Controller
     public function show($id)
     {
         try {
-            $usuario = User::findOrFail($id);
+            // Cargamos el usuario con la relación del empleado
+            $usuario = User::with('empleado')->findOrFail($id);
             return view('primary.usuarios.usuario_show', compact('usuario'));
         } catch (\Exception $e) {
             return redirect()->route('usuarios.index')

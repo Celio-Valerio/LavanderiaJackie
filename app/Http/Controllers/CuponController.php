@@ -140,9 +140,12 @@ class CuponController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Cupon $cupon)
     {
-        //
+        // Carga la relación con los clientes
+        $cupon->load('clientes');
+        
+        return view('primary.cupones.cupon_show', compact('cupon'));
     }
 
     /**
@@ -167,5 +170,14 @@ class CuponController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function toggleEstado(Cupon $cupon)
+    {
+        $cupon->estado = $cupon->estado == 'Activo' ? 'Utilizado' : 'Activo';
+        $cupon->save();
+        
+        return redirect()->route('cupones.index', $cupon->id)
+            ->with('success', 'Estado del cupón actualizado correctamente');
     }
 }

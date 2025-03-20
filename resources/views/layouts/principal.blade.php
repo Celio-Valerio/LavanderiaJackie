@@ -69,11 +69,11 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a href="/" class="logo d-flex align-items-center" style="flex-direction: row;">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="max-width: 100%; max-height: 50px; object-fit: contain; margin-top: 65px;">
-            <span class="d-none d-lg-block" style="white-space: nowrap;">Lavandería Jackie</span>
+        <a href="/" class="logo d-flex align-items-center">
+            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="max-height: 50px; object-fit: contain; margin-right: 10px;">
+            <span class="d-none d-lg-block">Lavandería Jackie</span>
         </a>
-        <i class="bi bi-list toggle-sidebar-btn" style="margin-left: 75px;"></i>
+        <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
     <nav class="header-nav ms-auto">

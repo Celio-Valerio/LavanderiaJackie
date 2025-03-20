@@ -22,6 +22,7 @@ use App\Http\Controllers\CuponController;
 use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCorreo;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -313,7 +314,7 @@ Route::get('/cupones/create', [CuponController::class, 'create'])->name('cupones
 Route::post('/cupones', [CuponController::class, 'store'])->name('cupones.store');
 
 // Ruta para mostrar los detalles de una cuenta bancaria específica
-Route::get('/cupones/{id}', [CuponController::class, 'show'])->name('cupones.show');
+Route::get('/cupones/{cupon}', [CuponController::class, 'show'])->name('cupones.show');
 
 // Ruta para mostrar el formulario de edición de un cupon
 Route::get('/cupones/{id}/edit', [CuponController::class, 'edit'])->name('cupones.edit');
@@ -321,6 +322,8 @@ Route::get('/cupones/{id}/edit', [CuponController::class, 'edit'])->name('cupone
 // Ruta para actualizar un cupon existente
 Route::put('/cupones/{id}', [CuponController::class, 'update'])->name('cupones.update');
 
+// Ruta para cambiar el estado de un cupon
+Route::patch('/cupones/{cupon}/toggle-estado', [CuponController::class, 'toggleEstado'])->name('cupones.toggle-estado');
 
 // Ruta para mostrar la lista de usuarios
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
@@ -342,3 +345,6 @@ Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios
 
 // Ruta para recargar el formulario de editar usuario
 Route::get('/usuarios/{id}/reload', [UsuarioController::class, 'reload'])->name('usuarios.reload');
+
+// Ruta para mostrar los detalles del usuario
+Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
