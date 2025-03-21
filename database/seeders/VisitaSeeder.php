@@ -12,6 +12,6 @@ class VisitaSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        \App\Models\Visita::factory()->count(100)->create();
     }
 }

@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         // Llamar a la semilla
         $this->call(CategoriaSeeder::class);
         $this->call(PuestoSeeder::class);
-        $this->call(EmpleadoSeeder::class);
+        //$this->call(EmpleadoSeeder::class);
         $this->call(ClienteSeeder::class);
         $this->call(ProveedorSeeder::class);
         $this->call(MaquinariaSeeder::class);
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductoSeeder::class);
         $this->call(CompraSeeder::class);
         $this->call(ServicioSeeder::class);
-        $this->call(ServicioEfectuadoSeeder::class);
+        //$this->call(ServicioEfectuadoSeeder::class);
         $this->call(GastosSeeder::class);
 
         $this->call(CuentaBancoSeeder::class);
@@ -48,6 +48,8 @@ class DatabaseSeeder extends Seeder
                 'producto_id' => $producto->id
             ]);
         });
+
+        //$this->call(VisitaSeeder::class);
 
     }
 

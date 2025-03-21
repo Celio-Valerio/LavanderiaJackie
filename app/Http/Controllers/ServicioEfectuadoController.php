@@ -138,18 +138,11 @@ class ServicioEfectuadoController extends Controller
         // Registrar o actualizar la visita del cliente
         $visita = Visita::where('cliente_id', $request->cliente_id)->first();
 
-        if ($visita) {
-            // Si ya existe, incrementar las visitas
-            $visita->increment('visitas_totales');
-            $visita->increment('visitas_disponibles');
-        } else {
-            // Si no existe, crear un nuevo registro
-            Visita::create([
-                'cliente_id' => $request->cliente_id,
-                'visitas_totales' => 1,
-                'visitas_disponibles' => 1,
-            ]);
-        }
+        // Registrar una nueva visita individual para el cliente
+        Visita::create([
+            'cliente_id' => $request->cliente_id,
+            'fecha_visita' => now(), // Registra la fecha y hora actual
+        ]);
 
         // Crear el servicio efectuado
         $servicioEfectuado = new ServicioEfectuado();

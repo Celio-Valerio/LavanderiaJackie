@@ -18,6 +18,10 @@ class Visita extends Model
         'visitas_disponibles',
     ];
 
+    protected $casts = [
+        'fecha_visita' => 'datetime',
+    ];
+
     /**
      * Relación con el modelo Cliente
      */

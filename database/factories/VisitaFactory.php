@@ -3,10 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Cliente;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Visita>
- */
 class VisitaFactory extends Factory
 {
     /**
@@ -17,7 +15,8 @@ class VisitaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'cliente_id' => Cliente::inRandomOrder()->first()->id ?? Cliente::factory(), // Cliente aleatorio o creado en el factory
+            'fecha_visita' => $this->faker->dateTimeBetween('-1 year', 'now'), // Fecha aleatoria en el último año
         ];
     }
 }

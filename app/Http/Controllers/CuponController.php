@@ -25,13 +25,13 @@ class CuponController extends Controller
      */
     public function create()
     {
-        // Obtener solo los clientes con 1 o más visitas disponibles
-        $clientes = Visita::where('visitas_disponibles', '>=', 1)
-            ->join('clientes', 'visitas.cliente_id', '=', 'clientes.id')
-            ->select('clientes.id', 'clientes.first_name', 'clientes.last_name', 'visitas.visitas_disponibles')
+        // Obtener todas las visitas con la información del cliente
+        $visitas = Visita::join('clientes', 'visitas.cliente_id', '=', 'clientes.id')
+            ->select('clientes.id', 'clientes.first_name', 'clientes.last_name', 'visitas.fecha_visita')
+            ->orderBy('visitas.fecha_visita', 'desc') // Ordenar por la fecha de visita
             ->get();
 
-        return view('primary.cupones.cupon_create', compact('clientes'));
+        return view('primary.cupones.cupon_create', compact('visitas'));
     }
 
     /**
@@ -100,8 +100,8 @@ class CuponController extends Controller
             'tipo.required' => 'El tipo de cupón es obligatorio.',
             'tipo.in' => 'El tipo de cupón debe ser Valor, Descuento o Cantidad.',
 
-            'valor.required_if' => 'El valor es obligatorio si el tipo de cupón es Valor, Cantidad o Descuento.',
-            'valor.required' => 'El valor es obligatorio si el tipo de cupón es Valor, Cantidad Descuento.',
+            'valor.required_if' => 'Debes asignar un valor al cupón.',
+            'valor.required' => 'Debes asignar un valor al cupón.',
             'valor.numeric' => 'El valor del cupón debe ser un número válido.',
             'valor.min' => 'El valor del cupón no puede ser menor a 0.',
             'valor.max' => 'El valor del cupón no puede exceder 999,999.99.',
@@ -144,7 +144,7 @@ class CuponController extends Controller
     {
         // Carga la relación con los clientes
         $cupon->load('clientes');
-        
+
         return view('primary.cupones.cupon_show', compact('cupon'));
     }
 
@@ -176,7 +176,7 @@ class CuponController extends Controller
     {
         $cupon->estado = $cupon->estado == 'Activo' ? 'Utilizado' : 'Activo';
         $cupon->save();
-        
+
         return redirect()->route('cupones.index', $cupon->id)
             ->with('success', 'Estado del cupón actualizado correctamente');
     }
