@@ -100,8 +100,8 @@ class CuponController extends Controller
             'tipo.required' => 'El tipo de cupón es obligatorio.',
             'tipo.in' => 'El tipo de cupón debe ser Valor, Descuento o Cantidad.',
 
-            'valor.required_if' => 'Debes asignar un valor al cupón.',
-            'valor.required' => 'Debes asignar un valor al cupón.',
+            'valor.required_if' => 'Llene los datos con relación a tipo de cupón.',
+            'valor.required' => 'Llene los datos con relación a tipo de cupón.',
             'valor.numeric' => 'El valor del cupón debe ser un número válido.',
             'valor.min' => 'El valor del cupón no puede ser menor a 0.',
             'valor.max' => 'El valor del cupón no puede exceder 999,999.99.',

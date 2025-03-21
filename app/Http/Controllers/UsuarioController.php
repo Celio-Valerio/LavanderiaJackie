@@ -29,14 +29,17 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        // Obtener los empleados que NO tienen un usuario asociado
-        $empleados = Empleado::select('id', 'first_name', 'last_name', 'address', 'email', 'phone')
+        // Obtener los empleados que NO tienen un usuario asociado, junto con el puesto
+        $empleados = Empleado::select('id', 'first_name', 'last_name', 'address', 'email', 'phone', 'puesto_id')
             ->whereNotIn('id', function ($query) {
                 $query->select('empleado_id')->from('users'); // Asegura que 'usuarios' es el nombre correcto de la tabla
-            })->get();
+            })
+            ->with('puesto') // Cargar la relación con el puesto
+            ->get();
 
         return view('primary.usuarios.usuario_create', compact('empleados'));
     }
+
 
 
     /**

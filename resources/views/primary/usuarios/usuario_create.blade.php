@@ -13,111 +13,146 @@
                         <form id="usuarioForm" action="{{ route('usuarios.store') }}" method="POST" novalidate enctype="multipart/form-data">
                             @csrf
 
-                            <div class="row g-0 mb-3">  <!-- Removemos gutter global -->
-                                <!-- Columna de inputs (más compacta) -->
-                                <div class="col-md-7 me-md-3">  <!-- Margen derecho para separación -->
-                                    <div class="mb-3">
-                                        <label for="empleado_id" class="form-label">Empleado</label>
-                                        <div class="d-flex align-items-start">
-                                            <!-- Select de cliente -->
-                                            <select name="empleado_id" id="empleado_id" class="form-control select2 @error('empleado_id') is-invalid @enderror" required>
-                                                <option value="">Seleccione un empleado</option>
-                                                @foreach($empleados as $empleado)
-                                                    <option value="{{ $empleado->id }}"
-                                                            data-nombre="{{ $empleado->first_name }} {{ $empleado->last_name }}"
-                                                            data-direccion="{{ $empleado->address }}"
-                                                            data-email="{{ $empleado->email }}"
-                                                            data-telefono="{{ $empleado->phone }}"
-                                                        {{ old('empleado_id') == $empleado->id ? 'selected' : '' }}>
-                                                        {{ $empleado->first_name }} {{ $empleado->last_name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @error('empleado_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                            <div>
+                                <div>
+                                    <h4 style="font-weight: bold;">Datos del empleado</h4>
 
-                                    <!-- Nombre completo -->
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Nombre de usuario</label>
-                                        <input type="text" name="name" class="form-control small-text-field @error('name') is-invalid @enderror"
-                                               id="name" value="{{ old('name') }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
-                                        @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
-
-                                    <!-- Teléfono y Email en row ajustado -->
-                                    <div class="row g-2 mb-3">  <!-- Gutters reducidos -->
+                                    <div class="row mb-3">
+                                        <!-- Seleccionar empleado -->
                                         <div class="col-md-6">
+                                            <label for="empleado_id" class="form-label">Empleado</label>
+                                            <div class="d-flex align-items-start">
+                                                <!-- Select de cliente -->
+                                                <select name="empleado_id" id="empleado_id" class="form-control select2 @error('empleado_id') is-invalid @enderror" required>
+                                                    <option value="">Seleccione un empleado</option>
+                                                    @foreach($empleados as $empleado)
+                                                        <option value="{{ $empleado->id }}"
+                                                                data-nombre="{{ $empleado->first_name }} {{ $empleado->last_name }}"
+                                                                data-direccion="{{ $empleado->address }}"
+                                                                data-email="{{ $empleado->email }}"
+                                                                data-telefono="{{ $empleado->phone }}"
+                                                                data-puesto="{{ $empleado->puesto->name }}"
+                                                            {{ old('empleado_id') == $empleado->id ? 'selected' : '' }}>
+                                                            {{ $empleado->first_name }} {{ $empleado->last_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            @error('empleado_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!--  Nombre completo -->
+                                        <div class="col-md-6">
+                                            <label for="names" class="form-label">Nombre completo</label>
+                                            <input type="text" name="names" class="form-control small-text-field @error('names') is-invalid @enderror"
+                                                   id="names" value="{{ old('names') }}" placeholder="Ej: Juan Pérez" maxlength="100" readonly>
+                                            @error('names')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="puesto" class="form-label">Puesto</label>
+                                            <input type="text" name="puesto" class="form-control small-text-field @error('puesto') is-invalid @enderror"
+                                                   id="puesto" value="{{ old('puesto') }}" placeholder="Ej: Administrador" maxlength="50" readonly>
+                                            @error('puesto')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        </div>
+
+                                        <div class="col-md-2">
                                             <label for="telefono" class="form-label">Teléfono</label>
                                             <input type="text" name="telefono" class="form-control small-text-field @error('telefono') is-invalid @enderror"
-                                                   id="telefono" value="{{ old('telefono') }}" placeholder="Ej: 90123456" maxlength="8">
+                                                   id="telefono" value="{{ old('telefono') }}" placeholder="Ej: 90123456" maxlength="8" readonly>
                                             @error('telefono')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                         </div>
 
                                         <div class="col-md-6">
                                             <label for="email" class="form-label">Correo electrónico</label>
                                             <input type="email" name="email" class="form-control small-text-field @error('email') is-invalid @enderror"
-                                                   id="email" value="{{ old('email') }}" placeholder="Ej: usuario@mail.com" maxlength="50">
+                                                   id="email" value="{{ old('email') }}" placeholder="Ej: usuario@mail.com" maxlength="50" readonly>
                                             @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                         </div>
                                     </div>
 
-                                    <!-- Contraseñas en row ajustado -->
-                                    <div class="row g-2 mb-3">  <!-- Gutters reducidos -->
-                                        <div class="col-md-6">
-                                            <label for="password" class="form-label">Contraseña</label>
-                                            <input type="password" name="password" class="form-control small-text-field @error('password') is-invalid @enderror"
-                                                   id="password" placeholder="" maxlength="50" required autocomplete="new-password">
-                                            @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
-                                            <input type="password" name="password_confirmation" class="form-control small-text-field @error('password_confirmation') is-invalid @enderror"
-                                                   id="password_confirmation" placeholder="" maxlength="50" required autocomplete="new-password">
-                                            @error('password_confirmation')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                        </div>
+                                    <div class="mb-3">
+                                        <label for="direccion" class="form-label">Dirección</label>
+                                        <textarea name="direccion" class="form-control small-text-field @error('direccion') is-invalid @enderror"
+                                                  id="direccion" placeholder="Ej: Calle Principal 123" maxlength="500" rows="2" readonly>{{ old('direccion') }}</textarea>
+                                        @error('direccion')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                     </div>
-                                </div>
 
-                                <!-- Columna de imagen más ajustada -->
-                                <div class="col-md-4 d-flex flex-column">  <!-- Alineación vertical -->
-                                    <div class="mb-3" style="width: 100%; text-align: center;">
-                                        <label for="image" class="form-label">Imagen de Usuario</label>
-                                        <!-- Div de imagen en gris, centrado -->
-                                        <div class="mb-3 image-preview-wrapper" style="position: relative; width: 100%; max-width: 300px; height: 200px;">
-                                            <div class="image-preview-border" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 3px dashed #b0b0b0; border-radius: 5px; pointer-events: none;"></div>
-                                            <div id="imagePreviewContainer" class="image-preview-container" style="width: 100%; height: 100%; background-color: #f0f0f0; border-radius: 5px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
-                                                <img id="imagePreview" src="{{ old('image') ? asset('storage/' . old('image')) : '#' }}" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 100%; display: {{ old('image') ? 'block' : 'none' }};">
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <div>
+                                <div>
+                                    <h4 style="font-weight: bold;">Datos del usuario</h4>
+
+                                    <div class="row g-0 mb-3">  <!-- Removemos gutter global -->
+                                        <!-- Columna de inputs (más compacta) -->
+                                        <div class="col-md-7 me-md-3">  <!-- Margen derecho para separación -->
+                                            <!-- Nombre completo -->
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label">Nombre de usuario</label>
+                                                <input type="text" name="name" class="form-control small-text-field @error('name') is-invalid @enderror"
+                                                       id="name" value="{{ old('name') }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
+                                                @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                            </div>
+
+                                            <!-- Teléfono y Email en row ajustado -->
+                                            <div class="row g-2 mb-3">  <!-- Gutters reducidos -->
+                                            </div>
+
+                                            <!-- Contraseñas en row ajustado -->
+                                            <div class="row g-2 mb-3">  <!-- Gutters reducidos -->
+                                                <div class="col-md-6">
+                                                    <label for="password" class="form-label">Contraseña</label>
+                                                    <input type="password" name="password" class="form-control small-text-field @error('password') is-invalid @enderror"
+                                                           id="password" placeholder="" maxlength="50" required autocomplete="new-password">
+                                                    @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
+                                                    <input type="password" name="password_confirmation" class="form-control small-text-field @error('password_confirmation') is-invalid @enderror"
+                                                           id="password_confirmation" placeholder="" maxlength="50" required autocomplete="new-password">
+                                                    @error('password_confirmation')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <!-- Botón para seleccionar imagen -->
-                                        <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" id="image" accept="image/*">
-                                        @error('image')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
+                                        <!-- Columna de imagen más ajustada -->
+                                        <div class="col-md-4 d-flex flex-column">  <!-- Alineación vertical -->
+                                            <div class="mb-3" style="width: 100%; text-align: center;">
+                                                <label for="image" class="form-label">Imagen de Usuario</label>
+                                                <!-- Div de imagen en gris, centrado -->
+                                                <div class="mb-3 image-preview-wrapper" style="position: relative; width: 100%; max-width: 300px; height: 200px;">
+                                                    <div class="image-preview-border" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 3px dashed #b0b0b0; border-radius: 5px; pointer-events: none;"></div>
+                                                    <div id="imagePreviewContainer" class="image-preview-container" style="width: 100%; height: 100%; background-color: #f0f0f0; border-radius: 5px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                                                        <img id="imagePreview" src="{{ old('image') ? asset('storage/' . old('image')) : '#' }}" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 100%; display: {{ old('image') ? 'block' : 'none' }};">
+                                                    </div>
+                                                </div>
 
-                                        <!-- Mostrar nombre del archivo si existe -->
-                                        @if(old('image'))
-                                            <small class="text-muted">Archivo: {{ basename(old('image')) }}</small>
-                                        @endif
+                                                <!-- Botón para seleccionar imagen -->
+                                                <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" id="image" accept="image/*">
+                                                @error('image')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+
+                                                <!-- Mostrar nombre del archivo si existe -->
+                                                @if(old('image'))
+                                                    <small class="text-muted">Archivo: {{ basename(old('image')) }}</small>
+                                                @endif
+                                            </div>
+
+
+                                        </div>
                                     </div>
-
-
                                 </div>
                             </div>
-
-                            <!-- Textarea dirección -->
-                            <div class="mb-3">
-                                <label for="direccion" class="form-label">Dirección</label>
-                                <textarea name="direccion" class="form-control small-text-field @error('direccion') is-invalid @enderror"
-                                          id="direccion" placeholder="Ej: Calle Principal 123" maxlength="500" rows="2">{{ old('direccion') }}</textarea>
-                                @error('direccion')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                            </div>
-
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between gap-2">  <!-- Espaciado uniforme -->
                                 <button type="submit" class="btn btn-primary flex-fill">Registrar</button>
@@ -307,6 +342,7 @@
                 const telefonoInput = document.getElementById('telefono');
                 const emailInput = document.getElementById('email');
                 const nameInput = document.getElementById('name');
+                const namesInput = document.getElementById('names');
                 const addressInput = document.getElementById('direccion');
 
                 clearButton.addEventListener('click', function () {
@@ -325,6 +361,7 @@
                     emailInput.value = '';
                     addressInput.value = '';
                     nameInput.value = '';
+                    namesInput.value = '';
 
                     // Resetear el select de empleado al primer índice (índice 0)
                     selectEmpleado.selectedIndex = 0;
@@ -394,24 +431,28 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const selectEmpleado = document.getElementById('empleado_id');
+                const inputNombres = document.getElementById('names');
                 const inputNombre = document.getElementById('name');
                 const inputDireccion = document.getElementById('direccion');
                 const inputEmail = document.getElementById('email');
                 const inputTelefono = document.getElementById('telefono');
+                const inputPuesto = document.getElementById('puesto');
 
                 selectEmpleado.addEventListener('change', function () {
                     const selectedOption = this.options[this.selectedIndex];
 
                     if (selectedOption.value) {
-                        inputNombre.value = selectedOption.getAttribute('data-nombre') || '';
+                        inputNombres.value = selectedOption.getAttribute('data-nombre') || '';
                         inputDireccion.value = selectedOption.getAttribute('data-direccion') || '';
                         inputEmail.value = selectedOption.getAttribute('data-email') || '';
                         inputTelefono.value = selectedOption.getAttribute('data-telefono') || '';
+                        inputPuesto.value = selectedOption.getAttribute('data-puesto') || '';
                     } else {
-                        inputNombre.value = '';
+                        inputNombres.value = '';
                         inputDireccion.value = '';
                         inputEmail.value = '';
                         inputTelefono.value = '';
+                        inputPuesto.value = '';
                     }
                 });
 
