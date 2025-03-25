@@ -81,11 +81,11 @@
                                         </tr>
                                         <tr>
                                             <th>Fecha de registro</th>
-                                            <td>{{ $usuario->created_at->format('d/m/Y H:i') }}</td>
+                                            <td>{{ $usuario->created_at->format('d/m/Y ') }}</td>
                                         </tr>
                                         <tr>
                                             <th>Última actualización</th>
-                                            <td>{{ $usuario->updated_at->format('d/m/Y H:i') }}</td>
+                                            <td>{{ $usuario->updated_at->format('d/m/Y ') }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
