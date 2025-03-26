@@ -45,27 +45,29 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <!-- Tabla de datos del empleado -->
-                                <h4>Datos del Empleado</h4>
+                                <h4>Datos del usuario</h4>
                                 <table class="table table-bordered mb-4">
                                     <tbody>
                                         <tr>
-                                            <th width="30%">Nombre del Empleado</th>
-                                            <td>{{ $usuario->empleado->first_name }} {{ $usuario->empleado->last_name }}</td>
+                                            <th width="30%">Nombre</th>
+                                            <td>{{  $usuario->name  }}</td>
                                         </tr>
-                                        <tr>
-                                            <th>Puesto del Empleado</th>
-                                            <td>{{ $usuario->empleado->puesto->name }}</td>
-                                        </tr>
+                                       
                                     </tbody>
                                 </table>
 
                                 <!-- Tabla de datos del usuario -->
-                                <h4>Datos del Usuario</h4>
+                                <h4>Datos del empleado</h4>
                                 <table class="table table-bordered">
                                     <tbody>
                                         <tr>
-                                            <th width="30%">Nombre de Usuario</th>
-                                            <td>{{ $usuario->name }}</td>
+                                            <th width="30%">Nombre</th>
+                                            <td>{{ $usuario->empleado->first_name }} {{$usuario->empleado->last_name}}</td>
+                                        </tr>
+
+                                        <tr>
+                                            <th>Puesto</th>
+                                            <td>{{ $usuario->empleado->puesto->name }}</td>
                                         </tr>
                                         <tr>
                                             <th>Email</th>
