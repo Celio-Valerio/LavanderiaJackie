@@ -14,6 +14,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade'); // Relación con Cliente
             $table->timestamp('fecha_visita')->useCurrent(); // Fecha y hora de la visita
+            $table->integer('visitas_disponibles');
+            $table->integer('visitas_totales');
             $table->timestamps();
         });
     }

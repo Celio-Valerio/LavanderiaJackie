@@ -108,7 +108,7 @@
                                                 <thead class="table-light">
                                                 <tr>
                                                     <th>Nombre</th>
-                                                    <th>Fecha de Visita</th>
+                                                    <th>Visitas</th>
                                                     <th>Acción</th>
                                                 </tr>
                                                 </thead>
@@ -116,7 +116,7 @@
                                                 @forelse($visitas as $visita)
                                                     <tr data-cliente-id="{{ $visita->id }}" data-fecha-visita="{{ $visita->fecha_visita->format('Y-m-d') }}">
                                                         <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
-                                                        <td>{{ \Illuminate\Support\Carbon::parse($visita->fecha_visita)->format('d/m/Y H:i') }}</td>
+                                                        <td>{{ $visita->visitas_totales }}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-primary btn-sm moveCliente">
                                                                 <i class="bi bi-arrow-right"></i> Mover
@@ -145,7 +145,7 @@
                                                 <thead class="table-light">
                                                 <tr>
                                                     <th>Nombre</th>
-                                                    <th>Fecha de Visita</th>
+                                                    <th>Visitas</th>
                                                     <th>Acción</th>
                                                 </tr>
                                                 </thead>
@@ -155,7 +155,7 @@
                                                     @if($visita)
                                                         <tr data-cliente-id="{{ $visita->id }}">
                                                             <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
-                                                            <td>{{ \Illuminate\Support\Carbon::parse($visita->fecha_visita)->format('d/m/Y H:i') }}</td>
+                                                            <td>{{ $visita->visitas_totales }}</td>
                                                             <td>
                                                                 <button type="button" class="btn btn-danger btn-sm removeCliente">
                                                                     <i class="bi bi-arrow-left"></i> Quitar
@@ -189,7 +189,7 @@
                                     @foreach ($visitas as $visita)
                                         <tr data-cliente-id="{{ $visita->id }}">
                                             <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($visita->fecha_visita)->format('d/m/Y H:i') }}</td>
+                                            <td>{{ $visita->visitas_totales }}</td>
                                             <td>
                                                 <button type="button" class="btn btn-primary btn-sm moveCliente">
                                                     <i class="bi bi-arrow-right"></i> Mover
@@ -248,7 +248,6 @@
                 });
             });
         </script>
-
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {

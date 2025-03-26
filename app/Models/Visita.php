@@ -16,6 +16,7 @@ class Visita extends Model
         'cliente_id',
         'visitas_totales',
         'visitas_disponibles',
+
     ];
 
     protected $casts = [
