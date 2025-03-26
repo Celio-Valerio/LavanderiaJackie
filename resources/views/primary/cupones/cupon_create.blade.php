@@ -68,13 +68,14 @@
                                     </div>
                                 </div>
 
-                            <!-- Campo de Descripción -->
-                            <div class="mb-3">
-                                <label for="descripcion" class="form-label">Descripción</label>
-                                <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Ej: Descripción del cupón." maxlength="500" rows="3">{{ old('descripcion') }}</textarea>
-                                @error('descripcion')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                                <!-- Campo de Descripción -->
+                                <div class="mb-3">
+                                    <label for="descripcion" class="form-label">Descripción</label>
+                                    <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Ej: Descripción del cupón." maxlength="500" rows="3">{{ old('descripcion') }}</textarea>
+                                    @error('descripcion')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <hr>
@@ -85,7 +86,7 @@
                                     <h5>Clientes que tendrán este cupón</h5>
                                 </div>
 
-                                <!-- Dentro de la sección "Clientes que tendrán este cupón" -->
+                                <!-- Filtro de fechas -->
                                 <div class="row mb-3">
                                     <div class="col-md-12">
                                         <div class="d-flex align-items-center gap-2 mb-3">
@@ -100,8 +101,8 @@
                                     </div>
                                 </div>
 
-                                    <!-- Tabla de Clientes Disponibles -->
-                                    <div class="col-md-6">
+                                <!-- Tabla de clientes disponibles -->
+                                <div class="col-md-6">
                                         <label class="form-label">Visita de los clientes</label>
                                         <div class="table-responsive">
                                             <table class="table table-hover table-bordered" id="availableClientsTable">
@@ -137,8 +138,8 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Tabla de Clientes Seleccionados -->
-                                    <div class="col-md-6">
+                                <!-- Tabla de clientes seleccionados -->
+                                <div class="col-md-6">
                                         <label class="form-label">Clientes seleccionados</label>
                                         <div class="table-responsive">
                                             <table class="table table-hover table-bordered" id="selectedClientsTable">
@@ -176,16 +177,15 @@
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
 
-                            <div id="clientesHiddenInputs">
+                                <div id="clientesHiddenInputs">
                                     @foreach (old('clientes', []) as $clienteId)
                                         <input type="hidden" name="clientes[]" value="{{ $clienteId }}">
                                     @endforeach
                                 </div>
 
-                            <!-- Template oculto para restaurar clientes -->
-                            <div id="availableClientsTemplate" style="display: none;">
+                                <!-- Template oculto para restaurar clientes -->
+                                <div id="availableClientsTemplate" style="display: none;">
                                     @foreach ($visitas as $visita)
                                         <tr data-cliente-id="{{ $visita->id }}">
                                             <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
@@ -198,6 +198,7 @@
                                         </tr>
                                     @endforeach
                                 </div>
+                            </div>
 
                             <!-- Botones de acción -->
                             <div class="d-flex justify-content-between">
@@ -205,13 +206,14 @@
                                 <button type="button" class="btn btn-warning flex-fill" id="clearButton">Limpiar</button>
                                 <a href="{{ route('cupones.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>
+
                         </form>
                         <!-- Fin del formulario -->
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <script>
             // Función para capitalizar solo la primera letra de la primera palabra
             function capitalizeFirstLetter(input) {

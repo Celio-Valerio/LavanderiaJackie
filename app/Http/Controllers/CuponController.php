@@ -31,9 +31,10 @@ class CuponController extends Controller
                 'clientes.id',
                 'clientes.first_name',
                 'clientes.last_name',
+                'visitas.id',
                 'visitas.fecha_visita',
-                'visitas.visitas_totales',       // Agregar las visitas totales
-                'visitas.visitas_disponibles'    // Agregar las visitas disponibles
+                'visitas.visitas_totales',
+                'visitas.visitas_disponibles'
             )
             ->orderBy('visitas.fecha_visita', 'desc') // Ordenar por la fecha de visita
             ->get();
@@ -141,7 +142,6 @@ class CuponController extends Controller
                 ->withErrors(['error' => 'Error: '.$e->getMessage()]);
         }
     }
-
 
     /**
      * Display the specified resource.
