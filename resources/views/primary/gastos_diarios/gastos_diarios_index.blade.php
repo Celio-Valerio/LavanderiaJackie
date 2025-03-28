@@ -39,6 +39,7 @@
                                     <th>Fecha</th>
                                     <th>Estado</th>
                                     <th>Cantidad</th>
+                                    <th>Acciones</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -59,8 +60,23 @@
                                         </td>
                                         <td>Gramos</td>
 
-                                        <td>
+                                        <td class="text-center">
+                                            <div class="d-flex gap-1 justify-content-center">
+                                                <a href="{{ route('gastos-diarios.print', $gasto) }}"
+                                                   class="btn btn-sm btn-success no-print"
+                                                   title="Imprimir"
+                                                   target="_blank"
+                                                   data-bs-toggle="tooltip">
+                                                    <i class="bi bi-printer"></i>
+                                                </a>
 
+                                                <a href="{{ route('gastos-diarios.pdf', $gasto) }}"
+                                                   class="btn btn-sm btn-dark no-print"
+                                                   title="Descargar PDF"
+                                                   data-bs-toggle="tooltip">
+                                                    <i class="bi bi-file-pdf"></i>
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                 @endforeach

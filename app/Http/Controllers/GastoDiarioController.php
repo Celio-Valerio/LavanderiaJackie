@@ -6,6 +6,7 @@ use App\Models\DetalleGastoDiario;
 use App\Models\GastoDiario;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class GastoDiarioController extends Controller
 {
@@ -104,5 +105,29 @@ class GastoDiarioController extends Controller
 
         // Si no hay más pendientes, redirigir al índice
         return redirect()->route('gastos_diarios.index')->with('success', 'Todos los gastos diarios han sido finalizados.');
+    }
+
+
+    public function print(GastoDiario $gastoDiario)
+    {
+        return view('primary.gastos_diarios.gastos_diarios_print', [
+            'gastoDiario' => $gastoDiario->load(['detalleGastoDiarios.producto', 'servicioEfectuado.cliente', 'servicioEfectuado.servicio'])
+        ]);
+    }
+
+    public function generatePDF(GastoDiario $gastoDiario)
+    {
+        $data = [
+            'gastoDiario' => $gastoDiario->load(['detalleGastoDiarios.producto', 'servicioEfectuado.cliente', 'servicioEfectuado.servicio'])
+        ];
+
+        $pdf = PDF::loadView('primary.gastos_diarios.gastos_diarios_print', $data)
+            ->setPaper('A4', 'portrait')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true
+            ]);
+
+        return $pdf->stream('gasto-diario-'.$gastoDiario->id.'.pdf');
     }
 }

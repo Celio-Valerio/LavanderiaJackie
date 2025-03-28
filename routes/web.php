@@ -241,6 +241,9 @@ Route::get('/gastos-diarios', [GastoDiarioController::class, 'index'])->name('ga
 Route::get('/gastos-diarios/create', [GastoDiarioController::class, 'create'])->name('gastos_diarios.create');
 Route::put('/gastos-diarios/{id}', [GastoDiarioController::class, 'update'])->name('gastos_diarios.update');
 
+Route::get('/gastos-diarios/{gasto}/print', [GastoDiarioController::class, 'print'])->name('gastos-diarios.print');
+Route::get('/gastos-diarios/{gasto}/pdf', [GastoDiarioController::class, 'generatePDF'])->name('gastos-diarios.pdf');
+
 // Ruta para listar todas las cuentas bancarias
 Route::get('/cuenta-bancos', [CuentaBancoController::class, 'index'])->name('cuenta_bancos.index');
 
