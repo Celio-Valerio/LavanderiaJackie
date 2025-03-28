@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UsuarioController extends Controller
 {
@@ -39,8 +40,6 @@ class UsuarioController extends Controller
 
         return view('primary.usuarios.usuario_create', compact('empleados'));
     }
-
-
 
     /**
      * Store a newly created resource in storage.
@@ -143,17 +142,148 @@ class UsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $usuario)
     {
-        //
+        // Obtener empleados sin usuario o el empleado actual del usuario
+        $empleados = Empleado::select('id', 'first_name', 'last_name', 'address', 'email', 'phone', 'puesto_id')
+            ->where(function($query) use ($usuario) {
+                $query->whereNotIn('id', function($subquery) {
+                    $subquery->select('empleado_id')->from('users');
+                })
+                    ->orWhere('id', $usuario->empleado_id); // Incluir empleado actual
+            })
+            ->with('puesto')
+            ->get();
+
+        return view('primary.usuarios.usuario_edit', compact('usuario', 'empleados'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $usuario = User::findOrFail($id);
+
+        $request->validate([
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'name' => ['required', 'string', 'min:3', 'max:100', 'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+){1,4}$/'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:100',
+                'unique:users,email,'.$usuario->id,
+                'unique:empleados,email,'.$request->empleado_id,
+                'regex:/^(.+)@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com)$/i'
+            ],
+            'password' => ['nullable', 'confirmed', 'min:8', 'max:30', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'],
+            'current_password' => [
+                'nullable',
+                Rule::requiredIf(function () use ($request) {
+                    return $request->filled('new_password');
+                }),
+                'current_password'
+            ],
+            'new_password' => [
+                'nullable',
+                'confirmed',
+                'min:8',
+                'max:30',
+                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/'
+            ],
+            'telefono' => [
+                'required',
+                'digits:8',
+                'regex:/^[2389][0-9]{7}$/',
+                'unique:users,telefono,'.$usuario->id,
+                'unique:empleados,phone,'.$request->empleado_id
+            ],
+            'direccion' => ['required', 'string', 'min:5', 'max:500'],
+            'empleado_id' => ['required', 'exists:empleados,id'],
+        ],[
+            'name.required' => 'El nombre de usuario es obligatorio.',
+            'name.regex' => 'El nombre de usuario puede contener hasta 5 palabras y no debe contener símbolos ni números.',
+
+            'email.required' => 'El campo correo electrónico es obligatorio.',
+            'email.email' => 'El formato del correo electrónico no es válido.',
+            'email.unique' => 'Este correo electrónico ya está registrado en usuarios o empleados.',
+            'email.regex' => 'El correo debe ser de Google, Yahoo, Hotmail u Outlook.',
+
+            'telefono.required' => 'El teléfono es obligatorio.',
+            'telefono.digits' => 'El teléfono debe contener 8 dígitos.',
+            'telefono.regex' => 'El teléfono debe comenzar con 2, 3, 8 o 9.',
+            'telefono.unique' => 'El número ya está registrado en usuarios o empleados.',
+
+            'password.regex' => 'La contraseña debe contener mayúscula, minúscula, número y símbolo.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.max' => 'La contraseña no puede exceder 30 caracteres.',
+
+            'direccion.required' => 'La dirección es obligatoria.',
+            'direccion.min' => 'La dirección debe tener al menos 5 caracteres.',
+            'direccion.max' => 'La dirección no puede exceder 500 caracteres.',
+
+            'empleado_id.required' => 'Debe seleccionar un empleado.',
+            'empleado_id.exists' => 'El empleado seleccionado no existe.',
+
+            'image.image' => 'Debe ser una imagen válida.',
+            'image.mimes' => 'Formatos permitidos: jpeg, png, jpg, gif.',
+            'image.max' => 'La imagen no puede superar 2MB.',
+
+            'current_password.required' => 'La contraseña actual es requerida para cambiar la contraseña.',
+            'current_password.current_password' => 'La contraseña actual es incorrecta.',
+
+            'new_password.regex' => 'La nueva contraseña debe contener mayúscula, minúscula, número y símbolo.',
+            'new_password.confirmed' => 'La confirmación de la nueva contraseña no coincide.',
+            'new_password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
+            'new_password.max' => 'La nueva contraseña no puede exceder 30 caracteres.',
+        ]);
+        try {
+            // Actualizar usuario
+            $usuario->name = $request->name;
+            $usuario->email = $request->email;
+            $usuario->telefono = $request->telefono;
+            $usuario->direccion = $request->direccion;
+            $usuario->empleado_id = $request->empleado_id;
+
+            if ($request->filled('new_password')) {
+                $usuario->password = Hash::make($request->new_password);
+            }
+
+            // Gestión de imagen
+            if ($request->hasFile('image')) {
+                if ($usuario->image && file_exists(public_path('assets/img/perfiles/'.$usuario->image))) {
+                    unlink(public_path('assets/img/perfiles/'.$usuario->image));
+                }
+
+                $image = $request->file('image');
+                $extension = $image->getClientOriginalExtension();
+                $timestamp = now()->format('d-m-Y_H-i-s');
+                $randomNumber = str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
+                $imageName = "perfiles_{$timestamp}_{$randomNumber}.{$extension}";
+                $image->move(public_path('assets/img/perfiles'), $imageName);
+                $usuario->image = $imageName;
+            }
+
+            $usuario->save();
+
+            // Actualizar datos del empleado relacionado
+            $empleado = Empleado::findOrFail($request->empleado_id);
+            $empleado->update([
+                'email' => $request->email,
+                'phone' => $request->telefono,
+                'address' => $request->direccion
+            ]);
+
+            return redirect()->route('usuarios.index')
+                ->with('success', 'Usuario y empleado actualizados exitosamente.');
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Error al actualizar: ' . $e->getMessage());
+        }
     }
 
     /**
