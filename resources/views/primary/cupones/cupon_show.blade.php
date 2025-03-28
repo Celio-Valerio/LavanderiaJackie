@@ -86,7 +86,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                       
+
                                     </tr>
                                 </table>
                             </div>
@@ -100,14 +100,14 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>Nombre</th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse($cupon->clientes as $cliente)
                                             <tr>
                                                 <td>{{ $cliente->first_name }} {{ $cliente->last_name }}</td>
-                                                
+
                                             </tr>
                                         @empty
                                             <tr>
@@ -121,13 +121,33 @@
                     </div>
 
                     <!-- Botones de acción -->
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-primary flex-fill me-1" data-bs-toggle="modal" data-bs-target="#confirmModal">
-                        {{ $cupon->estado == 'Activo' ? 'Desactivar' : 'Activar' }} Cupón
-                        </button>
-                        
-                        <a href="{{ route('cupones.index') }}" class="btn btn-danger flex-fill"> Regresar
-                        </a>
+                    <div class="row gx-2">  <!-- Usamos row de Bootstrap con gutter horizontal -->
+                        <div class="col">  <!-- Cada col ocupa igual ancho -->
+                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                                {{ $cupon->estado == 'Activo' ? 'Desactivar' : 'Activar' }} Cupón
+                            </button>
+                        </div>
+
+                        <div class="col">
+                            <a href="{{ route('cupones.index') }}" class="btn btn-danger w-100">
+                                Regresar
+                            </a>
+                        </div>
+
+                        <div class="col">
+                            <a href="{{ route('cupones.print', $cupon) }}"
+                               class="btn btn-success w-100 no-print"
+                               target="_blank">
+                                <i class="bi bi-printer"></i> Imprimir
+                            </a>
+                        </div>
+
+                        <div class="col">
+                            <a href="{{ route('cupones.pdf', $cupon) }}"
+                               class="btn btn-danger w-100 no-print">
+                                <i class="bi bi-file-pdf"></i> PDF
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ use App\Models\Cupon;
 use App\Models\Visita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CuponController extends Controller
 {
@@ -176,6 +177,34 @@ class CuponController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function print(Cupon $cupon)
+    {
+        return view('primary.cupones.cupon_print', [
+            'cupon' => $cupon,
+            'cliente' => $cupon->clientes->first() // O ajustar según lógica
+        ]);
+    }
+
+    public function generatePDF(Cupon $cupon)
+    {
+        $data = [
+            'cupon' => $cupon,
+            'cliente' => $cupon->clientes->first()
+        ];
+
+        $pdf = PDF::loadView('primary.cupones.cupon_print', $data)
+            ->setPaper('a5', 'portrait')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true
+            ]);
+
+        return $pdf->stream('cupon-lavanderia.pdf');
+
+        // Para descarga directa:
+        // return $pdf->download('cupon-lavanderia.pdf');
     }
 
     public function toggleEstado(Cupon $cupon)
