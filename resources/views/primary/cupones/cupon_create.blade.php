@@ -2,12 +2,6 @@
 @section('title', 'Registrar Cupón')
 @section('content')
 
-    <script>
-        // Al cargar la página
-        document.addEventListener('DOMContentLoaded', function() {
-            updateRowNumbers();
-        });
-    </script>
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -107,106 +101,102 @@
                                     </div>
                                 </div>
 
-                                <div class="row mb-3">
-                                    <!-- Contenedor para ambas tablas -->
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <!-- Tabla de clientes disponibles -->
-                                            <div class="col-md-6 pe-2">
-                                                <label class="form-label">Visita de los clientes</label>
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover table-bordered" id="availableClientsTable">
-                                                        <thead class="table-light">
-                                                        <tr>
-                                                            <th style="width: 5%;">N°</th>
-                                                            <th style="width: 55%;">Nombre</th>
-                                                            <th style="width: 20%;">Visitas</th>
-                                                            <th style="width: 20%;">Acción</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @forelse($visitas as $visita)
-                                                            <tr data-cliente-id="{{ $visita->id }}" data-fecha-visita="{{ $visita->fecha_visita->format('Y-m-d') }}">
-                                                                <td class="numero"></td>
-                                                                <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
-                                                                <td>{{ $visita->visitas_totales }}</td>
-                                                                <td>
-                                                                    <button type="button" class="btn btn-primary btn-sm moveCliente w-100">
-                                                                        <i class="bi bi-arrow-right"></i>
-                                                                    </button>
-                                                                </td>
-                                                            </tr>
-                                                        @empty
-                                                            <tr class="no-data">
-                                                                <td colspan="4" class="text-center">No hay visitas registradas</td>
-                                                            </tr>
-                                                        @endforelse
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-
-                                            <!-- Tabla de clientes seleccionados -->
-                                            <div class="col-md-6 ps-2">
-                                                <label class="form-label">Clientes seleccionados</label>
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover table-bordered" id="selectedClientsTable">
-                                                        <thead class="table-light">
-                                                        <tr>
-                                                            <th style="width: 5%;">N°</th>
-                                                            <th style="width: 55%;">Nombre</th>
-                                                            <th style="width: 20%;">Visitas</th>
-                                                            <th style="width: 20%;">Acción</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @forelse(old('clientes', []) as $clienteId)
-                                                            @php $visita = $visitas->find($clienteId); @endphp
-                                                            @if($visita)
-                                                                <tr data-cliente-id="{{ $visita->id }}">
-                                                                    <td class="numero"></td>
-                                                                    <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
-                                                                    <td>{{ $visita->visitas_totales }}</td>
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-danger btn-sm removeCliente w-100">
-                                                                            <i class="bi bi-arrow-left"></i>
-                                                                        </button>
-                                                                    </td>
-                                                                </tr>
-                                                            @endif
-                                                        @empty
-                                                            <tr class="no-data">
-                                                                <td colspan="4" class="text-center">No hay clientes seleccionados</td>
-                                                            </tr>
-                                                        @endforelse
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div id="clientesHiddenInputs">
-                                            @foreach (old('clientes', []) as $clienteId)
-                                                <input type="hidden" name="clientes[]" value="{{ $clienteId }}">
-                                            @endforeach
-                                        </div>
-
-                                        <!-- Template oculto para restaurar clientes -->
-                                        <div id="availableClientsTemplate" style="display: none;">
-                                            @foreach ($visitas as $visita)
-                                                <tr data-cliente-id="{{ $visita->id }}">
-                                                    <td class="numero"></td>
-                                                    <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
-                                                    <td>{{ $visita->visitas_totales }}</td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-primary btn-sm moveCliente w-100">
-                                                            <i class="bi bi-arrow-right"></i>
-                                                        </button>
-                                                    </td>
+                                <!-- Tabla de clientes disponibles -->
+                                <div class="col-md-6">
+                                        <label class="form-label">Visita de los clientes</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered" id="availableClientsTable">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Visitas</th>
+                                                    <th>Acción</th>
                                                 </tr>
-                                            @endforeach
+                                                </thead>
+                                                <tbody>
+                                                @forelse($visitas as $visita)
+                                                    <tr data-cliente-id="{{ $visita->id }}" data-fecha-visita="{{ $visita->fecha_visita->format('Y-m-d') }}">
+                                                        <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
+                                                        <td>{{ $visita->visitas_totales }}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-primary btn-sm moveCliente">
+                                                                <i class="bi bi-arrow-right"></i> Mover
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    <tr class="no-data">
+                                                        <td colspan="3" class="text-center">No hay visitas registradas</td>
+                                                    </tr>
+                                                @endforelse
+                                                </tbody>
+                                            </table>
                                         </div>
+                                        <!-- Mensaje de validación para fecha de visita -->
+                                        @error('fecha_visita')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
                                     </div>
+
+                                <!-- Tabla de clientes seleccionados -->
+                                <div class="col-md-6">
+                                        <label class="form-label">Clientes seleccionados</label>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered" id="selectedClientsTable">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th>Nombre</th>
+                                                    <th>Visitas</th>
+                                                    <th>Acción</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @forelse(old('clientes', []) as $clienteId)
+                                                    @php $visita = $visitas->find($clienteId); @endphp
+                                                    @if($visita)
+                                                        <tr data-cliente-id="{{ $visita->id }}">
+                                                            <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
+                                                            <td>{{ $visita->visitas_totales }}</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-danger btn-sm removeCliente">
+                                                                    <i class="bi bi-arrow-left"></i> Quitar
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    @endif
+                                                @empty
+                                                    <tr class="no-data">
+                                                        <td colspan="3" class="text-center">No hay clientes seleccionados</td>
+                                                    </tr>
+                                                @endforelse
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- Mensaje de validación para clientes seleccionados -->
+                                        @error('clientes')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                <div id="clientesHiddenInputs">
+                                    @foreach (old('clientes', []) as $clienteId)
+                                        <input type="hidden" name="clientes[]" value="{{ $clienteId }}">
+                                    @endforeach
+                                </div>
+
+                                <!-- Template oculto para restaurar clientes -->
+                                <div id="availableClientsTemplate" style="display: none;">
+                                    @foreach ($visitas as $visita)
+                                        <tr data-cliente-id="{{ $visita->id }}">
+                                            <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
+                                            <td>{{ $visita->visitas_totales }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-primary btn-sm moveCliente">
+                                                    <i class="bi bi-arrow-right"></i> Mover
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </div>
                             </div>
 
@@ -223,7 +213,7 @@
                 </div>
             </div>
         </div>
-
+        
         <script>
             // Función para capitalizar solo la primera letra de la primera palabra
             function capitalizeFirstLetter(input) {
@@ -262,20 +252,6 @@
         </script>
 
         <script>
-            function updateRowNumbers() {
-                // Numerar tabla de disponibles (solo filas visibles)
-                document.querySelectorAll('#availableClientsTable tbody tr[data-cliente-id]').forEach((row, index) => {
-                    if (row.style.display !== 'none') {
-                        row.querySelector('.numero').textContent = index + 1;
-                    }
-                });
-
-                // Numerar tabla de seleccionados
-                document.querySelectorAll('#selectedClientsTable tbody tr[data-cliente-id]').forEach((row, index) => {
-                    row.querySelector('.numero').textContent = index + 1;
-                });
-            }
-
             document.addEventListener('DOMContentLoaded', function() {
                 // Almacenar estado inicial para el botón limpiar
                 const initialAvailable = document.getElementById('availableClientsTable').innerHTML;
@@ -322,13 +298,12 @@
                         const newRow = row.cloneNode(true);
                         newRow.querySelector('button').outerHTML = `
                     <button type="button" class="btn btn-danger btn-sm removeCliente">
-                        <i class="bi bi-arrow-left"></i>
+                        <i class="bi bi-arrow-left"></i> Quitar
                     </button>`;
 
                         // Agregar a seleccionados
                         targetTbody.appendChild(newRow);
                         row.remove();
-                        updateRowNumbers(); // Actualizar números
 
                         // Agregar input hidden
                         document.getElementById('clientesHiddenInputs').insertAdjacentHTML('beforeend',
@@ -353,13 +328,12 @@
                         const newRow = row.cloneNode(true);
                         newRow.querySelector('button').outerHTML = `
                     <button type="button" class="btn btn-primary btn-sm moveCliente">
-                        <i class="bi bi-arrow-right"></i>
+                        <i class="bi bi-arrow-right"></i> Mover
                     </button>`;
 
                         // Agregar a disponibles
                         targetTbody.appendChild(newRow);
                         row.remove();
-                        updateRowNumbers();
 
                         // Eliminar input hidden
                         document.querySelector(`#clientesHiddenInputs input[value="${clienteId}"]`)?.remove();
@@ -571,7 +545,6 @@
                     });
 
                     checkEmptyTables();
-                    updateRowNumbers();
                 }
 
                 // Event listeners para los filtros
