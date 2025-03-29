@@ -2,15 +2,48 @@
 @section('title', 'Lista de cupones')
 @section('content')
     <section class="section">
+
+        <style>
+            .btn-secondary {
+                background-color: #6c757d;
+                border-color: #6c757d;
+                margin-right: 10px; /* Separación entre botones */
+            }
+            .btn-secondary:hover {
+                background-color: #5a6268;
+                border-color: #545b62;
+            }
+        </style>
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de cupones</h1>
-                            <!-- Botón agregar cupones -->
-                            <a href="{{ route('cupones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar cupón</a>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">
+                                @if($filter === 'pendientes')
+                                    Lista de cupones pendientes
+                                @else
+                                    Lista de cupones
+                                @endif
+                            </h1>
+                            <div class="d-flex gap-2">
+                                <!-- Botón de cambio de vista -->
+                                @if($filter === 'pendientes')
+                                    <a href="{{ route('cupones.index') }}" class="btn btn-secondary btn-sm d-flex align-items-center">
+                                        Ver Todos
+                                    </a>
+                                @else
+                                    <a href="{{ route('cupones.index', ['filter' => 'pendientes']) }}" class="btn btn-secondary btn-sm d-flex align-items-center">
+                                        Ver Pendientes
+                                    </a>
+                                @endif
+                                <!-- Botón agregar cupones -->
+                                <a href="{{ route('cupones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center">
+                                        Agregar cupón
+                                    </a>
+                            </div>
                         </div>
+
 
                         @if(session('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">

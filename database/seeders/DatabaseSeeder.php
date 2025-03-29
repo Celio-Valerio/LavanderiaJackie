@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CuentaBancoSeeder::class);
         $this->call(PresupuestoSeeder::class);
         $this->call(ControlCuentaSeeder::class);
+        $this->call(CuponSeeder::class);
         //$this->call(GastoDiarioSeeder::class);
 
         // Crear productos con historial de precios

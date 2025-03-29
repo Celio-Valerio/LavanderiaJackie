@@ -14,11 +14,16 @@ class CuponController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Obtener todos los servicios efectuados
-        $cupones = Cupon::all();
-        return view('primary.cupones.cupon_index', compact('cupones'));
+        // Filtrar cupones según parámetro
+        $filter = $request->input('filter');
+
+        $cupones = $filter === 'pendientes'
+            ? Cupon::where('estado', 'Activo')->get()
+            : Cupon::all();
+
+        return view('primary.cupones.cupon_index', compact('cupones', 'filter'));
     }
 
     /**
