@@ -10,7 +10,18 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios efectuados</h1>
                         <div class="button-group d-flex gap-2">
-                            <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
+                            <a href="{{ route('servicios_efectuados.create') }}"
+                               class="btn btn-primary btn-sm d-flex align-items-center"
+                               style="border-radius: 5px; height: 40px; padding: 0 15px">
+                                <i class="bi bi-plus-circle me-1"></i> Programar Servicio
+                            </a>
+
+                            <a href="{{ route('servicios-efectuados.export-pdf') }}"
+                               class="btn btn-danger btn-sm d-flex align-items-center"
+                               style="border-radius: 5px; height: 40px; padding: 0 15px"
+                               target="_blank">
+                                <i class="bi bi-file-pdf me-1"></i> Exportar PDF
+                            </a>
                         </div>
                     </div>
                     @if(session('success'))
@@ -241,6 +252,21 @@
                     }, 5000);
                 }
             });
+        </script>
+
+        <script>
+            function exportPDFWithFilters() {
+                const fechaDesde = document.getElementById('fecha-desde').value;
+                const fechaHasta = document.getElementById('fecha-hasta').value;
+
+                let url = '{{ route("servicios-efectuados.export-pdf") }}?';
+
+                if(fechaDesde && fechaHasta) {
+                    url += `fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}`;
+                }
+
+                window.open(url, '_blank');
+            }
         </script>
     </section>
 @endsection

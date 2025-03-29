@@ -23,13 +23,6 @@ class ServicioEfectuado extends Model
         'hora',
     ];
 
-    // Relación con el modelo Cliente
-    // ServicioEfectuado.php
-    public function cliente()
-    {
-        return $this->belongsTo(Cliente::class);
-    }
-
     public function servicio()
     {
         return $this->belongsTo(Servicio::class);
@@ -65,5 +58,16 @@ class ServicioEfectuado extends Model
         } else {
             $this->attributes['total'] = $value;
         }
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class);
+    }
+
+// DetalleServicio.php
+    public function producto()
+    {
+        return $this->belongsTo(Producto::class);
     }
 }

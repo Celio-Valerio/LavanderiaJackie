@@ -213,6 +213,9 @@ Route::put('/servicios-efectuados/{id}', [ServicioEfectuadoController::class, 'u
 // Ruta para la visualización de un servicio efectuado en factura
 Route::get('/servicios-efectuados/factura/{id}', [ServicioEfectuadoController::class, 'factura'])->name('servicios_efectuados.factura');
 
+Route::get('/servicios-efectuados/export-pdf', [ServicioEfectuadoController::class, 'exportPDF'])
+    ->name('servicios-efectuados.export-pdf');
+
 // Ruta para la lista de servicios efectuados
 Route::get('/servicios-ventas', [ServicioEfectuadoController::class, 'ventas'])->name('servicios_efectuados.ventas');
 
