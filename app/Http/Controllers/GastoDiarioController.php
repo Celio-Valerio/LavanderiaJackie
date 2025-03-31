@@ -108,26 +108,30 @@ class GastoDiarioController extends Controller
     }
 
 
-    public function print(GastoDiario $gastoDiario)
+    public function print($id)
     {
-        return view('primary.gastos_diarios.gastos_diarios_print', [
-            'gastoDiario' => $gastoDiario->load(['detalleGastoDiarios.producto', 'servicioEfectuado.cliente', 'servicioEfectuado.servicio'])
-        ]);
+        $gastoDiario = GastoDiario::with('detalleGastoDiarios.producto', 'servicioEfectuado.cliente', 'servicioEfectuado.servicio')
+            ->findOrFail($id);
+
+        return view('primary.gastos_diarios.gastos_diarios_print', compact('gastoDiario'));
     }
 
-    public function generatePDF(GastoDiario $gastoDiario)
-    {
-        $data = [
-            'gastoDiario' => $gastoDiario->load(['detalleGastoDiarios.producto', 'servicioEfectuado.cliente', 'servicioEfectuado.servicio'])
-        ];
 
-        $pdf = PDF::loadView('primary.gastos_diarios.gastos_diarios_print', $data)
+    public function generatePDF($id)
+    {
+        $gastoDiario = GastoDiario::with('detalleGastoDiarios.producto', 'servicioEfectuado.cliente', 'servicioEfectuado.servicio')
+            ->findOrFail($id);
+
+        $pdf = PDF::loadView('primary.gastos_diarios.gastos_diarios_print', compact('gastoDiario'))
             ->setPaper('A4', 'portrait')
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled' => true
             ]);
 
-        return $pdf->stream('gasto-diario-'.$gastoDiario->id.'.pdf');
+        return $pdf->download('gasto_diario_'.$gastoDiario->id.'.pdf');
     }
+
+
+
 }

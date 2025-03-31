@@ -15,6 +15,9 @@ class GastoDiario extends Model
         'estado',
     ];
 
+    protected $with = ['detalleGastoDiarios.producto', 'servicioEfectuado.cliente', 'servicioEfectuado.servicio'];
+
+
     // GastoDiario.php
     public function detalleGastoDiarios()
     {
@@ -26,7 +29,7 @@ class GastoDiario extends Model
         return $this->belongsTo(ServicioEfectuado::class);
     }
 
-    // DetalleGastoDiario.php
+
     public function gastoDiario()
     {
         return $this->belongsTo(GastoDiario::class);
@@ -64,4 +67,5 @@ class GastoDiario extends Model
     {
         return $this->detalle->sum('cantidad');
     }
+
 }

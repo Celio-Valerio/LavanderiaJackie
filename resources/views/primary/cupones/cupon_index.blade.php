@@ -121,12 +121,30 @@
 
                                     <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('d/m/Y') }}</td>
                                     <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_hasta)->format('d/m/Y') }}</td>
-
-
                                     <td class="text-center">
-                                        <a href="{{ route('cupones.show', $cupon->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('cupones.edit', $cupon->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                        <div class="btn-group" role="group" aria-label="Botones de acción">
+                                            <a href="{{ route('cupones.show', $cupon->id) }}" class="btn btn-info btn-sm" title="Ver" data-bs-toggle="tooltip">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{{ route('cupones.edit', $cupon->id) }}" class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="tooltip">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="{{ route('cupones.print', $cupon) }}"
+                                               class="btn btn-sm btn-success no-print"
+                                               title="Imprimir"
+                                               target="_blank"
+                                               data-bs-toggle="tooltip">
+                                                <i class="bi bi-printer"></i>
+                                            </a>
+                                            <a href="{{ route('cupones.pdf', $cupon) }}"
+                                               class="btn btn-sm btn-dark no-print"
+                                               title="Descargar PDF"
+                                               data-bs-toggle="tooltip">
+                                                <i class="bi bi-file-earmark-pdf"></i>
+                                            </a>
+                                        </div>
                                     </td>
+
                                 </tr>
                             @empty
                                 <tr>

@@ -186,30 +186,34 @@ class CuponController extends Controller
 
     public function print(Cupon $cupon)
     {
+        // Carga la relación con los clientes
+        $cupon->load('clientes');
+
         return view('primary.cupones.cupon_print', [
             'cupon' => $cupon,
-            'cliente' => $cupon->clientes->first() // O ajustar según lógica
+            'cliente' => $cupon->clientes->first() // Puedes obtener el primer cliente asignado si es necesario
         ]);
     }
 
     public function generatePDF(Cupon $cupon)
     {
+        // Datos que se pasan a la vista
         $data = [
             'cupon' => $cupon,
-            'cliente' => $cupon->clientes->first()
+            'cliente' => $cupon->clientes->first() // Puedes usar el primer cliente asignado
         ];
 
+        // Generación del PDF
         $pdf = PDF::loadView('primary.cupones.cupon_print', $data)
-            ->setPaper('a5', 'portrait')
+            ->setPaper('letter', 'portrait')  // Configura el tamaño de la página a A4 (tamaño carta)
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true
+                'isRemoteEnabled' => true,
+                'isPhpEnabled' => true
             ]);
 
-        return $pdf->stream('cupon-lavanderia.pdf');
-
-        // Para descarga directa:
-        // return $pdf->download('cupon-lavanderia.pdf');
+        // Forzar la descarga automática del archivo PDF
+        return $pdf->download('cupon-lavanderia.pdf');
     }
 
     public function toggleEstado(Cupon $cupon)
