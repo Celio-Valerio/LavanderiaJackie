@@ -15,6 +15,6 @@ class ServicioEfectuadoSeeder extends Seeder
     public function run(): void
     {
         // Crear 10 servicios efectuados
-        \App\Models\ServicioEfectuado::factory()->count(10)->create();
+        \App\Models\ServicioEfectuado::factory()->count(5)->create();
     }
 }

@@ -34,14 +34,14 @@ class DatabaseSeeder extends Seeder
         $this->call(ProductoSeeder::class);
         $this->call(CompraSeeder::class);
         $this->call(ServicioSeeder::class);
-        //$this->call(ServicioEfectuadoSeeder::class);
+        $this->call(ServicioEfectuadoSeeder::class);
         $this->call(GastosSeeder::class);
 
         $this->call(CuentaBancoSeeder::class);
         $this->call(PresupuestoSeeder::class);
         $this->call(ControlCuentaSeeder::class);
         $this->call(CuponSeeder::class);
-        //$this->call(GastoDiarioSeeder::class);
+
 
         // Crear productos con historial de precios
         Producto::all()->each(function ($producto) {
@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
         });
 
         //$this->call(VisitaSeeder::class);
+        $this->call(GastoDiarioSeeder::class);
 
     }
 

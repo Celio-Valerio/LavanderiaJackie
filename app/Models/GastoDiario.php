@@ -26,7 +26,7 @@ class GastoDiario extends Model
         return $this->belongsTo(ServicioEfectuado::class);
     }
 
-// DetalleGastoDiario.php
+    // DetalleGastoDiario.php
     public function gastoDiario()
     {
         return $this->belongsTo(GastoDiario::class);

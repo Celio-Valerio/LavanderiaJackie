@@ -183,7 +183,11 @@ class UsuarioController extends Controller
                 Rule::requiredIf(function () use ($request) {
                     return $request->filled('new_password');
                 }),
-                'current_password'
+                function ($attribute, $value, $fail) use ($usuario) {
+                    if (!Hash::check($value, $usuario->password)) {
+                        $fail('La contraseña actual es incorrecta.');
+                    }
+                }
             ],
             'new_password' => [
                 'nullable',

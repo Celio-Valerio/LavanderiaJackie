@@ -2,45 +2,41 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\GastoDiario;
 use App\Models\DetalleGastoDiario;
-use App\Models\ServicioEfectuado;
+use App\Models\GastoDiario;
 use App\Models\Producto;
+use App\Models\ServicioEfectuado;
+use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class GastoDiarioSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         DB::table('detalle_gasto_diarios')->delete();
         DB::table('gasto_diarios')->delete();
 
-        // Obtener 5 servicios efectuados existentes
         $servicios = ServicioEfectuado::inRandomOrder()->limit(5)->get();
         $productos = Producto::all();
 
         foreach ($servicios as $servicio) {
+            // Crear gasto diario con fecha aleatoria de los últimos 30 días
             $gasto = GastoDiario::create([
                 'servicio_efectuado_id' => $servicio->id,
                 'estado' => 'Terminado',
+                'fecha' => Carbon::now()->subDays(rand(0, 30))->format('Y-m-d')
             ]);
 
-            // Generar entre 2 y 5 detalles por gasto diario
-            $detallesCount = rand(2, 5);
-            $productosUsados = $productos->random($detallesCount);
-
-            foreach ($productosUsados as $producto) {
+            // Crear entre 2 y 5 detalles por gasto
+            $productos->random(rand(2, 5))->each(function ($producto) use ($gasto) {
                 DetalleGastoDiario::create([
                     'gasto_diario_id' => $gasto->id,
                     'producto_id' => $producto->id,
-                    'cantidad' => rand(1, 10), // Cantidad aleatoria
-                    'unidad_medida' => ['kg', 'gramos', 'litros', 'unidades', 'gotas'][rand(0, 4)], // Unidad aleatoria
+                    'cantidad' => rand(1, 1000) / 100, // Ej: 12.34
+                    'unidad_medida' => ['kg', 'gr', 'lt', 'unidades', 'ml'][rand(0, 4)],
                 ]);
-            }
+            });
         }
     }
 }
