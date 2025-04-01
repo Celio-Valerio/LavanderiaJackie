@@ -1,15 +1,50 @@
 @extends('layouts.principal')
 @section('title', 'Lista de cupones')
 @section('content')
+
+    <style>
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            margin-right: 10px; /* Separación entre botones */
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+    </style>
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de cupones</h1>
-                            <!-- Botón agregar cupones -->
-                            <a href="{{ route('cupones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar cupón</a>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">
+                                @if($filter === 'pendientes')
+                                    Lista de cupones pendientes
+                                @else
+                                    Lista de cupones
+                                @endif
+                            </h1>
+                            <div class="d-flex gap-2">
+                                <!-- Botón de cambio de vista -->
+                                <div class="d-flex gap-2">
+                                    @if($filter === 'pendientes')
+                                        <a href="{{ route('cupones.index') }}" class="btn btn-secondary btn-sm d-flex align-items-center">
+                                            Ver No Pendientes
+                                        </a>
+                                    @else
+                                        <a href="{{ route('cupones.index', ['filter' => 'pendientes']) }}" class="btn btn-secondary btn-sm d-flex align-items-center">
+                                            Ver Pendientes
+                                        </a>
+                                    @endif
+                                </div>
+
+                                <!-- Botón agregar cupones -->
+                                <a href="{{ route('cupones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center">
+                                    Agregar cupón
+                                </a>
+                            </div>
                         </div>
 
                         @if(session('success'))
@@ -49,6 +84,70 @@
                             </thead>
                             <tbody>
                             @forelse($cupones as $cupon)
+                                <tr data-fecha="{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('Y-m-d') }}">
+                                    <td class="row-index small-text-field"></td>
+                                    <td class="small-text-field" >{{ $cupon->nombre }}</td>
+
+                                    <td class="small-text-field">
+                                        @if($cupon->estado == 'Activo')
+                                            <span class="badge bg-success">{{ $cupon->estado }}</span>
+                                        @elseif($cupon->estado == 'Utilizado')
+                                            <span class="badge bg-primary">{{ $cupon->estado }}</span>
+                                        @elseif($cupon->estado == 'Inactivo')
+                                            <span class="badge bg-warning">{{ $cupon->estado }}</span>
+                                        @elseif($cupon->estado == 'Vencido')
+                                            <span class="badge bg-danger">{{ $cupon->estado }}</span>
+                                        @endif
+                                    </td>
+
+                                    <td class="small-text-field">
+                                        @if($cupon->tipo == 'Valor')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @elseif($cupon->tipo == 'Cantidad')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @elseif($cupon->tipo == 'Descuento')
+                                            <span class="badge bg-dark">{{ $cupon->tipo }}</span>
+                                        @endif
+                                    </td>
+
+
+                                    <td class="small-text-field">
+                                        @if($cupon->tipo == 'Valor')
+                                            <span>L. {{ $cupon->valor }}</span> <!-- Redondear el valor -->
+                                        @elseif($cupon->tipo == 'Cantidad')
+                                            <span>{{ round($cupon->valor) }} lavadas</span> <!-- Redondear el valor -->
+                                        @elseif($cupon->tipo == 'Descuento')
+                                            <span>{{ round($cupon->valor) }} %</span> <!-- Redondear el valor -->
+                                        @endif
+                                    </td>
+
+                                    <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('d/m/Y') }}</td>
+                                    <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_hasta)->format('d/m/Y') }}</td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group" aria-label="Botones de acción">
+                                            <a href="{{ route('cupones.show', $cupon->id) }}" class="btn btn-info btn-sm" title="Ver" data-bs-toggle="tooltip">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a href="{{ route('cupones.edit', $cupon->id) }}" class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="tooltip">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="{{ route('cupones.print', $cupon) }}"
+                                               class="btn btn-sm btn-success no-print"
+                                               title="Imprimir"
+                                               target="_blank"
+                                               data-bs-toggle="tooltip">
+                                                <i class="bi bi-printer"></i>
+                                            </a>
+                                            <a href="{{ route('cupones.pdf', $cupon) }}"
+                                               class="btn btn-sm btn-dark no-print"
+                                               title="Descargar PDF"
+                                               data-bs-toggle="tooltip">
+                                                <i class="bi bi-file-earmark-pdf"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                </tr>
                                 @php
                                     $fecha_hoy = date('Y-m-d');
                                 @endphp

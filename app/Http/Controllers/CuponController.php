@@ -16,15 +16,17 @@ class CuponController extends Controller
      */
     public function index(Request $request)
     {
-        // Filtrar cupones según parámetro
         $filter = $request->input('filter');
 
-        $cupones = $filter === 'pendientes'
-            ? Cupon::where('estado', 'Activo')->get()
-            : Cupon::all();
+        if ($filter === 'pendientes') {
+            $cupones = Cupon::where('estado', 'Activo')->get();
+        } else {
+            $cupones = Cupon::where('estado', '!=', 'Activo')->get(); // Excluir Activo
+        }
 
         return view('primary.cupones.cupon_index', compact('cupones', 'filter'));
     }
+
 
     /**
      * Show the form for creating a new resource.
