@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Empleado;
 use App\Models\Puesto;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class EmpleadoController extends Controller
 {
@@ -280,5 +282,22 @@ class EmpleadoController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function generarConstancia($id)
+    {
+        $empleado = Empleado::findOrFail($id);
+        $fechaActual = Carbon::now()->locale('es_ES')->isoFormat('DD/MM/YYYY');
+
+        $data = [
+            'empleado' => $empleado,
+            'fechaActual' => $fechaActual,
+            'gerente' => 'Matilde Jackeline Moncada Zelaya',
+            'telefonoEmpresa' => env('COMPANY_PHONE', '9608-5567'),
+            'emailEmpresa' => env('COMPANY_EMAIL', 'Jacky.moncada25@gmail.com')
+        ];
+
+        $pdf = Pdf::loadView('primary.empleados.empleado_constancia', $data);
+        return $pdf->download('constancia_laboral_'.$empleado->last_name.'.pdf');
     }
 }

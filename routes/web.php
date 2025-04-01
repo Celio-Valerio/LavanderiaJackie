@@ -78,7 +78,8 @@ Route::resource('empleados', EmpleadoController::class);
 // Ruta para recargar el formulario de editar empleado
 Route::get('/empleados/{id}/reload', [EmpleadoController::class, 'reload'])->name('empleados.reload');
 
-
+// Ruta para generar una constancia PDF del empleado
+Route::get('/empleados/{id}/constancia', [EmpleadoController::class, 'generarConstancia'])->name('empleados.constancia');
 
 // Rutas para manejar proveedores
 Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index'); // Lista de proveedores
