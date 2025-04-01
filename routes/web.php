@@ -329,6 +329,12 @@ Route::put('/cupones/{id}', [CuponController::class, 'update'])->name('cupones.u
 // Ruta para cambiar el estado de un cupon
 Route::patch('/cupones/{cupon}/toggle-estado', [CuponController::class, 'toggleEstado'])->name('cupones.toggle-estado');
 
+// Ruta para imprimir un cupón
+Route::get('/cupones/{cupon}/print', [CuponController::class, 'print'])->name('cupones.print');
+
+// Ruta para generar PDF de un cupón
+Route::get('/cupones/{cupon}/pdf', [CuponController::class, 'generatePDF'])->name('cupones.pdf');
+
 // Ruta para mostrar la lista de usuarios
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
 
