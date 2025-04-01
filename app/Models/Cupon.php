@@ -25,13 +25,10 @@ class Cupon extends Model
     /**
      * Relación con el modelo Cliente
      */
-    public function cliente(): BelongsTo
-    {
-        return $this->belongsTo(Cliente::class);
-    }
 
     public function clientes()
     {
-        return $this->belongsToMany(Cliente::class, 'cupon_cliente');
+        return $this->belongsToMany(Cliente::class, 'cupon_cliente')
+            ->withPivot('canjeado');
     }
 }

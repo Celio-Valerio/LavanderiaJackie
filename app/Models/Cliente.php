@@ -12,6 +12,11 @@ class Cliente extends Model
     // Especifica el nombre de la tabla si es diferente a la convención de nombres de Laravel
     protected $table = 'clientes';
 
+    public function cupones()
+    {
+        return $this->belongsToMany(Cupon::class, 'cupon_cliente')
+            ->withPivot('canjeado');
+    }
     public function servicios()
     {
         return $this->Hasmany(ServicioEfectuado::class);

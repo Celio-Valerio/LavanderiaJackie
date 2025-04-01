@@ -89,6 +89,17 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Estado</label>
+                                    <select name="estado" id="estado" class="form-select @error('estado') is-invalid @enderror">
+                                        <option value="">Seleccione el estado</option>
+                                        <option value="Activo" {{ (isset($empleado) && ($empleado->estado == 'Activo')) || old('genero') == 'Activo' ? 'selected' : '' }}>Activo</option>
+                                        <option value="Inactivo" {{ (isset($empleado) && ($empleado->estado == 'Inactivo')) || old('genero') == 'Inactivo' ? 'selected' : '' }}>Inactivo</option>
+                                    </select>
+                                    @error('estado')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <!-- Campo de Dirección -->

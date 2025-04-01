@@ -23,6 +23,7 @@ use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCorreo;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VencidoController;
 
 
 /*
@@ -77,7 +78,7 @@ Route::resource('empleados', EmpleadoController::class);
 // Ruta para recargar el formulario de editar empleado
 Route::get('/empleados/{id}/reload', [EmpleadoController::class, 'reload'])->name('empleados.reload');
 
-Route::get('/empleados/{id}/constancia', [EmpleadoController::class, 'generarConstancia'])->name('empleados.constancia');
+
 
 // Rutas para manejar proveedores
 Route::get('/proveedores', [ProveedorController::class, 'index'])->name('proveedores.index'); // Lista de proveedores
@@ -133,6 +134,9 @@ Route::get('/gastos', [GastoController::class, 'index'])->name('gastos.index'); 
 
 // Rutas de recursos para gastos
 Route::resource('gastos', GastoController::class);
+
+// Rutas de recursos para gastos
+Route::resource('vencidos', VencidoController::class);
 
 // Rutas para manejar productos
 Route::get('/productos', [ProductoController::class, 'index'])->name('productos.index'); // Lista de productos
@@ -213,9 +217,6 @@ Route::put('/servicios-efectuados/{id}', [ServicioEfectuadoController::class, 'u
 // Ruta para la visualización de un servicio efectuado en factura
 Route::get('/servicios-efectuados/factura/{id}', [ServicioEfectuadoController::class, 'factura'])->name('servicios_efectuados.factura');
 
-Route::get('/servicios-efectuados/export-pdf', [ServicioEfectuadoController::class, 'exportPDF'])
-    ->name('servicios-efectuados.export-pdf');
-
 // Ruta para la lista de servicios efectuados
 Route::get('/servicios-ventas', [ServicioEfectuadoController::class, 'ventas'])->name('servicios_efectuados.ventas');
 
@@ -243,9 +244,6 @@ Route::post('enviar_correo', function (Request $request) { })->name('enviar_corr
 Route::get('/gastos-diarios', [GastoDiarioController::class, 'index'])->name('gastos_diarios.index');
 Route::get('/gastos-diarios/create', [GastoDiarioController::class, 'create'])->name('gastos_diarios.create');
 Route::put('/gastos-diarios/{id}', [GastoDiarioController::class, 'update'])->name('gastos_diarios.update');
-
-Route::get('/gastos-diarios/{gasto}/print', [GastoDiarioController::class, 'print'])->name('gastos-diarios.print');
-Route::get('/gastos-diarios/{gasto}/pdf', [GastoDiarioController::class, 'generatePDF'])->name('gastos-diarios.pdf');
 
 // Ruta para listar todas las cuentas bancarias
 Route::get('/cuenta-bancos', [CuentaBancoController::class, 'index'])->name('cuenta_bancos.index');
@@ -331,12 +329,6 @@ Route::put('/cupones/{id}', [CuponController::class, 'update'])->name('cupones.u
 // Ruta para cambiar el estado de un cupon
 Route::patch('/cupones/{cupon}/toggle-estado', [CuponController::class, 'toggleEstado'])->name('cupones.toggle-estado');
 
-// Mostrar vista de impresión
-Route::get('/cupones/{cupon}/print', [CuponController::class, 'print'])->name('cupones.print');
-
-// Generar PDF
-Route::get('/cupones/{cupon}/pdf', [CuponController::class, 'generatePDF'])->name('cupones.pdf');
-
 // Ruta para mostrar la lista de usuarios
 Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
 
@@ -346,8 +338,12 @@ Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('usua
 // Ruta para almacenar un nuevo usuario
 Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
 
-Route::get('/usuarios/{usuario}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
-Route::put('/usuarios/{usuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
+// Ruta para mostrar el formulario de edición de un usuario
+Route::get('/usuarios/{id}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+
+// Ruta para actualizar un usuario
+Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
+
 // Ruta para la visualización de un usuario
 Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
 

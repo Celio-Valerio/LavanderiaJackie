@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Cupon;
 use App\Models\GastoDiario;
 use App\Models\Promo;
 use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
 use App\Models\Visita;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 class ServicioEfectuadoController extends Controller
 {
@@ -20,15 +20,17 @@ class ServicioEfectuadoController extends Controller
     {
         // Obtener todos los servicios efectuados
         $serviciosEfectuados = ServicioEfectuado::all();
-        return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados'));
+        $clientes = Cliente::all();
+        return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados', 'clientes'));
     }
 
     public function ventas()
     {
         $serviciosEfectuados = ServicioEfectuado::where('estado', 'Entregado')
             ->get();
+        $clientes = Cliente::all();
 
-        return view('primary.servicios_venta.servicios_ventas_index', compact('serviciosEfectuados'));
+        return view('primary.servicios_venta.servicios_ventas_index', compact('serviciosEfectuados', 'clientes'));
     }
 
     /**
@@ -46,13 +48,16 @@ class ServicioEfectuadoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         // Obtener clientes, servicios y promociones para mostrarlos en el formulario de creación
-        $clientes = Cliente::all();
         $servicios = Servicio::all();
+        $cliente_id = $request->input('cliente_id');
+        $cliente = Cliente::findOrfail($cliente_id);
+        $hoy = date('Y-m-d');
+        $cupones = $cliente->cupones()->where('fecha_desde', '<=', $hoy)->where('fecha_hasta', '>=', $hoy)->get();
         $promos = Promo::all();  // Si no se quiere usar, puede ser `nullable` en la migración
-        return view('primary.servicios_efectuados.servicios_efectuados_create', compact('clientes', 'servicios', 'promos'));
+        return view('primary.servicios_efectuados.servicios_efectuados_create', compact( 'servicios', 'promos', 'cliente', 'cupones'));
     }
 
     /**
@@ -171,6 +176,17 @@ class ServicioEfectuadoController extends Controller
         $servicioEfectuado->precio_envio = $request->precio_envio; // Guardar el precio de envío
         $servicioEfectuado->pago_envio = $request->pago_envio; // Guardar quién paga el envío
         $servicioEfectuado->total = str_replace(',', '', $request->total); // Eliminar las comas
+
+        $cupon_id = $request->input('cupon_id');
+
+        if (!empty($cupon_id)) {
+            $cupon = Cupon::find($cupon_id);
+
+            if ($cupon && $cupon->clientes()->where('cliente_id', $servicioEfectuado->cliente_id)->exists()) {
+                $cupon->clientes()->updateExistingPivot($servicioEfectuado->cliente_id, ['canjeado' => true]);
+            }
+        }
+
         // Asignar fecha y hora actual
         date_default_timezone_set('America/Tegucigalpa');
         $servicioEfectuado->fecha = now()->toDateString(); // Fecha actual en formato Y-m-d
@@ -345,29 +361,5 @@ class ServicioEfectuadoController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function exportPDF(Request $request)
-    {
-        $query = ServicioEfectuado::with(['cliente', 'servicio', 'promo'])
-            ->where('estado', '!=', 'Pendiente');
-
-        if($request->has('fecha_desde') && $request->has('fecha_hasta')) {
-            $query->whereBetween('fecha', [
-                $request->fecha_desde,
-                $request->fecha_hasta
-            ]);
-        }
-
-        $servicios = $query->get();
-
-        $pdf = PDF::loadView('primary.servicios_efectuados.pdf', compact('servicios'))
-            ->setPaper('A4', 'landscape')
-            ->setOptions([
-                'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true
-            ]);
-
-        return $pdf->stream('servicios-efectuados-'.now()->format('YmdHis').'.pdf');
     }
 }

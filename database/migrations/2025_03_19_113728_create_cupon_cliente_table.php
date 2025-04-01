@@ -14,13 +14,14 @@ return new class extends Migration
         Schema::create('cupon_cliente', function (Blueprint $table) {
             $table->foreignId('cupon_id')->constrained()->onDelete('cascade');
             $table->foreignId('cliente_id')->constrained()->onDelete('cascade');
+            $table->boolean('canjeado')->default(false);
             $table->primary(['cupon_id', 'cliente_id']);
         });
     }
 
     /**
      * Reverse the migrations.
-     */
+     */  
     public function down(): void
     {
         Schema::dropIfExists('cupon_cliente');

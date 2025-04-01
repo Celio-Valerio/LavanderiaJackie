@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('puesto_id'); // Referencia a la tabla puestos
             $table->date('hire_date'); // Fecha de Ingreso
             $table->decimal('salary', 10, 2); // Salario
+            $table->enum('estado', ['Activo', 'Inactivo'])->default('Activo');
 
             // Definir la relación con la tabla puestos
             $table->foreign('puesto_id')->references('id')->on('puestos')->onDelete('cascade');

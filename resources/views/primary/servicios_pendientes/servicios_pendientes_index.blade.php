@@ -7,9 +7,6 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios pendientes</h1>
-                            <div class="button-group d-flex gap-2">
-                                <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
-                            </div>
                         </div>
 
                         @if(session('success'))

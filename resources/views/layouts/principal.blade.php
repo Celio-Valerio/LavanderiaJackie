@@ -313,6 +313,12 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('vencidos.index') }}">
+                        <i class="bi bi-circle"></i><span>Cupones vencidos</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="{{ route('control_cuentas.index') }}">
                         <i class="bi bi-circle"></i><span>Control de cuentas</span>
                     </a>

@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Empleado;
 use App\Models\Puesto;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Carbon\Carbon;
 
 class EmpleadoController extends Controller
 {
@@ -220,6 +218,7 @@ class EmpleadoController extends Controller
                 'numeric',
                 'between:1500,50000',
             ],
+            'estado' => 'required',
         ], [
             // Mensajes de error personalizados
             'first_name.required' => 'El nombre es obligatorio.',
@@ -257,6 +256,7 @@ class EmpleadoController extends Controller
 
             'puesto_id.required' => 'El puesto es obligatorio.',
             'puesto_id.exists' => 'El puesto seleccionado no es válido.',
+            'estado.required' => 'El estado es obligatorio',
         ]);
 
         // Actualizar empleado
@@ -268,6 +268,7 @@ class EmpleadoController extends Controller
         $empleado->puesto_id = $request->puesto_id; // Actualiza el ID del puesto relacionado
         $empleado->hire_date = $request->hire_date;
         $empleado->salary = $request->salary;
+        $empleado->estado = $request->input('estado');
         $empleado->save();
 
         return redirect()->route('empleados.index')->with('success', 'El empleado ' . $empleado->first_name . ' ' . $empleado->last_name . ' ha sido actualizado exitosamente.');
@@ -279,22 +280,5 @@ class EmpleadoController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-    public function generarConstancia($id)
-    {
-        $empleado = Empleado::findOrFail($id);
-        $fechaActual = Carbon::now()->locale('es_ES')->isoFormat('DD/MM/YYYY');
-
-        $data = [
-            'empleado' => $empleado,
-            'fechaActual' => $fechaActual,
-            'gerente' => 'Matilde Jackeline Moncada Zelaya',
-            'telefonoEmpresa' => env('COMPANY_PHONE', '9608-5567'),
-            'emailEmpresa' => env('COMPANY_EMAIL', 'Jacky.moncada25@gmail.com')
-        ];
-
-        $pdf = Pdf::loadView('primary.empleados.empleado_constancia', $data);
-        return $pdf->download('constancia_laboral_'.$empleado->last_name.'.pdf');
     }
 }

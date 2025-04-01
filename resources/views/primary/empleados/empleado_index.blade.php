@@ -28,8 +28,9 @@
                                 <th style="width: 20%;">Nombre</th>
                                 <th style="width: 20%;">Apellido</th>
                                 <th style="width: 10%;">Teléfono</th>
-                                <th style="width: 20%;">Puesto</th>
-                                <th style="width: 25%;">Acciones</th>
+                                <th style="width: 25%;">Puesto</th>
+                                <th style="width: 25%;">Estado</th>
+                                <th style="width: 20%;">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -40,10 +41,12 @@
                                     <td class="small-text-field" >{{ $empleado->last_name }}</td>
                                     <td class="small-text-field" >{{ $empleado->phone }}</td>
                                     <td class="small-text-field" >{{ $empleado->puesto->name }}</td>
+                                    <td class="small-text-field">
+                                        <span class="badge {{ $empleado->estado  == 'Inactivo' ? 'bg-danger' : ($empleado->estado  == 'Activo' ? 'bg-success' : 'bg-danger') }}">{{ $empleado->estado  }}</span>
+                                    </td>
                                     <td class="text-center small-text-field">
                                         <a href="{{ route('empleados.show', $empleado->id) }}" class="btn btn-info btn-sm">Ver</a>
                                         <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                        <a href="{{ route('empleados.constancia', $empleado->id) }}" class="btn btn-success btn-sm">Constancia</a>
                                     </td>
                                 </tr>
                             @empty

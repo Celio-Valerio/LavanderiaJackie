@@ -1,5 +1,5 @@
 @extends('layouts.principal')
-@section('title', 'Lista de cupones')
+@section('title', 'Lista de cupones vencidos')
 @section('content')
     <section class="section">
         <div class="row">
@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de cupones</h1>
+                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de cupones vencidos</h1>
                             <!-- Botón agregar cupones -->
                             <a href="{{ route('cupones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar cupón</a>
                         </div>
@@ -52,21 +52,13 @@
                                 @php
                                     $fecha_hoy = date('Y-m-d');
                                 @endphp
-                                @if($fecha_hoy >= $cupon->fecha_desde && $fecha_hoy <= $cupon->fecha_hasta)
+                                @if($fecha_hoy > $cupon->fecha_hasta)
                                     <tr data-fecha="{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('Y-m-d') }}">
                                         <td class="row-index small-text-field"></td>
                                         <td class="small-text-field" >{{ $cupon->nombre }}</td>
 
                                         <td class="small-text-field">
-                                            @if($cupon->estado == 'Activo')
-                                                <span class="badge bg-success">{{ $cupon->estado }}</span>
-                                            @elseif($cupon->estado == 'Utilizado')
-                                                <span class="badge bg-primary">{{ $cupon->estado }}</span>
-                                            @elseif($cupon->estado == 'Inactivo')
-                                                <span class="badge bg-warning">{{ $cupon->estado }}</span>
-                                            @elseif($cupon->estado == 'Vencido')
-                                                <span class="badge bg-danger">{{ $cupon->estado }}</span>
-                                            @endif
+                                            <span class="badge bg-danger">Vencido</span>
                                         </td>
 
                                         <td class="small-text-field">

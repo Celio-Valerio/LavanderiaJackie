@@ -105,31 +105,44 @@
 
                             <div class="row">
                                 <!-- Cliente -->
-                                <div class="col-md-6">
-                                    <label for="cliente_id" class="form-label">Cliente</label>
+                                <div class="col-md-4">
+                                    <label class="form-label">Cliente</label>
+                                    <input type="text" name="cliente" id="cliente" class="form-control" value="{{ $cliente->first_name }} {{$cliente->last_name}}" readonly maxlength="5" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="cliente_id" class="form-label">Cupones</label>
                                     <div class="d-flex align-items-start">
                                         <!-- Select de cliente -->
-                                        <select name="cliente_id" id="cliente_id" class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
-                                            <option value="">Seleccione un cliente</option>
-                                            @foreach($clientes as $cliente)
-                                                <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
-                                                    {{ $cliente->first_name }} {{ $cliente->last_name }}
-                                                </option>
+                                        <select name="cupon_id" id="cupon_id" class="form-control select2 @error('cupon_id') is-invalid @enderror" required onchange="cambioCupon(this)">
+                                            <option value="">Seleccione un cupón</option>
+                                            @foreach($cupones as $cupon)
+                                                @php
+                                                    $clienteCupon = $cupon->clientes->firstWhere('id', $cliente->id);
+                                                    $canjeado = optional($clienteCupon)->pivot->canjeado ?? false;
+                                                @endphp
+                                                @if(!$canjeado)
+                                                    @if($cupon->tipo == 'Valor')
+                                                        <option value="{{$cupon->id}}" data-tipo="{{ $cupon->tipo }}" data-valor="{{ $cupon->valor }}">Nombre: {{$cupon->nombre}}, valor: L. {{$cupon->valor}}</option>
+                                                    @endif
+                                                    @if($cupon->tipo == 'Descuento')
+                                                        <option value="{{$cupon->id}}" data-tipo="{{ $cupon->tipo }}" data-valor="{{ $cupon->valor }}">Nombre: {{$cupon->nombre}}, descuento: {{$cupon->valor}}%</option>
+                                                    @endif
+                                                    @if($cupon->tipo == 'Cantidad')
+                                                        <option value="{{$cupon->id}}" data-tipo="{{ $cupon->tipo }}" data-valor="{{ $cupon->valor }}">Nombre: {{$cupon->nombre}}, cantidad: {{$cupon->valor}} servicio</option>
+                                                    @endif
+                                                @endif
                                             @endforeach
                                         </select>
-
-                                        <!-- Botón para agregar cliente -->
-                                        <a href="{{ route('clientes.create') }}" class="btn btn-primary ms-2" title="Agregar nuevo cliente">
-                                            <i class="bi bi-plus-circle"></i>
-                                        </a>
                                     </div>
-                                    @error('cliente_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <div>
+                                        <input type="hidden" name="cliente_id" id="cliente_id" value="{{$cliente->id}}">
+                                        <input type="hidden" name="tipo_cupon" id="tipo_cupon" value="{{old('tipo_cupon')}}">
+                                        <input type="hidden" name="valor_cupon" id="valor_cupon" value="{{old('valor_cupon')}}">
+                                    </div>
                                 </div>
 
                                 <!-- Servicio -->
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label for="servicio_id" class="form-label">Servicio</label>
                                     <select name="servicio_id" id="servicio_id" class="form-control @error('servicio_id') is-invalid @enderror" required>
                                         <option value="">Seleccione un servicio</option>
@@ -459,8 +472,23 @@
         });
 
     </script>
+    <script>
+
+    </script>
 
     <script>
+        function cambioCupon(select){
+            var opciones = select.options[select.selectedIndex];
+            var tipo = opciones.getAttribute('data-tipo');
+            var valor = opciones.getAttribute('data-valor');
+            var tipo2 = document.getElementById('tipo_cupon');
+            var valor2 = document.getElementById('valor_cupon');
+
+            tipo2.value = tipo;
+            valor2.value = valor;
+            calculateTotal();
+        }
+
         $(document).ready(function () {
             function toggleEnvioFields() {
                 if ($('#envio_domicilio').is(':checked')) {
@@ -474,6 +502,8 @@
                     calculateTotal(); // Recalculate total
                 }
             }
+
+
 
             function togglePrecioEnvio() {
                 if ($('#envio_empresa').is(':checked')) {
@@ -500,38 +530,6 @@
                 }
             });
 
-            // Función para calcular el total
-            function calculateTotal() {
-                var precio = $('#servicio_id option:selected').data('precio') || 0;
-                var libras = parseFloat($('#libras').val()) || 0;
-                var total = precio * libras;
-                var descuento = 0;
-
-                if (!$('#no_aplica').prop('checked')) {
-                    var descuentoPromo = $('#promo_id option:selected').data('descuento') || 0;
-                    descuento = (total * descuentoPromo) / 100;
-                    total -= descuento;
-                }
-
-                // Añadir precio de envío si aplica
-                if ($('#envio_empresa').is(':checked')) {
-                    var precioEnvio = parseFloat($('#precio_envio').val()) || 0;
-                    total += precioEnvio;
-                } else if ($('#envio_local').is(':checked') || $('#envio_cliente').is(':checked')) {
-                    $('#precio_envio').val(''); // Set envio price to 0.00
-                }
-
-                // Validación: Si hay un error, mantener el valor del precio de envío
-                if (isNaN(total)) {
-                    total = parseFloat($('#total').val()) || 0; // Mantener el total previo
-                }
-
-                // Formatear el total con comas para miles y punto para decimales
-                var totalFormateado = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-                // Asignar el total formateado
-                $('#total').val(totalFormateado);
-            }
 
             // Actualizar campos de envío al cambiar opciones
             $('#envio_local, #envio_domicilio').on('change', function () {
@@ -570,6 +568,57 @@
             toggleEnvioFields();
             togglePrecioEnvio();
         });
+
+        // Función para calcular el total
+        function calculateTotal() {
+            var precio = $('#servicio_id option:selected').data('precio') || 0;
+            var libras = parseFloat($('#libras').val()) || 0;
+            var total = precio * libras;
+            var descuento = 0;
+            var selectV = document.getElementById('cupon_id');
+
+            if (!$('#no_aplica').prop('checked')) {
+                var descuentoPromo = $('#promo_id option:selected').data('descuento') || 0;
+                descuento = (total * descuentoPromo) / 100;
+                total -= descuento;
+            }
+
+            if(selectV.value !== '' && precio > 0 && libras > 0){
+                var tipoC = document.getElementById('tipo_cupon').value;
+                var valorC = document.getElementById('valor_cupon').value;
+                var cal = 0;
+
+                if(tipoC === 'Descuento'){
+                    cal =  (parseFloat(valorC) / 100);
+                    total = total - (total * cal);
+                }
+                if(tipoC === 'Valor'){
+                    total = total - parseFloat(valorC);
+                }
+                if(tipoC === 'Cantidad'){
+                    total = 0;
+                }
+            }
+
+            // Añadir precio de envío si aplica
+            if ($('#envio_empresa').is(':checked')) {
+                var precioEnvio = parseFloat($('#precio_envio').val()) || 0;
+                total += precioEnvio;
+            } else if ($('#envio_local').is(':checked') || $('#envio_cliente').is(':checked')) {
+                $('#precio_envio').val(''); // Set envio price to 0.00
+            }
+
+            // Validación: Si hay un error, mantener el valor del precio de envío
+            if (isNaN(total)) {
+                total = parseFloat($('#total').val()) || 0; // Mantener el total previo
+            }
+
+            // Formatear el total con comas para miles y punto para decimales
+            var totalFormateado = total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+            // Asignar el total formateado
+            $('#total').val(totalFormateado);
+        }
     </script>
 
     <script>
