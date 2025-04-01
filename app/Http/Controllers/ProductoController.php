@@ -126,7 +126,8 @@ class ProductoController extends Controller
     {
         $producto = Producto::findOrFail($id); // Busca el producto o lanza un error si no existe
         $categorias = Categoria::all(); // Obtiene todas las categorías disponibles
-        return view('primary.productos.producto_update', compact('producto', 'categorias'));
+        $proveedores = Proveedor::all(); // Obtiene todos los proveedores disponibles
+        return view('primary.productos.producto_update', compact('producto', 'categorias', 'proveedores'));
     }
 
     /**
@@ -152,6 +153,10 @@ class ProductoController extends Controller
                 'required',
                 'exists:categorias,id', // Verifica que la categoría exista
             ],
+            'proveedor_id' => [
+                'required',
+                'exists:proveedors,id', // Verifica que el proveedor exista
+            ],
             'descripcion' => [
                 'nullable',
                 'string',
@@ -168,6 +173,8 @@ class ProductoController extends Controller
             'precio.min' => 'El precio del producto debe ser mayor a L. 0.00.',
             'categoria_id.required' => 'Debes seleccionar una categoría.',
             'categoria_id.exists' => 'La categoría seleccionada no es válida.',
+            'proveedor_id.required' => 'Debes seleccionar un proveedor.',
+            'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
             'descripcion.max' => 'La descripción no puede exceder los 500 caracteres.',
             'presentacion.required' => 'Debes seleccionar la presentación del producto.',
         ]);
@@ -192,12 +199,11 @@ class ProductoController extends Controller
         $producto->precio = $request->precio; // Actualizamos el precio
         $producto->presentacion = $request->presentacion;
         $producto->categoria_id = $request->categoria_id; // Usar la categoría seleccionada por el usuario
+        $producto->proveedor_id = $request->proveedor_id; // Usar el proveedor seleccionado por el usuario
         $producto->save();
 
-        $nombreProducto = $request->nombre;
-        return redirect()->route('productos.index')->with('success', 'El producto ' . $nombreProducto . ' ha sido actualizado exitosamente.');
+        return redirect()->route('productos.index')->with('success', 'El producto ' . $producto->nombre . ' ha sido actualizado exitosamente.');
     }
-
     /**
      * Remove the specified resource from storage.
      */

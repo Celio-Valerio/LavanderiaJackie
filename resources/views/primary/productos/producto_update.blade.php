@@ -49,6 +49,21 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <div class="col-md-6">
+                                        <label for="proveedor_id" class="form-label">Proveedor</label>
+                                        <select name="proveedor_id" class="form-select small-text-field @error('proveedor_id') is-invalid @enderror" id="proveedor_id" required>
+                                            <option value="">Seleccione un proveedor</option>
+                                            @foreach($proveedores as $proveedor)
+                                                <option value="{{ $proveedor->id }}" {{ old('proveedor_id', $producto->proveedor_id) == $proveedor->id ? 'selected' : '' }}>
+                                                    {{ $proveedor->full_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('proveedor_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                             </div>
 
                             <!-- Campo de Descripción -->
@@ -89,7 +104,8 @@
                     nombre: @json($producto->nombre),
                     precio: @json($producto->precio),
                     presentacion: @json($producto->presentacion),
-                    descripcion: @json($producto->descripcion)
+                    descripcion: @json($producto->descripcion),
+                    proveedor_id: @json($producto->proveedor_id)
                 };
 
                 // Función para limpiar validaciones
@@ -110,15 +126,22 @@
                     document.getElementById('precio').value = originalData.precio;
                     document.getElementById('descripcion').value = originalData.descripcion;
 
-                    // Restaurar el valor seleccionado del select
+                    // Restaurar el valor seleccionado del select de presentación
                     const presentacionSelect = document.getElementById('presentacion');
                     Array.from(presentacionSelect.options).forEach(option => {
                         option.selected = option.value === originalData.presentacion;
                     });
+
+                    // Restaurar el valor seleccionado del select de proveedor
+                    const proveedorSelect = document.getElementById('proveedor_id');
+                    Array.from(proveedorSelect.options).forEach(option => {
+                        option.selected = option.value == originalData.proveedor_id; // Comparación flexible para manejar tipos de datos
+                    });
                 };
 
-                // Asociar el botón de reestablecer
+// Asociar el botón de reestablecer
                 reloadButton.addEventListener('click', resetForm);
+
 
                 // Validación del campo de precio
                 const precioInput = document.getElementById('precio');
