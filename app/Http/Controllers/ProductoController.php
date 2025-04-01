@@ -29,7 +29,8 @@ class ProductoController extends Controller
     public function create()
     {
         $categorias = Categoria::all(); // Obtiene todas las categorías disponibles
-        return view('primary.productos.producto_create', compact('categorias')); // Pasa las categorías y proveedores a la vista
+        $proveedores = Proveedor::all(); // Obtiene todos los proveedores disponibles
+        return view('primary.productos.producto_create', compact('categorias', 'proveedores')); // Pasa los datos a la vista
     }
 
     /**
@@ -55,6 +56,10 @@ class ProductoController extends Controller
                 'required',
                 'exists:categorias,id', // Verifica que la categoría exista
             ],
+            'proveedor_id' => [
+                'required',
+                'exists:proveedors,id', // Verifica que el proveedor exista
+            ],
             'descripcion' => [
                 'nullable',
                 'string',
@@ -74,6 +79,9 @@ class ProductoController extends Controller
             'categoria_id.required' => 'Debes seleccionar una categoría.',
             'categoria_id.exists' => 'La categoría seleccionada no es válida.',
 
+            'proveedor_id.required' => 'Debes seleccionar un proveedor.',
+            'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
+
             'descripcion.max' => 'La descripción no puede exceder los 500 caracteres.',
 
             'presentacion.required' => 'Debes seleccionar la presentación del producto.',
@@ -86,12 +94,11 @@ class ProductoController extends Controller
         $producto->precio = $request->precio;
         $producto->presentacion = $request->presentacion;
         $producto->stock = 0; // Asegúrate de añadir este campo en la migración
-        $producto->categoria_id = 2; // Asignar la categoría relacionada
+        $producto->categoria_id = $request->categoria_id;
+        $producto->proveedor_id = $request->proveedor_id; // Asignar el proveedor
         $producto->save();
 
-        $nombreProducto = $request->nombre;
-        return redirect()->route('productos.index')->with('success', 'El producto ' . $nombreProducto . ' ha sido registrado exitosamente.');
-
+        return redirect()->route('productos.index')->with('success', 'El producto ' . $producto->nombre . ' ha sido registrado exitosamente.');
     }
 
     /**

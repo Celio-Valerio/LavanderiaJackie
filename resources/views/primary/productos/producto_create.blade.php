@@ -56,6 +56,22 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+                                <!-- Campo de Proveedor -->
+                                <div class="col-md-6">
+                                    <label for="proveedor_id" class="form-label">Proveedor</label>
+                                    <select name="proveedor_id" class="form-select small-text-field @error('proveedor_id') is-invalid @enderror" id="proveedor_id" required>
+                                        <option value="">Selecciona un proveedor</option>
+                                        @foreach($proveedores as $proveedor)
+                                            <option value="{{ $proveedor->id }}" {{ old('proveedor_id') == $proveedor->id ? 'selected' : '' }}>
+                                                {{ $proveedor->full_name }} - {{ $proveedor->company_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('proveedor_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
 
                             <!-- Campo de Descripción -->
