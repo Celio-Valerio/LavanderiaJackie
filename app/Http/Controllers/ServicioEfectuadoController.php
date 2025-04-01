@@ -10,6 +10,7 @@ use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
 use App\Models\Visita;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ServicioEfectuadoController extends Controller
 {
@@ -361,5 +362,29 @@ class ServicioEfectuadoController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportPDF(Request $request)
+    {
+        $query = ServicioEfectuado::with(['cliente', 'servicio', 'promo'])
+            ->where('estado', '!=', 'Pendiente');
+
+        if($request->has('fecha_desde') && $request->has('fecha_hasta')) {
+            $query->whereBetween('fecha', [
+                $request->fecha_desde,
+                $request->fecha_hasta
+            ]);
+        }
+
+        $servicios = $query->get();
+
+        $pdf = PDF::loadView('primary.servicios_efectuados.pdf', compact('servicios'))
+            ->setPaper('A4', 'landscape')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true
+            ]);
+
+        return $pdf->stream('servicios-efectuados-'.now()->format('YmdHis').'.pdf');
     }
 }
