@@ -248,6 +248,10 @@ Route::post('enviar_correo', function (Request $request) { })->name('enviar_corr
 // Ruta para la lista de gastos diarios
 Route::get('/gastos-diarios', [GastoDiarioController::class, 'index'])->name('gastos_diarios.index');
 Route::get('/gastos-diarios/create', [GastoDiarioController::class, 'create'])->name('gastos_diarios.create');
+
+Route::get('/gastos-diarios/{gasto}/print', [GastoDiarioController::class, 'print'])->name('gastos-diarios.print');
+Route::get('/gastos-diarios/{gasto}/pdf', [GastoDiarioController::class, 'generatePDF'])->name('gastos-diarios.pdf');
+
 Route::put('/gastos-diarios/{id}', [GastoDiarioController::class, 'update'])->name('gastos_diarios.update');
 
 // Ruta para listar todas las cuentas bancarias
