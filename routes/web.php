@@ -350,10 +350,10 @@ Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('usua
 Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
 
 // Ruta para mostrar el formulario de edición de un usuario
-Route::get('/usuarios/{id}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+Route::get('/usuarios/{usuario}/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
 
 // Ruta para actualizar un usuario
-Route::put('/usuarios/{id}', [UsuarioController::class, 'update'])->name('usuarios.update');
+Route::put('/usuarios/{usuario}', [UsuarioController::class, 'update'])->name('usuarios.update');
 
 // Ruta para la visualización de un usuario
 Route::get('/usuarios/{id}', [UsuarioController::class, 'show'])->name('usuarios.show');
