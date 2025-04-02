@@ -19,9 +19,9 @@ class CuponController extends Controller
         $filter = $request->input('filter');
 
         if ($filter === 'pendientes') {
-            $cupones = Cupon::where('estado', 'Activo')->get();
+            $cupones = Cupon::where('estado', 'Activo')->distinct()->get();
         } else {
-            $cupones = Cupon::where('estado', '!=', 'Activo')->get(); // Excluir Activo
+            $cupones = Cupon::where('estado', '!=', 'Activo')->distinct()->get();
         }
 
         return view('primary.cupones.cupon_index', compact('cupones', 'filter'));

@@ -4,12 +4,11 @@
     <style>
         .print-container {
             max-width: 800px;
-            margin: 0 auto; /* Asegura que el contenido esté centrado */
+            margin: 0 auto;
             padding: 20px;
-            border: 3px solid #007bff;
-            border-radius: 15px;
+            border: 2px solid #007bff;
             background: white;
-            font-family: Arial, sans-serif;
+            font-family: Helvetica, Arial, sans-serif;
         }
 
         @media print {
@@ -24,53 +23,56 @@
             }
 
             .print-container {
-                width: 100%; /* Asegura que el contenido use todo el ancho de la página */
+                width: 100%;
             }
         }
 
-        /* Modificaciones del encabezado */
         .header-section {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            width: 100%;
             border-bottom: 2px solid #007bff;
-            padding-bottom: 5px;
-            margin-bottom: 15px; /* Reducido */
+            margin-bottom: 15px;
+        }
+
+        .header-table {
+            width: 100%;
+        }
+
+        .header-table td {
+            vertical-align: top;
+            padding: 5px;
         }
 
         .logo {
-            max-width: 80px; /* Logo más pequeño */
-            margin-right: 15px; /* Espacio a la derecha del logo */
+            width: 80px;
         }
 
         .company-info {
             text-align: right;
             font-size: 12px;
             line-height: 1.4;
-            max-width: 60%; /* Limitar el ancho del texto */
         }
 
         .cupon-title {
             color: #007bff;
             text-align: center;
-            font-size: 26px;
-            margin-bottom: 15px;
+            font-size: 24px;
             text-transform: uppercase;
-        }
-
-        .cupon-details {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            font-size: 14px;
+            margin: 15px 0;
         }
 
         .cupon-code {
-            font-size: 36px;
+            font-size: 32px;
             color: #28a745;
             text-align: center;
-            margin: 20px 0;
             font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .cupon-details {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            font-size: 14px;
         }
 
         .terms {
@@ -82,17 +84,22 @@
     </style>
 
     <div class="print-container">
-        <!-- ENCABEZADO -->
         <div class="header-section">
-            <img src="{{ asset('assets/img/logo.png') }}" class="logo" alt="Logo Lavandería">
-            <div class="company-info">
-                <strong style="font-size: 16px;">Lavandería Jackie</strong><br>
-                Factura de Venta de Servicios<br>
-                Prop. Matilde Jackeline Moncada Zelaya<br>
-                Bo. Tierra Blanca, media cuadra antes de Pintogama, Danlí, El Paraíso.<br>
-                R.T.N.: 07031985048849 &nbsp; | &nbsp; Cel: 9608-5567<br>
-                Email: jacky.moncada25@gmail.com
-            </div>
+            <table class="header-table">
+                <tr>
+                    <td style="width: 80px;">
+                        <img src="{{ asset('assets/img/logo.png') }}" class="logo" alt="Logo Lavandería">
+                    </td>
+                    <td class="company-info">
+                        <strong style="font-size: 16px;">Lavandería Jackie</strong><br>
+                        Factura de Venta de Servicios<br>
+                        Prop. Matilde Jackeline Moncada Zelaya<br>
+                        Bo. Tierra Blanca, media cuadra antes de Pintogama, Danlí, El Paraíso.<br>
+                        R.T.N.: 07031985048849 &nbsp; | &nbsp; Cel: 9608-5567<br>
+                        Email: jacky.moncada25@gmail.com
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <h1 class="cupon-title">Cupón de Descuento</h1>
@@ -129,37 +136,10 @@
                     <td><strong>Estado:</strong></td>
                     <td>{{ ucfirst(strtolower($cupon->estado)) }}</td>
                 </tr>
-
                 <tr>
                     <td><strong>Descripción:</strong></td>
                     <td>{{ ucfirst(strtolower($cupon->descripcion)) }}</td>
                 </tr>
-
-                <!-- Lista de clientes asignados -->
-                <div class="col-md-6">
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="table-light">
-                            <tr>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <br>
-                            <th>Clientes asignados:</th>
-                            @forelse($cupon->clientes as $cliente)
-                                <tr>
-                                    <td>{{ $cliente->first_name }} {{ $cliente->last_name }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="2" class="text-center">No hay clientes asignados</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
             </table>
         </div>
 
