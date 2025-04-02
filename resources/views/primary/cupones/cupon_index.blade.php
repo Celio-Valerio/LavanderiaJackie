@@ -154,8 +154,7 @@
                                 @if($fecha_hoy >= $cupon->fecha_desde && $fecha_hoy <= $cupon->fecha_hasta)
                                     <tr data-fecha="{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('Y-m-d') }}">
                                         <td class="row-index small-text-field"></td>
-                                        <td class="small-text-field" >{{ $cupon->nombre }}</td>
-
+                                        <td class="small-text-field">{{ $cupon->nombre }}</td>
                                         <td class="small-text-field">
                                             @if($cupon->estado == 'Activo')
                                                 <span class="badge bg-success">{{ $cupon->estado }}</span>
@@ -167,38 +166,17 @@
                                                 <span class="badge bg-danger">{{ $cupon->estado }}</span>
                                             @endif
                                         </td>
-
-                                        <td class="small-text-field">
-                                            @if($cupon->tipo == 'Valor')
-                                                <span class="badge bg-dark">{{ $cupon->tipo }}</span>
-                                            @elseif($cupon->tipo == 'Cantidad')
-                                                <span class="badge bg-dark">{{ $cupon->tipo }}</span>
-                                            @elseif($cupon->tipo == 'Descuento')
-                                                <span class="badge bg-dark">{{ $cupon->tipo }}</span>
-                                            @endif
-                                        </td>
-
-
-                                        <td class="small-text-field">
-                                            @if($cupon->tipo == 'Valor')
-                                                <span>L. {{ $cupon->valor }}</span> <!-- Redondear el valor -->
-                                            @elseif($cupon->tipo == 'Cantidad')
-                                                <span>{{ round($cupon->valor) }} lavadas</span> <!-- Redondear el valor -->
-                                            @elseif($cupon->tipo == 'Descuento')
-                                                <span>{{ round($cupon->valor) }} %</span> <!-- Redondear el valor -->
-                                            @endif
-                                        </td>
-
+                                        <td class="small-text-field">{{ $cupon->tipo }}</td>
+                                        <td class="small-text-field">{{ $cupon->valor }}</td>
                                         <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('d/m/Y') }}</td>
                                         <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_hasta)->format('d/m/Y') }}</td>
-
-
                                         <td class="text-center">
                                             <a href="{{ route('cupones.show', $cupon->id) }}" class="btn btn-info btn-sm">Ver</a>
                                             <a href="{{ route('cupones.edit', $cupon->id) }}" class="btn btn-warning btn-sm">Editar</a>
                                         </td>
                                     </tr>
                                 @endif
+
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center">No hay cupones registrados</td>

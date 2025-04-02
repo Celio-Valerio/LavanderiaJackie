@@ -17,40 +17,37 @@ class CuponSeeder extends Seeder
         $cupones = [
             // Cupones Activos (3)
             [
-                'nombre' => 'Descuento Verano',
-                'descripcion' => 'Promoción especial de temporada',
-                'tipo' => 'Descuento',
+                'nombre' => 'Descuento de verano',
+                'tipo' => 'Cantidad',
                 'estado' => 'Activo',
-                'valor' => 15.00,
-                'fecha_desde' => Carbon::now()->subDays(5),
-                'fecha_hasta' => Carbon::now()->addDays(15)
+                'valor' => 3,
+                'fecha_desde' => Carbon::now()->addDays(5),
+                'fecha_hasta' => Carbon::now()->addDays(20)
             ],
             [
                 'nombre' => 'Lavadas Gratis',
-                'tipo' => 'Cantidad',
+                'tipo' => 'Valor',
                 'estado' => 'Activo',
-                'valor' => 2.00,
-                'fecha_desde' => Carbon::now()->subWeek(),
-                'fecha_hasta' => Carbon::now()->addMonth()
+                'valor' => 44.00,
+                'fecha_desde' => Carbon::now()->addDays(3),
+                'fecha_hasta' => Carbon::now()->addDays(23)
             ],
             [
                 'nombre' => 'Primer Lavado',
-                'descripcion' => 'Descuento para nuevos clientes',
-                'tipo' => 'Valor',
+                'tipo' => 'Descuento',
                 'estado' => 'Activo',
-                'valor' => 50.00,
-                'fecha_desde' => Carbon::today(),
-                'fecha_hasta' => Carbon::today()->addMonth()
+                'valor' => 5,
+                'fecha_desde' => Carbon::now()->addDays(4),
+                'fecha_hasta' => Carbon::now()->addDays(24)
             ],
-
             // Cupones Inactivos (3)
             [
                 'nombre' => 'Oferta Nocturna',
-                'tipo' => 'Valor',
+                'tipo' => 'Descuento',
                 'estado' => 'Inactivo',
-                'valor' => 30.00,
+                'valor' => 5,
                 'fecha_desde' => Carbon::now()->addDays(5),
-                'fecha_hasta' => Carbon::now()->addDays(20)
+                'fecha_hasta' => Carbon::now()->addDays(27)
             ],
             [
                 'nombre' => 'Pack Familiar',

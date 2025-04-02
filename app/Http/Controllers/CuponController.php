@@ -27,7 +27,6 @@ class CuponController extends Controller
         return view('primary.cupones.cupon_index', compact('cupones', 'filter'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      */
