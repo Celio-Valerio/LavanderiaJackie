@@ -5,21 +5,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Agregar este estilo en la sección de estilos -->
     <style>
+        .password-input-group {
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
         .btn-toggle-password {
             position: absolute;
-            right: 10px;
+            right: 30px; /* Aumentamos el espacio a la derecha */
             top: 50%;
             transform: translateY(-50%);
             background: transparent;
             border: none;
             color: #6c757d;
-            padding: 0 5px;
+            padding: 0;
+            z-index: 5;
             cursor: pointer;
         }
 
-        .btn-toggle-password:focus {
-            outline: none;
-            box-shadow: none;
+        /* Añadir padding para el ícono de error de Bootstrap */
+        .form-control.is-invalid {
+            padding-right: 2.5rem;
+            background-position: right calc(0.375em + 0.1875rem) center;
         }
     </style>
 
@@ -108,34 +115,37 @@
                                             <div class="row g-2 mb-3">
                                                 <div class="col-md-6">
                                                     <label for="current_password" class="form-label">Contraseña actual</label>
-                                                    <div class="position-relative">
-                                                        <input type="password" name="current_password" class="form-control small-text-field @error('current_password') is-invalid @enderror"
+                                                    <div class="password-input-group">
+                                                        <input type="password" name="current_password"
+                                                               class="form-control small-text-field @error('current_password') is-invalid @enderror"
                                                                id="current_password" placeholder="" autocomplete="current-password">
-                                                        <button type="button" class="btn btn-toggle-password" onclick="togglePasswordVisibility('current_password')">
+                                                        <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('current_password')">
                                                             <i class="fas fa-eye-slash"></i>
                                                         </button>
-                                                        @error('current_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                                     </div>
+                                                    @error('current_password')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <label for="new_password" class="form-label">Nueva contraseña</label>
-                                                    <div class="position-relative">
-                                                        <input type="password" name="new_password" class="form-control small-text-field @error('new_password') is-invalid @enderror"
+                                                    <div class="password-input-group">
+                                                        <input type="password" name="new_password"
+                                                               class="form-control small-text-field @error('new_password') is-invalid @enderror"
                                                                id="new_password" placeholder="" autocomplete="new-password">
-                                                        <button type="button" class="btn btn-toggle-password" onclick="togglePasswordVisibility('new_password')">
+                                                        <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('new_password')">
                                                             <i class="fas fa-eye-slash"></i>
                                                         </button>
-                                                        @error('new_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                                     </div>
+                                                    @error('new_password')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <label for="new_password_confirmation" class="form-label">Confirmar nueva contraseña</label>
-                                                    <div class="position-relative">
-                                                        <input type="password" name="new_password_confirmation" class="form-control small-text-field"
+                                                    <div class="password-input-group">
+                                                        <input type="password" name="new_password_confirmation"
+                                                               class="form-control small-text-field"
                                                                id="new_password_confirmation" placeholder="" autocomplete="new-password">
-                                                        <button type="button" class="btn btn-toggle-password" onclick="togglePasswordVisibility('new_password_confirmation')">
+                                                        <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('new_password_confirmation')">
                                                             <i class="fas fa-eye-slash"></i>
                                                         </button>
                                                     </div>
@@ -177,25 +187,25 @@
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Variables para almacenar los valores originales
-                const originalValues = {
-                    name: "{{ $usuario->name }}",
-                    image: "{{ asset('assets/img/perfiles/'.$usuario->image) }}",
-                    empleado_id: "{{ $usuario->empleado_id }}",
-                    // Agregar más campos si es necesario
-                };
-
                 // Manejar el evento reset del formulario
                 document.getElementById('usuarioForm').addEventListener('reset', function(e) {
                     // Restaurar imagen original
                     document.getElementById('imagePreview').src = originalValues.image;
 
+                    // Limpiar clases de validación
+                    const inputs = document.querySelectorAll('.form-control');
+                    inputs.forEach(input => {
+                        input.classList.remove('is-invalid');
+                    });
+
+                    // Ocultar mensajes de error
+                    document.querySelectorAll('.invalid-feedback').forEach(element => {
+                        element.style.display = 'none';
+                    });
+
                     // Restaurar valores de los campos
                     document.getElementById('name').value = originalValues.name;
                     document.getElementById('empleado_id').value = originalValues.empleado_id;
-
-                    // Disparar evento change para actualizar campos relacionados
-                    document.getElementById('empleado_id').dispatchEvent(new Event('change'));
 
                     // Limpiar campos de contraseña
                     document.getElementById('current_password').value = '';

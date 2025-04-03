@@ -105,8 +105,7 @@
                     </td>
                     <td style="text-align: center; font-size: 12px; line-height: 1.3;">
                         <strong style="font-size: 14px;">Lavandería Jackie</strong><br>
-                        Factura de Venta de Servicios<br>
-                        Prop. Matilde Jackeline Moncada Zelaya<br>
+                        Gastos díarios<br>
                         Bo. Tierra Blanca, media cuadra antes de Pintogama, Danlí, El Paraíso.<br>
                         R.T.N.: 07031985048849 &nbsp; | &nbsp; Cel: 9608-5567<br>
                         Email: jacky.moncada25@gmail.com
