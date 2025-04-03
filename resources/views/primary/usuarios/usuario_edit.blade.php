@@ -2,6 +2,27 @@
 @section('title', 'Editar usuario')
 @section('content')
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Agregar este estilo en la sección de estilos -->
+    <style>
+        .btn-toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #6c757d;
+            padding: 0 5px;
+            cursor: pointer;
+        }
+
+        .btn-toggle-password:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -46,14 +67,14 @@
                                         <div class="col-md-2">
                                             <label for="telefono" class="form-label">Teléfono</label>
                                             <input type="text" name="telefono" class="form-control small-text-field @error('telefono') is-invalid @enderror"
-                                                   id="telefono" value="{{ $usuario->empleado->phone }}" placeholder="Ej: 90123456" maxlength="8">
+                                                   id="telefono" value="{{ $usuario->empleado->phone }}" placeholder="Ej: 90123456" maxlength="8" readonly>
                                             @error('telefono')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                         </div>
 
                                         <div class="col-md-6">
                                             <label for="email" class="form-label">Correo electrónico</label>
                                             <input type="email" name="email" class="form-control small-text-field @error('email') is-invalid @enderror"
-                                                   id="email" value="{{ $usuario->empleado->email }}" placeholder="Ej: usuario@mail.com" maxlength="50">
+                                                   id="email" value="{{ $usuario->empleado->email }}" placeholder="Ej: usuario@mail.com" maxlength="50" readonly>
                                             @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                         </div>
                                     </div>
@@ -61,9 +82,10 @@
                                     <div class="mb-3">
                                         <label for="direccion" class="form-label">Dirección</label>
                                         <textarea name="direccion" class="form-control small-text-field @error('direccion') is-invalid @enderror"
-                                                  id="direccion" placeholder="Ej: Calle Principal 123" maxlength="500" rows="2">{{ $usuario->empleado->address }}</textarea>
+                                                  id="direccion" placeholder="Ej: Calle Principal 123" maxlength="500" rows="2" readonly>{{ $usuario->empleado->address }}</textarea>
                                         @error('direccion')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                     </div>
+
                                 </div>
                             </div>
 
@@ -86,22 +108,37 @@
                                             <div class="row g-2 mb-3">
                                                 <div class="col-md-6">
                                                     <label for="current_password" class="form-label">Contraseña actual</label>
-                                                    <input type="password" name="current_password" class="form-control small-text-field @error('current_password') is-invalid @enderror"
-                                                           id="current_password" placeholder="" autocomplete="current-password">
-                                                    @error('current_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                                    <div class="position-relative">
+                                                        <input type="password" name="current_password" class="form-control small-text-field @error('current_password') is-invalid @enderror"
+                                                               id="current_password" placeholder="" autocomplete="current-password">
+                                                        <button type="button" class="btn btn-toggle-password" onclick="togglePasswordVisibility('current_password')">
+                                                            <i class="fas fa-eye-slash"></i>
+                                                        </button>
+                                                        @error('current_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                                    </div>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <label for="new_password" class="form-label">Nueva contraseña</label>
-                                                    <input type="password" name="new_password" class="form-control small-text-field @error('new_password') is-invalid @enderror"
-                                                           id="new_password" placeholder="" autocomplete="new-password">
-                                                    @error('new_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                                    <div class="position-relative">
+                                                        <input type="password" name="new_password" class="form-control small-text-field @error('new_password') is-invalid @enderror"
+                                                               id="new_password" placeholder="" autocomplete="new-password">
+                                                        <button type="button" class="btn btn-toggle-password" onclick="togglePasswordVisibility('new_password')">
+                                                            <i class="fas fa-eye-slash"></i>
+                                                        </button>
+                                                        @error('new_password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                                    </div>
                                                 </div>
 
                                                 <div class="col-md-6">
                                                     <label for="new_password_confirmation" class="form-label">Confirmar nueva contraseña</label>
-                                                    <input type="password" name="new_password_confirmation" class="form-control small-text-field"
-                                                           id="new_password_confirmation" placeholder="" autocomplete="new-password">
+                                                    <div class="position-relative">
+                                                        <input type="password" name="new_password_confirmation" class="form-control small-text-field"
+                                                               id="new_password_confirmation" placeholder="" autocomplete="new-password">
+                                                        <button type="button" class="btn btn-toggle-password" onclick="togglePasswordVisibility('new_password_confirmation')">
+                                                            <i class="fas fa-eye-slash"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -168,9 +205,20 @@
             });
         </script>
 
+        <script>
+            function togglePasswordVisibility(inputId) {
+                const passwordInput = document.getElementById(inputId);
+                const toggleButton = passwordInput.nextElementSibling.querySelector('i');
 
-
-
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleButton.classList.replace('fa-eye-slash', 'fa-eye');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleButton.classList.replace('fa-eye', 'fa-eye-slash');
+                }
+            }
+        </script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {

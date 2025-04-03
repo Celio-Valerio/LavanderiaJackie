@@ -92,8 +92,7 @@
                     </td>
                     <td class="company-info">
                         <strong style="font-size: 16px;">Lavandería Jackie</strong><br>
-                        Factura de Venta de Servicios<br>
-                        Prop. Matilde Jackeline Moncada Zelaya<br>
+                        Cupón de Venta de Servicios<br>
                         Bo. Tierra Blanca, media cuadra antes de Pintogama, Danlí, El Paraíso.<br>
                         R.T.N.: 07031985048849 &nbsp; | &nbsp; Cel: 9608-5567<br>
                         Email: jacky.moncada25@gmail.com
@@ -114,14 +113,23 @@
                     <td><strong>Nombre:</strong></td>
                     <td>{{ $cupon->nombre }}</td>
                 </tr>
+
+                <tr>
+                    <td><strong>Tipo:</strong></td>
+                    <td>{{ $cupon->tipo }}</td>
+                </tr>
+
                 <tr>
                     <td><strong>Valor:</strong></td>
                     <td>
                         @if($cupon->tipo == 'Descuento')
-                            {{ $cupon->valor }}% de Descuento
-                        @else
-                            L. {{ number_format($cupon->valor, 2) }}
+                            {{ intval($cupon->valor) }}% de descuento
+                        @elseif($cupon->tipo == 'Cantidad')
+                            {{ intval($cupon->valor) }} lavadas
+                        @elseif($cupon->tipo == 'Valor')
+                            L. {{ number_format($cupon->valor, 2, '.', ',') }}
                         @endif
+
                     </td>
                 </tr>
                 <tr>
