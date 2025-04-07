@@ -74,7 +74,8 @@
                             <tr>
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 15%;">Nombre</th>
-                                <th style="width: 15%;">Estado</th>
+                                <th style="width: 15%;">Cliente</th>
+                                <th style="width: 10%;">Estado</th>
                                 <th style="width: 10%;">Tipo de cupón</th>
                                 <th style="width: 15%;">Valor</th>
                                 <th style="width: 10%;">Inicia</th>
@@ -87,7 +88,11 @@
                                 <tr data-fecha="{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('Y-m-d') }}">
                                     <td class="row-index small-text-field"></td>
                                     <td class="small-text-field" >{{ $cupon->nombre }}</td>
-
+                                    <td class="small-text-field">
+                                        @foreach($cupon->clientes as $cliente)
+                                            {{ $cliente->first_name }} {{ $cliente->last_name }}
+                                        @endforeach
+                                    </td>
                                     <td class="small-text-field">
                                         @if($cupon->estado == 'Activo')
                                             <span class="badge bg-success">{{ $cupon->estado }}</span>
@@ -146,37 +151,7 @@
                                             </a>
                                         </div>
                                     </td>
-
                                 </tr>
-                                @php
-                                    $fecha_hoy = date('Y-m-d');
-                                @endphp
-                                @if($fecha_hoy >= $cupon->fecha_desde && $fecha_hoy <= $cupon->fecha_hasta)
-                                    <tr data-fecha="{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('Y-m-d') }}">
-                                        <td class="row-index small-text-field"></td>
-                                        <td class="small-text-field">{{ $cupon->nombre }}</td>
-                                        <td class="small-text-field">
-                                            @if($cupon->estado == 'Activo')
-                                                <span class="badge bg-success">{{ $cupon->estado }}</span>
-                                            @elseif($cupon->estado == 'Utilizado')
-                                                <span class="badge bg-primary">{{ $cupon->estado }}</span>
-                                            @elseif($cupon->estado == 'Inactivo')
-                                                <span class="badge bg-warning">{{ $cupon->estado }}</span>
-                                            @elseif($cupon->estado == 'Vencido')
-                                                <span class="badge bg-danger">{{ $cupon->estado }}</span>
-                                            @endif
-                                        </td>
-                                        <td class="small-text-field">{{ $cupon->tipo }}</td>
-                                        <td class="small-text-field">{{ $cupon->valor }}</td>
-                                        <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_desde)->format('d/m/Y') }}</td>
-                                        <td class="small-text-field">{{ \Carbon\Carbon::parse($cupon->fecha_hasta)->format('d/m/Y') }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('cupones.show', $cupon->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                            <a href="{{ route('cupones.edit', $cupon->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                        </td>
-                                    </tr>
-                                @endif
-
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center">No hay cupones registrados</td>

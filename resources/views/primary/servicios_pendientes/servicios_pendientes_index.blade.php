@@ -1,38 +1,41 @@
 @extends('layouts.principal')
 @section('title', 'Lista de Servicios Pendientes')
 @section('content')
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios pendientes</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios pendientes</h1>
+                        <div class="button-group d-flex gap-2">
+                            <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
                         </div>
+                    </div>
 
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-                        <hr>
-
-                        <!-- Filtros de fechas -->
-                        <div class="mb-3 d-flex align-items-center gap-2">
-                            <label for="fecha-desde" class="form-label">Buscar desde</label>
-                            <input type="date" id="fecha-desde" class="form-control d-inline-block w-auto">
-                            <label for="fecha-hasta" class="form-label">hasta</label>
-                            <input type="date" id="fecha-hasta" class="form-control d-inline-block w-auto">
-
-                            <!-- Botón de recargar -->
-                            <button id="reload-button" class="btn btn-link p-0" style="color: #007bff; font-size: 24px; margin-top: 5px;">
-                                <i class="bi bi-arrow-clockwise"></i>
-                            </button>
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
+                    @endif
+                    <hr>
 
-                        <div class="table-responsive">
-                            <table id="serviciosPendientesTable" class="table table-striped table-bordered small-text" style="padding-top: 20px; padding-bottom: 10px">
-                                <thead class="table-dark">
+                    <!-- Filtros de fechas -->
+                    <div class="mb-3 d-flex align-items-center gap-2">
+                        <label for="fecha-desde" class="form-label">Buscar desde</label>
+                        <input type="date" id="fecha-desde" class="form-control d-inline-block w-auto">
+                        <label for="fecha-hasta" class="form-label">hasta</label>
+                        <input type="date" id="fecha-hasta" class="form-control d-inline-block w-auto">
+
+                        <!-- Botón de recargar -->
+                        <button id="reload-button" class="btn btn-link p-0" style="color: #007bff; font-size: 24px; margin-top: 5px;">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="serviciosPendientesTable" class="table table-striped table-bordered small-text" style="padding-top: 20px; padding-bottom: 10px">
+                            <thead class="table-dark">
                             <tr>
                                 <th style="width: 5%;">N°</th>
                                 <th style="width: 15%;">Cliente</th>
@@ -124,101 +127,101 @@
         </div>
 
         <script>
-                $(document).ready(function() {
-                    var table = $('#serviciosPendientesTable').DataTable({
-                        "paging": true,
-                        "pageLength": 5,
-                        "lengthChange": true,
-                        "searching": true,
-                        "ordering": true,
-                        "lengthMenu": [5, 10, 25, 50],
-                        "language": {
-                            "sProcessing": "Procesando...",
-                            "sLengthMenu": "Mostrar _MENU_ servicios pendientes",
-                            "sZeroRecords": "No se encontraron resultados",
-                            "sEmptyTable": "Ningún servicio efectuado disponible en esta tabla",
-                            "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ servicios pendientes",
-                            "sInfoEmpty": "No hay resultados",
-                            "sInfoFiltered": "(filtrado de un total de _MAX_ servicios pendientes)",
-                            "sSearch": "",
-                            "oPaginate": {
-                                "sFirst": "Primero",
-                                "sLast": "Último",
-                                "sNext": "Siguiente",
-                                "sPrevious": "Anterior"
-                            }
-                        },
-                        "columnDefs": [{
-                            "targets": 0,
-                            "orderable": false
-                        }],
-                        "drawCallback": function(settings) {
-                            var api = this.api();
-                            var startIndex = 1;
-                            api.rows({ search: 'applied' }).every(function(rowIdx) {
-                                $(this.node()).find('td.row-index').html(startIndex++);
-                            });
-                        },
-                        "responsive": true
-                    });
+            $(document).ready(function() {
+                var table = $('#serviciosPendientesTable').DataTable({
+                    "paging": true,
+                    "pageLength": 5,
+                    "lengthChange": true,
+                    "searching": true,
+                    "ordering": true,
+                    "lengthMenu": [5, 10, 25, 50],
+                    "language": {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ servicios pendientes",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún servicio efectuado disponible en esta tabla",
+                        "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ servicios pendientes",
+                        "sInfoEmpty": "No hay resultados",
+                        "sInfoFiltered": "(filtrado de un total de _MAX_ servicios pendientes)",
+                        "sSearch": "",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        }
+                    },
+                    "columnDefs": [{
+                        "targets": 0,
+                        "orderable": false
+                    }],
+                    "drawCallback": function(settings) {
+                        var api = this.api();
+                        var startIndex = 1;
+                        api.rows({ search: 'applied' }).every(function(rowIdx) {
+                            $(this.node()).find('td.row-index').html(startIndex++);
+                        });
+                    },
+                    "responsive": true
+                });
 
-                    function filterByDate() {
+                function filterByDate() {
+                    var fechaDesde = $('#fecha-desde').val();
+                    var fechaHasta = $('#fecha-hasta').val();
+                    table.draw();
+                }
+
+                $.fn.dataTable.ext.search.push(
+                    function(settings, data, dataIndex) {
                         var fechaDesde = $('#fecha-desde').val();
                         var fechaHasta = $('#fecha-hasta').val();
-                        table.draw();
+                        var fechaServicio = $(table.row(dataIndex).node()).data('fecha');
+
+                        if (!fechaDesde || !fechaHasta) {
+                            return true;
+                        }
+
+                        return fechaServicio >= fechaDesde && fechaServicio <= fechaHasta;
                     }
+                );
 
-                    $.fn.dataTable.ext.search.push(
-                        function(settings, data, dataIndex) {
-                            var fechaDesde = $('#fecha-desde').val();
-                            var fechaHasta = $('#fecha-hasta').val();
-                            var fechaServicio = $(table.row(dataIndex).node()).data('fecha');
+                $('#fecha-desde, #fecha-hasta').change(filterByDate);
 
-                            if (!fechaDesde || !fechaHasta) {
-                                return true;
-                            }
-
-                            return fechaServicio >= fechaDesde && fechaServicio <= fechaHasta;
-                        }
-                    );
-
-                    $('#fecha-desde, #fecha-hasta').change(filterByDate);
-
-                    $('#serviciosPendientesTable_length').addClass('text-end').css('float', 'right');
-                    $('#serviciosPendientesTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                    $('#serviciosPendientesTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                    $('#serviciosPendientesTable_filter input').css({
-                        'width': '300px',
-                        'border-radius': '5px',
-                        'padding': '5px'
-                    });
-
-                    // Funcionalidad de impresión
-                    let servicioId = null; // Inicializa la variable
-
-                    // Captura el ID del servicio al hacer clic en el botón de imprimir
-                    $(document).on('click', '.imprimir-btn', function() {
-                        servicioId = $(this).data('id'); // Obtiene el ID del servicio
-                        console.log("Servicio ID seleccionado: ", servicioId); // Depuración
-                    });
-
-                    $('#confirmarImpresion').on('click', function() {
-                        if (servicioId) { // Verifica que el ID no sea undefined
-                            window.open(`{{ url('servicios-pendientes/factura') }}/${servicioId}`, '_blank');
-                            $('#imprimirModal').modal('hide');
-                        } else {
-                            alert('Error: No se pudo obtener el ID del servicio. Inténtelo de nuevo.');
-                        }
-                    });
-
-                    // Botón de recargar
-                    $('#reload-button').on('click', function() {
-                        $('#fecha-desde').val('');
-                        $('#fecha-hasta').val('');
-                        table.search('').draw(); // Limpiar búsqueda y recargar tabla
-                    });
+                $('#serviciosPendientesTable_length').addClass('text-end').css('float', 'right');
+                $('#serviciosPendientesTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                $('#serviciosPendientesTable_filter input').attr('placeholder', 'Buscar por todos los datos');
+                $('#serviciosPendientesTable_filter input').css({
+                    'width': '300px',
+                    'border-radius': '5px',
+                    'padding': '5px'
                 });
-            </script>
+
+                // Funcionalidad de impresión
+                let servicioId = null; // Inicializa la variable
+
+                // Captura el ID del servicio al hacer clic en el botón de imprimir
+                $(document).on('click', '.imprimir-btn', function() {
+                    servicioId = $(this).data('id'); // Obtiene el ID del servicio
+                    console.log("Servicio ID seleccionado: ", servicioId); // Depuración
+                });
+
+                $('#confirmarImpresion').on('click', function() {
+                    if (servicioId) { // Verifica que el ID no sea undefined
+                        window.open(`{{ url('servicios-pendientes/factura') }}/${servicioId}`, '_blank');
+                        $('#imprimirModal').modal('hide');
+                    } else {
+                        alert('Error: No se pudo obtener el ID del servicio. Inténtelo de nuevo.');
+                    }
+                });
+
+                // Botón de recargar
+                $('#reload-button').on('click', function() {
+                    $('#fecha-desde').val('');
+                    $('#fecha-hasta').val('');
+                    table.search('').draw(); // Limpiar búsqueda y recargar tabla
+                });
+            });
+        </script>
 
         <script>
             document.addEventListener('DOMContentLoaded', () => {

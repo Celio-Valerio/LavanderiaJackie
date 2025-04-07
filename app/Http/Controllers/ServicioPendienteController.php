@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\EnviarCorreo;
 use App\Models\Cliente;
+use App\Models\Cupon;
 use App\Models\Promo;
 use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
@@ -48,7 +49,12 @@ class ServicioPendienteController extends Controller
         $clientes = Cliente::all();
         $servicios = Servicio::all();
         $promos = Promo::all();  // Si no se quiere usar, puede ser `nullable` en la migración
-        return view('primary.servicios_pendientes.servicios_pendientes_create', compact('clientes', 'servicios', 'promos'));
+        $hoy = date('Y-m-d');
+        $cupones = Cupon::with('clientes')
+            ->where('fecha_desde', '<=', $hoy)
+            ->where('fecha_hasta', '>=', $hoy)
+            ->get();
+        return view('primary.servicios_pendientes.servicios_pendientes_create', compact('clientes', 'servicios', 'promos', 'cupones'));
     }
 
     /**

@@ -106,41 +106,60 @@
                             <div class="row">
                                 <!-- Cliente -->
                                 <div class="col-md-4">
-                                    <label class="form-label">Cliente</label>
-                                    <input type="text" name="cliente" id="cliente" class="form-control" value="{{ $cliente->first_name }} {{$cliente->last_name}}" readonly maxlength="5" required>
+                                    <label for="cliente_id" class="form-label">Cliente</label>
+                                    <div class="d-flex align-items-start">
+                                        <!-- Select de cliente -->
+                                        <select name="cliente_id" id="cliente_id" class="form-control select2 @error('cliente_id') is-invalid @enderror" required onchange="mostrarCupones(this)">
+                                            <option value="">Seleccione un cliente</option>
+                                            @foreach($clientes as $cliente)
+                                                <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
+                                                    {{ $cliente->first_name }} {{ $cliente->last_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        <!-- Botón para agregar cliente -->
+                                        <a href="{{ route('clientes.create') }}" class="btn btn-primary ms-2" title="Agregar nuevo cliente">
+                                            <i class="bi bi-plus-circle"></i>
+                                        </a>
+                                    </div>
+                                    @error('cliente_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
+
                                 <div class="col-md-4">
                                     <label for="cliente_id" class="form-label">Cupones</label>
                                     <div class="d-flex align-items-start">
                                         <!-- Select de cliente -->
-                                        <select name="cupon_id" id="cupon_id" class="form-control select2 @error('cupon_id') is-invalid @enderror" required onchange="cambioCupon(this)">
-                                            <option value="">Seleccione un cupón</option>
-                                            @foreach($cupones as $cupon)
-                                                @php
-                                                    $clienteCupon = $cupon->clientes->firstWhere('id', $cliente->id);
-                                                    $canjeado = optional($clienteCupon)->pivot->canjeado ?? false;
-                                                @endphp
-                                                @if(!$canjeado)
-                                                    @if($cupon->tipo == 'Valor')
-                                                        <option value="{{$cupon->id}}" data-tipo="{{ $cupon->tipo }}" data-valor="{{ $cupon->valor }}">Nombre: {{$cupon->nombre}}, valor: L. {{$cupon->valor}}</option>
-                                                    @endif
-                                                    @if($cupon->tipo == 'Descuento')
-                                                        <option value="{{$cupon->id}}" data-tipo="{{ $cupon->tipo }}" data-valor="{{ $cupon->valor }}">Nombre: {{$cupon->nombre}}, descuento: {{$cupon->valor}}%</option>
-                                                    @endif
-                                                    @if($cupon->tipo == 'Cantidad')
-                                                        <option value="{{$cupon->id}}" data-tipo="{{ $cupon->tipo }}" data-valor="{{ $cupon->valor }}">Nombre: {{$cupon->nombre}}, cantidad: {{$cupon->valor}} servicio</option>
-                                                    @endif
-                                                @endif
-                                            @endforeach
+                                        <select name="cupon_id" id="cupon_id" class="form-control select2 @error('cupon_id') is-invalid @enderror" onchange="cambioCupon(this)" >
+                                            <option value=""></option>
+                                            @if($cupones->count() > 0)
+                                                @foreach($cupones as $cupon)
+                                                    <option value="{{ $cupon->id }}"
+                                                            data-clientes='@json($cupon->clientes->map(function($cliente) {
+                                                                return [
+                                                                    "id" => $cliente->id,
+                                                                    "canjeado" => (bool)$cliente->pivot->canjeado
+                                                                ];
+                                                            }))'
+                                                            data-tipo="{{ $cupon->tipo }}"
+                                                            data-valor="{{ $cupon->valor }}"
+                                                        {{ old('cupon_id') == $cupon->id ? 'selected' : '' }}>
+                                                        Nombre: {{ $cupon->nombre }},
+                                                        @if($cupon->tipo == 'Valor')
+                                                            valor: L. {{ $cupon->valor }}
+                                                        @elseif($cupon->tipo == 'Descuento')
+                                                            descuento: {{ $cupon->valor }}%
+                                                        @elseif($cupon->tipo == 'Cantidad')
+                                                            cantidad: {{ $cupon->valor }} servicio
+                                                        @endif
+                                                    </option>
+                                                @endforeach
+                                            @endif
                                         </select>
                                     </div>
-                                    <div>
-                                        <input type="hidden" name="cliente_id" id="cliente_id" value="{{$cliente->id}}">
-                                        <input type="hidden" name="tipo_cupon" id="tipo_cupon" value="{{old('tipo_cupon')}}">
-                                        <input type="hidden" name="valor_cupon" id="valor_cupon" value="{{old('valor_cupon')}}">
-                                    </div>
                                 </div>
-
                                 <!-- Servicio -->
                                 <div class="col-md-4">
                                     <label for="servicio_id" class="form-label">Servicio</label>
@@ -294,6 +313,11 @@
                                 </div>
                             </div>
 
+                            <div>
+                                <input type="hidden" name="tipo_cupon" id="tipo_cupon" value="{{old('tipo_cupon')}}">
+                                <input type="hidden" name="valor_cupon" id="valor_cupon" value="{{old('valor_cupon')}}">
+                            </div>
+
                             <!-- Botones -->
                             <div class="d-flex justify-content-between mt-4">
                                 <button type="submit" class="btn btn-primary flex-fill me-1" name="action" value="registrar">Registrar</button>
@@ -337,7 +361,64 @@
         </div>
     </div>
 
+
     <script>
+        let originalCuponOptions = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let cuponSelect = document.getElementById('cupon_id');
+            originalCuponOptions = Array.from(cuponSelect.querySelectorAll('option'));
+            mostrarCupones();
+        });
+
+        function mostrarCupones() {
+            let clienteSelect = document.getElementById('cliente_id');
+            let cuponSelect = document.getElementById('cupon_id');
+            let clienteIdSeleccionado = clienteSelect.value;
+
+            cuponSelect.innerHTML = '';
+
+            let opcionInicial = originalCuponOptions.find(opt => opt.value === "");
+            if (opcionInicial) {
+                cuponSelect.appendChild(opcionInicial);
+            }
+
+            originalCuponOptions.forEach(opcion => {
+                let clientesJson = opcion.dataset.clientes;
+                if (!clientesJson) return; // Salta si no tiene data
+
+                let clientesArray = JSON.parse(clientesJson);
+                // Buscar si el cliente seleccionado está en la lista y NO está canjeado
+                let mostrarOpcion = clientesArray.some(clientObj => {
+                    return clientObj.id === parseInt(clienteIdSeleccionado) && clientObj.canjeado === false;
+                });
+
+                if (mostrarOpcion) {
+                    cuponSelect.appendChild(opcion);
+                }
+            });
+
+            cuponSelect.disabled = cuponSelect.options.length <= 1;
+            calculateTotal();
+        }
+    </script>
+
+
+
+    <script>
+        function cambioCupon(select){
+            var opciones = select.options[select.selectedIndex];
+            var tipo = opciones.getAttribute('data-tipo');
+            var valor = opciones.getAttribute('data-valor');
+            var tipo2 = document.getElementById('tipo_cupon');
+            var valor2 = document.getElementById('valor_cupon');
+
+            tipo2.value = tipo;
+            valor2.value = valor;
+            calculateTotal();
+        }
+
+
         document.addEventListener('DOMContentLoaded', function() {
             const promoSelect = document.getElementById('promo_id');
             const librasInput = document.getElementById('libras');
@@ -472,103 +553,8 @@
         });
 
     </script>
-    <script>
-
-    </script>
 
     <script>
-        function cambioCupon(select){
-            var opciones = select.options[select.selectedIndex];
-            var tipo = opciones.getAttribute('data-tipo');
-            var valor = opciones.getAttribute('data-valor');
-            var tipo2 = document.getElementById('tipo_cupon');
-            var valor2 = document.getElementById('valor_cupon');
-
-            tipo2.value = tipo;
-            valor2.value = valor;
-            calculateTotal();
-        }
-
-        $(document).ready(function () {
-            function toggleEnvioFields() {
-                if ($('#envio_domicilio').is(':checked')) {
-                    $('#direccionWrapper').removeClass('d-none');
-                    $('#envioWrapper').removeClass('d-none');
-                } else {
-                    $('#direccionWrapper').addClass('d-none');
-                    $('#envioWrapper').addClass('d-none');
-                    $('#precioEnvioWrapper').addClass('d-none');
-
-                    calculateTotal(); // Recalculate total
-                }
-            }
-
-
-
-            function togglePrecioEnvio() {
-                if ($('#envio_empresa').is(':checked')) {
-                    $('#precioEnvioWrapper').removeClass('d-none');
-                } else {
-                    $('#precioEnvioWrapper').addClass('d-none');
-                    // Mantener el precio de envío si existe, no resetear
-                    if ($('#precio_envio').val() === "") {
-                        $('#precio_envio').val(''); // Reset envio price si está vacío
-                    }
-                    calculateTotal(); // Recalculate total
-                }
-            }
-
-            // Control de "No Aplica" para la promoción
-            $('#no_aplica').change(function () {
-                if ($(this).prop('checked')) {
-                    $('#promo_id').val('');
-                    $('#promo_id').prop('disabled', true); // Deshabilitar selección
-                    $('#promo_id').trigger('change');
-                } else {
-                    $('#promo_id').prop('disabled', false); // Habilitar si aplica
-                    $('#promo_id').trigger('change');
-                }
-            });
-
-
-            // Actualizar campos de envío al cambiar opciones
-            $('#envio_local, #envio_domicilio').on('change', function () {
-                toggleEnvioFields();
-                calculateTotal();
-
-                // Si se selecciona "Envío: Local", quitar la selección de "¿Quién paga el envío?"
-                if ($('#envio_local').is(':checked')) {
-                    $('#envio_cliente, #envio_empresa').prop('checked', false); // Desmarcar ambos
-                }
-            });
-
-            $('#envio_cliente, #envio_empresa').on('change', function () {
-                togglePrecioEnvio();
-                calculateTotal();
-            });
-
-            // Actualizar el total al cambiar valores relevantes
-            $('#libras, #servicio_id, #promo_id, #precio_envio').on('input change', calculateTotal);
-
-            // Limpiar el formulario
-            $('#clearButton').on('click', function () {
-                $('#servicioForm')[0].reset();
-                $('#libras').val('');
-                $('#total').val('');
-                $('#direccion').val('');
-                $('#no_aplica').prop('checked', false);
-                $('#envio_local').prop('checked', false);
-                $('#envio_domicilio').prop('checked', false);
-                $('#servicio_id').prop('disabled', false).val('');
-                $('#promo_id').prop('disabled', false).val('');
-                $('#direccionWrapper, #envioWrapper, #precioEnvioWrapper').addClass('d-none');
-            });
-
-            // Inicializar
-            toggleEnvioFields();
-            togglePrecioEnvio();
-        });
-
         // Función para calcular el total
         function calculateTotal() {
             var precio = $('#servicio_id option:selected').data('precio') || 0;
@@ -619,6 +605,83 @@
             // Asignar el total formateado
             $('#total').val(totalFormateado);
         }
+
+        $(document).ready(function () {
+            function toggleEnvioFields() {
+                if ($('#envio_domicilio').is(':checked')) {
+                    $('#direccionWrapper').removeClass('d-none');
+                    $('#envioWrapper').removeClass('d-none');
+                } else {
+                    $('#direccionWrapper').addClass('d-none');
+                    $('#envioWrapper').addClass('d-none');
+                    $('#precioEnvioWrapper').addClass('d-none');
+
+                    calculateTotal(); // Recalculate total
+                }
+            }
+
+            function togglePrecioEnvio() {
+                if ($('#envio_empresa').is(':checked')) {
+                    $('#precioEnvioWrapper').removeClass('d-none');
+                } else {
+                    $('#precioEnvioWrapper').addClass('d-none');
+                    // Mantener el precio de envío si existe, no resetear
+                    if ($('#precio_envio').val() === "") {
+                        $('#precio_envio').val(''); // Reset envio price si está vacío
+                    }
+                    calculateTotal(); // Recalculate total
+                }
+            }
+
+            // Control de "No Aplica" para la promoción
+            $('#no_aplica').change(function () {
+                if ($(this).prop('checked')) {
+                    $('#promo_id').val('');
+                    $('#promo_id').prop('disabled', true); // Deshabilitar selección
+                    $('#promo_id').trigger('change');
+                } else {
+                    $('#promo_id').prop('disabled', false); // Habilitar si aplica
+                    $('#promo_id').trigger('change');
+                }
+            });
+
+            // Actualizar campos de envío al cambiar opciones
+            $('#envio_local, #envio_domicilio').on('change', function () {
+                toggleEnvioFields();
+                calculateTotal();
+
+                // Si se selecciona "Envío: Local", quitar la selección de "¿Quién paga el envío?"
+                if ($('#envio_local').is(':checked')) {
+                    $('#envio_cliente, #envio_empresa').prop('checked', false); // Desmarcar ambos
+                }
+            });
+
+            $('#envio_cliente, #envio_empresa').on('change', function () {
+                togglePrecioEnvio();
+                calculateTotal();
+            });
+
+            // Actualizar el total al cambiar valores relevantes
+            $('#libras, #servicio_id, #promo_id, #precio_envio').on('input change', calculateTotal);
+
+            // Limpiar el formulario
+            $('#clearButton').on('click', function () {
+                $('#servicioForm')[0].reset();
+                $('#libras').val('');
+                $('#total').val('');
+                $('#direccion').val('');
+                $('#no_aplica').prop('checked', false);
+                $('#envio_local').prop('checked', false);
+                $('#envio_domicilio').prop('checked', false);
+                $('#servicio_id').prop('disabled', false).val('');
+                $('#promo_id').prop('disabled', false).val('');
+                $('#direccionWrapper, #envioWrapper, #precioEnvioWrapper').addClass('d-none');
+            });
+
+            // Inicializar
+            toggleEnvioFields();
+            togglePrecioEnvio();
+        });
     </script>
 
     <script>

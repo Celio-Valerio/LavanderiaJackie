@@ -9,44 +9,8 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios vendidos</h1>
-                        <div>
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                Programar Servicio
-                            </button>
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Programar servicio</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="formCliente" action="{{ route('servicios_efectuados.create') }}" method="get" style="display: inline-block; width: 100%;">
-                                                @csrf
-                                                <div>
-                                                    <label for="cliente_id_modal" class="form-label">Cliente</label>
-                                                    <div class="d-flex align-items-start">
-                                                        <select name="cliente_id" id="cliente_id_modal" class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
-                                                            <option value="">Seleccione un cliente</option>
-                                                            @foreach($clientes as $cliente)
-                                                                <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
-                                                                    {{ $cliente->first_name }} {{ $cliente->last_name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-primary">Aceptar</button>
-                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Salir</button>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="button-group d-flex gap-2">
+                            <a href="{{ route('servicios_efectuados.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Programar Servicio</a>
                         </div>
                     </div>
                     @if(session('success'))
@@ -172,17 +136,6 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var modal = document.getElementById('exampleModal');
-                var selectCliente = document.getElementById('cliente_id_modal');
-
-                modal.addEventListener('hidden.bs.modal', function () {
-                    selectCliente.value = ""; // Restablece la selección
-                });
-            });
-        </script>
 
         <script>
             $(document).ready(function() {

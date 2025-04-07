@@ -21,17 +21,15 @@ class ServicioEfectuadoController extends Controller
     {
         // Obtener todos los servicios efectuados
         $serviciosEfectuados = ServicioEfectuado::all();
-        $clientes = Cliente::all();
-        return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados', 'clientes'));
+        return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados'));
     }
 
     public function ventas()
     {
         $serviciosEfectuados = ServicioEfectuado::where('estado', 'Entregado')
             ->get();
-        $clientes = Cliente::all();
 
-        return view('primary.servicios_venta.servicios_ventas_index', compact('serviciosEfectuados', 'clientes'));
+        return view('primary.servicios_venta.servicios_ventas_index', compact('serviciosEfectuados'));
     }
 
     /**
@@ -49,16 +47,18 @@ class ServicioEfectuadoController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
         // Obtener clientes, servicios y promociones para mostrarlos en el formulario de creación
+        $clientes = Cliente::all();
         $servicios = Servicio::all();
-        $cliente_id = $request->input('cliente_id');
-        $cliente = Cliente::findOrfail($cliente_id);
-        $hoy = date('Y-m-d');
-        $cupones = $cliente->cupones()->where('fecha_desde', '<=', $hoy)->where('fecha_hasta', '>=', $hoy)->get();
         $promos = Promo::all();  // Si no se quiere usar, puede ser `nullable` en la migración
-        return view('primary.servicios_efectuados.servicios_efectuados_create', compact( 'servicios', 'promos', 'cliente', 'cupones'));
+        $hoy = date('Y-m-d');
+        $cupones = Cupon::with('clientes')
+            ->where('fecha_desde', '<=', $hoy)
+            ->where('fecha_hasta', '>=', $hoy)
+            ->get();
+        return view('primary.servicios_efectuados.servicios_efectuados_create', compact('clientes', 'servicios', 'promos', 'cupones'));
     }
 
     /**
