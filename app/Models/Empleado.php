@@ -22,6 +22,7 @@ class Empleado extends Model
         'position',     // Puesto (debería ser el ID del puesto)
         'hire_date',    // Fecha de ingreso
         'salary',       // Salario
+        'identity_number', // Número de identidad
     ];
 
     // Definición de la relación con el modelo Puesto

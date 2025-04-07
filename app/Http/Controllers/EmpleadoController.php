@@ -43,6 +43,13 @@ class EmpleadoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'identity_number' => [
+                'required',
+                'string',
+                'size:13',
+                'unique:empleados,identity_number',
+                'regex:/^[0-9]{13}$/',
+            ],
             'first_name' => [
                 'required',
                 'string',
@@ -90,6 +97,12 @@ class EmpleadoController extends Controller
             ],
         ], [
             // Mensajes de error personalizados
+            'identity_number.required' => 'El número de identidad es obligatorio.',
+            'identity_number.string' => 'El número de identidad debe ser una cadena de texto.',
+            'identity_number.size' => 'El número de identidad debe tener exactamente 13 dígitos.',
+            'identity_number.unique' => 'Este número de identidad ya está registrado.',
+            'identity_number.regex' => 'El número de identidad solo debe contener números.',
+
             'first_name.required' => 'El nombre es obligatorio.',
             'first_name.string' => 'El nombre debe ser una cadena de texto válida.',
             'first_name.min' => 'El nombre debe tener al menos 3 caracteres.',
@@ -129,6 +142,7 @@ class EmpleadoController extends Controller
 
         // Guardar empleado en la base de datos
         $empleado = new Empleado();
+        $empleado->identity_number = $request->identity_number;
         $empleado->first_name = $request->first_name;
         $empleado->last_name = $request->last_name;
         $empleado->email = $request->email;
@@ -175,6 +189,13 @@ class EmpleadoController extends Controller
 
         // Validación de los datos
         $request->validate([
+            'identity_number' => [
+                'required',
+                'string',
+                'size:13',
+                'unique:empleados,identity_number,' . $empleado->id,
+                'regex:/^[0-9]{13}$/',
+            ],
             'first_name' => [
                 'required',
                 'string',
@@ -223,6 +244,12 @@ class EmpleadoController extends Controller
             'estado' => 'required',
         ], [
             // Mensajes de error personalizados
+            'identity_number.required' => 'El número de identidad es obligatorio.',
+            'identity_number.string' => 'El número de identidad debe ser una cadena de texto.',
+            'identity_number.size' => 'El número de identidad debe tener exactamente 13 dígitos.',
+            'identity_number.unique' => 'Este número de identidad ya está registrado.',
+            'identity_number.regex' => 'El número de identidad solo debe contener números.',
+
             'first_name.required' => 'El nombre es obligatorio.',
             'first_name.string' => 'El nombre debe ser una cadena de texto válida.',
             'first_name.min' => 'El nombre debe tener al menos 3 caracteres.',
@@ -262,6 +289,7 @@ class EmpleadoController extends Controller
         ]);
 
         // Actualizar empleado
+        $empleado->identity_number = $request->identity_number;
         $empleado->first_name = $request->first_name;
         $empleado->last_name = $request->last_name;
         $empleado->email = $request->email;

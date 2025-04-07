@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
+            $table->char('identity_number', 13)->unique(); // Número de identidad de Honduras
             $table->string('first_name', 50);
             $table->string('last_name', 50);
             $table->string('email', 255)->nullable()->unique();

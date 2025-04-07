@@ -15,6 +15,15 @@
                             @method('PUT') <!-- Enviar método PUT para la actualización -->
 
                             <div class="row mb-3">
+                                <!-- Campo de Identidad -->
+                                <div class="col-md-6">
+                                    <label for="identity_number" class="form-label">Número de Identidad</label>
+                                    <input type="text" name="identity_number" class="form-control @error('identity_number') is-invalid @enderror" id="identity_number" value="{{ old('identity_number', $empleado->identity_number) }}" placeholder="Ej: 0801199012345" maxlength="13" required>
+                                    @error('identity_number')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <!-- Campo de Nombre -->
                                 <div class="col-md-6">
                                     <label for="first_name" class="form-label">Nombre</label>
