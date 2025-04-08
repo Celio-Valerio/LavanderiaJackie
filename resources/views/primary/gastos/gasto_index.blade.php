@@ -59,15 +59,23 @@
         <td class="small-text-field">{{$gasto->descripcion}}</td>
         <td class="small-text-field">L.{{number_format($gasto->totalG, 2, '.', ',')}}</td>
         <td class="small-text-field">L.{{number_format($gasto->totalP ?? 0, 2, '.', ',')}}</td>
-        <td class="text-center small-text-field">
-            <a href="{{ route('gastos.show', $gasto->id) }}" class="btn btn-info btn-sm">Ver</a>
-            <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
-            <a href="{{ route('gastos.pdf', $gasto->id) }}"
-               class="btn btn-danger btn-sm"
-               target="_blank">
-                <i class="bi bi-file-pdf"></i> Generar PDF
-            </a>
+        <td class="text-center">
+            <div class="btn-group" role="group" aria-label="Botones de acción">
+                <a href="{{ route('gastos.show', $gasto->id) }}" class="btn btn-info btn-sm" title="Ver" data-bs-toggle="tooltip">
+                    <i class="bi bi-eye"></i>
+                </a>
+                <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="tooltip">
+                    <i class="bi bi-pencil"></i>
+                </a>
+                <a href="{{ route('gastos.print', $gasto->id) }}" class="btn btn-success btn-sm no-print" title="Imprimir" target="_blank" data-bs-toggle="tooltip">
+                    <i class="bi bi-printer"></i>
+                </a>
+                <a href="{{ route('gastos.pdf', $gasto->id) }}" class="btn btn-dark btn-sm no-print" title="Generar PDF" target="_blank" data-bs-toggle="tooltip">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                </a>
+            </div>
         </td>
+
     </tr>
     @empty
         <tr>

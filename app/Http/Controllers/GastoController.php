@@ -28,19 +28,36 @@ class GastoController extends Controller
         return view('primary.gastos.gasto_index', compact('gastos', 'ultimoGasto'));
     }
 
-    public function generatePDF(Gasto $gasto)
+    public function print($id)
     {
-        // Cambiar detallesGastos() por detalles()
-        $detallesGastos = $gasto->detalles()->with('producto')->get();
+        // Cargar el gasto con sus detalles
+        $gasto = Gasto::with('detalles.producto')->findOrFail($id);
 
+        // Asegúrate de pasar la variable correctamente a la vista
+        return view('primary.gastos.gastos_print', [
+            'gasto' => $gasto,
+            'detallesGastos' => $gasto->detalles
+        ]);
+    }
+
+
+    public function generatePDF($id)
+    {
+        // Cargar el gasto con sus detalles
+        $gasto = Gasto::with('detalles.producto')->findOrFail($id);
+
+        // Cargar la vista y generar el PDF
         $pdf = PDF::loadView('primary.gastos.gastos_print', [
             'gasto' => $gasto,
-            'detallesGastos' => $detallesGastos
-        ])->setPaper('a4', 'portrait')
+            'detallesGastos' => $gasto->detalles
+        ])
+            ->setPaper('A4', 'portrait')
             ->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
 
-        return $pdf->stream('gasto-'.$gasto->id.'.pdf');
+        // Descargar el PDF
+        return $pdf->download('gasto_'.$gasto->id.'.pdf');
     }
+
 
     public function reload($id)
     {

@@ -2,6 +2,7 @@
 
 @section('content')
 
+
     <style>
         .invoice-container {
             max-width: 100%;
