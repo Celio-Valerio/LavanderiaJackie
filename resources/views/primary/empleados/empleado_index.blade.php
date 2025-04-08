@@ -42,6 +42,7 @@
                                     <td class="small-text-field" >{{ $empleado->phone }}</td>
                                     <td class="small-text-field" >{{ $empleado->puesto->name }}</td>
                                     <td class="small-text-field">
+                                        
                                         <span class="badge {{ $empleado->estado  == 'Inactivo' ? 'bg-danger' : ($empleado->estado  == 'Activo' ? 'bg-success' : 'bg-danger') }}">{{ $empleado->estado  }}</span>
                                     </td>
                                     <td class="text-center small-text-field">

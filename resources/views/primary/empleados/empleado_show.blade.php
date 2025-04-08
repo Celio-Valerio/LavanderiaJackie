@@ -98,17 +98,25 @@
                         <!-- Información Laboral -->
                      
                         <div class="row mb-4">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="info-label"><strong>Puesto:</strong></div>
                                 <div class="info-value">{{ $empleado->puesto->name ?? 'No asignado' }}</div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="info-label"><strong>Fecha de ingreso:</strong></div>
                                 <div class="info-value">{{ \Carbon\Carbon::parse($empleado->hire_date)->translatedFormat('l d \d\e F, Y') }}</div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="info-label"><strong>Salario:</strong></div>
                                 <div class="info-value">L. {{ number_format($empleado->salary, 2, ',', '.') }}</div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="info-label"><strong>Estado:</strong></div>
+                                <div class="info-value">
+                                    <span class="badge {{ $empleado->estado == 'Inactivo' ? 'bg-danger' : 'bg-success' }}">
+                                        {{ $empleado->estado }}
+                                    </span>
+                                </div>
                             </div>
                         </div>
 

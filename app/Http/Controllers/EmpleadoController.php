@@ -288,6 +288,8 @@ class EmpleadoController extends Controller
             'estado.required' => 'El estado es obligatorio',
         ]);
 
+
+        
         // Actualizar empleado
         $empleado->identity_number = $request->identity_number;
         $empleado->first_name = $request->first_name;
