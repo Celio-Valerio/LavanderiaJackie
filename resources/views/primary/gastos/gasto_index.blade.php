@@ -38,18 +38,27 @@
         <thead class="table table-bordered table-dark">
             <th style="width: 5%;">N°</th>
             <th style="width: 20%;">Fecha</th>
-                <th style="width: 20%;">Descripción</th>
-            <th style="width: 20%;">Gastos fijos</th>
+            <th style="width: 20%;">Descripción</th>
+            <th style="width: 15%;">Gastos fijos</th>
+            <th style="width: 15%;">Gastos productos</th>
             <th style="width: 15%;">Acciones</th>
         </thead>
     <tbody>
-
+    @php
+        $totalGastosFijos = 0;
+        $totalGastosProductos = 0;
+    @endphp
     @forelse($gastos as $gasto)
+    @php
+        $totalGastosFijos += $gasto->totalG;
+        $totalGastosProductos += $gasto->totalP;
+    @endphp
     <tr data-fecha="{{ \Carbon\Carbon::parse($gasto->fecha)->format('Y-m-d') }}">
         <td class="row-index small-text-field"></td>
         <td class="small-text-field">{{ \Carbon\Carbon::parse($gasto->fecha)->translatedFormat('l d \d\e F, Y') }}</td>
         <td class="small-text-field">{{$gasto->descripcion}}</td>
         <td class="small-text-field">L.{{number_format($gasto->totalG, 2, '.', ',')}}</td>
+        <td class="small-text-field">L.{{number_format($gasto->totalP ?? 0, 2, '.', ',')}}</td>
         <td class="text-center small-text-field">
             <a href="{{ route('gastos.show', $gasto->id) }}" class="btn btn-info btn-sm">Ver</a>
             <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
@@ -57,10 +66,11 @@
     </tr>
     @empty
         <tr>
-            <td colspan="4" class="text-center">No hay gastos registrados</td>
+            <td colspan="6" class="text-center">No hay gastos registrados</td>
         </tr>
     @endforelse
     </tbody>
+    
     </table>
 
 <script>

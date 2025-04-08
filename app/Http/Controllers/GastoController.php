@@ -15,7 +15,14 @@ class GastoController extends Controller
 
     public function index()
     {
-        $gastos = Gasto::all();
+        $gastos = Gasto::with('detalles.producto')->get();
+        foreach ($gastos as $gasto) {
+            $totalProductos = 0;
+            foreach ($gasto->detalles as $detalle) {
+                $totalProductos += $detalle->cantidad * $detalle->producto->precio;
+            }
+            $gasto->totalP = $totalProductos;
+        }
         $ultimoGasto = $gastos->last();
         return view('primary.gastos.gasto_index', compact('gastos', 'ultimoGasto'));
     }
