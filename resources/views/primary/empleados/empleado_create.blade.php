@@ -79,6 +79,15 @@
                                     @enderror
                                 </div>
 
+                                <!-- Campo de Salario -->
+                                <div class="col-md-3">
+                                    <label for="salary" class="form-label">Salario</label>
+                                    <input type="number" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary') }}" placeholder="Ej: 2000" min="1500" max="999999" step="0.01" required>
+                                    @error('salary')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <!-- Campo de Fecha de Ingreso -->
                                 <div class="col-md-3">
                                     <label for="hire_date" class="form-label">Fecha de ingreso</label>
@@ -88,14 +97,16 @@
                                     @enderror
                                 </div>
 
-                                <!-- Campo de Salario -->
+                                <!-- Campo de Fecha de Salida -->
                                 <div class="col-md-3">
-                                    <label for="salary" class="form-label">Salario</label>
-                                    <input type="number" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary') }}" placeholder="Ej: 2000" min="1500" max="999999" step="0.01" required>
-                                    @error('salary')
+                                    <label for="fecha_salida" class="form-label">Fecha de salida</label>
+                                    <input type="date" name="fecha_salida" class="form-control @error('fecha_salida') is-invalid @enderror" id="fecha_salida" value="{{ old('fecha_salida') }}" required>
+                                    @error('fecha_salida')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
+
                             </div>
 
                             <!-- Campo de Dirección -->

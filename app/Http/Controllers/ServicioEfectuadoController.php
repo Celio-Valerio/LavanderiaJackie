@@ -369,11 +369,22 @@ class ServicioEfectuadoController extends Controller
         $query = ServicioEfectuado::with(['cliente', 'servicio', 'promo'])
             ->where('estado', '!=', 'Pendiente');
 
-        if($request->has('fecha_desde') && $request->has('fecha_hasta')) {
+        // Filtro por fechas
+        if ($request->has('fecha_desde') && $request->has('fecha_hasta')) {
             $query->whereBetween('fecha', [
                 $request->fecha_desde,
                 $request->fecha_hasta
             ]);
+        }
+
+        // Filtro por nombre (búsqueda general)
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = $request->search;
+
+            $query->whereHas('cliente', function($q) use ($searchTerm) {
+                $q->where('first_name', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('last_name', 'LIKE', "%{$searchTerm}%");
+            });
         }
 
         $servicios = $query->get();
@@ -387,4 +398,5 @@ class ServicioEfectuadoController extends Controller
 
         return $pdf->stream('servicios-efectuados-'.now()->format('YmdHis').'.pdf');
     }
+
 }

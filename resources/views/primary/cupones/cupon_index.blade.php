@@ -31,11 +31,11 @@
                                 <div class="d-flex gap-2">
                                     @if($filter === 'pendientes')
                                         <a href="{{ route('cupones.index') }}" class="btn btn-secondary btn-sm d-flex align-items-center">
-                                            Ver No Pendientes
+                                            Ver no pendientes
                                         </a>
                                     @else
                                         <a href="{{ route('cupones.index', ['filter' => 'pendientes']) }}" class="btn btn-secondary btn-sm d-flex align-items-center">
-                                            Ver Pendientes
+                                            Ver pendientes
                                         </a>
                                     @endif
                                 </div>
