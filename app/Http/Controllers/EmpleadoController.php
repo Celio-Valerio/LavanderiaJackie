@@ -67,7 +67,7 @@ class EmpleadoController extends Controller
             'email' => [
                 'nullable',
                 'email',
-                'unique:empleados,email', // Cambié 'clientes' a 'empleados'
+                'unique:empleados,email',
                 'regex:/^[\w.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
             ],
             'phone' => [
@@ -86,17 +86,21 @@ class EmpleadoController extends Controller
                 'required',
                 'date',
             ],
+            'fecha_salida' => [
+                'required',
+                'date',
+                'after:hire_date', // 👈 Esta es la regla clave
+            ],
             'salary' => [
                 'required',
                 'numeric',
                 'between:1500,50000',
             ],
-            'puesto_id' => [ // Nueva validación para puesto
+            'puesto_id' => [
                 'required',
-                'exists:puestos,id', // Verifica que el puesto exista
+                'exists:puestos,id',
             ],
         ], [
-            // Mensajes de error personalizados
             'identity_number.required' => 'El número de identidad es obligatorio.',
             'identity_number.string' => 'El número de identidad debe ser una cadena de texto.',
             'identity_number.size' => 'El número de identidad debe tener exactamente 13 dígitos.',
@@ -107,34 +111,38 @@ class EmpleadoController extends Controller
             'first_name.string' => 'El nombre debe ser una cadena de texto válida.',
             'first_name.min' => 'El nombre debe tener al menos 3 caracteres.',
             'first_name.max' => 'El nombre no puede exceder los 50 caracteres.',
-            'first_name.regex' => 'El nombre solo puede contener letras, un espacio opcional entre palabras, y no debe tener símbolos ni números.',
+            'first_name.regex' => 'El nombre solo puede contener letras y un espacio opcional entre nombres.',
 
             'last_name.required' => 'El apellido es obligatorio.',
             'last_name.string' => 'El apellido debe ser una cadena de texto válida.',
             'last_name.min' => 'El apellido debe tener al menos 3 caracteres.',
             'last_name.max' => 'El apellido no puede exceder los 50 caracteres.',
-            'last_name.regex' => 'El apellido solo puede contener letras, un espacio opcional entre palabras, y no debe tener símbolos ni números.',
+            'last_name.regex' => 'El apellido solo puede contener letras y un espacio opcional entre apellidos.',
 
-            'email.email' => 'El correo electrónico debe ser una dirección de correo válida.',
+            'email.email' => 'El correo electrónico debe ser una dirección válida.',
             'email.unique' => 'El correo electrónico ya está en uso.',
-            'email.regex' => 'Debes ingresar una dirección de correo electrónico correcta.',
+            'email.regex' => 'Debes ingresar una dirección de correo válida.',
 
             'phone.required' => 'El número de teléfono es obligatorio.',
             'phone.unique' => 'El número de teléfono ya está en uso.',
             'phone.digits' => 'El número de teléfono debe tener exactamente 8 dígitos.',
-            'phone.regex' => 'El número de teléfono debe empezar con 2, 3, 8 o 9.',
+            'phone.regex' => 'El número de teléfono debe comenzar con 2, 3, 8 o 9.',
 
+            'address.required' => 'La dirección es obligatoria.',
             'address.string' => 'La dirección debe ser una cadena de texto válida.',
             'address.min' => 'La dirección debe tener al menos 5 caracteres.',
             'address.max' => 'La dirección no puede exceder los 500 caracteres.',
-            'address.required' => 'La dirección es obligatoria.',
 
             'hire_date.required' => 'La fecha de ingreso es obligatoria.',
             'hire_date.date' => 'La fecha de ingreso debe ser una fecha válida.',
 
+            'fecha_salida.required' => 'La fecha de salida es obligatoria.',
+            'fecha_salida.date' => 'La fecha de salida debe ser una fecha válida.',
+            'fecha_salida.after' => 'La fecha de salida debe ser posterior a la fecha de ingreso.',
+
             'salary.required' => 'El salario es obligatorio.',
             'salary.numeric' => 'El salario debe ser un número.',
-            'salary.between' => 'El salario debe estar entre 1500 y 5000.',
+            'salary.between' => 'El salario debe estar entre 1500 y 50000.',
 
             'puesto_id.required' => 'El puesto es obligatorio.',
             'puesto_id.exists' => 'El puesto seleccionado no es válido.',
@@ -149,8 +157,9 @@ class EmpleadoController extends Controller
         $empleado->phone = $request->phone;
         $empleado->address = $request->address;
         $empleado->hire_date = $request->hire_date;
+        $empleado->fecha_salida = $request->fecha_salida;
         $empleado->salary = $request->salary;
-        $empleado->puesto_id = $request->puesto_id; // Asignar el puesto relacionado
+        $empleado->puesto_id = $request->puesto_id;
         $empleado->save();
 
         return redirect()->route('empleados.index')->with('success', 'El empleado ' . $empleado->first_name . ' ' . $empleado->last_name . ' ha sido registrado exitosamente.');
@@ -236,6 +245,11 @@ class EmpleadoController extends Controller
                 'required',
                 'date',
             ],
+            'fecha_salida' => [
+                'required',
+                'date',
+                'after:hire_date', // 👈 Esta es la regla clave
+            ],
             'salary' => [
                 'required',
                 'numeric',
@@ -279,6 +293,10 @@ class EmpleadoController extends Controller
             'hire_date.required' => 'La fecha de ingreso es obligatoria.',
             'hire_date.date' => 'La fecha de ingreso debe ser una fecha válida.',
 
+            'fecha_salida.required' => 'La fecha de salida es obligatoria.',
+            'fecha_salida.date' => 'La fecha de salida debe ser una fecha válida.',
+            'fecha_salida.after' => 'La fecha de salida debe ser posterior a la fecha de ingreso.',
+
             'salary.required' => 'El salario es obligatorio.',
             'salary.numeric' => 'El salario debe ser un número.',
             'salary.between' => 'El salario debe estar entre 1500 y 5000.',
@@ -289,7 +307,7 @@ class EmpleadoController extends Controller
         ]);
 
 
-        
+
         // Actualizar empleado
         $empleado->identity_number = $request->identity_number;
         $empleado->first_name = $request->first_name;
@@ -299,6 +317,7 @@ class EmpleadoController extends Controller
         $empleado->address = $request->address;
         $empleado->puesto_id = $request->puesto_id; // Actualiza el ID del puesto relacionado
         $empleado->hire_date = $request->hire_date;
+        $empleado->fecha_salida = $request->fecha_salida;
         $empleado->salary = $request->salary;
         $empleado->estado = $request->input('estado');
         $empleado->save();
@@ -327,7 +346,13 @@ class EmpleadoController extends Controller
             'emailEmpresa' => env('COMPANY_EMAIL', 'Jacky.moncada25@gmail.com')
         ];
 
-        $pdf = Pdf::loadView('primary.empleados.empleado_constancia', $data);
-        return $pdf->download('constancia_laboral_'.$empleado->last_name.'.pdf');
+        // Verifica el estado del empleado para cargar la vista correspondiente
+        $view = $empleado->estado === 'Activo'
+            ? 'primary.empleados.empleado_constancia'
+            : 'primary.empleados.empleado_inactivo_constancia';
+
+        $pdf = Pdf::loadView($view, $data);
+        return $pdf->download('constancia_laboral_'.$empleado->first_name.'_'.$empleado->last_name.'.pdf');
     }
+
 }
