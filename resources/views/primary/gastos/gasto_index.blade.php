@@ -62,6 +62,11 @@
         <td class="text-center small-text-field">
             <a href="{{ route('gastos.show', $gasto->id) }}" class="btn btn-info btn-sm">Ver</a>
             <a href="{{ route('gastos.edit', $gasto->id) }}" class="btn btn-warning btn-sm">Editar</a>
+            <a href="{{ route('gastos.pdf', $gasto->id) }}"
+               class="btn btn-danger btn-sm"
+               target="_blank">
+                <i class="bi bi-file-pdf"></i> Generar PDF
+            </a>
         </td>
     </tr>
     @empty
@@ -70,7 +75,7 @@
         </tr>
     @endforelse
     </tbody>
-    
+
     </table>
 
 <script>

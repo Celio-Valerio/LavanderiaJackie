@@ -9,6 +9,7 @@ use App\Models\Gasto;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use function Webmozart\Assert\Tests\StaticAnalysis\length;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class GastoController extends Controller
 {
@@ -25,6 +26,20 @@ class GastoController extends Controller
         }
         $ultimoGasto = $gastos->last();
         return view('primary.gastos.gasto_index', compact('gastos', 'ultimoGasto'));
+    }
+
+    public function generatePDF(Gasto $gasto)
+    {
+        // Cambiar detallesGastos() por detalles()
+        $detallesGastos = $gasto->detalles()->with('producto')->get();
+
+        $pdf = PDF::loadView('primary.gastos.gastos_print', [
+            'gasto' => $gasto,
+            'detallesGastos' => $detallesGastos
+        ])->setPaper('a4', 'portrait')
+            ->setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+
+        return $pdf->stream('gasto-'.$gasto->id.'.pdf');
     }
 
     public function reload($id)

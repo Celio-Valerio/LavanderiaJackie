@@ -131,7 +131,4 @@ class GastoDiarioController extends Controller
 
         return $pdf->download('gasto_diario_'.$gastoDiario->id.'.pdf');
     }
-
-
-
 }

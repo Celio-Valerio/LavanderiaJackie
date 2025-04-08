@@ -34,4 +34,9 @@ class DetalleGastoDiario extends Model
     {
         return $this->belongsTo(Producto::class);
     }
+
+    public function gasto()
+    {
+        return $this->belongsTo(Gasto::class);
+    }
 }

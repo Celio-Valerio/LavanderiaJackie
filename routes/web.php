@@ -367,3 +367,5 @@ Route::get('/usuarios/{id}/reload', [UsuarioController::class, 'reload'])->name(
 
 // Ruta para mostrar los detalles del usuario
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
+
+Route::get('/gastos/{gasto}/pdf', [GastoController::class, 'generatePDF'])->name('gastos.pdf');

@@ -36,5 +36,4 @@ class Gasto extends Model
     {
         return $this->hasMany(DetalleGastos::class);
     }
-
 }
