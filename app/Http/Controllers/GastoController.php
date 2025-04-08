@@ -28,6 +28,55 @@ class GastoController extends Controller
         return view('primary.gastos.gasto_index', compact('gastos', 'ultimoGasto'));
     }
 
+    public function exportPDF(Request $request)
+    {
+        // 1) Cargar relaciones necesarias (detalles.producto)
+        \Log::debug('exportPDF params', $request->all());
+        $query = Gasto::with('detalles.producto');
+
+        // 2) Filtro por fechas
+        $fechaDesde = $request->query('fecha_desde');
+        $fechaHasta = $request->query('fecha_hasta');
+        if ($fechaDesde && $fechaHasta) {
+            $query->whereBetween('fecha', [$fechaDesde, $fechaHasta]);
+        }
+
+        // 3) Filtro por texto (solo descripción)
+
+        $search = $request->query('search');
+        if (!empty($search)) {
+            $query->where(function($query) use ($search) {
+                $query->where('descripcion', 'LIKE', "%{$search}%")
+                    ->orWhere('fecha', 'LIKE', "%{$search}%")
+                    ->orWhere('totalG', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // 4) Obtener gastos y calcular totalP
+        $gastos = $query->get()->map(function($gasto) {
+            $gasto->totalP = $gasto->detalles
+                ->sum(fn($d) => $d->cantidad * $d->producto->precio);
+            return $gasto;
+        });
+
+        // 5) Totales generales
+        $totalGastosFijos     = $gastos->sum('totalG');
+        $totalGastosProductos = $gastos->sum('totalP');
+
+        // 6) Generar PDF
+        $pdf = PDF::loadView(
+            'primary.gastos.gastos_reporte',
+            compact('gastos', 'totalGastosFijos', 'totalGastosProductos')
+        )
+            ->setPaper('A4', 'landscape')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled'      => true,
+            ]);
+
+        return $pdf->download('gastos-' . now()->format('YmdHis') . '.pdf');
+    }
+
     public function print($id)
     {
         // Cargar el gasto con sus detalles
@@ -39,7 +88,6 @@ class GastoController extends Controller
             'detallesGastos' => $gasto->detalles
         ]);
     }
-
 
     public function generatePDF($id)
     {
@@ -57,7 +105,6 @@ class GastoController extends Controller
         // Descargar el PDF
         return $pdf->download('gasto_'.$gasto->id.'.pdf');
     }
-
 
     public function reload($id)
     {
@@ -143,8 +190,6 @@ class GastoController extends Controller
         } else {
             return redirect()->route('gastos.index')->with('success', 'Error. La compra no pudo ser guardada');
         }
-
-        //return redirect()->route( 'gastos.index')->with('success', 'Gasto registrado exitosamente.');
     }
 
     public function show(string $id)
@@ -204,14 +249,5 @@ class GastoController extends Controller
 
             return redirect()->route('gastos.index')->with('success', 'Error, no se actualizaron gastos.');
         }
-
-
-        //return redirect()->route('gastos.index')->with('success', 'Gasto actualizado exitosamente.');
-
     }
-        //return redirect()->route('gastos.index')->with('success', 'Gasto actualizado exitosamente.');
-
-    }
-
-
-        //return redirect()->route('gastos.index')->with('success', 'Gasto actualizado exitosamente.');
+}

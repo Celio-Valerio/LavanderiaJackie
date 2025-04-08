@@ -130,13 +130,7 @@ Route::resource('compras', CompraController::class);
 // Ruta para recargar el formulario de editar compra
 Route::get('/compras/{id}/reload', [CompraController::class, 'reload'])->name('compras.reload');
 
-// Rutas para manejar gastos
-Route::get('/gastos', [GastoController::class, 'index'])->name('gastos.index'); // Lista de gastos
-
-// Rutas de recursos para gastos
-Route::resource('gastos', GastoController::class);
-
-// Rutas de recursos para gastos
+// Rutas de recursos para vencidos
 Route::resource('vencidos', VencidoController::class);
 
 // Rutas para manejar productos
@@ -305,10 +299,10 @@ Route::get('/control-cuentas/{id}', [ControlCuentaController::class, 'show'])->n
 // Ruta para la visualización de un servicio pendiente
 Route::get('/control-cuentas/show/{id}', [ControlCuentaController::class, 'show'])->name('control_cuentas.show');
 
-// Rutas para manejar gastos
-Route::get('/presupuestos', [PresupuestoController::class, 'index'])->name('presupuestos.index'); // Lista de gastos
+// Rutas para manejar presupuestos
+Route::get('/presupuestos', [PresupuestoController::class, 'index'])->name('presupuestos.index'); // Lista de presupuestos
 
-// Rutas de recursos para gastos
+// Rutas de recursos para presupuestos
 Route::resource('presupuestos', PresupuestoController::class);
 
 // Ruta para mostrar el formulario de edición de un presupuesto
@@ -368,5 +362,19 @@ Route::get('/usuarios/{id}/reload', [UsuarioController::class, 'reload'])->name(
 // Ruta para mostrar los detalles del usuario
 Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
 
+// Ruta para mostrar el PDF
 Route::get('/gastos/{gasto}/print', [GastoController::class, 'print'])->name('gastos.print');
+
+// Ruta para descargar el PDF de cada gasto
 Route::get('/gastos/{gasto}/pdf', [GastoController::class, 'generatePDF'])->name('gastos.pdf');
+
+// Ruta para generar un pdf de la lista de servicios efectuados
+Route::get('/gastos/export-pdf', [GastoController::class, 'exportPDF'])->name('gastos.export-pdf');
+
+// Rutas para manejar gastos
+Route::get('/gastos', [GastoController::class, 'index'])->name('gastos.index'); // Lista de gastos
+
+// Rutas de recursos para gastos
+Route::resource('gastos', GastoController::class);
+
+
