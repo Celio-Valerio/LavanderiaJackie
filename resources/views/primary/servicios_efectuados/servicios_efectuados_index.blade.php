@@ -10,9 +10,10 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de servicios efectuados</h1>
                         <div class="button-group d-flex gap-2">
-                            <a href="{{ route('servicios-efectuados.export-pdf') }}"
+                            <a href="#"
                                class="btn btn-danger btn-sm d-flex align-items-center"
                                style="border-radius: 5px; height: 40px; padding: 0 15px"
+                               id="export-pdf-btn"
                                target="_blank">
                                 <i class="bi bi-file-pdf me-1"></i> Exportar PDF
                             </a>
@@ -247,6 +248,30 @@
                     }, 5000);
                 }
             });
+        </script>
+
+        <script>
+            document.getElementById('export-pdf-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const fechaDesde = document.getElementById('fecha-desde').value;
+                const fechaHasta = document.getElementById('fecha-hasta').value;
+                const searchTerm = $('#serviciosEfectuadosTable_filter input').val();  // Obtén el término de búsqueda
+
+                let url = '{{ route("servicios-efectuados.export-pdf") }}?';
+
+                if (fechaDesde && fechaHasta) {
+                    url += `fecha_desde=${fechaDesde}&fecha_hasta=${fechaHasta}`;
+                }
+
+                if (searchTerm && searchTerm.trim() !== '') {
+                    url += `&search=${searchTerm}`;  // Agrega el término de búsqueda si existe
+                }
+
+                this.href = url;
+                window.open(this.href, '_blank');
+            });
+
         </script>
     </section>
 @endsection
