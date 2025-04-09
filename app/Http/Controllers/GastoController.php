@@ -30,21 +30,23 @@ class GastoController extends Controller
 
     public function exportPDF(Request $request)
     {
-
         \Log::debug('exportPDF params', $request->all());
-        // 1) Cargar relaciones necesarias
+
         $query = Gasto::with('detalles.producto');
 
-        // 2) Filtro por fechas
         $fechaDesde = $request->query('fecha_desde');
         $fechaHasta = $request->query('fecha_hasta');
+
         if ($fechaDesde && $fechaHasta) {
             $query->whereBetween('fecha', [$fechaDesde, $fechaHasta]);
         }
 
-        // 3) Filtro por texto
+        $searchTerm = null; // 👈 Inicializado
+
         $search = $request->query('search');
         if (!empty($search)) {
+            $searchTerm = $search; // 👈 Guardamos el término para mostrarlo en la vista
+
             $query->where(function($query) use ($search) {
                 $query->where('descripcion', 'LIKE', "%{$search}%")
                     ->orWhere('fecha', 'LIKE', "%{$search}%")
@@ -52,18 +54,15 @@ class GastoController extends Controller
             });
         }
 
-        // 4) Obtener gastos y calcular totalP
         $gastos = $query->get()->map(function($gasto) {
             $gasto->totalP = $gasto->detalles
                 ->sum(fn($d) => $d->cantidad * $d->producto->precio);
             return $gasto;
         });
 
-        // 5) Totales generales
         $totalGastosFijos     = $gastos->sum('totalG');
         $totalGastosProductos = $gastos->sum('totalP');
 
-        /// 6) Generar PDF
         $pdf = PDF::loadView(
             'primary.gastos.gastos_reporte',
             compact(
@@ -71,14 +70,15 @@ class GastoController extends Controller
                 'totalGastosFijos',
                 'totalGastosProductos',
                 'fechaDesde',
-                'fechaHasta'    // <-- aquí
+                'fechaHasta',
+                'searchTerm' // 👈 Asegúrate de incluirlo aquí
             )
         )
             ->setPaper('A4', 'landscape')
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled'      => true,
-                ]);
+            ]);
 
         return $pdf->download('gastos-' . now()->format('YmdHis') . '.pdf');
     }

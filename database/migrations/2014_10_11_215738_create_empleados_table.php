@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('address');
             $table->unsignedBigInteger('puesto_id'); // Referencia a la tabla puestos
             $table->date('hire_date'); // Fecha de Ingreso
-            $table->date('fecha_salida');
+            $table->date('fecha_salida')->nullable();
             $table->decimal('salary', 10, 2); // Salario
             $table->enum('estado', ['Activo', 'Inactivo'])->default('Activo');
 

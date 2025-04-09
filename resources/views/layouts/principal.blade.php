@@ -227,41 +227,63 @@
             </li><!-- End Messages Nav -->
 
             <li class="nav-item dropdown pe-3">
-
                 <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2">C. Valerio</span>
-                </a><!-- End Profile Iamge Icon -->
+                    <!-- Imagen de perfil del usuario -->
+                    @if(Auth::check() && Auth::user()->image)
+                        <img src="{{ asset('assets/img/perfiles/' . Auth::user()->image) }}" alt="Profile" class="rounded-circle">
+                    @else
+                        <img src="{{ asset('img/default-user.png') }}" alt="Profile" class="rounded-circle">
+                    @endif
+                    <span class="d-none d-md-block dropdown-toggle ps-2">
+            @if(Auth::check())
+                            {{ Auth::user()->name }}
+                        @else
+                            Usuario No Autenticado
+                        @endif
+        </span>
+                </a><!-- End Profile Image Icon -->
 
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
-                        <h6>Celio Valerio</h6>
-                        <span>Desarrollador</span>
+                        @if(Auth::check())
+                            <h6>{{ Auth::user()->name }}</h6>
+                            <!-- Puedes agregar más información del usuario si lo deseas -->
+                            <span>{{ Auth::user()->empleado ? Auth::user()->empleado->puesto->name : 'No asignado' }}</span>
+                        @else
+                            <h6>Usuario No Autenticado</h6>
+                        @endif
                     </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
 
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                            <i class="bi bi-person"></i>
-                            <span>Mi Perfil</span>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
-                            <i class="bi bi-gear"></i>
-                            <span>Configuración de Cuenta</span>
-                        </a>
-                    </li>
+                    <!-- Enlace al perfil del usuario -->
+                    @if(Auth::check())
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}">
+                                <i class="bi bi-person"></i>
+                                <span>Mi Perfil</span>
+                            </a>
+                        </li>
+                    @endif
                     <li>
                         <hr class="dropdown-divider">
                     </li>
 
+                    <!-- Enlace a la configuración de cuenta -->
+                    @if(Auth::check())
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}">
+                                <i class="bi bi-gear"></i>
+                                <span>Configuración de Cuenta</span>
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                    @endif
+
+                    <!-- Enlace de ayuda -->
                     <li>
                         <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
                             <i class="bi bi-question-circle"></i>
@@ -272,13 +294,18 @@
                         <hr class="dropdown-divider">
                     </li>
 
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Cerrar Sesión</span>
-                        </a>
-                    </li>
-
+                    <!-- Cerrar sesión -->
+                    @if(Auth::check())
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <a class="dropdown-item d-flex align-items-center" href="#" onclick="event.preventDefault(); this.closest('form').submit();">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Cerrar Sesión</span>
+                                </a>
+                            </form>
+                        </li>
+                    @endif
                 </ul><!-- End Profile Dropdown Items -->
             </li><!-- End Profile Nav -->
 

@@ -89,7 +89,6 @@
             <!-- TÍTULO -->
         <div class="title text-center mb-4">
             <strong style="font-size: 22px; display: block;">Reporte de servicios efectuados</strong>
-
             <div class="text-center mb-3" style="font-size: 14px;">
                 @if(!empty($fechaDesde) && !empty($fechaHasta))
                     <div>
@@ -115,8 +114,6 @@
                     </div>
                 @endif
             </div>
-
-
         </div>
 
         <!-- TABLA -->

@@ -246,7 +246,6 @@ class EmpleadoController extends Controller
                 'date',
             ],
             'fecha_salida' => [
-                'required',
                 'date',
                 'after:hire_date', // 👈 Esta es la regla clave
             ],
@@ -293,7 +292,6 @@ class EmpleadoController extends Controller
             'hire_date.required' => 'La fecha de ingreso es obligatoria.',
             'hire_date.date' => 'La fecha de ingreso debe ser una fecha válida.',
 
-            'fecha_salida.required' => 'La fecha de salida es obligatoria.',
             'fecha_salida.date' => 'La fecha de salida debe ser una fecha válida.',
             'fecha_salida.after' => 'La fecha de salida debe ser posterior a la fecha de ingreso.',
 
