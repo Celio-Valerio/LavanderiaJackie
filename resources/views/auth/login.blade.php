@@ -364,7 +364,7 @@
 
         <!-- Correo Electrónico -->
         <div class="form-floating">
-            <label for="email">Correo Electrónico</label>
+            <label for="email">Correo electrónico</label>
             <input type="email" class="form-control rounded-4" id="email" name="email" placeholder="nombre@ejemplo.com" required autofocus>
             @error('email')
             <div class="text-danger">{{ $message }}</div>
@@ -383,11 +383,6 @@
                 placeholder="Contraseña"
                 required
             >
-            <i
-                class="mdi mdi-eye password-toggle"
-                id="togglePassword"
-                style="color: #42a5f5; position: absolute; right: 15px; top: 57%; transform: translateY(-50%); cursor: pointer;"
-            ></i>
             @error('password')
             <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -395,42 +390,23 @@
 
         <!-- Texto informativo -->
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="remember_me" name="remember">
-                <label class="form-check-label" for="remember_me">Recordar sesión</label>
+            <div class="text-center mt-4">
+                <p class="text-muted">¿Olvidaste tu contraseña?
+                    @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-primary text-decoration-none fw-semibold">
+                        Recuperala aquí
+                    </a>
+                    @endif
+                </p>
             </div>
-            @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="text-decoration-none text-primary">
-                    ¿Olvidaste tu contraseña?
-                </a>
-            @endif
         </div>
 
         <button class="btn btn-lg btn-primary mb-3" type="submit">
             Ingresar
         </button>
 
-        <div class="text-center mt-4">
-            <p class="text-muted">¿No tienes cuenta?
-                <a href="{{ route('register') }}" class="text-primary text-decoration-none fw-semibold">
-                    Regístrate aquí
-                </a>
-            </p>
-        </div>
     </form>
 </div>
-
-<script>
-    // Script para mostrar/ocultar la contraseña
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordField = document.getElementById('password');
-
-    togglePassword.addEventListener('click', function () {
-        const type = passwordField.type === 'password' ? 'text' : 'password';
-        passwordField.type = type;
-        togglePassword.classList.toggle('mdi-eye-off');
-    });
-</script>
 
 </body>
 </html>

@@ -32,7 +32,7 @@ class NewPasswordController extends Controller
         $request->validate([
             'token'    => ['required'],
             'email'    => ['required', 'email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required','min:8', 'confirmed', Rules\Password::defaults()],
         ], [
             'token.required'         => 'El token de restablecimiento es obligatorio.',
             'email.required'         => 'El correo electrónico es obligatorio.',
@@ -40,6 +40,8 @@ class NewPasswordController extends Controller
             'password.required'      => 'La contraseña es obligatoria.',
             'password.confirmed'     => 'La confirmación de la contraseña no coincide.',
             'password.password'      => 'La contraseña debe tener al menos 8 caracteres e incluir mayúsculas, minúsculas, números y símbolos.',
+            'password.min'      => 'La contraseña debe tener al menos 8 caracteres e incluir mayúsculas, minúsculas, números y símbolos.',
+
         ]);
 
         $status = Password::reset(

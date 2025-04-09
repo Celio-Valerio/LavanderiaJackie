@@ -44,17 +44,64 @@
             pointer-events: none;
         }
 
+        /* Ajusta el z-index de la tarjeta de inicio de sesión */
         .login-card {
-            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con algo de transparencia */
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 16px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            animation: float 6s ease-in-out infinite;
+            padding: 1.2rem; /* Reducido el padding */
             width: 100%;
-            max-width: 400px;
-            z-index: 1;
+            max-width: 450px; /* Tarjeta más ancha */
+            z-index: 10;
             position: relative;
         }
+
+        .form-control {
+            background-color: #f4f7fb;
+            border: 1px solid #ddd;
+            padding-left: 45px;
+            font-size: 0.875rem; /* Tamaño de fuente reducido */
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .form-floating label {
+            color: #555;
+            font-weight: 600;
+            font-size: 0.875rem; /* Tamaño reducido */
+        }
+
+        .btn-primary {
+            background-color: #ff7043;
+            border-color: #ff7043;
+            transition: all 0.3s ease;
+            padding: 0.7rem;
+            font-size: 0.9rem; /* Tamaño ajustado */
+            border-radius: 8px;
+        }
+
+        .btn-toggle {
+            background-color: #ff7043;
+            border-color: #ff7043;
+            color: white;
+            width: 100%;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .password-requirements {
+            font-size: 0.75rem; /* Tamaño reducido */
+        }
+
+        /* Fondo burbujas y figuras con z-index más bajo para no interferir */
+        .background-figures, .background-bubbles, .background-shapes {
+            z-index: 0;  /* Asegúrate de que estén debajo del formulario */
+        }
+
 
         /* Fondo con figuras de colores material design */
         .background-figures {
@@ -374,73 +421,45 @@
 
         <!-- Email -->
         <div class="form-floating">
-            <label for="email">Correo Electrónico</label>
+            <label for="email">Correo electrónico</label>
             <input type="email" class="form-control rounded-4"
                    id="email" name="email"
                    placeholder="nombre@ejemplo.com"
                    required
-                   value="{{ old('email', $request->email) }}">
+                   value="{{ old('email', $request->email) }}" readonly>
             @error('email')
             <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
-        <!-- Password -->
+        <!-- Campo de la nueva contraseña -->
         <div class="form-floating position-relative">
-            <label for="password">Nueva Contraseña</label>
+            <label for="password">Nueva contraseña</label>
             <input type="password"
                    class="form-control rounded-4 pe-5"
                    id="password"
                    name="password"
-                   placeholder="Nueva Contraseña"
+                   placeholder="Nueva contraseña"
                    required>
-            <i class="mdi mdi-eye password-toggle"
-               style="color: #42a5f5; position: absolute; right: 15px; top: 57%; transform: translateY(-50%); cursor: pointer;"></i>
             @error('password')
             <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
-        <!-- Confirm Password -->
+        <!-- Campo de confirmación de la contraseña -->
         <div class="form-floating position-relative">
-            <label for="password_confirmation">Confirmar Contraseña</label>
+            <label for="password_confirmation">Confirmar contraseña</label>
             <input type="password"
                    class="form-control rounded-4 pe-5"
                    id="password_confirmation"
                    name="password_confirmation"
-                   placeholder="Confirmar Contraseña"
+                   placeholder="Confirmar contraseña"
                    required>
-            <i class="mdi mdi-eye password-toggle"
-               style="color: #42a5f5; position: absolute; right: 15px; top: 57%; transform: translateY(-50%); cursor: pointer;"></i>
         </div>
-
-        <div class="password-requirements">
-            La contraseña debe contener al menos:
-            <ul class="mt-1 mb-0">
-                <li>8 caracteres mínimo</li>
-                <li>1 letra mayúscula</li>
-                <li>1 signo</li>
-                <li>1 número</li>
-            </ul>
-        </div>
-
         <button class="btn btn-lg btn-primary mb-3" type="submit">
             Restablecer Contraseña
         </button>
     </form>
 </div>
-
-<script>
-    // Script para mostrar/ocultar contraseña
-    document.querySelectorAll('.password-toggle').forEach(icon => {
-        icon.addEventListener('click', function() {
-            const input = this.previousElementSibling;
-            const type = input.type === 'password' ? 'text' : 'password';
-            input.type = type;
-            this.classList.toggle('mdi-eye-off');
-        });
-    });
-</script>
-
 </body>
 </html>

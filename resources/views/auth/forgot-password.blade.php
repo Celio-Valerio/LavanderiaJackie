@@ -268,6 +268,19 @@
         }
     </style>
 </head>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const successMessage = document.getElementById("success-message");
+        if (successMessage) {
+            // Esperar 3 segundos y redirigir
+            setTimeout(() => {
+                window.location.href = successMessage.dataset.redirect;
+            }, 3000);
+        }
+    });
+</script>
+
 <body>
 
 <!-- Fondo con burbujas en movimiento -->
@@ -358,6 +371,14 @@
 
 <!-- Mismos elementos de fondo que en login -->
 <div class="login-card animate__animated animate__fadeIn">
+
+    @if (session('status'))
+        <div id="success-message" data-redirect="{{ route('login') }}">
+            {{ session('status') }}
+        </div>
+    @endif
+
+
     <div class="login-header">
         <div style="display: flex; justify-content: center;">
             <img src="{{ asset('assets/img/logo.png') }}" alt="Logo Lavandería" style="max-width: 70px;">
