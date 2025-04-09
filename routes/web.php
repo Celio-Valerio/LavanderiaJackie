@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\EnviarCorreo;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VencidoController;
-
+use App\Http\Controllers\LavanderiaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,24 +40,30 @@ use App\Http\Controllers\VencidoController;
 
 require __DIR__.'/auth.php';
 
+Route::get('/bienvenida', [LavanderiaController::class, 'bienvenida'])->name('bienvenida');
 
 
+Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('dashboard'); // Redirigir a la página principal si está logueado
+    }
+    return redirect()->route('bienvenida'); // Redirigir a la bienvenida si no está logueado
+})->name('home'); // Puedes asignar un nombre si lo deseas
+
+// Rutas protegidas por autenticación
 Route::middleware('auth')->group(function () {
-
-    Route::get('/', function () {
-        return view('pagina_principal');
-    });
-
     Route::get('/dashboard', function () {
-        return view('pagina_principal');
+        return view('pagina_principal'); // La vista principal cuando está logueado
     })->middleware(['auth', 'verified'])->name('dashboard');
+
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/inicio', function () {
-        return view('layouts.principal');
+        return view('layouts.principal'); // Otra vista principal (si tienes más páginas)
     });
 
 // Ruta para mostrar la lista de clientes
