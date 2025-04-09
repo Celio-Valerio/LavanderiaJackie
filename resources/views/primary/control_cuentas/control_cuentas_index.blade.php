@@ -9,8 +9,20 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de transacciones</h1>
+
                         <div class="button-group d-flex gap-2">
-                            <a href="{{ route('control_cuentas.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px">Registrar Transacción</a>
+                            <a href="#"
+                               class="btn btn-danger btn-sm d-flex align-items-center"
+                               style="border-radius: 5px; height: 40px; padding: 0 15px"
+                               id="export-pdf-btn"
+                               target="_blank">
+                                <i class="bi bi-file-pdf me-1"></i> Exportar PDF
+                            </a>
+                            <a href="{{ route('control_cuentas.create') }}"
+                               class="btn btn-primary btn-sm d-flex align-items-center"
+                               style="border-radius: 5px; height: 40px; padding: 0 15px;">
+                                Registrar transacción
+                            </a>
                         </div>
                     </div>
 
@@ -209,6 +221,25 @@
                         alert.style.display = 'none';
                     }, 5000);
                 }
+            });
+        </script>
+
+
+        <script>
+            document.getElementById('export-pdf-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const params = new URLSearchParams();
+                const fDesde = document.getElementById('fecha-desde').value;
+                const fHasta = document.getElementById('fecha-hasta').value;
+                const search = document.querySelector('#transaccionesTable_filter input').value.trim();
+
+                if (fDesde) params.append('fecha_desde', fDesde);
+                if (fHasta) params.append('fecha_hasta', fHasta);
+                if (search) params.append('search', search);
+
+                const url = `{{ route('control-cuentas.export-pdf') }}?${params.toString()}`;
+                window.open(url, '_blank');
             });
         </script>
 

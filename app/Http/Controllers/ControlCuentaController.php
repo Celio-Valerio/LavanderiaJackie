@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ControlCuenta;
 use App\Models\CuentaBanco;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class ControlCuentaController extends Controller
@@ -19,6 +20,82 @@ class ControlCuentaController extends Controller
         return view('primary.control_cuentas.control_cuentas_index', [
             'transacciones' => $transacciones,
         ]);
+    }
+
+    public function exportPDF(Request $request)
+    {
+        $query = ControlCuenta::with('cuentaBanco');
+
+        // Filtros de fecha
+        $fechaDesde = $request->query('fecha_desde');
+        $fechaHasta = $request->query('fecha_hasta');
+        if ($fechaDesde && $fechaHasta) {
+            $query->whereBetween('fecha', [$fechaDesde, $fechaHasta]);
+        }
+
+        // Filtro por tipo de transacción
+        $tipoTransaccion = $request->query('tipo_transaccion');
+        if ($tipoTransaccion) {
+            $query->where('transaccion', $tipoTransaccion);
+        }
+
+        // Búsqueda general
+        $searchTerm = null;
+        $search = $request->query('search');
+        if (!empty($search)) {
+            $searchTerm = $search;
+            $query->where(function($q) use ($search) {
+                $q->where('fecha', 'LIKE', "%{$search}%")
+                    ->orWhere('monto', 'LIKE', "%{$search}%")
+                    ->orWhere('notas', 'LIKE', "%{$search}%")
+                    ->orWhereHas('cuentaBanco', function($q) use ($search) {
+                        $q->where('banco', 'LIKE', "%{$search}%")
+                            ->orWhere('cuenta', 'LIKE', "%{$search}%");
+                    });
+            });
+        }
+
+        $transacciones = $query->orderBy('fecha', 'desc')->get();
+
+        // Cálculo de totales
+        $totalRetiros = 0;
+        $totalDepositos = 0;
+        $totalSaldoInicial = 0;
+
+        foreach ($transacciones as $trans) {
+            switch ($trans->transaccion) {
+                case 'Retiro':
+                    $totalRetiros += $trans->monto;
+                    break;
+                case 'Deposito':
+                    $totalDepositos += $trans->monto;
+                    break;
+                case 'Saldo inicial':
+                    $totalSaldoInicial += $trans->monto;
+                    break;
+            }
+        }
+
+        $neto = ($totalDepositos + $totalSaldoInicial) - $totalRetiros;
+
+        $pdf = PDF::loadView('primary.control_cuentas.control_cuentas_reporte', compact(
+            'transacciones',
+            'totalRetiros',
+            'totalDepositos',
+            'totalSaldoInicial',
+            'neto',
+            'fechaDesde',
+            'fechaHasta',
+            'tipoTransaccion',
+            'searchTerm'
+        ))
+            ->setPaper('A4', 'landscape')
+            ->setOptions([
+                'isHtml5ParserEnabled' => true,
+                'isRemoteEnabled' => true,
+            ]);
+
+        return $pdf->download('control-cuentas-'.now()->format('YmdHis').'.pdf');
     }
 
     public function create()
@@ -62,6 +139,4 @@ class ControlCuentaController extends Controller
 
         return view('primary.control_cuentas.control_cuentas_show', compact('transaccion'));
     }
-
-
 }
