@@ -369,18 +369,19 @@ class ServicioEfectuadoController extends Controller
         $query = ServicioEfectuado::with(['cliente', 'servicio', 'promo'])
             ->where('estado', '!=', 'Pendiente');
 
-        // Filtro por fechas
-        if ($request->has('fecha_desde') && $request->has('fecha_hasta')) {
+        // 1) Leer filtros de fechas
+        $fechaDesde = $request->query('fecha_desde');
+        $fechaHasta = $request->query('fecha_hasta');
+        if ($fechaDesde && $fechaHasta) {
             $query->whereBetween('fecha', [
-                $request->fecha_desde,
-                $request->fecha_hasta
+                $fechaDesde,
+                $fechaHasta
             ]);
         }
 
-        // Filtro por nombre (búsqueda general)
+        // 2) Filtro por búsqueda de cliente
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
-
             $query->whereHas('cliente', function($q) use ($searchTerm) {
                 $q->where('first_name', 'LIKE', "%{$searchTerm}%")
                     ->orWhere('last_name', 'LIKE', "%{$searchTerm}%");
@@ -389,14 +390,17 @@ class ServicioEfectuadoController extends Controller
 
         $servicios = $query->get();
 
-        $pdf = PDF::loadView('primary.servicios_efectuados.pdf', compact('servicios'))
+        // 3) Generar PDF, pasando también las fechas
+        $pdf = PDF::loadView(
+            'primary.servicios_efectuados.pdf',
+            compact('servicios', 'fechaDesde', 'fechaHasta')
+        )
             ->setPaper('A4', 'landscape')
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
-                'isRemoteEnabled' => true
+                'isRemoteEnabled'      => true
             ]);
 
         return $pdf->stream('servicios-efectuados-'.now()->format('YmdHis').'.pdf');
     }
-
 }
