@@ -30,7 +30,7 @@ class ConfirmablePasswordController extends Controller
             'password' => $request->password,
         ])) {
             throw ValidationException::withMessages([
-                'password' => __('auth.password'),
+                'password' => 'La contraseña ingresada es incorrecta. Por favor, inténtalo de nuevo.',
             ]);
         }
 
@@ -38,4 +38,5 @@ class ConfirmablePasswordController extends Controller
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
+
 }
