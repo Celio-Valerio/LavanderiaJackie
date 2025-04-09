@@ -90,25 +90,33 @@
         <div class="title text-center mb-4">
             <strong style="font-size: 22px; display: block;">Reporte de servicios efectuados</strong>
 
-            @if(!empty($fechaDesde) && !empty($fechaHasta))
-                <div style="font-size: 18px;">
-                    <strong>Generado desde</strong>
-                    {{ \Carbon\Carbon::parse($fechaDesde)
-                          ->locale('es')
-                          ->isoFormat('dddd D [de] MMMM, YYYY') }}
-                    <strong>hasta</strong>
-                    {{ \Carbon\Carbon::parse($fechaHasta)
-                          ->locale('es')
-                          ->isoFormat('dddd D [de] MMMM, YYYY') }}
-                </div>
-            @else
-                <div style="font-size: 14px;">
-                    <strong>Generado el</strong>
-                    {{ \Carbon\Carbon::now()
-                          ->locale('es')
-                          ->isoFormat('dddd D [de] MMMM, YYYY') }}
-                </div>
-            @endif
+            <div class="text-center mb-3" style="font-size: 14px;">
+                @if(!empty($fechaDesde) && !empty($fechaHasta))
+                    <div>
+                        <strong>Generado desde</strong>
+                        {{ \Carbon\Carbon::parse($fechaDesde)->locale('es')->isoFormat('dddd D [de] MMMM, YYYY') }}
+                        <strong>hasta</strong>
+                        {{ \Carbon\Carbon::parse($fechaHasta)->locale('es')->isoFormat('dddd D [de] MMMM, YYYY') }}
+                    </div>
+                @else
+                    <div>
+                        <strong>Generado el</strong>
+                        {{ \Carbon\Carbon::now()->locale('es')->isoFormat('dddd D [de] MMMM, YYYY') }}
+                    </div>
+                @endif
+
+                @if(!empty($searchTerm))
+                    <div class="mt-2">
+                        Búsqueda realizada utilizando todos los filtros para <strong>"{{ $searchTerm }}"</strong>
+                    </div>
+                @elseif(empty($fechaDesde) && empty($fechaHasta))
+                    <div class="mt-2">
+                        <em>Reporte sin filtros aplicados</em>
+                    </div>
+                @endif
+            </div>
+
+
         </div>
 
         <!-- TABLA -->

@@ -369,17 +369,15 @@ class ServicioEfectuadoController extends Controller
         $query = ServicioEfectuado::with(['cliente', 'servicio', 'promo'])
             ->where('estado', '!=', 'Pendiente');
 
-        // 1) Leer filtros de fechas
         $fechaDesde = $request->query('fecha_desde');
         $fechaHasta = $request->query('fecha_hasta');
+
         if ($fechaDesde && $fechaHasta) {
-            $query->whereBetween('fecha', [
-                $fechaDesde,
-                $fechaHasta
-            ]);
+            $query->whereBetween('fecha', [$fechaDesde, $fechaHasta]);
         }
 
-        // 2) Filtro por búsqueda de cliente
+        $searchTerm = null; // Inicializamos para que siempre esté definida
+
         if ($request->has('search') && !empty($request->search)) {
             $searchTerm = $request->search;
             $query->whereHas('cliente', function($q) use ($searchTerm) {
@@ -390,10 +388,9 @@ class ServicioEfectuadoController extends Controller
 
         $servicios = $query->get();
 
-        // 3) Generar PDF, pasando también las fechas
         $pdf = PDF::loadView(
             'primary.servicios_efectuados.pdf',
-            compact('servicios', 'fechaDesde', 'fechaHasta')
+            compact('servicios', 'fechaDesde', 'fechaHasta', 'searchTerm') // 👈 Agregado
         )
             ->setPaper('A4', 'landscape')
             ->setOptions([
@@ -403,4 +400,5 @@ class ServicioEfectuadoController extends Controller
 
         return $pdf->stream('servicios-efectuados-'.now()->format('YmdHis').'.pdf');
     }
+
 }
