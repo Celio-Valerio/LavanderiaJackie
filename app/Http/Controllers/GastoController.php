@@ -30,8 +30,9 @@ class GastoController extends Controller
 
     public function exportPDF(Request $request)
     {
-        // 1) Cargar relaciones necesarias (detalles.producto)
+
         \Log::debug('exportPDF params', $request->all());
+        // 1) Cargar relaciones necesarias
         $query = Gasto::with('detalles.producto');
 
         // 2) Filtro por fechas
@@ -41,8 +42,7 @@ class GastoController extends Controller
             $query->whereBetween('fecha', [$fechaDesde, $fechaHasta]);
         }
 
-        // 3) Filtro por texto (solo descripción)
-
+        // 3) Filtro por texto
         $search = $request->query('search');
         if (!empty($search)) {
             $query->where(function($query) use ($search) {
@@ -63,16 +63,22 @@ class GastoController extends Controller
         $totalGastosFijos     = $gastos->sum('totalG');
         $totalGastosProductos = $gastos->sum('totalP');
 
-        // 6) Generar PDF
+        /// 6) Generar PDF
         $pdf = PDF::loadView(
             'primary.gastos.gastos_reporte',
-            compact('gastos', 'totalGastosFijos', 'totalGastosProductos')
+            compact(
+                'gastos',
+                'totalGastosFijos',
+                'totalGastosProductos',
+                'fechaDesde',
+                'fechaHasta'    // <-- aquí
+            )
         )
             ->setPaper('A4', 'landscape')
             ->setOptions([
                 'isHtml5ParserEnabled' => true,
                 'isRemoteEnabled'      => true,
-            ]);
+                ]);
 
         return $pdf->download('gastos-' . now()->format('YmdHis') . '.pdf');
     }

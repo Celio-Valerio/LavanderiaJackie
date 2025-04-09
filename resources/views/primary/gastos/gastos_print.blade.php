@@ -115,11 +115,25 @@
             </table>
         </div>
 
-        <!-- INFORMACIÓN DEL REPORTE -->
-        <div class="title-section">
-            <h1>Reporte de Gastos</h1>
-            <p class="text-muted">Fecha: {{ \Carbon\Carbon::parse($gasto->fecha)->format('d/m/Y') }}</p>
-            <p class="text-muted">Descripción: {{ $gasto->descripcion }}</p>
+        @php
+            // Fija Carbon en español
+            \Carbon\Carbon::setLocale('es');
+        @endphp
+
+            <!-- INFORMACIÓN DEL REPORTE -->
+        <div class="title-section text-center mb-4">
+            <h1 class="mb-1">Reporte de Gastos</h1>
+
+            <p class="mb-0">
+                <strong>Fecha:</strong>
+                {{ \Carbon\Carbon::parse($gasto->fecha)
+                      ->locale('es')
+                      ->isoFormat('dddd D [de] MMMM, YYYY') }}
+            </p>
+
+            <p class="mb-0">
+                <strong>Descripción:</strong> {{ $gasto->descripcion }}
+            </p>
         </div>
 
         <!-- GASTOS FIJOS -->

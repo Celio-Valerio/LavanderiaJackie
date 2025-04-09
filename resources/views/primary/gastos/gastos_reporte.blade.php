@@ -81,10 +81,34 @@
             </table>
         </div>
 
-        <!-- TÍTULO -->
-        <div class="title">
-            <strong style="font-size: 18px;">Reporte de gastos</strong><br>
-            <div style="font-size: 14px;">Generado el: {{ \Carbon\Carbon::now()->locale('es')->isoFormat('D [de] MMMM [de] YYYY') }}</div>
+        @php
+            // Fija Carbon en español
+            \Carbon\Carbon::setLocale('es');
+        @endphp
+
+            <!-- TÍTULO -->
+        <div class="title text-center mb-4">
+            <strong style="font-size: 22px; display: block;">Reporte de servicios efectuados</strong>
+
+            @if(!empty($fechaDesde) && !empty($fechaHasta))
+                <div style="font-size: 18px;">
+                    <strong>Generado desde</strong>
+                    {{ \Carbon\Carbon::parse($fechaDesde)
+                          ->locale('es')
+                          ->isoFormat('dddd D [de] MMMM, YYYY') }}
+                    <strong>hasta</strong>
+                    {{ \Carbon\Carbon::parse($fechaHasta)
+                          ->locale('es')
+                          ->isoFormat('dddd D [de] MMMM, YYYY') }}
+                </div>
+            @else
+                <div style="font-size: 14px;">
+                    <strong>Generado el</strong>
+                    {{ \Carbon\Carbon::now()
+                          ->locale('es')
+                          ->isoFormat('dddd D [de] MMMM, YYYY') }}
+                </div>
+            @endif
         </div>
 
         <table class="table">
