@@ -25,6 +25,7 @@ use App\Mail\EnviarCorreo;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VencidoController;
 use App\Http\Controllers\LavanderiaController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,9 +53,9 @@ Route::get('/', function () {
 
 // Rutas protegidas por autenticación
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('pagina_principal'); // La vista principal cuando está logueado
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->middleware(['auth', 'verified'])
+        ->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

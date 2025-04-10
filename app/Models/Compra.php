@@ -26,10 +26,24 @@ class Compra extends Model
      * Relación con el modelo `DetalleCompra`.
      * Una compra tiene muchos detalles de compra.
      */
+    // from:
     public function detalles()
     {
         return $this->hasMany(DetalleCompra::class);
     }
+
+// to:
+    public function detalle_compras()
+    {
+        return $this->hasMany(DetalleCompra::class);
+    }
+
+    // in app/Models/Compra.php
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class, 'proveedor_id');
+    }
+
     public function presupuesto()
     {
         return $this->belongsTo(Presupuesto::class);

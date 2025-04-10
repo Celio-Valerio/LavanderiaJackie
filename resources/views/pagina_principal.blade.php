@@ -1,451 +1,438 @@
 @extends('layouts.principal')
-@section('title', 'Dashboard')
+@section('title', 'Lavandería Jackie - Inicio')
 @section('content')
-
-    <section class="section">
-
-        <div class="row">
-            <div class="col-lg-12">
-
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Dashboard</h5>
-                        <p>Bienvenido a Lavanderia Jackie SA, un software creado para el control y monitoreo...</p>
-
-                        <section class="section dashboard">
-                            <div class="row">
-
-                                <!-- Left side columns -->
-                                <div class="col-lg-8">
-                                    <div class="row">
-
-                                        <!-- Sales Card -->
-                                        <div class="col-xxl-4 col-md-6">
-                                            <div class="card info-card sales-card">
-
-                                                <div class="filter">
-                                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                                        <li class="dropdown-header text-start">
-                                                            <h6>Filter</h6>
-                                                        </li>
-
-                                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                                    </ul>
-                                                </div>
-
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Sales <span>| Today</span></h5>
-
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                            <i class="bi bi-cart"></i>
-                                                        </div>
-                                                        <div class="ps-3">
-                                                            <h6>145</h6>
-                                                            <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div><!-- End Sales Card -->
-
-                                        <!-- Revenue Card -->
-                                        <div class="col-xxl-4 col-md-6">
-                                            <div class="card info-card revenue-card">
-
-                                                <div class="filter">
-                                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                                        <li class="dropdown-header text-start">
-                                                            <h6>Filter</h6>
-                                                        </li>
-
-                                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                                    </ul>
-                                                </div>
-
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Revenue <span>| This Month</span></h5>
-
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                            <i class="bi bi-currency-dollar"></i>
-                                                        </div>
-                                                        <div class="ps-3">
-                                                            <h6>$3,264</h6>
-                                                            <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div><!-- End Revenue Card -->
-
-                                        <!-- Customers Card -->
-                                        <div class="col-xxl-4 col-xl-12">
-
-                                            <div class="card info-card customers-card">
-
-                                                <div class="filter">
-                                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                                        <li class="dropdown-header text-start">
-                                                            <h6>Filter</h6>
-                                                        </li>
-
-                                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                                    </ul>
-                                                </div>
-
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Customers <span>| This Year</span></h5>
-
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                                            <i class="bi bi-people"></i>
-                                                        </div>
-                                                        <div class="ps-3">
-                                                            <h6>1244</h6>
-                                                            <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
-
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-
-                                        </div><!-- End Customers Card -->
-
-                                        <!-- Reports -->
-                                        <div class="col-12">
-                                            <div class="card">
-
-                                                <div class="filter">
-                                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                                        <li class="dropdown-header text-start">
-                                                            <h6>Filter</h6>
-                                                        </li>
-
-                                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                                    </ul>
-                                                </div>
-
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Reports <span>/Today</span></h5>
-
-                                                    <!-- Line Chart -->
-                                                    <div id="reportsChart"></div>
-
-                                                    <script>
-                                                        document.addEventListener("DOMContentLoaded", () => {
-                                                            new ApexCharts(document.querySelector("#reportsChart"), {
-                                                                series: [{
-                                                                    name: 'Sales',
-                                                                    data: [31, 40, 28, 51, 42, 82, 56],
-                                                                }, {
-                                                                    name: 'Revenue',
-                                                                    data: [11, 32, 45, 32, 34, 52, 41]
-                                                                }, {
-                                                                    name: 'Customers',
-                                                                    data: [15, 11, 32, 18, 9, 24, 11]
-                                                                }],
-                                                                chart: {
-                                                                    height: 350,
-                                                                    type: 'area',
-                                                                    toolbar: {
-                                                                        show: false
-                                                                    },
-                                                                },
-                                                                markers: {
-                                                                    size: 4
-                                                                },
-                                                                colors: ['#4154f1', '#2eca6a', '#ff771d'],
-                                                                fill: {
-                                                                    type: "gradient",
-                                                                    gradient: {
-                                                                        shadeIntensity: 1,
-                                                                        opacityFrom: 0.3,
-                                                                        opacityTo: 0.4,
-                                                                        stops: [0, 90, 100]
-                                                                    }
-                                                                },
-                                                                dataLabels: {
-                                                                    enabled: false
-                                                                },
-                                                                stroke: {
-                                                                    curve: 'smooth',
-                                                                    width: 2
-                                                                },
-                                                                xaxis: {
-                                                                    type: 'datetime',
-                                                                    categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
-                                                                },
-                                                                tooltip: {
-                                                                    x: {
-                                                                        format: 'dd/MM/yy HH:mm'
-                                                                    },
-                                                                }
-                                                            }).render();
-                                                        });
-                                                    </script>
-                                                    <!-- End Line Chart -->
-
-                                                </div>
-
-                                            </div>
-                                        </div><!-- End Reports -->
-
-                                        <!-- Recent Sales -->
-                                        <div class="col-12">
-                                            <div class="card recent-sales overflow-auto">
-
-                                                <div class="filter">
-                                                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                                        <li class="dropdown-header text-start">
-                                                            <h6>Filter</h6>
-                                                        </li>
-
-                                                        <li><a class="dropdown-item" href="#">Today</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Month</a></li>
-                                                        <li><a class="dropdown-item" href="#">This Year</a></li>
-                                                    </ul>
-                                                </div>
-
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Recent Sales <span>| Today</span></h5>
-
-                                                    <table class="table table-borderless datatable">
-                                                        <thead>
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">Customer</th>
-                                                            <th scope="col">Product</th>
-                                                            <th scope="col">Price</th>
-                                                            <th scope="col">Status</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <tr>
-                                                            <th scope="row"><a href="#">#2457</a></th>
-                                                            <td>Brandon Jacob</td>
-                                                            <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                                                            <td>$64</td>
-                                                            <td><span class="badge bg-success">Approved</span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row"><a href="#">#2147</a></th>
-                                                            <td>Bridie Kessler</td>
-                                                            <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                                                            <td>$47</td>
-                                                            <td><span class="badge bg-warning">Pending</span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row"><a href="#">#2049</a></th>
-                                                            <td>Ashleigh Langosh</td>
-                                                            <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                                                            <td>$147</td>
-                                                            <td><span class="badge bg-success">Approved</span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row"><a href="#">#2644</a></th>
-                                                            <td>Angus Grady</td>
-                                                            <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                                                            <td>$67</td>
-                                                            <td><span class="badge bg-danger">Rejected</span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row"><a href="#">#2644</a></th>
-                                                            <td>Raheem Lehner</td>
-                                                            <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                                                            <td>$165</td>
-                                                            <td><span class="badge bg-success">Approved</span></td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-
-                                                </div>
-
-                                            </div>
-                                        </div><!-- End Recent Sales -->
-
-
-                                    </div>
-                                </div><!-- End Left side columns -->
-
-                                <!-- Right side columns -->
-                                <div class="col-lg-4">
-
-                                    <!-- Recent Activity -->
-                                    <div class="card">
-                                        <div class="filter">
-                                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                                <li class="dropdown-header text-start">
-                                                    <h6>Filter</h6>
-                                                </li>
-
-                                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="card-body">
-                                            <h5 class="card-title">Recent Activity <span>| Today</span></h5>
-
-                                            <div class="activity">
-
-                                                <div class="activity-item d-flex">
-                                                    <div class="activite-label">32 min</div>
-                                                    <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
-                                                    <div class="activity-content">
-                                                        Quia quae rerum <a href="#" class="fw-bold text-dark">explicabo officiis</a> beatae
-                                                    </div>
-                                                </div><!-- End activity item-->
-
-                                                <div class="activity-item d-flex">
-                                                    <div class="activite-label">56 min</div>
-                                                    <i class='bi bi-circle-fill activity-badge text-danger align-self-start'></i>
-                                                    <div class="activity-content">
-                                                        Voluptatem blanditiis blanditiis eveniet
-                                                    </div>
-                                                </div><!-- End activity item-->
-
-                                                <div class="activity-item d-flex">
-                                                    <div class="activite-label">2 hrs</div>
-                                                    <i class='bi bi-circle-fill activity-badge text-primary align-self-start'></i>
-                                                    <div class="activity-content">
-                                                        Voluptates corrupti molestias voluptatem
-                                                    </div>
-                                                </div><!-- End activity item-->
-
-                                                <div class="activity-item d-flex">
-                                                    <div class="activite-label">1 day</div>
-                                                    <i class='bi bi-circle-fill activity-badge text-info align-self-start'></i>
-                                                    <div class="activity-content">
-                                                        Tempore autem saepe <a href="#" class="fw-bold text-dark">occaecati voluptatem</a> tempore
-                                                    </div>
-                                                </div><!-- End activity item-->
-
-                                                <div class="activity-item d-flex">
-                                                    <div class="activite-label">2 days</div>
-                                                    <i class='bi bi-circle-fill activity-badge text-warning align-self-start'></i>
-                                                    <div class="activity-content">
-                                                        Est sit eum reiciendis exercitationem
-                                                    </div>
-                                                </div><!-- End activity item-->
-
-                                                <div class="activity-item d-flex">
-                                                    <div class="activite-label">4 weeks</div>
-                                                    <i class='bi bi-circle-fill activity-badge text-muted align-self-start'></i>
-                                                    <div class="activity-content">
-                                                        Dicta dolorem harum nulla eius. Ut quidem quidem sit quas
-                                                    </div>
-                                                </div><!-- End activity item-->
-
-                                            </div>
-
-                                        </div>
-                                    </div><!-- End Recent Activity -->
-
-                                    <!-- Budget Report -->
-                                    <div class="card">
-                                        <div class="filter">
-                                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                                                <li class="dropdown-header text-start">
-                                                    <h6>Filter</h6>
-                                                </li>
-
-                                                <li><a class="dropdown-item" href="#">Today</a></li>
-                                                <li><a class="dropdown-item" href="#">This Month</a></li>
-                                                <li><a class="dropdown-item" href="#">This Year</a></li>
-                                            </ul>
-                                        </div>
-
-                                        <div class="card-body pb-0">
-                                            <h5 class="card-title">Budget Report <span>| This Month</span></h5>
-
-                                            <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
-
-                                            <script>
-                                                document.addEventListener("DOMContentLoaded", () => {
-                                                    var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
-                                                        legend: {
-                                                            data: ['Allocated Budget', 'Actual Spending']
-                                                        },
-                                                        radar: {
-                                                            // shape: 'circle',
-                                                            indicator: [{
-                                                                name: 'Sales',
-                                                                max: 6500
-                                                            },
-                                                                {
-                                                                    name: 'Administration',
-                                                                    max: 16000
-                                                                },
-                                                                {
-                                                                    name: 'Information Technology',
-                                                                    max: 30000
-                                                                },
-                                                                {
-                                                                    name: 'Customer Support',
-                                                                    max: 38000
-                                                                },
-                                                                {
-                                                                    name: 'Development',
-                                                                    max: 52000
-                                                                },
-                                                                {
-                                                                    name: 'Marketing',
-                                                                    max: 25000
-                                                                }
-                                                            ]
-                                                        },
-                                                        series: [{
-                                                            name: 'Budget vs spending',
-                                                            type: 'radar',
-                                                            data: [{
-                                                                value: [4200, 3000, 20000, 35000, 50000, 18000],
-                                                                name: 'Allocated Budget'
-                                                            },
-                                                                {
-                                                                    value: [5000, 14000, 28000, 26000, 42000, 21000],
-                                                                    name: 'Actual Spending'
-                                                                }
-                                                            ]
-                                                        }]
-                                                    });
-                                                });
-                                            </script>
-
-                                        </div>
-                                    </div><!-- End Budget Report -->
-
-                                </div><!-- End Right side columns -->
-
-                            </div>
-                        </section>
-                    </div>
+    @php
+        use App\Models\Producto;
+    @endphp
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <style>
+        :root {
+            --mdc-primary:    #2A5C82;
+            --mdc-secondary:  #5AB1BB;
+            --mdc-success:    #4CAF50;
+            --mdc-warning:    #FFC107;
+            --mdc-error:      #D32F2F;
+            --surface:       #FFFFFF;
+            --background:    #F9FBFD;
+            --on-surface:     #263238;
+            --on-surface-60:  #607D8B;
+            --border:         #E0E0E0;
+            --border-radius:  12px;
+            --spacing:        24px;
+            --shadow-1:       0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-2:       0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background: var(--background);
+            font-family: 'Roboto', sans-serif;
+            color: var(--on-surface);
+        }
+
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: var(--spacing);
+        }
+
+        /* Header Section */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: calc(var(--spacing) * 1.5);
+            background: var(--surface);
+            padding: calc(var(--spacing) * 1.5);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-1);
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--mdc-primary);
+        }
+
+        .header-title p {
+            margin: 0.5rem 0 0;
+            color: var(--on-surface-60);
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--mdc-primary) 0%, var(--mdc-secondary) 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-2);
+        }
+
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: var(--spacing);
+            margin-bottom: calc(var(--spacing) * 1.5);
+        }
+
+        .metric-card {
+            background: var(--surface);
+            padding: var(--spacing);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-1);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .metric-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .metric-content h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--on-surface);
+        }
+
+        .metric-content p {
+            margin: 0.25rem 0 0;
+            color: var(--on-surface-60);
+            font-size: 0.9rem;
+        }
+
+        /* Main Content Layout */
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--spacing);
+            margin-bottom: var(--spacing);
+        }
+
+        /* Chart Section */
+        .chart-card {
+            background: var(--surface);
+            border-radius: var(--border-radius);
+            padding: var(--spacing);
+            box-shadow: var(--shadow-1);
+        }
+
+        .chart-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--on-surface);
+        }
+
+        /* Recent Purchases */
+        .recent-purchases {
+            background: var(--surface);
+            border-radius: var(--border-radius);
+            padding: var(--spacing);
+            box-shadow: var(--shadow-1);
+        }
+
+        .purchase-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .purchase-item:last-child {
+            border-bottom: none;
+        }
+
+        .purchase-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .purchase-info small {
+            color: var(--on-surface-60);
+            font-size: 0.85rem;
+        }
+
+        .purchase-amount {
+            background: var(--mdc-success);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        /* Inventory Table */
+        .inventory-table {
+            background: var(--surface);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-1);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table-header h2 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: var(--background);
+            color: var(--on-surface-60);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        tr:nth-child(even) {
+            background: var(--background);
+        }
+
+        .stock-indicator {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .stock-low {
+            background: #FFF3E0;
+            color: #EF6C00;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: transparent;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="header-title">
+                <h1>Panel de Gestión</h1>
+                <p>Bienvenido al sistema de Lavandería Jackie</p>
+            </div>
+            <button class="btn-primary">
+                <span class="material-icons-round">add</span>
+                Nueva Orden
+            </button>
+        </header>
+
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon" style="background: var(--mdc-primary);">
+                    <span class="material-icons-round">group</span>
                 </div>
+                <div class="metric-content">
+                    <h3>{{ $totalClientes }}</h3>
+                    <p>Clientes Registrados</p>
+                </div>
+            </div>
 
+            <div class="metric-card">
+                <div class="metric-icon" style="background: var(--mdc-success);">
+                    <span class="material-icons-round">work</span>
+                </div>
+                <div class="metric-content">
+                    <h3>{{ $empleadosActivos }}</h3>
+                    <p>Empleados Activos</p>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-icon" style="background: var(--mdc-secondary);">
+                    <span class="material-icons-round">inventory</span>
+                </div>
+                <div class="metric-content">
+                    <h3>{{ Producto::count() }}</h3>
+                    <p>Total Productos</p>
+                </div>
             </div>
         </div>
 
-    </section>
+        <!-- Main Content -->
+        <div class="dashboard-content">
+            <!-- Gráfico de Stock -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Productos con Mayor Stock</h2>
+                </div>
+                <div id="stockChart" style="height: 320px;"></div>
+            </div>
 
+            <!-- Últimas Compras -->
+            <div class="recent-purchases">
+                <div class="chart-header">
+                    <h2>Últimas Transacciones</h2>
+                </div>
+                <div class="purchase-list">
+                    @foreach ($ultimasCompras as $compra)
+                        <div class="purchase-item">
+                            <div class="purchase-info">
+                                <h6  style="font-size: 9px">Factura #{{ $compra->numero_factura }}</h6>
+                                <small  style="font-size: 5px">{{ \Carbon\Carbon::parse($compra->fecha_compra)->isoFormat('D MMM YYYY') }}</small>
+                            </div>
+                            <span class="purchase-amount" style="font-size: 8px">
+                                L. {{ number_format($compra->detalle_compras->sum('precio'), 2) }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de Inventario -->
+        <div class="inventory-table">
+            <div class="table-header">
+                <h2>Productos con Stock Bajo</h2>
+                <button class="btn-icon">
+                    <span class="material-icons-round">manage_history</span>
+                    Gestionar
+                </button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Stock Actual</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach(Producto::where('stock','<',10)->get() as $producto)
+                        <tr>
+                            <td>{{ $producto->nombre }}</td>
+
+                            <td>
+                                    <span class="stock-indicator stock-low">
+                                        {{ $producto->stock }} unidades
+                                    </span>
+                            </td>
+                            <td>
+                                <button class="btn-icon">
+                                    <span class="material-icons-round">add_box</span>
+                                    Reponer
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script del Gráfico -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            new ApexCharts(document.querySelector("#stockChart"), {
+                series: [{
+                    name: 'Stock',
+                    data: @json($topProductos->pluck('stock'))
+                }],
+                chart: {
+                    type: 'bar',
+                    height: '100%',
+                    toolbar: { show: false },
+                    fontFamily: 'Roboto'
+                },
+                colors: ['#2A5C82'],
+                plotOptions: {
+                    bar: {
+                        borderRadius: 8,
+                        columnWidth: '45%',
+                    }
+                },
+                dataLabels: { enabled: false },
+                xaxis: {
+                    categories: @json($topProductos->pluck('nombre')),
+                    labels: { style: { fontSize: '13px' } }
+                },
+                yaxis: { labels: { style: { fontSize: '13px' } } },
+                grid: { borderColor: '#ECEFF1' },
+                tooltip: {
+                    y: {
+                        formatter: (val) => `${val} unidades`,
+                        title: { formatter: () => 'Stock' }
+                    }
+                }
+            }).render();
+        });
+    </script>
 @endsection
