@@ -3,6 +3,7 @@
 use App\Http\Controllers\ControlCuentaController;
 use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\MaquinariaController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromoController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;

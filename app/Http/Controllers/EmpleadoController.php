@@ -7,6 +7,7 @@ use App\Models\Puesto;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redirect;
 
 class EmpleadoController extends Controller
 {
@@ -196,8 +197,8 @@ class EmpleadoController extends Controller
     {
         $empleado = Empleado::findOrFail($id); // Obtiene el empleado por ID
 
-        // Validación de los datos
-        $request->validate([
+        // 1) Validar los datos del empleado
+        $data = $request->validate([
             'identity_number' => [
                 'required',
                 'string',
@@ -304,8 +305,6 @@ class EmpleadoController extends Controller
             'estado.required' => 'El estado es obligatorio',
         ]);
 
-
-
         // Actualizar empleado
         $empleado->identity_number = $request->identity_number;
         $empleado->first_name = $request->first_name;
@@ -320,7 +319,34 @@ class EmpleadoController extends Controller
         $empleado->estado = $request->input('estado');
         $empleado->save();
 
-        return redirect()->route('empleados.index')->with('success', 'El empleado ' . $empleado->first_name . ' ' . $empleado->last_name . ' ha sido actualizado exitosamente.');
+       try {
+            // 2) Actualizar el empleado
+            $empleado->update([
+                'first_name' => $data['first_name'],
+                'last_name'  => $data['last_name'],
+                'email'      => $data['email'],
+                'phone'      => $data['phone'],
+                'address'    => $data['address'],
+            ]);
+
+            // 3) Sincronizar con el usuario relacionado (si existe)
+            if ($empleado->user) {
+                $empleado->user->update([
+                    'email'     => $data['email'],
+                    'telefono'  => $data['phone'],
+                    'direccion' => $data['address'],
+                ]);
+            }
+
+            return Redirect::route('empleados.index')
+                ->with('success', 'Empleado (y usuario) actualizados correctamente.');
+
+        } catch (\Exception $e) {
+            return Redirect::back()
+                ->withInput()
+                ->with('error', 'Error al actualizar: ' . $e->getMessage());
+        }
+
     }
 
     /**

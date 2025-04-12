@@ -286,10 +286,10 @@
                 <h1>Panel de Gestión</h1>
                 <p>Bienvenido al sistema de Lavandería Jackie</p>
             </div>
-            <button class="btn-primary">
+            <a class="btn-primary" href="{{ route('compras.create') }}">
                 <span class="material-icons-round">add</span>
-                Nueva Orden
-            </button>
+                Comprar productos
+            </a>
         </header>
 
         <!-- Key Metrics -->
@@ -360,10 +360,10 @@
         <div class="inventory-table">
             <div class="table-header">
                 <h2>Productos con Stock Bajo</h2>
-                <button class="btn-icon">
+                <a class="btn-icon" href="{{ route('productos.index') }}">
                     <span class="material-icons-round">manage_history</span>
                     Gestionar
-                </button>
+                </a>
             </div>
             <div class="table-responsive">
                 <table>
@@ -371,7 +371,6 @@
                     <tr>
                         <th>Producto</th>
                         <th>Stock Actual</th>
-                        <th>Acciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -384,12 +383,7 @@
                                         {{ $producto->stock }} unidades
                                     </span>
                             </td>
-                            <td>
-                                <button class="btn-icon">
-                                    <span class="material-icons-round">add_box</span>
-                                    Reponer
-                                </button>
-                            </td>
+
                         </tr>
                     @endforeach
                     </tbody>
