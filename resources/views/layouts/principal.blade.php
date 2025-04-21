@@ -153,7 +153,6 @@
 
     <!-- Menú Items -->
     <ul class="sidebar-nav" id="sidebar-nav">
-
         <li class="nav-item">
             <a class="nav-link " href="/">
                 <i class="bi bi-grid"></i>
@@ -161,12 +160,13 @@
             </a>
         </li><!-- End Dashboard Nav -->
 
-
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-layout-text-window-reverse"></i><span>Operaciones</span><i class="bi bi-chevron-down ms-auto"></i>
+            <a class="nav-link collapsed" data-bs-target="#operaciones-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-layout-text-window-reverse"></i>
+                <span>Operaciones</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
             </a>
-            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="operaciones-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="{{ route('cuenta_bancos.index') }}">
                         <i class="bi bi-circle"></i><span>Cuentas de banco</span>
@@ -265,7 +265,6 @@
                 </li>
             </ul>
         </li><!-- End Tables Nav -->
-
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
