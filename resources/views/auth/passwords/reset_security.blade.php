@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Iniciar sesión</title>
+    <title>Restablecer contraseña</title>
 
     <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -13,7 +13,7 @@
     <!-- Material Design Icons -->
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
 
-    <!-- Animate.css (para la animación de fadeIn) -->
+    <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
     <style>
@@ -32,8 +32,7 @@
         body::before {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             background-image:
                 radial-gradient(circle at 10% 20%, rgba(0,188,212,0.2) 0%, transparent 40%),
                 radial-gradient(circle at 80% 30%, rgba(3,169,244,0.15) 0%, transparent 50%),
@@ -102,7 +101,7 @@
             pointer-events: none;
         }
 
-        /* Tarjeta de login */
+        /* Tarjeta de restablecer contraseña */
         .login-card {
             background-color: rgba(255,255,255,0.9);
             border-radius: 16px;
@@ -110,7 +109,7 @@
             padding: 2rem;
             animation: float 6s ease-in-out infinite;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             z-index: 1;
             position: relative;
         }
@@ -168,23 +167,6 @@
             color: #42a5f5;
         }
 
-        /* Encabezado */
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .login-header img {
-            width: 80px;
-            height: auto;
-            margin-bottom: 15px;
-        }
-        .login-header h1 {
-            color: #42a5f5;
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
         /* Botón principal */
         .btn-primary {
             display: block;
@@ -230,14 +212,29 @@
             color: #dc3545;
             margin-top: 0.25rem;
         }
+
+        /* Encabezado */
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-header img {
+            width: 80px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .login-header h1 {
+            color: #42a5f5;
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
 
-<!-- Figuras de fondo -->
+<!-- Fondos animados -->
 <div class="background-figures"></div>
-
-<!-- Burbujas en movimiento -->
 <div class="background-bubbles">
     <div class="bubble" style="top:10%; left:15%;  animation-delay: 0s;"></div>
     <div class="bubble" style="top:70%; left:80%;  animation-delay: 2s;"></div>
@@ -304,77 +301,73 @@
     </polygon>
 </svg>
 
-<!-- Tarjeta de login -->
+
+<!-- Tarjeta de restablecer contraseña -->
 <div class="login-card animate__animated animate__fadeIn">
+
     <div class="login-header">
         <img src="{{ asset('assets/img/logo.png') }}" alt="Logo Lavandería">
-        <h1>Inicio de Sesión</h1>
+        <h1>Restablecer contraseña</h1>
         <hr>
     </div>
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('password.security.reset') }}">
         @csrf
+        <input type="hidden" name="email" value="{{ $email }}">
 
-        <!-- Correo Electrónico -->
-        <div class="form-floating">
-            <div class="form-floating position-relative">
-                <label for="email">Correo electrónico</label>
-                <i class="mdi mdi-email-outline input-icon"></i>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico" value="{{ old('email') }}">
-            </div>
-            @error('email')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- Contraseña -->
-        <div class="form-floating">
-            <label for="password">Contraseña</label>
-            <i class="mdi mdi-lock input-icon"></i>
+        <div class="form-floating position-relative">
+            <label for="password">Nueva contraseña</label>
+            <i class="mdi mdi-lock-outline input-icon"></i>
             <input
                 type="password"
                 class="form-control"
                 id="password"
                 name="password"
-                placeholder="Contraseña"
+                placeholder="Nueva contraseña"
+                required
             >
             <button type="button" class="password-toggle" id="togglePassword">
                 <i class="mdi mdi-eye-off"></i>
             </button>
-            @error('password')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
+            @error('password')<div class="text-danger">{{ $message }}</div>@enderror
         </div>
 
-        <!-- Botón Ingresar -->
-        <button type="submit" class="btn-primary">Ingresar</button>
-    </form>
-
-    <div class="text-center mt-6">
-        <p class="text-muted">{{ __('¿Olvidaste tu contraseña?') }}</p>
-
-        @if (Route::has('password.security.email'))
-            <a href="{{ route('password.security.email') }}"
-               class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md
-                  font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500
-                  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
-                  active:bg-blue-600 transition"
+        <div class="form-floating position-relative">
+            <label for="password_confirmation">Confirmar contraseña</label>
+            <i class="mdi mdi-lock-outline input-icon"></i>
+            <input
+                type="password"
+                class="form-control"
+                id="password_confirmation"
+                name="password_confirmation"
+                placeholder="Confirmar contraseña"
+                required
             >
-                {{ __('Recupérala con tu pregunta de seguridad') }}
-            </a>
-        @endif
-    </div>
+            <button type="button" class="password-toggle" id="togglePasswordConfirmation">
+                <i class="mdi mdi-eye-off"></i>
+            </button>
+        </div>
 
-
-
-
-
+        <button type="submit" class="btn-primary">Cambiar contraseña</button>
+    </form>
 </div>
 
 <script>
-    // Alternar visibilidad de contraseña
+    // Toggle para nueva contraseña
     document.getElementById('togglePassword').addEventListener('click', function() {
         const pwd = document.getElementById('password');
+        const icon = this.querySelector('i');
+        if (pwd.type === 'password') {
+            pwd.type = 'text';
+            icon.classList.replace('mdi-eye-off', 'mdi-eye');
+        } else {
+            pwd.type = 'password';
+            icon.classList.replace('mdi-eye', 'mdi-eye-off');
+        }
+    });
+    // Toggle para confirmación
+    document.getElementById('togglePasswordConfirmation').addEventListener('click', function() {
+        const pwd = document.getElementById('password_confirmation');
         const icon = this.querySelector('i');
         if (pwd.type === 'password') {
             pwd.type = 'text';

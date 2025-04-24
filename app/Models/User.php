@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -24,6 +25,8 @@ class User extends Authenticatable
         'direccion',
         'telefono',
         'image',
+        'security_question',
+        'security_answer',
     ];
 
     public function empleados()
@@ -44,6 +47,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'security_answer',   // ocultamos la respuesta real
     ];
 
     /**
@@ -55,4 +59,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Hashea automáticamente la respuesta de seguridad.
+     */
+    public function setSecurityAnswerAttribute($value)
+    {
+        $this->attributes['security_answer'] = Hash::make($value);
+    }
 }

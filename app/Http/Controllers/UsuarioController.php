@@ -54,6 +54,8 @@ class UsuarioController extends Controller
             'telefono' => ['required', 'digits:8', 'regex:/^[2389][0-9]{7}$/', 'unique:users,telefono'],
             'direccion' => ['required', 'string', 'min:5', 'max:500'],
             'empleado_id' => ['required', 'exists:empleados,id'],
+            'security_question' => ['required', 'string', 'max:255'],
+            'security_answer' => ['required', 'string', 'min:3', 'max:100'],
         ],[
             'name.required' => 'El nombre de usuario es obligatorio.',
             'name.regex' => 'El nombre de usuario puede contener hasta 5 palabras y no debe contener símbolos ni números.',
@@ -86,6 +88,11 @@ class UsuarioController extends Controller
 
             'empleado_id.required' => 'El empleado es obligatorio.',
             'empleado_id.exists' => 'El empleado seleccionado no es válido.',
+
+            'security_question.required' => 'La pregunta de seguridad es obligatoria.',
+            'security_answer.required' => 'La respuesta de seguridad es obligatoria.',
+            'security_answer.min' => 'La respuesta debe tener al menos 3 caracteres.',
+            'security_answer.max' => 'La respuesta no puede exceder los 100 caracteres.',
         ]);
 
         try {
@@ -114,6 +121,8 @@ class UsuarioController extends Controller
                 $user->image = $imageName;
             }
 
+            $user->security_question = $request->security_question;
+            $user->security_answer = $request->security_answer; // Sin Hash::make
             $user->save();
             return redirect()->route('usuarios.index')
                 ->with('success', 'El usuario ' . $user->name . ' ha sido registrado exitosamente.');

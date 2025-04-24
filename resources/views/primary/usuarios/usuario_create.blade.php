@@ -91,66 +91,101 @@
                                 <div>
                                     <h4 style="font-weight: bold;">Datos del usuario</h4>
 
-                                    <div class="row g-0 mb-3">  <!-- Removemos gutter global -->
-                                        <!-- Columna de inputs (más compacta) -->
-                                        <div class="col-md-7 me-md-3">  <!-- Margen derecho para separación -->
-                                            <!-- Nombre completo -->
+                                    <div class="row g-3 mb-4 align-items-start">
+                                        <!-- Columna izquierda: todos los inputs de texto -->
+                                        <div class="col-md-8">
+                                            <!-- Nombre de usuario -->
                                             <div class="mb-3">
                                                 <label for="name" class="form-label">Nombre de usuario</label>
-                                                <input type="text" name="name" class="form-control small-text-field @error('name') is-invalid @enderror"
-                                                       id="name" value="{{ old('name') }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
+                                                <input type="text" name="name" id="name"
+                                                       class="form-control small-text-field @error('name') is-invalid @enderror"
+                                                       value="{{ old('name') }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
                                                 @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                             </div>
 
-                                            <!-- Teléfono y Email en row ajustado -->
-                                            <div class="row g-2 mb-3">  <!-- Gutters reducidos -->
+                                            <!-- Pregunta de seguridad -->
+                                            <div class="mb-3">
+                                                <label for="security_question" class="form-label">Pregunta de seguridad</label>
+                                                <select name="security_question" id="security_question"
+                                                        class="form-select @error('security_question') is-invalid @enderror" required>
+                                                    <option value="">Seleccione una pregunta...</option>
+                                                    <option value="¿Cuál es el nombre de tu primera mascota?" {{ old('security_question')=='¿Cuál es el nombre de tu primera mascota?'?'selected':'' }}>
+                                                        ¿Cuál es el nombre de tu primera mascota?
+                                                    </option>
+                                                    <option value="¿En qué ciudad naciste?" {{ old('security_question')=='¿En qué ciudad naciste?'?'selected':'' }}>
+                                                        ¿En qué ciudad naciste?
+                                                    </option>
+                                                    <option value="¿Cuál es tu comida favorita?" {{ old('security_question')=='¿Cuál es tu comida favorita?'?'selected':'' }}>
+                                                        ¿Cuál es tu comida favorita?
+                                                    </option>
+                                                    <option value="¿Cómo se llamaba tu colegio primario?" {{ old('security_question')=='¿Cómo se llamaba tu colegio primario?'?'selected':'' }}>
+                                                        ¿Cómo se llamaba tu colegio primario?
+                                                    </option>
+                                                    <option value="¿Cuál es el nombre de tu mejor amigo de la infancia?" {{ old('security_question')=='¿Cuál es el nombre de tu mejor amigo de la infancia?'?'selected':'' }}>
+                                                        ¿Cuál es el nombre de tu mejor amigo de la infancia?
+                                                    </option>
+                                                </select>
+                                                @error('security_question')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                             </div>
 
-                                            <!-- Contraseñas en row ajustado -->
-                                            <div class="row g-2 mb-3">  <!-- Gutters reducidos -->
+                                            <!-- Respuesta de seguridad -->
+                                            <div class="mb-3">
+                                                <label for="security_answer" class="form-label">Respuesta de seguridad</label>
+                                                <input type="text" name="security_answer" id="security_answer"
+                                                       class="form-control small-text-field @error('security_answer') is-invalid @enderror"
+                                                       value="{{ old('security_answer') }}" placeholder="Escribe tu respuesta"
+                                                       minlength="3" maxlength="100" required>
+                                                @error('security_answer')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                            </div>
+
+                                            <!-- Contraseña y Confirmación -->
+                                            <div class="row g-2 mb-3">
                                                 <div class="col-md-6">
                                                     <label for="password" class="form-label">Contraseña</label>
-                                                    <input type="password" name="password" class="form-control small-text-field @error('password') is-invalid @enderror"
-                                                           id="password" placeholder="" maxlength="50" required autocomplete="new-password">
+                                                    <input type="password" name="password" id="password"
+                                                           class="form-control small-text-field @error('password') is-invalid @enderror"
+                                                           maxlength="50" required autocomplete="new-password">
                                                     @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                                 </div>
-
                                                 <div class="col-md-6">
                                                     <label for="password_confirmation" class="form-label">Confirmar contraseña</label>
-                                                    <input type="password" name="password_confirmation" class="form-control small-text-field @error('password_confirmation') is-invalid @enderror"
-                                                           id="password_confirmation" placeholder="" maxlength="50" required autocomplete="new-password">
+                                                    <input type="password" name="password_confirmation" id="password_confirmation"
+                                                           class="form-control small-text-field @error('password_confirmation') is-invalid @enderror"
+                                                           maxlength="50" required autocomplete="new-password">
                                                     @error('password_confirmation')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- Columna de imagen más ajustada -->
-                                        <div class="col-md-4 d-flex flex-column">  <!-- Alineación vertical -->
-                                            <div class="mb-3" style="width: 100%; text-align: center;">
-                                                <label for="image" class="form-label">Imagen de Usuario</label>
-                                                <!-- Div de imagen en gris, centrado -->
-                                                <div class="mb-3 image-preview-wrapper" style="position: relative; width: 100%; max-width: 300px; height: 200px;">
-                                                    <div class="image-preview-border" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 3px dashed #b0b0b0; border-radius: 5px; pointer-events: none;"></div>
-                                                    <div id="imagePreviewContainer" class="image-preview-container" style="width: 100%; height: 100%; background-color: #f0f0f0; border-radius: 5px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
-                                                        <img id="imagePreview" src="{{ old('image') ? asset('storage/' . old('image')) : '#' }}" alt="Vista previa de la imagen" style="max-width: 100%; max-height: 100%; display: {{ old('image') ? 'block' : 'none' }};">
-                                                    </div>
+                                        <!-- Columna derecha: imagen de usuario, alineada al tope -->
+                                        <div class="col-md-4 text-center">
+                                            <label for="image" class="form-label">Imagen de Usuario</label>
+                                            <div class="image-preview-wrapper mb-3" style="position: relative; width: 100%; max-width: 300px; height: 200px; margin: 0 auto;">
+                                                <div class="image-preview-border"
+                                                     style="position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+                  border: 3px dashed #b0b0b0; border-radius: 5px; pointer-events: none;"></div>
+                                                <div id="imagePreviewContainer"
+                                                     class="image-preview-container"
+                                                     style="width: 100%; height: 100%; background-color: #f0f0f0;
+                  border-radius: 5px; overflow: hidden;
+                  display: flex; justify-content: center; align-items: center;">
+                                                    <img id="imagePreview"
+                                                         src="{{ old('image') ? asset('storage/' . old('image')) : '#' }}"
+                                                         alt="Vista previa de la imagen"
+                                                         style="max-width: 100%; max-height: 100%; display: {{ old('image') ? 'block' : 'none' }};">
                                                 </div>
-
-                                                <!-- Botón para seleccionar imagen -->
-                                                <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" id="image" accept="image/*">
-                                                @error('image')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                @enderror
-
-                                                <!-- Mostrar nombre del archivo si existe -->
-                                                @if(old('image'))
-                                                    <small class="text-muted">Archivo: {{ basename(old('image')) }}</small>
-                                                @endif
                                             </div>
+                                            <input type="file" name="image" id="image"
+                                                   class="form-control @error('image') is-invalid @enderror"
+                                                   accept="image/*">
+                                            @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
 
-
+                                            @if(old('image'))
+                                                <small class="text-muted d-block mt-1">Archivo: {{ basename(old('image')) }}</small>
+                                            @endif
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                             <!-- Botones de acción -->

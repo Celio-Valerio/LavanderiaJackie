@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Iniciar sesión</title>
+    <title>Recuperar contraseña</title>
 
     <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -308,83 +308,34 @@
 <div class="login-card animate__animated animate__fadeIn">
     <div class="login-header">
         <img src="{{ asset('assets/img/logo.png') }}" alt="Logo Lavandería">
-        <h1>Inicio de Sesión</h1>
+        <h1>Recuperar contraseña</h1>
         <hr>
     </div>
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('password.security.email') }}">
         @csrf
 
-        <!-- Correo Electrónico -->
         <div class="form-floating">
-            <div class="form-floating position-relative">
-                <label for="email">Correo electrónico</label>
-                <i class="mdi mdi-email-outline input-icon"></i>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico" value="{{ old('email') }}">
-            </div>
+            <label for="email">Correo electrónico</label>
+            <i class="mdi mdi-email-outline input-icon"></i>
+            <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                placeholder="nombre@ejemplo.com"
+                required
+                autofocus
+                value="{{ old('email') }}"
+            >
             @error('email')
             <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
 
-        <!-- Contraseña -->
-        <div class="form-floating">
-            <label for="password">Contraseña</label>
-            <i class="mdi mdi-lock input-icon"></i>
-            <input
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-                placeholder="Contraseña"
-            >
-            <button type="button" class="password-toggle" id="togglePassword">
-                <i class="mdi mdi-eye-off"></i>
-            </button>
-            @error('password')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- Botón Ingresar -->
-        <button type="submit" class="btn-primary">Ingresar</button>
+        <button type="submit" class="btn-primary">Siguiente</button>
     </form>
 
-    <div class="text-center mt-6">
-        <p class="text-muted">{{ __('¿Olvidaste tu contraseña?') }}</p>
-
-        @if (Route::has('password.security.email'))
-            <a href="{{ route('password.security.email') }}"
-               class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md
-                  font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500
-                  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
-                  active:bg-blue-600 transition"
-            >
-                {{ __('Recupérala con tu pregunta de seguridad') }}
-            </a>
-        @endif
-    </div>
-
-
-
-
-
 </div>
-
-<script>
-    // Alternar visibilidad de contraseña
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        const pwd = document.getElementById('password');
-        const icon = this.querySelector('i');
-        if (pwd.type === 'password') {
-            pwd.type = 'text';
-            icon.classList.replace('mdi-eye-off', 'mdi-eye');
-        } else {
-            pwd.type = 'password';
-            icon.classList.replace('mdi-eye', 'mdi-eye-off');
-        }
-    });
-</script>
-
 </body>
 </html>

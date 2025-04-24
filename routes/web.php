@@ -27,6 +27,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VencidoController;
 use App\Http\Controllers\LavanderiaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\PasswordSecurityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -386,4 +387,13 @@ Route::middleware('auth')->group(function () {
 // Rutas de recursos para gastos
     Route::resource('gastos', GastoController::class);
 });
+
+
+Route::get('password/security', [PasswordSecurityController::class,'showEmailForm'])->name('password.security.email');
+Route::post('password/security', [PasswordSecurityController::class,'handleEmail'])->name('password.security.email.post');
+Route::get('password/security/question', [PasswordSecurityController::class,'showQuestionForm'])->name('password.security.question');
+Route::post('password/security/question', [PasswordSecurityController::class,'handleQuestion'])->name('password.security.question.post');
+Route::get('password/security/reset', [PasswordSecurityController::class,'showResetForm'])->name('password.security.reset');
+Route::post('password/security/reset', [PasswordSecurityController::class,'resetPassword'])->name('password.security.reset.post');
+
 
