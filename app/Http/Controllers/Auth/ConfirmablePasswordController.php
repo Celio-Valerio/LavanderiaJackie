@@ -30,7 +30,7 @@ class ConfirmablePasswordController extends Controller
             'password' => $request->password,
         ])) {
             throw ValidationException::withMessages([
-                'password' => 'La contraseña ingresada es incorrecta. Por favor, inténtalo de nuevo.',
+                'password' => 'Hey! La contraseña ingresada es incorrecta. Por favor, inténtalo de nuevo.',
             ]);
         }
 

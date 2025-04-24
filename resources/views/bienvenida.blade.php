@@ -117,22 +117,22 @@
 <!-- Hero Section -->
 <section class="hero-section" id="inicio">
     <div class="container text-center">
-        <h1 class="display-4 mb-4 font-weight-bold">Cuidado Profesional para Tus Prendas</h1>
+        <h1 class="display-4 mb-4 font-weight-bold">Cuidado profesional para tus prendas</h1>
         <p class="lead mb-4">Especialistas en lavado de ropa, peluches, cobijas y artículos delicados</p>
-        <a href="#contacto" class="btn btn-custom btn-lg">Solicitar Servicio</a>
+        <a href="#contacto" class="btn btn-custom btn-lg">Solicitar servicio</a>
     </div>
 </section>
 
 <!-- Servicios -->
 <section class="py-5" id="servicios">
     <div class="container">
-        <h2 class="text-center mb-5 display-4 font-weight-bold" style="color: var(--primary-color);">Nuestros Servicios</h2>
+        <h2 class="text-center mb-5 display-4 font-weight-bold" style="color: var(--primary-color);">Nuestros servicios</h2>
         <div class="row">
             <div class="col-lg-4 mb-4">
                 <div class="card service-card h-100">
                     <img src="{{ asset('assets/img/bienvenida/ropa.jpg') }}" class="card-img-top" alt="Lavado de ropa">
                     <div class="card-body text-center">
-                        <h5 class="card-title font-weight-bold">Lavado de Ropa</h5>
+                        <h5 class="card-title font-weight-bold">Lavado de ropa</h5>
                         <p class="card-text">Lavado profesional con técnicas especializadas para todo tipo de prendas</p>
                         <span class="badge badge-feature">Incluye secado y doblado</span>
                     </div>
@@ -143,7 +143,7 @@
                 <div class="card service-card h-100">
                     <img src="{{ asset('assets/img/bienvenida/peluches.png') }}" class="card-img-top" alt="Limpieza de peluches">
                     <div class="card-body text-center">
-                        <h5 class="card-title font-weight-bold">Limpieza de Peluches</h5>
+                        <h5 class="card-title font-weight-bold">Limpieza de peluches</h5>
                         <p class="card-text">Lavado especializado para juguetes de peluche y muñecos de tela</p>
                         <span class="badge badge-feature">Secado controlado</span>
                     </div>
@@ -154,7 +154,7 @@
                 <div class="card service-card h-100">
                     <img src="{{ asset('assets/img/bienvenida/cobijas.jpg') }}" class="card-img-top" alt="Lavado de cobijas">
                     <div class="card-body text-center">
-                        <h5 class="card-title font-weight-bold">Lavado de Cobijas</h5>
+                        <h5 class="card-title font-weight-bold">Lavado de cobijas</h5>
                         <p class="card-text">Cuidado especial para edredones, colchas y cubrecamas</p>
                         <span class="badge badge-feature">Grandes dimensiones</span>
                     </div>
@@ -171,22 +171,22 @@
         <div class="row text-center">
             <div class="col-md-3 mb-4">
                 <i class="fas fa-tint feature-icon"></i>
-                <h5>Productos Ecológicos</h5>
+                <h5>Productos ecológicos</h5>
                 <p>Detergentes hipoalergénicos y amigables con el medio ambiente</p>
             </div>
             <div class="col-md-3 mb-4">
                 <i class="fas fa-clock feature-icon"></i>
-                <h5>Servicio Express</h5>
+                <h5>Servicio express</h5>
                 <p>Lavado urgente disponible en 4 horas</p>
             </div>
             <div class="col-md-3 mb-4">
                 <i class="fas fa-shield-alt feature-icon"></i>
-                <h5>Protección Total</h5>
+                <h5>Protección total</h5>
                 <p>Seguro contra daños y pérdidas</p>
             </div>
             <div class="col-md-3 mb-4">
                 <i class="fas fa-truck feature-icon"></i>
-                <h5>Recogida a Domicilio</h5>
+                <h5>Recogida a domicilio</h5>
                 <p>Servicio gratuito en área metropolitana</p>
             </div>
         </div>
@@ -209,7 +209,7 @@
                     <div class="contact-info">
                         <p class="d-flex align-items-center">
                             <i class="fas fa-map-marker-alt mr-3"></i>
-                            Bo. Tierra Blanca, media cuadra antes de Pintogama, Danlí, El Paraíso
+                            Bo. Tierra Blanca, media cuadra antes de Pintogama, Danlí, El Paraíso.
                         </p>
                         <p class="d-flex align-items-center">
                             <i class="fas fa-phone mr-3"></i>
@@ -221,8 +221,8 @@
                         </p>
                     </div>
                     <div class="mt-4">
-                        <h5 class="mb-3">Horario de Atención</h5>
-                        <p>Lunes a Viernes: 7:00 AM - 7:00 PM<br>
+                        <h5 class="mb-3">Horario de atención</h5>
+                        <p>Lunes a viernes: 7:00 AM - 7:00 PM<br>
                             Sábados: 8:00 AM - 5:00 PM</p>
                     </div>
                 </div>
@@ -236,11 +236,11 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-4">
-                <h5>Nuestra Misión</h5>
+                <h5>Nuestra misión</h5>
                 <p>Brindar cuidado profesional a tus prendas con tecnología ecológica y atención personalizada.</p>
             </div>
             <div class="col-md-4 mb-4">
-                <h5>Enlaces Rápidos</h5>
+                <h5>Enlaces rápidos</h5>
                 <ul class="list-unstyled">
                     <li><a href="#inicio" class="text-light">Inicio</a></li>
                     <li><a href="#servicios" class="text-light">Servicios</a></li>

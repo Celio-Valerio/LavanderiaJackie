@@ -320,12 +320,13 @@
             <div class="form-floating position-relative">
                 <label for="email">Correo electrónico</label>
                 <i class="mdi mdi-email-outline input-icon"></i>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico" value="{{ old('email') }}">
             </div>
             @error('email')
             <div class="text-danger">{{ $message }}</div>
             @enderror
         </div>
+
 
         <!-- Contraseña -->
         <div class="form-floating">
@@ -337,7 +338,6 @@
                 id="password"
                 name="password"
                 placeholder="Contraseña"
-                required
             >
             <button type="button" class="password-toggle" id="togglePassword">
                 <i class="mdi mdi-eye-off"></i>
