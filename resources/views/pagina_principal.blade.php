@@ -283,7 +283,7 @@
         <!-- Header -->
         <header class="dashboard-header">
             <div class="header-title">
-                <h1>Panel de Gestión</h1>
+                <h1>Panel de gestión</h1>
                 <p>Bienvenido al sistema de Lavandería Jackie</p>
             </div>
             <a class="btn-primary" href="{{ route('compras.create') }}">
@@ -300,7 +300,7 @@
                 </div>
                 <div class="metric-content">
                     <h3>{{ $totalClientes }}</h3>
-                    <p>Clientes Registrados</p>
+                    <p>Clientes registrados</p>
                 </div>
             </div>
 
@@ -310,7 +310,7 @@
                 </div>
                 <div class="metric-content">
                     <h3>{{ $empleadosActivos }}</h3>
-                    <p>Empleados Activos</p>
+                    <p>Empleados activos</p>
                 </div>
             </div>
 
@@ -320,7 +320,7 @@
                 </div>
                 <div class="metric-content">
                     <h3>{{ Producto::count() }}</h3>
-                    <p>Total Productos</p>
+                    <p>Total de productos</p>
                 </div>
             </div>
         </div>
@@ -330,7 +330,7 @@
             <!-- Gráfico de Stock -->
             <div class="chart-card">
                 <div class="chart-header">
-                    <h2>Productos con Mayor Stock</h2>
+                    <h2>Productos con mayor stock</h2>
                 </div>
                 <div id="stockChart" style="height: 320px;"></div>
             </div>
@@ -338,7 +338,7 @@
             <!-- Últimas Compras -->
             <div class="recent-purchases">
                 <div class="chart-header">
-                    <h2>Últimas Transacciones</h2>
+                    <h2>Últimas transacciones</h2>
                 </div>
                 <div class="purchase-list">
                     @foreach ($ultimasCompras as $compra)
@@ -359,7 +359,7 @@
         <!-- Tabla de Inventario -->
         <div class="inventory-table">
             <div class="table-header">
-                <h2>Productos con Stock Bajo</h2>
+                <h2>Productos con stock bajo</h2>
                 <a class="btn-icon" href="{{ route('productos.index') }}">
                     <span class="material-icons-round">manage_history</span>
                     Gestionar
@@ -370,7 +370,7 @@
                     <thead>
                     <tr>
                         <th>Producto</th>
-                        <th>Stock Actual</th>
+                        <th>Stock actual</th>
                     </tr>
                     </thead>
                     <tbody>

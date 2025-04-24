@@ -327,7 +327,6 @@
             @enderror
         </div>
 
-
         <!-- Contraseña -->
         <div class="form-floating">
             <label for="password">Contraseña</label>
