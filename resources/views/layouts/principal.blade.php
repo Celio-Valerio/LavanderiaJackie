@@ -112,12 +112,7 @@
 
                     <!-- Enlace a la configuración de cuenta -->
                     @if(Auth::check())
-                        <li>
-                            <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}">
-                                <i class="bi bi-gear"></i>
-                                <span>Configuración de Cuenta</span>
-                            </a>
-                        </li>
+
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -156,7 +151,7 @@
         <li class="nav-item">
             <a class="nav-link " href="/">
                 <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
+                <span>Inicio</span>
             </a>
         </li><!-- End Dashboard Nav -->
 

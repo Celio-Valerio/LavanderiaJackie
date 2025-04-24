@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ProductoPrecioHistorial;
 
 class Producto extends Model
 {
@@ -49,5 +50,13 @@ class Producto extends Model
     public function detallesGastoDiario()
     {
         return $this->hasMany(DetalleGastoDiario::class);
+    }
+
+    /**
+     * Historial de cambios de precio.
+     */
+    public function historialPrecios()
+    {
+        return $this->hasMany(ProductoPrecioHistorial::class, 'producto_id');
     }
 }
