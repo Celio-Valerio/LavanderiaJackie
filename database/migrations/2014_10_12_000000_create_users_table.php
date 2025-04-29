@@ -24,8 +24,7 @@ return new class extends Migration
             // Columna para la relación con el empleado
             $table->unsignedBigInteger('empleado_id');
             $table->foreign('empleado_id')->references('id')->on('empleados')->onDelete('cascade'); // Relación foránea, eliminar transacción si se elimina la cuenta
-
-
+            $table->unsignedBigInteger('rolpermiso_id');
             $table->rememberToken();
             $table->timestamps();
         });

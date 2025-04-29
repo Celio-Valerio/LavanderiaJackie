@@ -3,54 +3,54 @@
 @section('content')
 
     <section class="section">
+        @if($usuario->rolpermiso->productos_editar == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 30px !important;">Editar Producto</h1>
+                            <hr>
+                            <!-- Inicio del formulario -->
+                            <form id="productoForm" action="{{ route('productos.update', $producto->id) }}" method="POST" novalidate>
+                                @csrf
+                                @method('PUT') <!-- Método PUT para actualizar -->
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Editar Producto</h1>
-                        <hr>
-                        <!-- Inicio del formulario -->
-                        <form id="productoForm" action="{{ route('productos.update', $producto->id) }}" method="POST" novalidate>
-                            @csrf
-                            @method('PUT') <!-- Método PUT para actualizar -->
+                                <div class="row mb-3">
+                                    <!-- Campo de Nombre del Producto -->
+                                    <div class="col-md-6">
+                                        <label for="nombre" class="form-label">Nombre del producto</label>
+                                        <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre', $producto->nombre) }}" placeholder="Ej: Jabón Líquido" maxlength="50" required>
+                                        @error('nombre')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                            <div class="row mb-3">
-                                <!-- Campo de Nombre del Producto -->
-                                <div class="col-md-6">
-                                    <label for="nombre" class="form-label">Nombre del producto</label>
-                                    <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre', $producto->nombre) }}" placeholder="Ej: Jabón Líquido" maxlength="50" required>
-                                    @error('nombre')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                    <!-- Campo de Presentación -->
+                                    <div class="col-md-6">
+                                        <label for="presentacion" class="form-label">Presentación</label>
+                                        <select name="presentacion" class="form-select small-text-field @error('presentacion') is-invalid @enderror" id="presentacion" required>
+                                            <option value="Litros" {{ old('presentacion', $producto->presentacion) === 'Litros' ? 'selected' : '' }}>Litros</option>
+                                            <option value="Kilogramos" {{ old('presentacion', $producto->presentacion) === 'Kilogramos' ? 'selected' : '' }}>Kilogramos</option>
+                                            <option value="Bolsas" {{ old('presentacion', $producto->presentacion) === 'Bolsas' ? 'selected' : '' }}>Bolsas</option>
+                                        </select>
+                                        @error('presentacion')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                 </div>
 
-                                <!-- Campo de Presentación -->
-                                <div class="col-md-6">
-                                    <label for="presentacion" class="form-label">Presentación</label>
-                                    <select name="presentacion" class="form-select small-text-field @error('presentacion') is-invalid @enderror" id="presentacion" required>
-                                        <option value="Litros" {{ old('presentacion', $producto->presentacion) === 'Litros' ? 'selected' : '' }}>Litros</option>
-                                        <option value="Kilogramos" {{ old('presentacion', $producto->presentacion) === 'Kilogramos' ? 'selected' : '' }}>Kilogramos</option>
-                                        <option value="Bolsas" {{ old('presentacion', $producto->presentacion) === 'Bolsas' ? 'selected' : '' }}>Bolsas</option>
-                                    </select>
-                                    @error('presentacion')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                                <!-- Campo de Precio -->
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="precio" class="form-label">Precio</label>
+                                        <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio', $producto->precio) }}" placeholder="Ej: 99.99" required>
+                                        @error('precio')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                            </div>
-
-                            <!-- Campo de Precio -->
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="precio" class="form-label">Precio</label>
-                                    <input type="text" name="precio" class="form-control small-text-field @error('precio') is-invalid @enderror" id="precio" value="{{ old('precio', $producto->precio) }}" placeholder="Ej: 99.99" required>
-                                    @error('precio')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
+                                    <div class="col-md-6">
                                         <label for="proveedor_id" class="form-label">Proveedor</label>
                                         <select name="proveedor_id" class="form-select small-text-field @error('proveedor_id') is-invalid @enderror" id="proveedor_id" required>
                                             <option value="">Seleccione un proveedor</option>
@@ -64,35 +64,46 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                            </div>
-
-                            <!-- Campo de Descripción -->
-                            <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label for="descripcion" class="form-label">Descripción</label>
-                                    <textarea name="descripcion" class="form-control small-text-field @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Descripción del producto" maxlength="500" rows="3">{{ old('descripcion', $producto->descripcion) }}</textarea>
-                                    @error('descripcion')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
                                 </div>
-                            </div>
 
-                            <!-- Campo oculto para categoría -->
-                            <input type="hidden" name="categoria_id" value="2">
+                                <!-- Campo de Descripción -->
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label for="descripcion" class="form-label">Descripción</label>
+                                        <textarea name="descripcion" class="form-control small-text-field @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Descripción del producto" maxlength="500" rows="3">{{ old('descripcion', $producto->descripcion) }}</textarea>
+                                        @error('descripcion')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
 
-                            <!-- Botones de acción -->
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-success flex-fill me-1">Actualizar</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="reloadButton">Reestablecer</button>
-                                <a href="{{ route('productos.index') }}" class="btn btn-danger flex-fill">Cancelar</a>
-                            </div>
-                        </form>
-                        <!-- Fin del formulario -->
+                                <!-- Campo oculto para categoría -->
+                                <input type="hidden" name="categoria_id" value="2">
 
+                                <!-- Botones de acción -->
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-success flex-fill me-1">Actualizar</button>
+                                    <button type="button" class="btn btn-warning flex-fill me-1" id="reloadButton">Reestablecer</button>
+                                    <a href="{{ route('productos.index') }}" class="btn btn-danger flex-fill">Cancelar</a>
+                                </div>
+                            </form>
+                            <!-- Fin del formulario -->
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {

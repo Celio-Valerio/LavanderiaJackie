@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cupon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VencidoController extends Controller
 {
@@ -14,7 +15,8 @@ class VencidoController extends Controller
     {
         // Obtener todos los servicios efectuados
         $cupones = Cupon::all();
-        return view('primary.vencidos.index_vencido', compact('cupones'));
+        $usuario = Auth::user();
+        return view('primary.vencidos.index_vencido', compact('cupones', 'usuario'));
     }
 
     /**

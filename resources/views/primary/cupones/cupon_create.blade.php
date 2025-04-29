@@ -3,106 +3,107 @@
 @section('content')
 
     <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar Cupón</h1>
-                        <hr>
-                        <!-- Inicio del formulario -->
-                        <form id="cuponForm" action="{{ route('cupones.store') }}" method="POST" novalidate>
-                            @csrf <!-- Protección contra CSRF -->
-
-                            <div class="row mb-3">
-                                <!-- Campo de Nombre del Cupón -->
-                                <div class="col-md-6">
-                                    <label for="nombre" class="form-label">Nombre del Cupón</label>
-                                    <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre') }}" placeholder="Ej: Descuento especial" maxlength="100" required>
-                                    @error('nombre')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Campo de Tipo de Cupón -->
-                                <div class="col-md-4">
-                                    <label for="tipo" class="form-label">Tipo de Cupón</label>
-                                    <select name="tipo" class="form-control @error('tipo') is-invalid @enderror" id="tipo" required>
-                                        <option value="" disabled {{ old('tipo') ? '' : 'selected' }}>Seleccione el tipo</option>
-                                        <option value="Valor" {{ old('tipo') == 'Valor' ? 'selected' : '' }}>Valor</option>
-                                        <option value="Descuento" {{ old('tipo') == 'Descuento' ? 'selected' : '' }}>Descuento</option>
-                                        <option value="Cantidad" {{ old('tipo') == 'Cantidad' ? 'selected' : '' }}>Cantidad</option>
-                                    </select>
-                                    @error('tipo')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Campo de Valor del Cupón -->
-                                <div class="col-md-2">
-                                    <label for="valor" class="form-label" id="valorLabel">Valor del Cupón</label>
-                                    <input type="text" name="valor" class="form-control @error('valor') is-invalid @enderror" id="valor" value="{{ old('valor') }}" placeholder="Ej: 100">
-                                    @error('valor')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row-mb-3">
-                                <div class="row mb-2">
-                                    <!-- Fecha Desde -->
-                                    <div class="col-md-3">
-                                        <label for="fecha_desde" class="form-label">Fecha de inicio</label>
-                                        <input type="date" name="fecha_desde" id="fecha_desde" class="form-control @error('fecha_desde') is-invalid @enderror" required value="{{ old('fecha_desde') }}">
-                                        @error('fecha_desde')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Fecha Hasta -->
-                                    <div class="col-md-3">
-                                        <label for="fecha_hasta" class="form-label">Fecha de finalización</label>
-                                        <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control @error('fecha_hasta') is-invalid @enderror" required value="{{ old('fecha_hasta') }}">
-                                        @error('fecha_hasta')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <!-- Campo de Descripción -->
-                                <div class="mb-3">
-                                    <label for="descripcion" class="form-label">Descripción</label>
-                                    <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Ej: Descripción del cupón." maxlength="500" rows="3">{{ old('descripcion') }}</textarea>
-                                    @error('descripcion')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
+        @if($usuario->rolpermiso->cupones_crear == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 30px !important;">Registrar Cupón</h1>
                             <hr>
+                            <!-- Inicio del formulario -->
+                            <form id="cuponForm" action="{{ route('cupones.store') }}" method="POST" novalidate>
+                                @csrf <!-- Protección contra CSRF -->
 
-                            <div class="row mb-3">
+                                <div class="row mb-3">
+                                    <!-- Campo de Nombre del Cupón -->
+                                    <div class="col-md-6">
+                                        <label for="nombre" class="form-label">Nombre del Cupón</label>
+                                        <input type="text" name="nombre" class="form-control @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre') }}" placeholder="Ej: Descuento especial" maxlength="100" required>
+                                        @error('nombre')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                                <div class="align-center">
-                                    <h5>Clientes que tendrán este cupón</h5>
+                                    <!-- Campo de Tipo de Cupón -->
+                                    <div class="col-md-4">
+                                        <label for="tipo" class="form-label">Tipo de Cupón</label>
+                                        <select name="tipo" class="form-control @error('tipo') is-invalid @enderror" id="tipo" required>
+                                            <option value="" disabled {{ old('tipo') ? '' : 'selected' }}>Seleccione el tipo</option>
+                                            <option value="Valor" {{ old('tipo') == 'Valor' ? 'selected' : '' }}>Valor</option>
+                                            <option value="Descuento" {{ old('tipo') == 'Descuento' ? 'selected' : '' }}>Descuento</option>
+                                            <option value="Cantidad" {{ old('tipo') == 'Cantidad' ? 'selected' : '' }}>Cantidad</option>
+                                        </select>
+                                        @error('tipo')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Campo de Valor del Cupón -->
+                                    <div class="col-md-2">
+                                        <label for="valor" class="form-label" id="valorLabel">Valor del Cupón</label>
+                                        <input type="text" name="valor" class="form-control @error('valor') is-invalid @enderror" id="valor" value="{{ old('valor') }}" placeholder="Ej: 100">
+                                        @error('valor')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
 
-                                <!-- Filtro de fechas -->
-                                <div class="row mb-3">
-                                    <div class="col-md-12">
-                                        <div class="d-flex align-items-center gap-2 mb-3">
-                                            <label class="form-label m-0">Filtrar visitas por fecha:</label>
-                                            <input type="date" id="filter-fecha-desde" class="form-control" style="width: 180px;">
-                                            <span>a</span>
-                                            <input type="date" id="filter-fecha-hasta" class="form-control" style="width: 180px;">
-                                            <button type="button" id="clear-filters" class="btn btn-secondary btn-sm">
-                                                <i class="bi bi-x-circle"></i> Limpiar
-                                            </button>
+                                <div class="row-mb-3">
+                                    <div class="row mb-2">
+                                        <!-- Fecha Desde -->
+                                        <div class="col-md-3">
+                                            <label for="fecha_desde" class="form-label">Fecha de inicio</label>
+                                            <input type="date" name="fecha_desde" id="fecha_desde" class="form-control @error('fecha_desde') is-invalid @enderror" required value="{{ old('fecha_desde') }}">
+                                            @error('fecha_desde')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+                                        <!-- Fecha Hasta -->
+                                        <div class="col-md-3">
+                                            <label for="fecha_hasta" class="form-label">Fecha de finalización</label>
+                                            <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control @error('fecha_hasta') is-invalid @enderror" required value="{{ old('fecha_hasta') }}">
+                                            @error('fecha_hasta')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
                                     </div>
+
+                                    <!-- Campo de Descripción -->
+                                    <div class="mb-3">
+                                        <label for="descripcion" class="form-label">Descripción</label>
+                                        <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Ej: Descripción del cupón." maxlength="500" rows="3">{{ old('descripcion') }}</textarea>
+                                        @error('descripcion')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
 
-                                <!-- Tabla de clientes disponibles -->
-                                <div class="col-md-6">
+                                <hr>
+
+                                <div class="row mb-3">
+
+                                    <div class="align-center">
+                                        <h5>Clientes que tendrán este cupón</h5>
+                                    </div>
+
+                                    <!-- Filtro de fechas -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-12">
+                                            <div class="d-flex align-items-center gap-2 mb-3">
+                                                <label class="form-label m-0">Filtrar visitas por fecha:</label>
+                                                <input type="date" id="filter-fecha-desde" class="form-control" style="width: 180px;">
+                                                <span>a</span>
+                                                <input type="date" id="filter-fecha-hasta" class="form-control" style="width: 180px;">
+                                                <button type="button" id="clear-filters" class="btn btn-secondary btn-sm">
+                                                    <i class="bi bi-x-circle"></i> Limpiar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tabla de clientes disponibles -->
+                                    <div class="col-md-6">
                                         <label class="form-label">Visita de los clientes</label>
                                         <div class="table-responsive">
                                             <table class="table table-hover table-bordered" id="availableClientsTable">
@@ -138,8 +139,8 @@
                                         @enderror
                                     </div>
 
-                                <!-- Tabla de clientes seleccionados -->
-                                <div class="col-md-6">
+                                    <!-- Tabla de clientes seleccionados -->
+                                    <div class="col-md-6">
                                         <label class="form-label">Clientes seleccionados</label>
                                         <div class="table-responsive">
                                             <table class="table table-hover table-bordered" id="selectedClientsTable">
@@ -178,42 +179,53 @@
                                         @enderror
                                     </div>
 
-                                <div id="clientesHiddenInputs">
-                                    @foreach (old('clientes', []) as $clienteId)
-                                        <input type="hidden" name="clientes[]" value="{{ $clienteId }}">
-                                    @endforeach
+                                    <div id="clientesHiddenInputs">
+                                        @foreach (old('clientes', []) as $clienteId)
+                                            <input type="hidden" name="clientes[]" value="{{ $clienteId }}">
+                                        @endforeach
+                                    </div>
+
+                                    <!-- Template oculto para restaurar clientes -->
+                                    <div id="availableClientsTemplate" style="display: none;">
+                                        @foreach ($visitas as $visita)
+                                            <tr data-cliente-id="{{ $visita->id }}">
+                                                <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
+                                                <td>{{ $visita->visitas_totales }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary btn-sm moveCliente">
+                                                        <i class="bi bi-arrow-right"></i> Mover
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </div>
                                 </div>
 
-                                <!-- Template oculto para restaurar clientes -->
-                                <div id="availableClientsTemplate" style="display: none;">
-                                    @foreach ($visitas as $visita)
-                                        <tr data-cliente-id="{{ $visita->id }}">
-                                            <td>{{ $visita->first_name }} {{ $visita->last_name }}</td>
-                                            <td>{{ $visita->visitas_totales }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary btn-sm moveCliente">
-                                                    <i class="bi bi-arrow-right"></i> Mover
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                <!-- Botones de acción -->
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
+                                    <button type="button" class="btn btn-warning flex-fill" id="clearButton">Limpiar</button>
+                                    <a href="{{ route('cupones.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                                 </div>
-                            </div>
 
-                            <!-- Botones de acción -->
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
-                                <button type="button" class="btn btn-warning flex-fill" id="clearButton">Limpiar</button>
-                                <a href="{{ route('cupones.index') }}" class="btn btn-danger flex-fill">Regresar</a>
-                            </div>
-
-                        </form>
-                        <!-- Fin del formulario -->
+                            </form>
+                            <!-- Fin del formulario -->
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
+
         <script>
             // Función para capitalizar solo la primera letra de la primera palabra
             function capitalizeFirstLetter(input) {

@@ -6,6 +6,7 @@ use App\Models\ControlCuenta;
 use App\Models\CuentaBanco;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ControlCuentaController extends Controller
 {
@@ -15,10 +16,11 @@ class ControlCuentaController extends Controller
         $transacciones = ControlCuenta::with('cuentaBanco')
             ->orderBy('fecha', 'desc') // Ordenar las transacciones por fecha, de mayor a menor
             ->get();
+        $usuario = Auth::user();
 
         // Pasar las transacciones a la vista
         return view('primary.control_cuentas.control_cuentas_index', [
-            'transacciones' => $transacciones,
+            'transacciones' => $transacciones, 'usuario' => $usuario
         ]);
     }
 
@@ -77,6 +79,7 @@ class ControlCuentaController extends Controller
         }
 
         $neto = ($totalDepositos + $totalSaldoInicial) - $totalRetiros;
+        $usuario = Auth::user();
 
         $pdf = PDF::loadView('primary.control_cuentas.control_cuentas_reporte', compact(
             'transacciones',
@@ -101,7 +104,8 @@ class ControlCuentaController extends Controller
     public function create()
     {
         $cuentasBancos = CuentaBanco::all();
-        return view('primary.control_cuentas.control_cuentas_create', compact('cuentasBancos'));
+        $usuario = Auth::user();
+        return view('primary.control_cuentas.control_cuentas_create', compact('cuentasBancos', 'usuario'));
     }
 
     public function store(Request $request)
@@ -136,7 +140,8 @@ class ControlCuentaController extends Controller
     public function show($id)
     {
         $transaccion = ControlCuenta::with('cuentaBanco')->findOrFail($id);
+        $usuario = Auth::user();
 
-        return view('primary.control_cuentas.control_cuentas_show', compact('transaccion'));
+        return view('primary.control_cuentas.control_cuentas_show', compact('transaccion', 'usuario'));
     }
 }

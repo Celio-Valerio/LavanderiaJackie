@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Promo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PromoController extends Controller
 {
@@ -14,7 +15,8 @@ class PromoController extends Controller
     public function index()
     {
         $promociones = Promo::all(); // O cualquier lógica de paginación o filtrado que necesites
-        return view('primary.promociones.promo_index', compact('promociones'));
+        $usuario = Auth::user();
+        return view('primary.promociones.promo_index', compact('promociones', 'usuario'));
     }
 
     public function view(Request $request)
@@ -26,8 +28,9 @@ class PromoController extends Controller
         $promociones = Promo::when($search, function ($query, $search) {
             return $query->where('name', 'like', '%' . $search . '%');
         })->paginate(3); // Número de promociones por página
+        $usuario = Auth::user();
 
-        return view('primary.promociones.promo_vista', compact('promociones', 'search'));
+        return view('primary.promociones.promo_vista', compact('promociones', 'search', 'usuario'));
     }
 
 
@@ -37,7 +40,8 @@ class PromoController extends Controller
      */
     public function create()
     {
-        return view('primary.promociones.promo_create'); // Vista para crear una nueva promoción
+        $usuario = Auth::user();
+        return view('primary.promociones.promo_create', compact('usuario')); // Vista para crear una nueva promoción
     }
 
     /**
@@ -161,9 +165,10 @@ class PromoController extends Controller
     {
         // Buscar la promoción por ID o lanzar un error 404 si no existe
         $promocion = Promo::findOrFail($id);
+        $usuario = Auth::user();
 
         // Pasar la promoción a la vista para mostrarla
-        return view('primary.promociones.promo_show', compact('promocion'));
+        return view('primary.promociones.promo_show', compact('promocion', 'usuario'));
     }
 
 
@@ -173,7 +178,8 @@ class PromoController extends Controller
     public function edit($id)
     {
         $promo = Promo::findOrFail($id); // Encuentra la promoción por ID o lanza un error 404 si no existe
-        return view('primary.promociones.promo_update', compact('promo')); // Pasa la promoción a la vista
+        $usuario = Auth::user();
+        return view('primary.promociones.promo_update', compact('promo', 'usuario')); // Pasa la promoción a la vista
     }
 
     /**

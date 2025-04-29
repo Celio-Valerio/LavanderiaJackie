@@ -47,115 +47,127 @@
     </style>
 
     <section class="section">
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
-                <div class="card shadow-lg rounded-lg border-0">
-                    <div class="card-body">
-                        <!-- Título de la sección -->
-                        <h1 class="card-title text-center mb-4">Detalles del servicio pendiente</h1>
-                        <hr>
+        @if($usuario->rolpermiso->serviciospendientes_ver == 1)
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card shadow-lg rounded-lg border-0">
+                        <div class="card-body">
+                            <!-- Título de la sección -->
+                            <h1 class="card-title text-center mb-4">Detalles del servicio pendiente</h1>
+                            <hr>
 
-                        <!-- Información del cliente -->
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label"><strong>Cliente:</strong> {{ $servicioEfectuado->cliente->first_name }} {{ $servicioEfectuado->cliente->last_name }}</label>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label"><strong>Servicio:</strong> {{ $servicioEfectuado->servicio->nombre }}</label>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label"><strong>Envio:</strong> {{ $servicioEfectuado->envio }}</label>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label"><strong>Estado:</strong> {{ $servicioEfectuado->estado }}</label>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    <strong>Pagará el envío:</strong>
-                                    @if($servicioEfectuado->pago_envio !== null)
-                                        {{ $servicioEfectuado->pago_envio }}
-                                    @else
-                                        No se pagrá envió
-                                    @endif
-                                </label>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    <strong>Precio de envio:</strong>
-                                    @if($servicioEfectuado->precio_envio !== null)
-                                        L. {{ number_format($servicioEfectuado->precio_envio, 2) }}
-                                    @else
-                                        No se pagrá envió
-                                    @endif
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    <strong>Promoción:</strong>
-                                    @if($servicioEfectuado->promo && $servicioEfectuado->promo->name)
-                                        {{ $servicioEfectuado->promo->name }} ({{ $servicioEfectuado->promo->promo }})
-                                    @else
-                                        No se le aplicó promoción.
-                                    @endif
-                                </label>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label">
-                                    <strong>Descuento:</strong>
-                                    @if($servicioEfectuado->promo && $servicioEfectuado->promo->discount)
-                                        {{ $servicioEfectuado->promo->discount }}%
-                                    @else
-                                        No se le aplicó descuento.
-                                    @endif
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label"><strong>Total:</strong> L. {{ number_format($servicioEfectuado->total, 2) }}</label>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
+                            <!-- Información del cliente -->
                             <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label class="form-label"><strong>Notas:</strong> {{ $servicioEfectuado->notas ?? 'No hay notas disponibles.' }}</label>
+                                <div class="col-md-6">
+                                    <label class="form-label"><strong>Cliente:</strong> {{ $servicioEfectuado->cliente->first_name }} {{ $servicioEfectuado->cliente->last_name }}</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label"><strong>Servicio:</strong> {{ $servicioEfectuado->servicio->nombre }}</label>
                                 </div>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="col-md-12">
-                                    <label class="form-label"><strong>Dirección:</strong> {{ $servicioEfectuado->direccion ?? 'El cliente recogerá, en la empresa.' }}</label>
+                                <div class="col-md-6">
+                                    <label class="form-label"><strong>Envio:</strong> {{ $servicioEfectuado->envio }}</label>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label"><strong>Estado:</strong> {{ $servicioEfectuado->estado }}</label>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        <strong>Pagará el envío:</strong>
+                                        @if($servicioEfectuado->pago_envio !== null)
+                                            {{ $servicioEfectuado->pago_envio }}
+                                        @else
+                                            No se pagrá envió
+                                        @endif
+                                    </label>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        <strong>Precio de envio:</strong>
+                                        @if($servicioEfectuado->precio_envio !== null)
+                                            L. {{ number_format($servicioEfectuado->precio_envio, 2) }}
+                                        @else
+                                            No se pagrá envió
+                                        @endif
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        <strong>Promoción:</strong>
+                                        @if($servicioEfectuado->promo && $servicioEfectuado->promo->name)
+                                            {{ $servicioEfectuado->promo->name }} ({{ $servicioEfectuado->promo->promo }})
+                                        @else
+                                            No se le aplicó promoción.
+                                        @endif
+                                    </label>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        <strong>Descuento:</strong>
+                                        @if($servicioEfectuado->promo && $servicioEfectuado->promo->discount)
+                                            {{ $servicioEfectuado->promo->discount }}%
+                                        @else
+                                            No se le aplicó descuento.
+                                        @endif
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label"><strong>Total:</strong> L. {{ number_format($servicioEfectuado->total, 2) }}</label>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label"><strong>Notas:</strong> {{ $servicioEfectuado->notas ?? 'No hay notas disponibles.' }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <label class="form-label"><strong>Dirección:</strong> {{ $servicioEfectuado->direccion ?? 'El cliente recogerá, en la empresa.' }}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botones de acción -->
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <a href="{{ route('servicios_pendientes.index') }}" class="btn btn-secondary w-100 rounded-pill py-2">
+                                        Volver a la Lista
+                                    </a>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Botones de acción -->
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <a href="{{ route('servicios_pendientes.index') }}" class="btn btn-secondary w-100 rounded-pill py-2">
-                                    Volver a la Lista
-                                </a>
-                            </div>
-                        </div>
                     </div>
-
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
     </section>
 
     <script>

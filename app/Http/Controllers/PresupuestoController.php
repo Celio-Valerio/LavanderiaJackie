@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Presupuesto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PresupuestoController extends Controller
 {
@@ -13,7 +14,8 @@ class PresupuestoController extends Controller
     public function index()
     {
         $presupuestos = Presupuesto::all();
-        return view('primary.presupuestos.presupuestoindex', compact('presupuestos'));
+        $usuario = Auth::user();
+        return view('primary.presupuestos.presupuestoindex', compact('presupuestos', 'usuario'));
     }
 
     /**
@@ -21,7 +23,8 @@ class PresupuestoController extends Controller
      */
     public function create()
     {
-        return view('primary.presupuestos.presupuestocreate');
+        $usuario = Auth::user();
+        return view('primary.presupuestos.presupuestocreate', compact('usuario'));
     }
 
     /**
@@ -64,9 +67,10 @@ class PresupuestoController extends Controller
     public function show(string $id)
     {
         $presupuesto = Presupuesto::findOrFail($id);
+        $usuario = Auth::user();
 
         // Retorna la vista 'compras.show' y le pasa los datos de la compra
-        return view('primary.presupuestos.presupuestoshow', compact('presupuesto'));
+        return view('primary.presupuestos.presupuestoshow', compact('presupuesto', 'usuario'));
     }
 
     /**
@@ -78,7 +82,8 @@ class PresupuestoController extends Controller
     public function edit(string $id)
     {
         $presupuesto = Presupuesto::findOrFail($id);
-        return view('primary.presupuestos.presupuesto_edit', compact('presupuesto'));
+        $usuario = Auth::user();
+        return view('primary.presupuestos.presupuesto_edit', compact('presupuesto', 'usuario'));
     }
 
     /**

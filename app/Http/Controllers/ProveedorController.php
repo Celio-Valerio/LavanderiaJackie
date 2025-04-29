@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProveedorController extends Controller
 {
@@ -15,9 +16,10 @@ class ProveedorController extends Controller
     {
         // Obtener todos los clientes de la base de datos
         $proveedores = Proveedor::all();
+        $usuario = Auth::user();
 
         // Retornar una vista con los clientes
-        return view('primary.proveedores.proveedor_index', compact('proveedores'));
+        return view('primary.proveedores.proveedor_index', compact('proveedores', 'usuario'));
     }
 
     public function reload($id)
@@ -32,7 +34,8 @@ class ProveedorController extends Controller
     public function create()
     {
         $categorias = Categoria::all(); // Obtiene todos los puestos disponibles
-        return view('primary.proveedores.proveedor_create', compact('categorias')); // Pasa los puestos a la vista
+        $usuario = Auth::user();
+        return view('primary.proveedores.proveedor_create', compact('categorias', 'usuario')); // Pasa los puestos a la vista
     }
 
     /**
@@ -143,8 +146,9 @@ class ProveedorController extends Controller
         $proveedor = Proveedor::findOrFail($id);
 
         // Retorna la vista 'clientes.show' y le pasa los datos del cliente
+        $usuario = Auth::user();
 
-        return view('primary.proveedores.proveedor_show', compact('proveedor'));
+        return view('primary.proveedores.proveedor_show', compact('proveedor', 'usuario'));
     }
 
     /**
@@ -154,8 +158,9 @@ class ProveedorController extends Controller
     {
         $proveedor = Proveedor::findOrFail($id); // Obtiene el empleado por ID
         $categorias = Categoria::all(); // Obtiene todos los puestos disponibles
+        $usuario = Auth::user();
 
-        return view('primary.proveedores.proveedor_update', compact('proveedor', 'categorias'));
+        return view('primary.proveedores.proveedor_update', compact('proveedor', 'categorias', 'usuario'));
 
     }
 

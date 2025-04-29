@@ -13,78 +13,90 @@
     </style>
 
     <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de maquinaria</h1>
-                            <!-- Botón agregar maquinaria -->
-                            <a href="{{ route('maquinarias.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar maquinaria</a>
-                        </div>
-
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        @if($usuario->rolpermiso->maquinas_lista == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de maquinaria</h1>
+                                <!-- Botón agregar maquinaria -->
+                                <a href="{{ route('maquinarias.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar maquinaria</a>
                             </div>
-                        @endif
-                        <hr>
 
-                        <table id="maquinariasTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
-                            <thead class="table table-bordered table-dark">
-                            <tr>
-                                <th style="width: 5%;">N°</th>
-                                <th style="width: 35%;">Nombre</th>
-                                <th style="width: 25%;">Tipo</th>
-                                <th style="width: 15%;">Estado</th>
-                                
-                                <th style="width: 20%;">Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($maquinarias as $maquinaria)
+                            @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+                            <hr>
+
+                            <table id="maquinariasTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
+                                <thead class="table table-bordered table-dark">
                                 <tr>
-                                    <td class="row-index"></td>
-                                    <td>{{ $maquinaria->name }} <b>{{ $maquinaria->brand }}</b> <b>{{ $maquinaria->model }}</b></td>
-                                    <td>{{ $maquinaria->type }}</td>
-                                    <td>
-                                        @if($maquinaria->status == 'Operativa')
-                                            <span class="badge bg-success">{{ $maquinaria->status }}</span>
-                                        @elseif($maquinaria->status == 'En mantenimiento')
-                                            <span class="badge bg-warning">{{ $maquinaria->status }}</span>
-                                        @elseif($maquinaria->status == 'Dada de baja')
-                                            <span class="badge bg-danger">{{ $maquinaria->status }}</span>
-                                        @elseif($maquinaria->status == 'Bajo revisión')
-                                            <span class="badge bg-info">{{ $maquinaria->status }}</span>
-                                        @elseif($maquinaria->status == 'Fuera de servicio')
-                                            <span class="badge bg-dark">{{ $maquinaria->status }}</span>
-                                        @elseif($maquinaria->status == 'Próxima a revisión')
-                                            <span class="badge bg-warning">{{ $maquinaria->status }}</span> <!-- Puedes usar un color diferente si deseas -->
-                                        @elseif($maquinaria->status == 'En pruebas')
-                                            <span class="badge bg-purple">{{ $maquinaria->status }}</span> <!-- Asegúrate de tener una clase CSS para este color -->
-                                        @else
-                                            <span class="badge bg-secondary">{{ $maquinaria->status }}</span>
-                                        @endif
-                                    </td>
+                                    <th style="width: 5%;">N°</th>
+                                    <th style="width: 35%;">Nombre</th>
+                                    <th style="width: 25%;">Tipo</th>
+                                    <th style="width: 15%;">Estado</th>
 
-                                    <td class="text-center">
-                                        <a href="{{ route('maquinarias.show', $maquinaria->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                        <a href="{{ route('maquinarias.edit', $maquinaria->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                                    </td>
+                                    <th style="width: 20%;">Acciones</th>
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">No hay maquinarias registradas</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @forelse($maquinarias as $maquinaria)
+                                    <tr>
+                                        <td class="row-index"></td>
+                                        <td>{{ $maquinaria->name }} <b>{{ $maquinaria->brand }}</b> <b>{{ $maquinaria->model }}</b></td>
+                                        <td>{{ $maquinaria->type }}</td>
+                                        <td>
+                                            @if($maquinaria->status == 'Operativa')
+                                                <span class="badge bg-success">{{ $maquinaria->status }}</span>
+                                            @elseif($maquinaria->status == 'En mantenimiento')
+                                                <span class="badge bg-warning">{{ $maquinaria->status }}</span>
+                                            @elseif($maquinaria->status == 'Dada de baja')
+                                                <span class="badge bg-danger">{{ $maquinaria->status }}</span>
+                                            @elseif($maquinaria->status == 'Bajo revisión')
+                                                <span class="badge bg-info">{{ $maquinaria->status }}</span>
+                                            @elseif($maquinaria->status == 'Fuera de servicio')
+                                                <span class="badge bg-dark">{{ $maquinaria->status }}</span>
+                                            @elseif($maquinaria->status == 'Próxima a revisión')
+                                                <span class="badge bg-warning">{{ $maquinaria->status }}</span> <!-- Puedes usar un color diferente si deseas -->
+                                            @elseif($maquinaria->status == 'En pruebas')
+                                                <span class="badge bg-purple">{{ $maquinaria->status }}</span> <!-- Asegúrate de tener una clase CSS para este color -->
+                                            @else
+                                                <span class="badge bg-secondary">{{ $maquinaria->status }}</span>
+                                            @endif
+                                        </td>
 
+                                        <td class="text-center">
+                                            <a href="{{ route('maquinarias.show', $maquinaria->id) }}" class="btn btn-info btn-sm">Ver</a>
+                                            <a href="{{ route('maquinarias.edit', $maquinaria->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">No hay maquinarias registradas</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
 
         <script>
             $(document).ready(function() {

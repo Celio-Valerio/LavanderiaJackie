@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cliente;
+use Illuminate\Support\Facades\Auth;
 
 class ClienteController extends Controller
 {
@@ -14,9 +15,10 @@ class ClienteController extends Controller
     {
         // Obtener todos los clientes de la base de datos
         $clientes = Cliente::all();
+        $usuario = Auth::user();
 
         // Retornar una vista con los clientes
-        return view('primary.clientes.cliente_index', compact('clientes'));
+        return view('primary.clientes.cliente_index', compact('clientes', 'usuario'));
     }
 
     public function reload($id)
@@ -30,7 +32,8 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        return view('primary.clientes.cliente_create'); // Asegúrate de tener la vista en 'resources/views/clientes/create.blade.php'
+        $usuario = Auth::user();
+        return view('primary.clientes.cliente_create', compact('usuario')); // Asegúrate de tener la vista en 'resources/views/clientes/create.blade.php'
     }
 
     /**
@@ -126,10 +129,11 @@ class ClienteController extends Controller
     {
         // Busca al cliente por su ID
         $cliente = Cliente::findOrFail($id);
+        $usuario = Auth::user();
 
         // Retorna la vista 'clientes.show' y le pasa los datos del cliente
 
-        return view('primary.clientes.cliente_show', compact('cliente'));
+        return view('primary.clientes.cliente_show', compact('cliente', 'usuario'));
     }
 
 
@@ -139,7 +143,8 @@ class ClienteController extends Controller
     public function edit(string $id)
     {
         $cliente = Cliente::findOrFail($id); // Obtiene el cliente por ID
-        return view('primary.clientes.cliente_update', compact('cliente')); // Retorna la vista de edición
+        $usuario = Auth::user();
+        return view('primary.clientes.cliente_update', compact('cliente', 'usuario')); // Retorna la vista de edición
     }
 
     /**

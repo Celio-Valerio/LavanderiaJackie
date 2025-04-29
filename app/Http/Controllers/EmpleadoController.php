@@ -7,6 +7,7 @@ use App\Models\Puesto;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class EmpleadoController extends Controller
@@ -18,9 +19,10 @@ class EmpleadoController extends Controller
     {
         // Obtener todos los empleados de la base de datos
         $empleados = Empleado::all();
+        $usuario = Auth::user();
 
         // Retornar una vista con los empleados
-        return view('primary.empleados.empleado_index', compact('empleados'));
+        return view('primary.empleados.empleado_index', compact('empleados', 'usuario'));
     }
 
     public function reload($id)
@@ -35,7 +37,8 @@ class EmpleadoController extends Controller
     public function create()
     {
         $puestos = Puesto::all(); // Obtiene todos los puestos disponibles
-        return view('primary.empleados.empleado_create', compact('puestos')); // Pasa los puestos a la vista
+        $usuario = Auth::user();
+        return view('primary.empleados.empleado_create', compact('puestos', 'usuario')); // Pasa los puestos a la vista
     }
 
     /**
@@ -174,9 +177,10 @@ class EmpleadoController extends Controller
     {
         // Busca al empleado por su ID
         $empleado = Empleado::findOrFail($id);
+        $usuario = Auth::user();
 
         // Retorna la vista 'empleados.show' y le pasa los datos del empleado
-        return view('primary.empleados.empleado_show', compact('empleado'));
+        return view('primary.empleados.empleado_show', compact('empleado', 'usuario'));
     }
 
     /**
@@ -186,8 +190,9 @@ class EmpleadoController extends Controller
     {
         $empleado = Empleado::findOrFail($id); // Obtiene el empleado por ID
         $puestos = Puesto::all(); // Obtiene todos los puestos disponibles
+        $usuario = Auth::user();
 
-        return view('primary.empleados.empleado_update', compact('empleado', 'puestos'));
+        return view('primary.empleados.empleado_update', compact('empleado', 'puestos', 'usuario'));
     }
 
     /**

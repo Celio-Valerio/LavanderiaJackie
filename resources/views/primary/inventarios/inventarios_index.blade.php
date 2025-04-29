@@ -3,50 +3,62 @@
 @section('content')
 
     <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de productos en el inventario</h1>
-                        </div>
-
-
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        @if($usuario->rolpermiso->inventario_lista == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de productos en el inventario</h1>
                             </div>
-                        @endif
-                        <hr>
 
-                        <table id="productosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
-                            <thead class="table table-bordered table-dark">
-                            <tr>
-                                <th style="width: 5%;">N°</th>
-                                <th style="width: 30%;">Producto</th>
-                                <th style="width: 15%;">Cantidad disponible</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @forelse($productos as $producto)
-                                <tr>
-                                    <td class="row-index small-text-field"></td>
-                                    <td class="small-text-field"><b>{{ $producto->nombre }}</b></td>
-                                    <td class="small-text-field">{{ $producto->stock }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="text-center">No hay productos del inventario registrados</td>
-                                </tr>
-                            @endforelse
-                            </tbody>
-                        </table>
 
+                            @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+                            <hr>
+
+                            <table id="productosTable" class="table table-striped table-bordered" style="padding-top: 20px; padding-bottom: 10px">
+                                <thead class="table table-bordered table-dark">
+                                <tr>
+                                    <th style="width: 5%;">N°</th>
+                                    <th style="width: 30%;">Producto</th>
+                                    <th style="width: 15%;">Cantidad disponible</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @forelse($productos as $producto)
+                                    <tr>
+                                        <td class="row-index small-text-field"></td>
+                                        <td class="small-text-field"><b>{{ $producto->nombre }}</b></td>
+                                        <td class="small-text-field">{{ $producto->stock }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center">No hay productos del inventario registrados</td>
+                                    </tr>
+                                @endforelse
+                                </tbody>
+                            </table>
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Detectar cuando se cierra cualquier modal

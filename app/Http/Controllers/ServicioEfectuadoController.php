@@ -11,6 +11,7 @@ use App\Models\ServicioEfectuado;
 use App\Models\Visita;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class ServicioEfectuadoController extends Controller
 {
@@ -21,15 +22,17 @@ class ServicioEfectuadoController extends Controller
     {
         // Obtener todos los servicios efectuados
         $serviciosEfectuados = ServicioEfectuado::all();
-        return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados'));
+        $usuario = Auth::user();
+        return view('primary.servicios_efectuados.servicios_efectuados_index', compact('serviciosEfectuados', 'usuario'));
     }
 
     public function ventas()
     {
         $serviciosEfectuados = ServicioEfectuado::where('estado', 'Entregado')
             ->get();
+        $usuario = Auth::user();
 
-        return view('primary.servicios_venta.servicios_ventas_index', compact('serviciosEfectuados'));
+        return view('primary.servicios_venta.servicios_ventas_index', compact('serviciosEfectuados', 'usuario'));
     }
 
     /**
@@ -39,9 +42,10 @@ class ServicioEfectuadoController extends Controller
     {
         // Buscar el servicio efectuado por su ID
         $servicioEfectuado = ServicioEfectuado::findOrFail($id);
+        $usuario = Auth::user();
 
         // Pasar los datos a la vista y renderizarla
-        return view('primary.servicios_efectuados.servicios_efectuados_factura', compact('servicioEfectuado'));
+        return view('primary.servicios_efectuados.servicios_efectuados_factura', compact('servicioEfectuado', 'usuario'));
     }
 
     /**
@@ -58,7 +62,8 @@ class ServicioEfectuadoController extends Controller
             ->where('fecha_desde', '<=', $hoy)
             ->where('fecha_hasta', '>=', $hoy)
             ->get();
-        return view('primary.servicios_efectuados.servicios_efectuados_create', compact('clientes', 'servicios', 'promos', 'cupones'));
+        $usuario = Auth::user();
+        return view('primary.servicios_efectuados.servicios_efectuados_create', compact('clientes', 'servicios', 'promos', 'cupones', 'usuario'));
     }
 
     /**
@@ -212,9 +217,10 @@ class ServicioEfectuadoController extends Controller
     {
         // Buscar el servicio efectuado por su ID
         $servicioEfectuado = ServicioEfectuado::findOrFail($id);
+        $usuario = Auth::user();
 
         // Pasar los datos a la vista y renderizarla
-        return view('primary.servicios_efectuados.servicios_efectuados_show', compact('servicioEfectuado'));
+        return view('primary.servicios_efectuados.servicios_efectuados_show', compact('servicioEfectuado', 'usuario'));
     }
 
     /**
@@ -232,9 +238,10 @@ class ServicioEfectuadoController extends Controller
         $clientes = Cliente::all();
         $servicios = Servicio::all();
         $promos = Promo::all();
+        $usuario = Auth::user();
 
         // Retornar la vista de edición con los datos
-        return view('primary.servicios_efectuados.servicios_efectuados_update', compact('servicioPendiente', 'clientes', 'servicios', 'promos'));
+        return view('primary.servicios_efectuados.servicios_efectuados_update', compact('servicioPendiente', 'clientes', 'servicios', 'promos', 'usuario'));
     }
 
     /**
@@ -351,8 +358,9 @@ class ServicioEfectuadoController extends Controller
             'estado' => 'Pendiente', // Estado inicial del gasto
             'fecha' => $servicioPendiente->fecha, // Tomamos la fecha del servicio
         ]);
+        $usuario = Auth::user();
 
-        return redirect()->route('servicios_efectuados.index')->with('success', 'Estado actualizado y gasto diario registrado.');
+        return redirect()->route('servicios_efectuados.index')->with('success', 'Estado actualizado y gasto diario registrado.', 'usuario');
     }
 
 

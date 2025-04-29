@@ -28,6 +28,8 @@ use App\Http\Controllers\VencidoController;
 use App\Http\Controllers\LavanderiaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth\PasswordSecurityController;
+use App\Http\Controllers\RolpermisoController;
+use App\Http\Controllers\CanjeadosController;   
 
 /*
 |--------------------------------------------------------------------------
@@ -231,6 +233,11 @@ Route::middleware('auth')->group(function () {
 
 // Rutas de recursos para inventarios
     Route::resource('inventarios', InventarioController::class);
+
+    //Rutas de roles y permisos
+    Route::resource('roles', RolpermisoController::class);
+    Route::resource('canjeados', CanjeadosController::class);
+
 
 //Ruta de historial de clientes
     Route::get('/historial_Cliente/{id}', [\App\Http\Controllers\HistorialCliente::class, 'historialCliente'])->name('historial.ver');

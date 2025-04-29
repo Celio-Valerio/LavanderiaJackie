@@ -31,18 +31,18 @@
         .btn:hover {
             background-color: #0056b3;
         }
-        
+
         .info-label {
             font-size: 18px;
             margin-bottom: 15px;
         }
-        
+
         .info-value {
             font-size: 20px;
             font-weight: 500;
             color: #333;
         }
-        
+
         .section-title {
             font-size: 22px;
             font-weight: bold;
@@ -54,85 +54,97 @@
 </style>
 
     <section class="section">
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Detalles del empleado</h5>
-                        <hr>
+        @if($usuario->rolpermiso->empleados_ver == 1)
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Detalles del empleado</h5>
+                            <hr>
 
-                        <!-- Información Personal -->
-                        
-                        <div class="row mb-4">
-                            <div class="col-md-4">
-                                <div class="info-label"><strong>Identidad:</strong></div>
-                                <div class="info-value">{{ $empleado->identity_number }}</div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="info-label"><strong>Nombre:</strong></div>
-                                <div class="info-value">{{ $empleado->first_name }}</div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="info-label"><strong>Apellido:</strong></div>
-                                <div class="info-value">{{ $empleado->last_name }}</div>
-                            </div>
-                        </div>
+                            <!-- Información Personal -->
 
-                        <!-- Información de Contacto -->
-                       
-                        <div class="row mb-4">
-                            <div class="col-md-4">
-                                <div class="info-label"><strong>Correo electrónico:</strong></div>
-                                <div class="info-value">{{ $empleado->email }}</div>
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="info-label"><strong>Identidad:</strong></div>
+                                    <div class="info-value">{{ $empleado->identity_number }}</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="info-label"><strong>Nombre:</strong></div>
+                                    <div class="info-value">{{ $empleado->first_name }}</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="info-label"><strong>Apellido:</strong></div>
+                                    <div class="info-value">{{ $empleado->last_name }}</div>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="info-label"><strong>Teléfono:</strong></div>
-                                <div class="info-value">{{ $empleado->phone }}</div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="info-label"><strong>Dirección:</strong></div>
-                                <div class="info-value">{{ $empleado->address }}</div>
-                            </div>
-                        </div>
 
-                        <!-- Información Laboral -->
-                     
-                        <div class="row mb-4">
-                            <div class="col-md-3">
-                                <div class="info-label"><strong>Puesto:</strong></div>
-                                <div class="info-value">{{ $empleado->puesto->name ?? 'No asignado' }}</div>
+                            <!-- Información de Contacto -->
+
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="info-label"><strong>Correo electrónico:</strong></div>
+                                    <div class="info-value">{{ $empleado->email }}</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="info-label"><strong>Teléfono:</strong></div>
+                                    <div class="info-value">{{ $empleado->phone }}</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="info-label"><strong>Dirección:</strong></div>
+                                    <div class="info-value">{{ $empleado->address }}</div>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="info-label"><strong>Fecha de ingreso:</strong></div>
-                                <div class="info-value">{{ \Carbon\Carbon::parse($empleado->hire_date)->translatedFormat('l d \d\e F, Y') }}</div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="info-label"><strong>Salario:</strong></div>
-                                <div class="info-value">L. {{ number_format($empleado->salary, 2, ',', '.') }}</div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="info-label"><strong>Estado:</strong></div>
-                                <div class="info-value">
+
+                            <!-- Información Laboral -->
+
+                            <div class="row mb-4">
+                                <div class="col-md-3">
+                                    <div class="info-label"><strong>Puesto:</strong></div>
+                                    <div class="info-value">{{ $empleado->puesto->name ?? 'No asignado' }}</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="info-label"><strong>Fecha de ingreso:</strong></div>
+                                    <div class="info-value">{{ \Carbon\Carbon::parse($empleado->hire_date)->translatedFormat('l d \d\e F, Y') }}</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="info-label"><strong>Salario:</strong></div>
+                                    <div class="info-value">L. {{ number_format($empleado->salary, 2, ',', '.') }}</div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="info-label"><strong>Estado:</strong></div>
+                                    <div class="info-value">
                                     <span class="badge {{ $empleado->estado == 'Inactivo' ? 'bg-danger' : 'bg-success' }}">
                                         {{ $empleado->estado }}
                                     </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Botones de acción -->
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <a href="{{ route('empleados.index') }}" class="btn btn-secondary w-100">Volver a la Lista</a>
+                            <!-- Botones de acción -->
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <a href="{{ route('empleados.index') }}" class="btn btn-secondary w-100">Volver a la Lista</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning w-100">Editar Empleado</a>
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning w-100">Editar Empleado</a>
-                            </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
     </section>
 @endsection

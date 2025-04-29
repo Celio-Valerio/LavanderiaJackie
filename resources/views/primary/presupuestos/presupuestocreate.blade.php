@@ -8,11 +8,11 @@
         Carbon::setUTF8(true);
     @endphp
     <section class="section">
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body"></div>
+        @if($usuario->rolpermiso->presupuesto_crear == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body"></div>
                         <h1 class="card-title" style="font-size: 30px !important;">Registro de presupuesto del mes de {{ ucfirst(Carbon::now()->locale('es')->monthName) }}</h1>
                         <hr>
                         <form id="presupuestoForm" action="{{ route('presupuestos.store') }}" method="POST" novalidate>
@@ -57,7 +57,18 @@
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Función para permitir solo números decimales válidos

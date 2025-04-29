@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InventarioController extends Controller
 {
@@ -15,9 +16,10 @@ class InventarioController extends Controller
     {
         // Obtener todos los productos
         $productos = Producto::with('categoria', 'proveedor')->get();
+        $usuario = Auth::user();
 
         // Retornar la vista con los productos
-        return view('primary.inventarios.inventarios_index', compact('productos'));
+        return view('primary.inventarios.inventarios_index', compact('productos', 'usuario'));
     }
 
     /**

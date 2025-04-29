@@ -8,6 +8,7 @@ use App\Models\Detalles_gasto;
 use App\Models\Gasto;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function Webmozart\Assert\Tests\StaticAnalysis\length;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -25,7 +26,8 @@ class GastoController extends Controller
             $gasto->totalP = $totalProductos;
         }
         $ultimoGasto = $gastos->last();
-        return view('primary.gastos.gasto_index', compact('gastos', 'ultimoGasto'));
+        $usuario = Auth::user();
+        return view('primary.gastos.gasto_index', compact('gastos', 'ultimoGasto', 'usuario'));
     }
 
     public function exportPDF(Request $request)
@@ -124,8 +126,9 @@ class GastoController extends Controller
         $productos = Producto::all(); // Asegúrate de que 'Producto' sea el modelo correcto
         $compras = Compra::all();
         $gastos = Gasto::all();
+        $usuario = Auth::user();
 
-        return view('primary.gastos.gasto_create', compact('productos', 'compras', 'gastos'));
+        return view('primary.gastos.gasto_create', compact('productos', 'compras', 'gastos', 'usuario'));
     }
 
     public function store(Request $request)
@@ -203,7 +206,8 @@ class GastoController extends Controller
         $gasto = Gasto::findOrFail($id);
         $gastosFijos = Gasto::all();
         $detallesGastos = DetalleGastos::where('gasto_id', $id)->get();
-        return view('primary.gastos.gasto_show', compact('gasto', 'gastosFijos', 'detallesGastos'));
+        $usuario = Auth::user();
+        return view('primary.gastos.gasto_show', compact('gasto', 'gastosFijos', 'detallesGastos', 'usuario'));
 
     }
 
@@ -212,7 +216,8 @@ class GastoController extends Controller
         $gasto = Gasto::findOrFail($id);
         $productos = Producto::all();
         $detalles = $gasto->detalles;
-        return view('primary.gastos.gasto_update', compact('gasto', 'productos', 'detalles'));
+        $usuario = Auth::user();
+        return view('primary.gastos.gasto_update', compact('gasto', 'productos', 'detalles', 'usuario'));
     }
 
     public function update(Request $request, string $id)

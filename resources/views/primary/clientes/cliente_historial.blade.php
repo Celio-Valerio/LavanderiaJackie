@@ -1,59 +1,70 @@
 @extends('layouts.principal')
 @section('title', 'Historial cliente')
 @section('content')
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Historial de servicios de {{$cliente->first_name}} {{$cliente->last_name}}</h1>
-                        <hr>
-                        <label for="lblValor" style="margin-bottom: 20px"><b>Mostrar por:</b></label>
-                        <br>
-                        <div class="row" style="margin-bottom: 20px">
-                            <div class="col-md-4">
-                                <label for="lblAnio">Año:</label>
-                                <select name="anio" class="form-control" id="anio">
-                                    <option value=""></option>
-                                    @foreach($anios as $anio)
-                                        <option>{{$anio}}</option>
-                                    @endforeach
-                                </select>
+        @if($usuario->rolpermiso->clientes_ver == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 30px !important;">Historial de servicios de {{$cliente->first_name}} {{$cliente->last_name}}</h1>
+                            <hr>
+                            <label for="lblValor" style="margin-bottom: 20px"><b>Mostrar por:</b></label>
+                            <br>
+                            <div class="row" style="margin-bottom: 20px">
+                                <div class="col-md-4">
+                                    <label for="lblAnio">Año:</label>
+                                    <select name="anio" class="form-control" id="anio">
+                                        <option value=""></option>
+                                        @foreach($anios as $anio)
+                                            <option>{{$anio}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="lblMes">Mes:</label>
+                                    <select name="mes" class="form-control" id="mes">
+                                        <option value=""></option>
+                                        <option value="01">Enero</option>
+                                        <option value="02">Febrero</option>
+                                        <option value="03">Marzo</option>
+                                        <option value="04">Abril</option>
+                                        <option value="05">Mayo</option>
+                                        <option value="06">Junio</option>
+                                        <option value="07">Julio</option>
+                                        <option value="08">Agosto</option>
+                                        <option value="09">Septiembre</option>
+                                        <option value="10">Octubre</option>
+                                        <option value="11">Noviembre</option>
+                                        <option value="12">Diciembre</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <label for="lblMes">Mes:</label>
-                                <select name="mes" class="form-control" id="mes">
-                                    <option value=""></option>
-                                    <option value="01">Enero</option>
-                                    <option value="02">Febrero</option>
-                                    <option value="03">Marzo</option>
-                                    <option value="04">Abril</option>
-                                    <option value="05">Mayo</option>
-                                    <option value="06">Junio</option>
-                                    <option value="07">Julio</option>
-                                    <option value="08">Agosto</option>
-                                    <option value="09">Septiembre</option>
-                                    <option value="10">Octubre</option>
-                                    <option value="11">Noviembre</option>
-                                    <option value="12">Diciembre</option>
-                                </select>
-                            </div>
-                        </div>
 
 
-                        <div id="chart"></div>
-                        <div id="chart2"></div>
-                        <div class="d-flex justify-content-between">
-                            <a href="{{ route('clientes.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                            <div id="chart"></div>
+                            <div id="chart2"></div>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('clientes.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                            </div>
                         </div>
+                        <input type="hidden" id="porDia" name="porDia" value='@json($clienteDia)'>
+                        <input type="hidden" id="servicios" name="servicios" value="{{$clienteServicios}}">
                     </div>
-                    <input type="hidden" id="porDia" name="porDia" value='@json($clienteDia)'>
-                    <input type="hidden" id="servicios" name="servicios" value="{{$clienteServicios}}">
                 </div>
             </div>
-        </div>
-        <script>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
             document.addEventListener("DOMContentLoaded", function () {
                 var porDia = JSON.parse(document.getElementById('porDia').value);
                 var serviciosC = JSON.parse(document.getElementById('servicios').value);

@@ -92,209 +92,221 @@
     </style>
 
     <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Programar un nuevo servicio</h1>
-                        <hr>
+        @if($usuario->rolpermiso->serviciospendientes_crear == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 30px !important;">Programar un nuevo servicio</h1>
+                            <hr>
 
-                        <!-- Formulario -->
-                        <form id="servicioForm" action="{{ route('servicios_pendientes.store') }}" method="POST" enctype="multipart/form-data" novalidate>
-                            @csrf
+                            <!-- Formulario -->
+                            <form id="servicioForm" action="{{ route('servicios_pendientes.store') }}" method="POST" enctype="multipart/form-data" novalidate>
+                                @csrf
 
-                            <div class="row">
-                                <!-- Cliente -->
-                                <div class="col-md-6">
-                                    <label for="cliente_id" class="form-label">Cliente</label>
-                                    <div class="d-flex align-items-start">
-                                        <!-- Select de cliente -->
-                                        <select name="cliente_id" id="cliente_id" class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
-                                            <option value="">Seleccione un cliente</option>
-                                            @foreach($clientes as $cliente)
-                                                <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
-                                                    {{ $cliente->first_name }} {{ $cliente->last_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                                <div class="row">
+                                    <!-- Cliente -->
+                                    <div class="col-md-6">
+                                        <label for="cliente_id" class="form-label">Cliente</label>
+                                        <div class="d-flex align-items-start">
+                                            <!-- Select de cliente -->
+                                            <select name="cliente_id" id="cliente_id" class="form-control select2 @error('cliente_id') is-invalid @enderror" required>
+                                                <option value="">Seleccione un cliente</option>
+                                                @foreach($clientes as $cliente)
+                                                    <option value="{{ $cliente->id }}" {{ old('cliente_id') == $cliente->id ? 'selected' : '' }}>
+                                                        {{ $cliente->first_name }} {{ $cliente->last_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
 
-                                        <!-- Botón para agregar cliente -->
-                                        <a href="{{ route('clientes.create') }}" class="btn btn-primary ms-2" title="Agregar nuevo cliente">
-                                            <i class="bi bi-plus-circle"></i>
-                                        </a>
-                                    </div>
-                                    @error('cliente_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Servicio -->
-                                <div class="col-md-6">
-                                    <label for="servicio_id" class="form-label">Servicio</label>
-                                    <select name="servicio_id" id="servicio_id" class="form-control @error('servicio_id') is-invalid @enderror" required>
-                                        <option value="">Seleccione un servicio</option>
-                                        @foreach($servicios as $servicio)
-                                            <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}" {{ old('servicio_id') == $servicio->id ? 'selected' : '' }}>
-                                                {{ $servicio->nombre }} <strong> - L. {{ $servicio->precio }}</strong>
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('servicio_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- ACTUAL -->
-                            <div class="row mt-3">
-                                <!-- Libras -->
-                                <div class="col-md-3">
-                                    <label for="libras" class="form-label">Libras</label>
-                                    <input type="number" name="libras" id="libras" class="form-control @error('libras') is-invalid @enderror" value="{{ old('libras') }}" maxlength="5" required>
-                                    @error('libras')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Total -->
-                                <div class="col-md-3">
-                                    <label for="total" class="form-label">Total</label>
-                                    <input type="text" name="total" id="total" class="form-control" value="{{ old('total') }}" readonly>
-                                </div>
-
-                                <!-- Promoción -->
-                                <div class="col-md-6">
-                                    <label class="form-label">Promoción</label>
-                                    <div class="d-flex align-items-center">
-                                        <select name="promo_id" id="promo_id" class="form-control @error('promo_id') is-invalid @enderror me-2" disabled>
-                                            <option value="">Seleccione una promoción</option>
-                                            @foreach($promos as $promo)
-                                                @php
-                                                    $diasPromo = json_decode($promo->days); // Decodificar el JSON en un array
-                                                    $diasAbreviados = implode(', ', array_map(function($dia) {
-                                                        return substr($dia, 0, 1); // Obtener solo la primera letra de cada día
-                                                    }, $diasPromo)); // Convertir los días en las primeras letras
-                                                @endphp
-                                                <option value="{{ $promo->id }}"
-                                                        data-descuento="{{ $promo->discount }}"
-                                                        data-dias="{{ json_encode($diasPromo) }}"
-                                                        data-desde="{{ $promo->desde }}"
-                                                        data-hasta="{{ $promo->hasta }}"
-                                                    {{ old('promo_id') == $promo->id ? 'selected' : '' }}>
-                                                    {{ $promo->name }} ({{ $promo->desde }} lbs -{{ $promo->hasta }} lbs
-                                                    {{ $diasAbreviados }})
-                                                    <strong>{{ $promo->discount }}%</strong>
-                                                </option>
-                                            @endforeach
-
-
-                                        </select>
-
-                                        <div class="form-check">
-                                            <input class="form-check-input custom-checkbox-input" type="checkbox" id="no_aplica" name="no_aplica" {{ old('no_aplica') ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-checkbox-label ms-1" for="no_aplica"></label>
+                                            <!-- Botón para agregar cliente -->
+                                            <a href="{{ route('clientes.create') }}" class="btn btn-primary ms-2" title="Agregar nuevo cliente">
+                                                <i class="bi bi-plus-circle"></i>
+                                            </a>
                                         </div>
-
-                                    </div>
-                                    @error('promo_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-
-                            <div class="row mt-3">
-                                <!-- Columna 1: Envío -->
-                                <div class="col-md-6">
-                                    <!-- Fila 1 y 2: Envío -->
-                                    <label class="form-label">Envio</label>
-                                    <div class="d-flex align-items-center">
-                                        <div class="form-check custom-radio-wrapper me-3">
-                                            <input class="form-check-input custom-radio-input" type="radio" name="envio" id="envio_local" value="Local" {{ old('envio') == 'Local' ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-radio-label" for="envio_local">Local</label>
-                                        </div>
-                                        <div class="form-check custom-radio-wrapper">
-                                            <input class="form-check-input custom-radio-input" type="radio" name="envio" id="envio_domicilio" value="A domicilio" {{ old('envio') == 'A domicilio' ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-radio-label" for="envio_domicilio">A domicilio</label>
-                                        </div>
-                                    </div>
-                                    @error('envio')
-                                    <div class="text-danger mt-2">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6" id="envioWrapper" class="mt-2 d-none">
-                                    <label class="form-label">¿Quién paga el envío?</label>
-                                    <div class="d-flex align-items-center">
-                                        <div class="form-check custom-radio-wrapper me-3">
-                                            <input class="form-check-input custom-radio-input" type="radio" name="pago_envio" id="envio_cliente" value="Cliente" {{ old('pago_envio') == 'Cliente' ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-radio-label" for="envio_cliente">Cliente</label>
-                                        </div>
-                                        <div class="form-check custom-radio-wrapper">
-                                            <input class="form-check-input custom-radio-input" type="radio" name="pago_envio" id="envio_empresa" value="Empresa" {{ old('pago_envio') == 'Empresa' ? 'checked' : '' }}>
-                                            <label class="form-check-label custom-radio-label" for="envio_empresa">Empresa</label>
-                                        </div>
-                                        @error('pago_envio')
-                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @error('cliente_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="row mt-3">
-                                <!-- Columna 2: Notas -->
-                                <div class="col-md-6">
-                                    <!-- Fila 3 a 6: Notas -->
-                                    <label for="notas" class="form-label">Notas</label>
-                                    <textarea name="notas" id="notas" class="form-control @error('notas') is-invalid @enderror" rows="4" maxlength="500">{{ old('notas') }}</textarea>
-                                    @error('notas')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Columna 1: Dirección -->
-                                <div class="col-md-6">
-                                    <div id="direccionWrapper">
-                                        <label for="direccion" class="form-label">Dirección</label>
-                                        <textarea name="direccion" id="direccion" class="form-control @error('direccion') is-invalid @enderror" rows="4" maxlength="500">{{ old('direccion') }}</textarea>
-                                        @error('direccion')
+                                    <!-- Servicio -->
+                                    <div class="col-md-6">
+                                        <label for="servicio_id" class="form-label">Servicio</label>
+                                        <select name="servicio_id" id="servicio_id" class="form-control @error('servicio_id') is-invalid @enderror" required>
+                                            <option value="">Seleccione un servicio</option>
+                                            @foreach($servicios as $servicio)
+                                                <option value="{{ $servicio->id }}" data-precio="{{ $servicio->precio }}" {{ old('servicio_id') == $servicio->id ? 'selected' : '' }}>
+                                                    {{ $servicio->nombre }} <strong> - L. {{ $servicio->precio }}</strong>
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('servicio_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row mt-3">
-                                <!-- Precio del envío -->
-                                <div class="col-md-6">
-                                    <div id="precioEnvioWrapper">
-                                        <label for="precio_envio" class="form-label">Precio de Envío</label>
-                                        <input type="number"
-                                               name="precio_envio"
-                                               id="precio_envio"
-                                               class="form-control @error('precio_envio') is-invalid @enderror"
-                                               value="{{ old('precio_envio') }}" oninput="limitInputToFiveDigits(this)">
-                                        @error('precio_envio')
+                                <!-- ACTUAL -->
+                                <div class="row mt-3">
+                                    <!-- Libras -->
+                                    <div class="col-md-3">
+                                        <label for="libras" class="form-label">Libras</label>
+                                        <input type="number" name="libras" id="libras" class="form-control @error('libras') is-invalid @enderror" value="{{ old('libras') }}" maxlength="5" required>
+                                        @error('libras')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Total -->
+                                    <div class="col-md-3">
+                                        <label for="total" class="form-label">Total</label>
+                                        <input type="text" name="total" id="total" class="form-control" value="{{ old('total') }}" readonly>
+                                    </div>
+
+                                    <!-- Promoción -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Promoción</label>
+                                        <div class="d-flex align-items-center">
+                                            <select name="promo_id" id="promo_id" class="form-control @error('promo_id') is-invalid @enderror me-2" disabled>
+                                                <option value="">Seleccione una promoción</option>
+                                                @foreach($promos as $promo)
+                                                    @php
+                                                        $diasPromo = json_decode($promo->days); // Decodificar el JSON en un array
+                                                        $diasAbreviados = implode(', ', array_map(function($dia) {
+                                                            return substr($dia, 0, 1); // Obtener solo la primera letra de cada día
+                                                        }, $diasPromo)); // Convertir los días en las primeras letras
+                                                    @endphp
+                                                    <option value="{{ $promo->id }}"
+                                                            data-descuento="{{ $promo->discount }}"
+                                                            data-dias="{{ json_encode($diasPromo) }}"
+                                                            data-desde="{{ $promo->desde }}"
+                                                            data-hasta="{{ $promo->hasta }}"
+                                                        {{ old('promo_id') == $promo->id ? 'selected' : '' }}>
+                                                        {{ $promo->name }} ({{ $promo->desde }} lbs -{{ $promo->hasta }} lbs
+                                                        {{ $diasAbreviados }})
+                                                        <strong>{{ $promo->discount }}%</strong>
+                                                    </option>
+                                                @endforeach
+
+
+                                            </select>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input custom-checkbox-input" type="checkbox" id="no_aplica" name="no_aplica" {{ old('no_aplica') ? 'checked' : '' }}>
+                                                <label class="form-check-label custom-checkbox-label ms-1" for="no_aplica"></label>
+                                            </div>
+
+                                        </div>
+                                        @error('promo_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Botones -->
-                            <div class="d-flex justify-content-between mt-4">
-                                <button type="submit" class="btn btn-primary flex-fill me-1" name="action" value="registrar">Registrar</button>
-                                <button type="submit" class="btn btn-success flex-fill me-1" name="action" value="registrar_imprimir">Registrar e imprimir</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
-                                <a href="{{ route('servicios_pendientes.index') }}" class="btn btn-danger flex-fill">Regresar</a>
-                            </div>
-                        </form>
-                        <!-- Fin del formulario -->
 
+                                <div class="row mt-3">
+                                    <!-- Columna 1: Envío -->
+                                    <div class="col-md-6">
+                                        <!-- Fila 1 y 2: Envío -->
+                                        <label class="form-label">Envio</label>
+                                        <div class="d-flex align-items-center">
+                                            <div class="form-check custom-radio-wrapper me-3">
+                                                <input class="form-check-input custom-radio-input" type="radio" name="envio" id="envio_local" value="Local" {{ old('envio') == 'Local' ? 'checked' : '' }}>
+                                                <label class="form-check-label custom-radio-label" for="envio_local">Local</label>
+                                            </div>
+                                            <div class="form-check custom-radio-wrapper">
+                                                <input class="form-check-input custom-radio-input" type="radio" name="envio" id="envio_domicilio" value="A domicilio" {{ old('envio') == 'A domicilio' ? 'checked' : '' }}>
+                                                <label class="form-check-label custom-radio-label" for="envio_domicilio">A domicilio</label>
+                                            </div>
+                                        </div>
+                                        @error('envio')
+                                        <div class="text-danger mt-2">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-6" id="envioWrapper" class="mt-2 d-none">
+                                        <label class="form-label">¿Quién paga el envío?</label>
+                                        <div class="d-flex align-items-center">
+                                            <div class="form-check custom-radio-wrapper me-3">
+                                                <input class="form-check-input custom-radio-input" type="radio" name="pago_envio" id="envio_cliente" value="Cliente" {{ old('pago_envio') == 'Cliente' ? 'checked' : '' }}>
+                                                <label class="form-check-label custom-radio-label" for="envio_cliente">Cliente</label>
+                                            </div>
+                                            <div class="form-check custom-radio-wrapper">
+                                                <input class="form-check-input custom-radio-input" type="radio" name="pago_envio" id="envio_empresa" value="Empresa" {{ old('pago_envio') == 'Empresa' ? 'checked' : '' }}>
+                                                <label class="form-check-label custom-radio-label" for="envio_empresa">Empresa</label>
+                                            </div>
+                                            @error('pago_envio')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <!-- Columna 2: Notas -->
+                                    <div class="col-md-6">
+                                        <!-- Fila 3 a 6: Notas -->
+                                        <label for="notas" class="form-label">Notas</label>
+                                        <textarea name="notas" id="notas" class="form-control @error('notas') is-invalid @enderror" rows="4" maxlength="500">{{ old('notas') }}</textarea>
+                                        @error('notas')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Columna 1: Dirección -->
+                                    <div class="col-md-6">
+                                        <div id="direccionWrapper">
+                                            <label for="direccion" class="form-label">Dirección</label>
+                                            <textarea name="direccion" id="direccion" class="form-control @error('direccion') is-invalid @enderror" rows="4" maxlength="500">{{ old('direccion') }}</textarea>
+                                            @error('direccion')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <!-- Precio del envío -->
+                                    <div class="col-md-6">
+                                        <div id="precioEnvioWrapper">
+                                            <label for="precio_envio" class="form-label">Precio de Envío</label>
+                                            <input type="number"
+                                                   name="precio_envio"
+                                                   id="precio_envio"
+                                                   class="form-control @error('precio_envio') is-invalid @enderror"
+                                                   value="{{ old('precio_envio') }}" oninput="limitInputToFiveDigits(this)">
+                                            @error('precio_envio')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botones -->
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="submit" class="btn btn-primary flex-fill me-1" name="action" value="registrar">Registrar</button>
+                                    <button type="submit" class="btn btn-success flex-fill me-1" name="action" value="registrar_imprimir">Registrar e imprimir</button>
+                                    <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
+                                    <a href="{{ route('servicios_pendientes.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                                </div>
+                            </form>
+                            <!-- Fin del formulario -->
+
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
     </section>
 
     <!-- Modal de advertencia general (Libras fuera de rango o Día no disponible) -->

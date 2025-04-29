@@ -9,6 +9,7 @@ use App\Models\Promo;
 use App\Models\Servicio;
 use App\Models\ServicioEfectuado;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
@@ -24,8 +25,9 @@ class ServicioPendienteController extends Controller
             ->orderBy('fecha', 'asc') // Primero ordena por fecha ascendente (más antiguo a más nuevo)
             ->orderBy('hora', 'asc')  // Luego ordena por hora ascendente dentro de cada fecha
             ->get();
+        $usuario = Auth::user();
 
-        return view('primary.servicios_pendientes.servicios_pendientes_index', compact('serviciosEfectuados'));
+        return view('primary.servicios_pendientes.servicios_pendientes_index', compact('serviciosEfectuados', 'usuario'));
     }
 
     /**
@@ -35,9 +37,10 @@ class ServicioPendienteController extends Controller
     {
         // Buscar el servicio efectuado por su ID
         $servicioEfectuado = ServicioEfectuado::findOrFail($id);
+        $usuario = Auth::user();
 
         // Pasar los datos a la vista y renderizarla
-        return view('primary.servicios_pendientes.servicios_pendientes_factura', compact('servicioEfectuado'));
+        return view('primary.servicios_pendientes.servicios_pendientes_factura', compact('servicioEfectuado', 'usuario'));
     }
 
     /**
@@ -54,7 +57,8 @@ class ServicioPendienteController extends Controller
             ->where('fecha_desde', '<=', $hoy)
             ->where('fecha_hasta', '>=', $hoy)
             ->get();
-        return view('primary.servicios_pendientes.servicios_pendientes_create', compact('clientes', 'servicios', 'promos', 'cupones'));
+        $usuario = Auth::user();
+        return view('primary.servicios_pendientes.servicios_pendientes_create', compact('clientes', 'servicios', 'promos', 'cupones', 'usuario'));
     }
 
     /**
@@ -174,9 +178,10 @@ class ServicioPendienteController extends Controller
     {
         // Buscar el servicio efectuado por su ID
         $servicioEfectuado = ServicioEfectuado::findOrFail($id);
+        $usuario = Auth::user();
 
         // Pasar los datos a la vista y renderizarla
-        return view('primary.servicios_pendientes.servicios_pendientes_show', compact('servicioEfectuado'));
+        return view('primary.servicios_pendientes.servicios_pendientes_show', compact('servicioEfectuado', 'usuario'));
     }
 
     /**
@@ -191,9 +196,10 @@ class ServicioPendienteController extends Controller
         $clientes = Cliente::all();
         $servicios = Servicio::all();
         $promos = Promo::all();
+        $usuario = Auth::user();
 
         // Retornar la vista de edición con los datos
-        return view('primary.servicios_pendientes.servicios_pendientes_update', compact('servicioPendiente', 'clientes', 'servicios', 'promos'));
+        return view('primary.servicios_pendientes.servicios_pendientes_update', compact('servicioPendiente', 'clientes', 'servicios', 'promos', 'usuario'));
     }
 
     /**

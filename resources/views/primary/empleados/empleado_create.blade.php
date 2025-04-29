@@ -3,134 +3,147 @@
 @section('content')
 
     <section class="section">
+        @if($usuario->rolpermiso->empleados_crear == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 30px !important;">Registrar empleado</h1>
+                            <hr>
+                            <!-- Inicio del formulario -->
+                            <form id="empleadoForm" action="{{ route('empleados.store') }}" method="POST" novalidate>
+                                @csrf <!-- Protección contra CSRF -->
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar empleado</h1>
-                        <hr>
-                        <!-- Inicio del formulario -->
-                        <form id="empleadoForm" action="{{ route('empleados.store') }}" method="POST" novalidate>
-                            @csrf <!-- Protección contra CSRF -->
+                                <div class="row mb-3">
+                                    <!-- Campo de Identidad -->
+                                    <div class="col-md-6">
+                                        <label for="identity_number" class="form-label">Número de Identidad</label>
+                                        <input type="text" name="identity_number" class="form-control @error('identity_number') is-invalid @enderror" id="identity_number" value="{{ old('identity_number') }}" placeholder="Ej: 0801199012345" maxlength="13" required>
+                                        @error('identity_number')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
 
-                            <div class="row mb-3">
-                                <!-- Campo de Identidad -->
-                                <div class="col-md-6">
-                                    <label for="identity_number" class="form-label">Número de Identidad</label>
-                                    <input type="text" name="identity_number" class="form-control @error('identity_number') is-invalid @enderror" id="identity_number" value="{{ old('identity_number') }}" placeholder="Ej: 0801199012345" maxlength="13" required>
-                                    @error('identity_number')
+                                    <!-- Campo de Nombre -->
+                                    <div class="col-md-6">
+                                        <label for="first_name" class="form-label">Nombre</label>
+                                        <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" id="first_name" value="{{ old('first_name') }}" placeholder="Ej: Juan" maxlength="50" required>
+                                        @error('first_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Campo de Apellido -->
+                                    <div class="col-md-6">
+                                        <label for="last_name" class="form-label">Apellido</label>
+                                        <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" id="last_name" value="{{ old('last_name') }}" placeholder="Ej: Pérez" maxlength="50" required>
+                                        @error('last_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <!-- Campo de Email -->
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Correo electrónico</label>
+                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}" placeholder="Ej: ejemplo@gmail.com" required>
+                                        @error('email')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="puesto_id" class="form-label">Puesto</label>
+                                        <select name="puesto_id" class="form-select @error('puesto_id') is-invalid @enderror" id="puesto_id" required>
+                                            <option value="">Selecciona un puesto</option>
+                                            @foreach($puestos as $puesto)
+                                                <option value="{{ $puesto->id }}" {{ old('puesto_id') == $puesto->id ? 'selected' : '' }}>
+                                                    {{ $puesto->name }} <!-- Asegúrate de que este campo corresponda al modelo Puesto -->
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('puesto_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <!-- Campo de Teléfono -->
+                                    <div class="col-md-3">
+                                        <label for="phone" class="form-label">Teléfono</label>
+                                        <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone') }}" placeholder="Ej: 90123456" maxlength="8" required>
+                                        @error('phone')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Campo de Salario -->
+                                    <div class="col-md-3">
+                                        <label for="salary" class="form-label">Salario</label>
+                                        <input type="number" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary') }}" placeholder="Ej: 2000" min="1500" max="999999" step="0.01" required>
+                                        @error('salary')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Campo de Fecha de Ingreso -->
+                                    <div class="col-md-3">
+                                        <label for="hire_date" class="form-label">Fecha de ingreso</label>
+                                        <input type="date" name="hire_date" class="form-control @error('hire_date') is-invalid @enderror" id="hire_date" value="{{ old('hire_date') }}" required>
+                                        @error('hire_date')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <!-- Campo de Fecha de Salida -->
+                                    <div class="col-md-3">
+                                        <label for="fecha_salida" class="form-label">Fecha de salida</label>
+                                        <input type="date" name="fecha_salida" class="form-control @error('fecha_salida') is-invalid @enderror" id="fecha_salida" value="{{ old('fecha_salida') }}" required>
+                                        @error('fecha_salida')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+
+                                </div>
+
+                                <!-- Campo de Dirección -->
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Dirección</label>
+                                    <textarea name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Ej: Calle Principal 123" maxlength="500" rows="3">{{ old('address') }}</textarea>
+                                    @error('address')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
-                                <!-- Campo de Nombre -->
-                                <div class="col-md-6">
-                                    <label for="first_name" class="form-label">Nombre</label>
-                                    <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" id="first_name" value="{{ old('first_name') }}" placeholder="Ej: Juan" maxlength="50" required>
-                                    @error('first_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                <!-- Botones de acción -->
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
+                                    <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
+                                    <a href="{{ route('empleados.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                                 </div>
+                            </form>
+                            <!-- Fin del formulario -->
 
-                                <!-- Campo de Apellido -->
-                                <div class="col-md-6">
-                                    <label for="last_name" class="form-label">Apellido</label>
-                                    <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" id="last_name" value="{{ old('last_name') }}" placeholder="Ej: Pérez" maxlength="50" required>
-                                    @error('last_name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <!-- Campo de Email -->
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">Correo electrónico</label>
-                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}" placeholder="Ej: ejemplo@gmail.com" required>
-                                    @error('email')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="puesto_id" class="form-label">Puesto</label>
-                                    <select name="puesto_id" class="form-select @error('puesto_id') is-invalid @enderror" id="puesto_id" required>
-                                        <option value="">Selecciona un puesto</option>
-                                        @foreach($puestos as $puesto)
-                                            <option value="{{ $puesto->id }}" {{ old('puesto_id') == $puesto->id ? 'selected' : '' }}>
-                                                {{ $puesto->name }} <!-- Asegúrate de que este campo corresponda al modelo Puesto -->
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('puesto_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <!-- Campo de Teléfono -->
-                                <div class="col-md-3">
-                                    <label for="phone" class="form-label">Teléfono</label>
-                                    <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone') }}" placeholder="Ej: 90123456" maxlength="8" required>
-                                    @error('phone')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Campo de Salario -->
-                                <div class="col-md-3">
-                                    <label for="salary" class="form-label">Salario</label>
-                                    <input type="number" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary') }}" placeholder="Ej: 2000" min="1500" max="999999" step="0.01" required>
-                                    @error('salary')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Campo de Fecha de Ingreso -->
-                                <div class="col-md-3">
-                                    <label for="hire_date" class="form-label">Fecha de ingreso</label>
-                                    <input type="date" name="hire_date" class="form-control @error('hire_date') is-invalid @enderror" id="hire_date" value="{{ old('hire_date') }}" required>
-                                    @error('hire_date')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-                                <!-- Campo de Fecha de Salida -->
-                                <div class="col-md-3">
-                                    <label for="fecha_salida" class="form-label">Fecha de salida</label>
-                                    <input type="date" name="fecha_salida" class="form-control @error('fecha_salida') is-invalid @enderror" id="fecha_salida" value="{{ old('fecha_salida') }}" required>
-                                    @error('fecha_salida')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-
-                            </div>
-
-                            <!-- Campo de Dirección -->
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Dirección</label>
-                                <textarea name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Ej: Calle Principal 123" maxlength="500" rows="3">{{ old('address') }}</textarea>
-                                @error('address')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <!-- Botones de acción -->
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
-                                <a href="{{ route('empleados.index') }}" class="btn btn-danger flex-fill">Regresar</a>
-                            </div>
-                        </form>
-                        <!-- Fin del formulario -->
-
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
+
+
 
         <script>
             // Función para capitalizar la primera letra y la letra después de un espacio

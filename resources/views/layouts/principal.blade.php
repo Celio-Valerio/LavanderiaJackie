@@ -187,6 +187,12 @@
                 </li>
 
                 <li>
+                    <a href="{{ route('canjeados.index') }}">
+                        <i class="bi bi-circle"></i><span>Cupones canjeados</span>
+                    </a>
+                </li>
+                
+                <li>
                     <a href="{{ route('gastos_diarios.index') }}">
                         <i class="bi bi-circle"></i><span>Gastos diarios</span>
                     </a>
@@ -306,6 +312,12 @@
                 <li>
                     <a href="/mantenimientos">
                         <i class="bi bi-circle"></i><span>Mantenimientos</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{{route('roles.index')}}">
+                        <i class="bi bi-circle"></i><span>Roles y permisos</span>
                     </a>
                 </li>
 

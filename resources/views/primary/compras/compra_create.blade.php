@@ -2,134 +2,171 @@
 @extends('layouts.principal')
 @section('title', 'Registrar Compra')
 
-@section('content')
-    <section class="section">
+<section class="section">
+    @if($usuario->rolpermiso->compras_crear == 1)
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px;">Registrar compra</h1>
+                        <h1 class="card-title" style="font-size: 30px !important;">Registrar compra</h1>
                         <hr>
-
                         @if(session('clearLocalStorage'))
-                            <script>localStorage.clear();</script>
+                            <script>
+                                localStorage.removeItem('detallesCompra');
+                                localStorage.removeItem('productosSeleccionados');
+                            </script>
                         @endif
 
-                        <form id="compraForm" action="{{ route('compras.store') }}" method="POST" novalidate>
+                        <form action="{{ route('compras.store') }}" method="POST" novalidate>
                             @csrf
-                            <input type="hidden" name="detallesMandar" id="detallesMandar" value="{{ old('detallesMandar') }}">
-
-                            {{-- Proveedor y Factura --}}
-                            <div class="row mb-4">
-                                <div class="col-md-4">
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <label for="proveedor_id">Proveedor:</label>
-                                    <select name="proveedor_id" id="proveedor_id"
-                                            class="form-control @error('proveedor_id') is-invalid @enderror"
-                                            onchange="handleProveedor(this)" required>
+                                    <select name="proveedor_id" id="proveedor_id" class="form-control @error('proveedor_id') is-invalid @enderror" onchange="mostrarProductos(this); bloquearProveedor(this);" required>
                                         <option value=""></option>
-                                        @foreach ($proveedores as $prov)
-                                            @if($prov->productos->count())
-                                                <option value="{{ $prov->id }}"
-                                                        data-productos='@json($prov->productos)'
-                                                    {{ old('proveedor_id') == $prov->id ? 'selected' : '' }}>
-                                                    {{ $prov->full_name }}
-                                                </option>
+                                        @foreach ($proveedores as $proveedor)
+                                            @if($proveedor->productos->count() > 0)
+                                                <option value="{{$proveedor->id}}" {{  (old('proveedor_id') == $proveedor->id) ? 'selected' : '' }} data-productos="{{ json_encode($proveedor->productos) }}">{{ $proveedor->full_name }}</option>
                                             @endif
                                         @endforeach
                                     </select>
-                                    @error('proveedor_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="numero_factura">Número de Factura:</label>
-                                    <input type="text" name="numero_factura" id="numero_factura"
-                                           class="form-control @error('numero_factura') is-invalid @enderror"
-                                           required maxlength="16"
-                                           value="{{ old('numero_factura') }}">
-                                    @error('numero_factura')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="fecha_compra">Fecha de Compra:</label>
-                                    <input type="date" name="fecha_compra" id="fecha_compra"
-                                           class="form-control @error('fecha_compra') is-invalid @enderror"
-                                           required
-                                           value="{{ old('fecha_compra', date('Y-m-d')) }}"
-                                           max="{{ date('Y-m-d') }}">
-                                    @error('fecha_compra')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    @error('proveedor_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
+                            <!-- Información de la Factura -->
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="numero_factura">Número de Factura:</label>
+                                        <input type="text" name="numero_factura" id="numero_factura" class="form-control @error('numero_factura') is-invalid @enderror" required maxlength="16" value="{{old('numero_factura')}}">
+                                        @error('numero_factura')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="fecha_compra">Fecha de Compra:</label>
+                                        <input type="date" name="fecha_compra" id="fecha_compra" class="form-control @error('fecha_compra') is-invalid @enderror" required value="{{ date('Y-m-d') }}" max="{{date('Y-m-d')}}">
+                                        @error('fecha_compra')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="presupuesto">Presupuesto disponible:</label>
+                                        <input type="text" class="form-control" value="L. {{number_format($presupuesto->cantidad - $presupuesto->gastado, 2, '.', ',')}}" readonly>
+                                    </div>
+                                </div>
 
-                            {{-- Descripción --}}
+                            </div>
+                            <!-- Descripción de la Compra -->
                             <div class="row mb-4">
                                 <div class="col-md-12">
-                                    <label for="descripcion">Descripción:</label>
-                                    <textarea name="descripcion" id="descripcion"
-                                              class="form-control @error('descripcion') is-invalid @enderror"
-                                              required>{{ old('descripcion') }}</textarea>
-                                    @error('descripcion')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    <div class="form-group">
+                                        <label for="descripcion">Descripción:</label>
+                                        <textarea name="descripcion" id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" required>{{  old('descripcion') }}</textarea>
+                                        @error('descripcion')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
-
-                            <hr class="mb-4">
-
-                            {{-- Detalles Dinámicos --}}
-                            <h2 class="mb-3">Detalles de compra</h2>
+                            <div id="linea" class="col-mb-12 bg-primary"
+                                 style="height: 3px; margin-bottom: 20px"
+                            > </div>
+                            <!-- Tabla de Detalles de la Compra -->
+                            <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Detalles de compra</strong></h2>
                             <div id="detallesCompra">
-                                <div class="row align-items-end">
+                                <div class="row mb-2">
                                     <div class="col-md-4">
-                                        <label>Producto:</label>
-                                        <select id="producto_select" class="form-control">
-                                            <option value=""></option>
-                                        </select>
-                                        <div class="invalid-feedback" id="productoError"></div>
+                                        <div class="form-group">
+                                            <label for="detalles[0][producto_id]">Producto:</label>
+                                            <select name="productos" class="form-control" id="productos">
+                                                <option value=""></option>
+                                                @foreach($productos as $producto)
+                                                    <option value="{{$producto->id}}">{{$producto->nombre}}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="invalid-feedback" id="productoVacio"></div>
+
+                                        </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label>Cantidad:</label>
-                                        <input type="number" id="cantidad" class="form-control" placeholder="Ej: 10">
-                                        <div class="invalid-feedback" id="cantidadError"></div>
+                                        <div class="form-group">
+                                            <label for="detalles[0][cantidad]">Cantidad:</label>
+                                            <input type="text" name="detalles[0][cantidad]" class="form-control" required placeholder="Ej: 10" maxlength="6">
+                                            <div class="invalid-feedback" id="cantidadVacio"></div>
+                                        </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label>Precio:</label>
-                                        <input type="number" step="0.01" id="precio" class="form-control" placeholder="Ej: 100.00">
-                                        <div class="invalid-feedback" id="precioError"></div>
+                                        <div class="form-group">
+                                            <label for="detalles[0][precio]">Precio:</label>
+                                            <input type="text" name="detalles[0][precio]" class="form-control" required placeholder="Ej: 100.00" maxlength="6">
+                                            <div class="invalid-feedback" id="precioVacio"></div>
+                                        </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label>Descuento %:</label>
-                                        <input type="number" step="0.01" id="descuento" class="form-control" placeholder="0 - 100">
-                                        <div class="invalid-feedback" id="descuentoError"></div>
+                                        <div class="form-group">
+                                            <label for="detalles[0][descuento]">Descuento:</label>
+                                            <input type="text" name="detalles[0][descuento]" class="form-control" required placeholder="Ej: 10.00 %" maxlength="3">
+                                            <div class="invalid-feedback" id="descuentoVacio"></div>
+                                        </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <button type="button" id="addProducto" class="btn btn-success w-100">Agregar</button>
+                                        <div class="form-group">
+                                            <label for="opcion">Acción:</label> <br>
+                                            <button class="btn btn-success btn-sm flex-fill me-0" name="agrePro" id="agrePro" style="height: 30px; width: 120px;">Agregar producto</button>
+                                        </div>
                                     </div>
+                                    <input type="hidden" name="detallesMandar" id="detallesMandar">
                                 </div>
                             </div>
 
-                            <div class="table-responsive my-4">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Acción</th><th>Producto</th><th>Cantidad</th><th>Precio</th><th>Desc %</th><th>Total</th>
-                                    </tr>
+                            <div class="table-responsive" style="margin-top: 50px; margin-bottom: 20px">
+                                <div class="invalid-feedback" id="tableVacia"></div>
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-primary">
+                                    <th class="color">Opción</th>
+                                    <th class="color">Producto</th>
+                                    <th class="color">Cantidad</th>
+                                    <th class="color">Precio</th>
+                                    <th class="color">Descuento</th>
+                                    <th class="color">Total</th>
                                     </thead>
-                                    <tbody id="bodyDetalles">
-                                    <tr><td colspan="6" class="text-center text-muted">No hay productos</td></tr>
+                                    <tbody>
                                     </tbody>
                                 </table>
                             </div>
 
-                            {{-- Botones --}}
-                            <div class="d-flex gap-2">
-                                <button type="submit" class="btn btn-primary flex-fill">Registrar</button>
-                                <button type="reset" id="btnClear" class="btn btn-warning flex-fill">Limpiar</button>
+                            <!-- Botones de acción -->
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary flex-fill me-1" name="registrar" id="registrar">Registrar</button>
+                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
                                 <a href="{{ route('compras.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                             </div>
                         </form>
+                        <!-- Fin del formulario -->
+
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    @else
+        <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+            <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                     alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+            </div>
+        </div>
+    @endif
+
 
     <script>
         const form = document.getElementById('compraForm');

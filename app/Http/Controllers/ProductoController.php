@@ -7,6 +7,7 @@ use App\Models\Producto;
 use App\Models\ProductoPrecioHistorial;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductoController extends Controller
 {
@@ -17,9 +18,10 @@ class ProductoController extends Controller
     {
         // Obtener todos los productos
         $productos = Producto::with('categoria')->get();
+        $usuario = Auth::user();
 
         // Retornar la vista con los productos
-        return view('primary.productos.producto_index', compact('productos'));
+        return view('primary.productos.producto_index', compact('productos', 'usuario'));
     }
 
 
@@ -30,7 +32,8 @@ class ProductoController extends Controller
     {
         $categorias = Categoria::all(); // Obtiene todas las categorías disponibles
         $proveedores = Proveedor::all(); // Obtiene todos los proveedores disponibles
-        return view('primary.productos.producto_create', compact('categorias', 'proveedores')); // Pasa los datos a la vista
+        $usuario = Auth::user();
+        return view('primary.productos.producto_create', compact('categorias', 'proveedores', 'usuario')); // Pasa los datos a la vista
     }
 
     /**
@@ -113,9 +116,10 @@ class ProductoController extends Controller
         // Obtener el historial de precios usando la relación definida en el modelo Producto
         // Asegúrate de que el nombre de la columna sea 'fecha_cambio' en la base de datos
         $historialPrecios = $producto->historialPrecios()->orderBy('fecha_cambio', 'desc')->get();  // Asegúrate de tener la columna 'fecha_cambio' en tu tabla
+        $usuario = Auth::user();
 
         // Pasar los datos a la vista
-        return view('primary.productos.producto_show', compact('producto', 'historialPrecios'));
+        return view('primary.productos.producto_show', compact('producto', 'historialPrecios', 'usuario'));
     }
 
 
@@ -127,7 +131,8 @@ class ProductoController extends Controller
         $producto = Producto::findOrFail($id); // Busca el producto o lanza un error si no existe
         $categorias = Categoria::all(); // Obtiene todas las categorías disponibles
         $proveedores = Proveedor::all(); // Obtiene todos los proveedores disponibles
-        return view('primary.productos.producto_update', compact('producto', 'categorias', 'proveedores'));
+        $usuario = Auth::user();
+        return view('primary.productos.producto_update', compact('producto', 'categorias', 'proveedores', 'usuario'));
     }
 
     /**

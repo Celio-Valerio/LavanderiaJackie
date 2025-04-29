@@ -8,6 +8,7 @@ use App\Models\Producto;
 use App\Models\DetalleCompra;
 use App\Models\Presupuesto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class CompraController extends Controller
@@ -20,11 +21,12 @@ class CompraController extends Controller
         // Obtener todos los compras de la base de datos
         $compras = Compra::all();
         $presupuestos = Presupuesto::all();
+        $usuario = Auth::user();
 
         session()->flash('clearLocalStorage', true);
 
         // Retornar una vista con los compras
-        return view('primary.compras.compra_index', compact('compras', 'presupuestos'));
+        return view('primary.compras.compra_index', compact('compras', 'presupuestos', 'usuario'));
     }
 
 
@@ -41,9 +43,10 @@ class CompraController extends Controller
         $presupuestos = Presupuesto::all();
         $id = $presupuestos->last()->id;
         $presupuesto = Presupuesto::findOrFail($id);
+        $usuario = Auth::user();
 
         // Retornar la vista del formulario de creación con los datos necesarios
-        return view('primary.compras.compra_create', compact('proveedores', 'productos', 'presupuesto'));
+        return view('primary.compras.compra_create', compact('proveedores', 'productos', 'presupuesto', 'usuario'));
     }
 
     /**
@@ -129,9 +132,9 @@ class CompraController extends Controller
     {
 
         $compra = Compra::findOrFail($id);
-
+        $usuario = Auth::user();
         // Retorna la vista 'compras.show' y le pasa los datos de la compra
-        return view('primary.compras.compra_show', compact('compra'));
+        return view('primary.compras.compra_show', compact('compra', 'usuario'));
     }
 
     /**

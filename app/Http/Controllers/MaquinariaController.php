@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Maquinaria;
 use App\Models\Proveedor;
+use Illuminate\Support\Facades\Auth;
 
 class MaquinariaController extends Controller
 {
@@ -12,9 +13,10 @@ class MaquinariaController extends Controller
     {
         // Obtener todos los clientes de la base de datos
         $maquinarias = Maquinaria::all();
+        $usuario = Auth::user();
 
         // Retornar una vista con los clientes
-        return view('primary.maquinarias.maquinaria_index', compact('maquinarias'));
+        return view('primary.maquinarias.maquinaria_index', compact('maquinarias', 'usuario'));
     }
 
     /**
@@ -32,7 +34,8 @@ class MaquinariaController extends Controller
     public function create()
     {
         $proveedores = Proveedor::all(); // Obtiene todos los proveedores disponibles
-        return view('primary.maquinarias.maquinaria_create', compact('proveedores')); // Pasa los proveedores a la vista
+        $usuario = Auth::user();
+        return view('primary.maquinarias.maquinaria_create', compact('proveedores', 'usuario')); // Pasa los proveedores a la vista
     }
 
     /**
@@ -131,9 +134,10 @@ class MaquinariaController extends Controller
     {
         // Busca al empleado por su ID
         $maquinaria = Maquinaria::findOrFail($id);
+        $usuario = Auth::user();
 
         // Retorna la vista 'empleados.show' y le pasa los datos del empleado
-        return view('primary.maquinarias.maquinaria_show', compact('maquinaria'));
+        return view('primary.maquinarias.maquinaria_show', compact('maquinaria', 'usuario'));
     }
 
     /**
@@ -143,7 +147,8 @@ class MaquinariaController extends Controller
     {
         $maquinaria = Maquinaria::findOrFail($id);
         $proveedores = Proveedor::all();
-        return view('primary.maquinarias.maquinaria_update', compact('maquinaria', 'proveedores'));
+        $usuario = Auth::user();
+        return view('primary.maquinarias.maquinaria_update', compact('maquinaria', 'proveedores', 'usuario'));
     }
 
     /**

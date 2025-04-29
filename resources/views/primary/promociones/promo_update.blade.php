@@ -60,160 +60,173 @@
 
     </style>
     <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Actualizar Promoción</h1>
-                        <hr>
+        @if($usuario->rolpermiso->promociones_editar == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 30px !important;">Actualizar Promoción</h1>
+                            <hr>
 
-                        <!-- Inicio del formulario -->
-                        <form id="promoForm" action="{{ route('promociones.update', $promo->id) }}" method="POST" enctype="multipart/form-data" novalidate>
-                            @csrf
-                            @method('PUT')
+                            <!-- Inicio del formulario -->
+                            <form id="promoForm" action="{{ route('promociones.update', $promo->id) }}" method="POST" enctype="multipart/form-data" novalidate>
+                                @csrf
+                                @method('PUT')
 
-                            <div class="row small-text-field">
-                                <!-- Columnas de contenido -->
-                                <div class="col-md-8">
-                                    <div class="row mb-3">
-                                        <!-- Campo de Nombre de la Promoción -->
-                                        <div class="col-md-12">
-                                            <label for="name" class="form-label">Nombre de la promoción</label>
-                                            <input type="text" name="name" class="form-control small-text-field @error('name') is-invalid @enderror" id="name" value="{{ old('name', $promo->name) }}" placeholder="Ej: Promoción especial" maxlength="50" required>
-                                            @error('name')
+                                <div class="row small-text-field">
+                                    <!-- Columnas de contenido -->
+                                    <div class="col-md-8">
+                                        <div class="row mb-3">
+                                            <!-- Campo de Nombre de la Promoción -->
+                                            <div class="col-md-12">
+                                                <label for="name" class="form-label">Nombre de la promoción</label>
+                                                <input type="text" name="name" class="form-control small-text-field @error('name') is-invalid @enderror" id="name" value="{{ old('name', $promo->name) }}" placeholder="Ej: Promoción especial" maxlength="50" required>
+                                                @error('name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <!-- Campo de Descuento -->
+                                            <div class="col-md-2">
+                                                <label for="discount" class="form-label">Descuento(%)</label>
+                                                <input type="text" name="discount" class="form-control small-text-field @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount', $promo->discount) }}" placeholder="Ej: 20" required>
+                                                @error('discount')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Campo de Descuento -->
+                                            <div class="col-md-2">
+                                                <label for="desde" class="form-label">Desde(lbs)</label>
+                                                <input type="text" name="desde" class="form-control small-text-field @error('desde') is-invalid @enderror" id="desde" value="{{ old('desde', $promo->desde) }}" placeholder="Ej: 10" required>
+                                                @error('desde')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Campo de Descuento -->
+                                            <div class="col-md-2">
+                                                <label for="hasta" class="form-label">Hasta(lbs)</label>
+                                                <input type="text" name="hasta" class="form-control small-text-field @error('hasta') is-invalid @enderror" id="hasta" value="{{ old('hasta', $promo->hasta) }}" placeholder="Ej: 20" required>
+                                                @error('hasta')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+
+                                                <?php
+                                                $promos = [
+                                                    "Ropa habitual de 21 a 49 libras",
+                                                    "Lavado y secado -20 libras",
+                                                    "Sabanas, cubrecolchón y sobrefundas",
+                                                    "Lavados y secados +50 libras",
+                                                    "Peluches, almohadas y cojines",
+                                                    "Edredones"
+                                                ];
+                                                ?>
+                                                <!-- Campo de promoción -->
+                                            <div class="col-md-6">
+                                                <label for="promo" class="form-label">Promoción</label>
+                                                <select name="promo" class="form-select small-text-field @error('promo') is-invalid @enderror" id="promo" required>
+                                                    <option value="">Selecciona una promoción</option>
+                                                    @foreach($promos as $option)
+                                                        <option value="{{ $option }}" {{ old('promo', $promo->promo) == $option ? 'selected' : '' }}>
+                                                            {{ $option }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('promo')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <!-- Campo de Notas -->
+                                        <div class="mb-3">
+                                            <label for="notes" class="form-label">Notas</label>
+                                            <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" id="notes" placeholder="Ej: Notas básicas al respecto" maxlength="500" rows="3">{{ old('notes', $promo->notes) }}</textarea>
+                                            @error('notes')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
-                                        <!-- Campo de Descuento -->
-                                        <div class="col-md-2">
-                                            <label for="discount" class="form-label">Descuento(%)</label>
-                                            <input type="text" name="discount" class="form-control small-text-field @error('discount') is-invalid @enderror" id="discount" value="{{ old('discount', $promo->discount) }}" placeholder="Ej: 20" required>
-                                            @error('discount')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                    <!-- Columna de la Imagen -->
+                                    <div class="col-md-4 d-flex flex-column align-items-center">
+                                        <div class="mb-3" style="width: 100%; text-align: center;">
+                                            <label for="image" class="form-label">Imagen de la Promoción</label>
+                                            <!-- Div de imagen en gris, centrado -->
+                                            <div class="mb-3 image-preview-wrapper" style="position: relative; width: 100%; max-width: 300px; height: 200px;">
+                                                <div class="image-preview-border" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 3px dashed #b0b0b0; border-radius: 5px; pointer-events: none;"></div>
+                                                <div id="imagePreviewContainer" class="image-preview-container" style="width: 100%; height: 100%; background-color: #f0f0f0; border-radius: 5px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                                                    <!-- Mostrar la imagen actual o vista previa de la nueva imagen -->
+                                                    <img id="imagePreview"
+                                                         src="{{ $promo->image ? asset('assets/img/promociones/' . $promo->image) : '#' }}"
+                                                         alt="Vista previa de la imagen"
+                                                         style="max-width: 100%; max-height: 100%; display: {{ $promo->image ? 'block' : 'none' }};">
+                                                </div>
+                                            </div>
 
-                                        <!-- Campo de Descuento -->
-                                        <div class="col-md-2">
-                                            <label for="desde" class="form-label">Desde(lbs)</label>
-                                            <input type="text" name="desde" class="form-control small-text-field @error('desde') is-invalid @enderror" id="desde" value="{{ old('desde', $promo->desde) }}" placeholder="Ej: 10" required>
-                                            @error('desde')
+                                            <!-- Botón para seleccionar imagen -->
+                                            <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" id="image" accept="image/*">
+                                            @error('image')
                                             <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
-                                        </div>
 
-                                        <!-- Campo de Descuento -->
-                                        <div class="col-md-2">
-                                            <label for="hasta" class="form-label">Hasta(lbs)</label>
-                                            <input type="text" name="hasta" class="form-control small-text-field @error('hasta') is-invalid @enderror" id="hasta" value="{{ old('hasta', $promo->hasta) }}" placeholder="Ej: 20" required>
-                                            @error('hasta')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                            <?php
-                                            $promos = [
-                                                "Ropa habitual de 21 a 49 libras",
-                                                "Lavado y secado -20 libras",
-                                                "Sabanas, cubrecolchón y sobrefundas",
-                                                "Lavados y secados +50 libras",
-                                                "Peluches, almohadas y cojines",
-                                                "Edredones"
-                                            ];
-                                            ?>
-                                        <!-- Campo de promoción -->
-                                        <div class="col-md-6">
-                                            <label for="promo" class="form-label">Promoción</label>
-                                            <select name="promo" class="form-select small-text-field @error('promo') is-invalid @enderror" id="promo" required>
-                                                <option value="">Selecciona una promoción</option>
-                                                @foreach($promos as $option)
-                                                    <option value="{{ $option }}" {{ old('promo', $promo->promo) == $option ? 'selected' : '' }}>
-                                                        {{ $option }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('promo')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
+                                            <!-- Mostrar nombre del archivo actual si existe -->
+                                            @if($promo->image)
+                                                <small class="text-muted">Imagen actual: {{ basename($promo->image) }}</small>
+                                            @endif
                                         </div>
                                     </div>
 
-                                    <!-- Campo de Notas -->
-                                    <div class="mb-3">
-                                        <label for="notes" class="form-label">Notas</label>
-                                        <textarea name="notes" class="form-control @error('notes') is-invalid @enderror" id="notes" placeholder="Ej: Notas básicas al respecto" maxlength="500" rows="3">{{ old('notes', $promo->notes) }}</textarea>
-                                        @error('notes')
-                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    <!-- Campo de Días de la Promoción -->
+                                    <div class="row mb-3">
+                                        <label class="form-label">Días de la promoción</label>
+                                        <div class="col-md-12 d-flex flex-wrap">
+                                            @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as $day)
+                                                <div class="custom-checkbox-wrapper me-3">
+                                                    <input
+                                                        class="custom-checkbox-input"
+                                                        type="checkbox"
+                                                        name="days[]"
+                                                        value="{{ $day }}"
+                                                        id="day_{{ $day }}"
+                                                        {{ in_array($day, json_decode($promo->days, true) ?? []) ? 'checked' : '' }}>
+                                                    <label class="custom-checkbox-label" for="day_{{ $day }}">{{ $day }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        @error('days')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                     </div>
                                 </div>
 
-                                <!-- Columna de la Imagen -->
-                                <div class="col-md-4 d-flex flex-column align-items-center">
-                                    <div class="mb-3" style="width: 100%; text-align: center;">
-                                        <label for="image" class="form-label">Imagen de la Promoción</label>
-                                        <!-- Div de imagen en gris, centrado -->
-                                        <div class="mb-3 image-preview-wrapper" style="position: relative; width: 100%; max-width: 300px; height: 200px;">
-                                            <div class="image-preview-border" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 3px dashed #b0b0b0; border-radius: 5px; pointer-events: none;"></div>
-                                            <div id="imagePreviewContainer" class="image-preview-container" style="width: 100%; height: 100%; background-color: #f0f0f0; border-radius: 5px; overflow: hidden; display: flex; justify-content: center; align-items: center;">
-                                                <!-- Mostrar la imagen actual o vista previa de la nueva imagen -->
-                                                <img id="imagePreview"
-                                                     src="{{ $promo->image ? asset('assets/img/promociones/' . $promo->image) : '#' }}"
-                                                     alt="Vista previa de la imagen"
-                                                     style="max-width: 100%; max-height: 100%; display: {{ $promo->image ? 'block' : 'none' }};">
-                                            </div>
-                                        </div>
-
-                                        <!-- Botón para seleccionar imagen -->
-                                        <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" id="image" accept="image/*">
-                                        @error('image')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-
-                                        <!-- Mostrar nombre del archivo actual si existe -->
-                                        @if($promo->image)
-                                            <small class="text-muted">Imagen actual: {{ basename($promo->image) }}</small>
-                                        @endif
-                                    </div>
+                                <!-- Botones de acción -->
+                                <div class="d-flex justify-content-between">
+                                    <button type="submit" class="btn btn-success flex-fill me-1">Actualizar</button>
+                                    <button type="button" class="btn btn-warning flex-fill me-1" id="reloadButton">Reestablecer</button>
+                                    <a href="{{ route('promociones.index') }}" class="btn btn-danger flex-fill">Cancelar</a>
                                 </div>
-
-                                <!-- Campo de Días de la Promoción -->
-                                <div class="row mb-3">
-                                    <label class="form-label">Días de la promoción</label>
-                                    <div class="col-md-12 d-flex flex-wrap">
-                                        @foreach(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] as $day)
-                                            <div class="custom-checkbox-wrapper me-3">
-                                                <input
-                                                    class="custom-checkbox-input"
-                                                    type="checkbox"
-                                                    name="days[]"
-                                                    value="{{ $day }}"
-                                                    id="day_{{ $day }}"
-                                                    {{ in_array($day, json_decode($promo->days, true) ?? []) ? 'checked' : '' }}>
-                                                <label class="custom-checkbox-label" for="day_{{ $day }}">{{ $day }}</label>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    @error('days')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Botones de acción -->
-                            <div class="d-flex justify-content-between">
-                                <button type="submit" class="btn btn-success flex-fill me-1">Actualizar</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="reloadButton">Reestablecer</button>
-                                <a href="{{ route('promociones.index') }}" class="btn btn-danger flex-fill">Cancelar</a>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
+
 
         <script>
             document.addEventListener('DOMContentLoaded', function () {

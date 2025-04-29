@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Mantenimiento;
 use App\Models\Maquinaria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MantenimientoController extends Controller
 {
@@ -15,9 +16,10 @@ class MantenimientoController extends Controller
     {
         // Obtener todos los mantenimientos de la base de datos
         $mantenimientos = Mantenimiento::all();
+        $usuario = Auth::user();
 
         // Retornar una vista con los mantenimientos
-        return view('primary.mantenimientos.mantenimiento_index', compact('mantenimientos'));
+        return view('primary.mantenimientos.mantenimiento_index', compact('mantenimientos', 'usuario'));
     }
 
     /**
@@ -26,7 +28,8 @@ class MantenimientoController extends Controller
     public function create()
     {
         $maquinarias = Maquinaria::all(); // Obtener todas las máquinas para el select
-        return view('primary.mantenimientos.mantenimiento_create', compact('maquinarias'));
+        $usuario = Auth::user();
+        return view('primary.mantenimientos.mantenimiento_create', compact('maquinarias', 'usuario'));
     }
 
     /**
@@ -97,9 +100,10 @@ class MantenimientoController extends Controller
     {
         // Encontrar el mantenimiento por su ID
         $mantenimiento = Mantenimiento::findOrFail($id);
+        $usuario = Auth::user();
 
         // Retornar una vista con los detalles del mantenimiento
-        return view('primary.mantenimientos.mantenimiento_show', compact('mantenimiento'));
+        return view('primary.mantenimientos.mantenimiento_show', compact('mantenimiento', 'usuario'));
     }
 
 
@@ -114,9 +118,10 @@ class MantenimientoController extends Controller
 
         // Obtener todas las máquinas para el select
         $maquinarias = Maquinaria::all();
+        $usuario = Auth::user();
 
         // Retornar una vista con el formulario de edición
-        return view('primary.mantenimientos.mantenimiento_update', compact('mantenimiento', 'maquinarias'));
+        return view('primary.mantenimientos.mantenimiento_update', compact('mantenimiento', 'maquinarias', 'usuario'));
     }
 
     /**

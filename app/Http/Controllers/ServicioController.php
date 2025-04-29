@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Servicio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ServicioController extends Controller
 {
@@ -13,7 +14,8 @@ class ServicioController extends Controller
     {
         // Obtener todos los servicios
         $servicios = Servicio::all();
-        return view('primary.servicios.servicio_index', compact('servicios'));
+        $usuario = Auth::user();
+        return view('primary.servicios.servicio_index', compact('servicios', 'usuario'));
     }
 
     /**
@@ -21,7 +23,8 @@ class ServicioController extends Controller
      */
     public function create()
     {
-        return view('primary.servicios.servicio_create');
+        $usuario = Auth::user();
+        return view('primary.servicios.servicio_create', compact('usuario'));
     }
 
     /**
@@ -94,7 +97,8 @@ class ServicioController extends Controller
     {
         // Obtener el servicio por ID
         $servicio = Servicio::findOrFail($id);
-        return view('primary.servicios.servicio_show', compact('servicio'));
+        $usuario = Auth::user();
+        return view('primary.servicios.servicio_show', compact('servicio', 'usuario'));
     }
 
     /**
@@ -103,7 +107,8 @@ class ServicioController extends Controller
     public function edit($id)
     {
         $servicio = Servicio::findOrFail($id);
-        return view('primary.servicios.servicio_update', compact('servicio'));
+        $usuario = Auth::user();
+        return view('primary.servicios.servicio_update', compact('servicio', 'usuario'));
     }
 
     /**

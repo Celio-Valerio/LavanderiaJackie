@@ -61,7 +61,6 @@
             text-align: right;
         }
     </style>
-
     <div class="invoice-container">
         <!-- ENCABEZADO -->
         <div class="header-section">
@@ -159,3 +158,9 @@
         </table>
     </div>
 @endsection
+@section('scripts')
+    <script>
+        window.onload = function() {
+            window.print();
+        };
+    </script>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HistorialCliente extends Controller
 {
@@ -31,6 +32,7 @@ class HistorialCliente extends Controller
             ->selectRaw('DISTINCT YEAR(fecha) as anio')
             ->orderBy('anio', 'asc')
             ->pluck('anio');
-        return view('primary.clientes.cliente_historial', compact('cliente', 'clienteServicios', 'clienteDia', 'anios', 'meses'));
+        $usuario = Auth::user();
+        return view('primary.clientes.cliente_historial', compact('cliente', 'clienteServicios', 'clienteDia', 'anios', 'meses', 'usuario'));
     }
 }

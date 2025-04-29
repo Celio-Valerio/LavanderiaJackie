@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\ControlCuenta;
 use App\Models\CuentaBanco;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CuentaBancoController extends Controller
@@ -18,9 +19,10 @@ class CuentaBancoController extends Controller
 
         // Obtener todas las cuentas bancarias
         $cuentaBanco = CuentaBanco::all();
+        $usuario = Auth::user();
 
         // Pasar los bancos y las cuentas a la vista
-        return view('primary.cuentas_bancos.cuentas_bancos_index', compact('bancos', 'cuentaBanco'));
+        return view('primary.cuentas_bancos.cuentas_bancos_index', compact('bancos', 'cuentaBanco', 'usuario'));
     }
 
 
@@ -68,9 +70,10 @@ class CuentaBancoController extends Controller
     {
 
         $cuenta = CuentaBanco::findOrFail($id);
+        $usuario = Auth::user();
 
         // Retorna la vista 'compras.show' y le pasa los datos de la compra
-        return view('primary.cuentas_bancos.cuenta_bancos_show', compact('cuenta'));
+        return view('primary.cuentas_bancos.cuenta_bancos_show', compact('cuenta', 'usuario'));
     }
 
 

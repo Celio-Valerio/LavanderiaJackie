@@ -3,189 +3,201 @@
 @section('content')
 
     <section class="section">
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        @php
-                            $fechaAc = date('Y-m-d');
-                            $primerDiaMes = date('Y-m-01');
-                            $ultimoDiaMes = date('Y-m-t');
-                            $hayGastos = false;
-                            $fechaRegistro = '';
-                            $luz = 0;
-                            $agua = 0;
-                            $renta = 0;
-                            $nomina = 0;
-                            $internet = 0;
-                            $hayluz = false;
-                            $hayagua = false;
-                            $hayrenta = false;
-                            $haynomina = false;
-                            $hayinternet = false;
-                        @endphp
-                        @foreach($gastos as $gasto)
-                            @if($gasto->fecha >= $primerDiaMes && $gasto->fecha <= $ultimoDiaMes)
-                                @if($gasto->energia > 0)
-                                    @php
-                                        $hayluz = true;
-                                        $luz = $gasto->energia;
-                                    @endphp
+        @if($usuario->rolpermiso->gastos_crear == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            @php
+                                $fechaAc = date('Y-m-d');
+                                $primerDiaMes = date('Y-m-01');
+                                $ultimoDiaMes = date('Y-m-t');
+                                $hayGastos = false;
+                                $fechaRegistro = '';
+                                $luz = 0;
+                                $agua = 0;
+                                $renta = 0;
+                                $nomina = 0;
+                                $internet = 0;
+                                $hayluz = false;
+                                $hayagua = false;
+                                $hayrenta = false;
+                                $haynomina = false;
+                                $hayinternet = false;
+                            @endphp
+                            @foreach($gastos as $gasto)
+                                @if($gasto->fecha >= $primerDiaMes && $gasto->fecha <= $ultimoDiaMes)
+                                    @if($gasto->energia > 0)
+                                        @php
+                                            $hayluz = true;
+                                            $luz = $gasto->energia;
+                                        @endphp
+                                    @endif
+                                    @if($gasto->agua > 0)
+                                        @php
+                                            $hayagua = true;
+                                            $agua = $gasto->agua;
+                                        @endphp
+                                    @endif
+                                    @if($gasto->renta > 0)
+                                        @php
+                                            $hayrenta = true;
+                                            $renta = $gasto->renta;
+                                        @endphp
+                                    @endif
+                                    @if($gasto->nomina > 0)
+                                        @php
+                                            $haynomina = true;
+                                            $nomina = $gasto->nomina;
+                                        @endphp
+                                    @endif
+                                    @if($gasto->internet > 0)
+                                        @php
+                                            $hayinternet = true;
+                                            $internet = $gasto->internet;
+                                        @endphp
+                                    @endif
+                                    @if($hayluz && $hayinternet && $hayrenta && $hayagua && $haynomina)
+                                        @php
+                                            $hayGastos = true;
+                                        @endphp
+                                    @endif
                                 @endif
-                                @if($gasto->agua > 0)
-                                    @php
-                                        $hayagua = true;
-                                        $agua = $gasto->agua;
-                                    @endphp
-                                @endif
-                                @if($gasto->renta > 0)
-                                    @php
-                                        $hayrenta = true;
-                                        $renta = $gasto->renta;
-                                    @endphp
-                                @endif
-                                @if($gasto->nomina > 0)
-                                    @php
-                                        $haynomina = true;
-                                        $nomina = $gasto->nomina;
-                                    @endphp
-                                @endif
-                                @if($gasto->internet > 0)
-                                    @php
-                                        $hayinternet = true;
-                                        $internet = $gasto->internet;
-                                    @endphp
-                                @endif
-                                @if($hayluz && $hayinternet && $hayrenta && $hayagua && $haynomina)
-                                    @php
-                                        $hayGastos = true;
-                                    @endphp
-                                @endif
+                            @endforeach
+                            <h1 class="card-title" style="font-size: 30px !important;">Registrar gastos</h1>
+                            @if($hayGastos === true)
+                                <label for="lblInfo" class="card-title">Los gastos fijos ya han sido registrados.</label>
                             @endif
-                        @endforeach
-                        <h1 class="card-title" style="font-size: 30px !important;">Registrar gastos</h1>
-                        @if($hayGastos === true)
-                            <label for="lblInfo" class="card-title">Los gastos fijos ya han sido registrados.</label>
-                        @endif
-                        <div class="invalid-feedback" id="formularioVacio"></div>
-                        <hr>
-                        <form id="gastoForm" action="{{ route('gastos.store') }}" method="POST" novalidate>
-                            @csrf
-                            <!-- Gastos fijos -->
-                            <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Gastos fijos</strong></h2>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblDescripcion">Descripción:</label>
-                                        <input type="text" name="descripcion" id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" maxlength="50" value="{{old('descripcion')}}">
-                                        <div class="invalid-feedback" id="descripcionVacio"></div>
+                            <div class="invalid-feedback" id="formularioVacio"></div>
+                            <hr>
+                            <form id="gastoForm" action="{{ route('gastos.store') }}" method="POST" novalidate>
+                                @csrf
+                                <!-- Gastos fijos -->
+                                <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Gastos fijos</strong></h2>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="lblDescripcion">Descripción:</label>
+                                            <input type="text" name="descripcion" id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" maxlength="50" value="{{old('descripcion')}}">
+                                            <div class="invalid-feedback" id="descripcionVacio"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="lblProducto">Gastos fijos:</label>
+                                        <select name="gastosfijos" class="form-control @error('gastosfijos') is-invalid @enderror" id="gastosfijos" >
+                                        </select>
+                                        <div class="invalid-feedback" id="gastofijoVacio"></div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="lblValor">Monto:</label>
+                                            <input type="text" name="monto" id="monto" class="form-control" maxlength="6" value="{{old('monto')}}" oninput="validarSoloNumeros2(this)">
+                                            <div class="invalid-feedback" id="montoVacio"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="opcion">Acción:</label> <br>
+                                            <button class="btn btn-success" name="agreGasto" id="agreGasto">Agregar gasto</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="lblProducto">Gastos fijos:</label>
-                                    <select name="gastosfijos" class="form-control @error('gastosfijos') is-invalid @enderror" id="gastosfijos" >
-                                    </select>
-                                    <div class="invalid-feedback" id="gastofijoVacio"></div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="lblValor">Monto:</label>
-                                        <input type="text" name="monto" id="monto" class="form-control" maxlength="6" value="{{old('monto')}}" oninput="validarSoloNumeros2(this)">
-                                        <div class="invalid-feedback" id="montoVacio"></div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="opcion">Acción:</label> <br>
-                                        <button class="btn btn-success" name="agreGasto" id="agreGasto">Agregar gasto</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr style="margin-top: 40px">
-                            <div class="table-responsive">
-                                <div class="invalid-feedback" id="tableVacia2"></div>
-                                <table class="table table-hover" id="tablaGasto" style="font-size: 16px;">
-                                    <thead>
+                                <hr style="margin-top: 40px">
+                                <div class="table-responsive">
+                                    <div class="invalid-feedback" id="tableVacia2"></div>
+                                    <table class="table table-hover" id="tablaGasto" style="font-size: 16px;">
+                                        <thead>
                                         <th class="color">Opción</th>
                                         <th class="color">Gasto fijo</th>
                                         <th class="color">Monto</th>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <hr style="margin-top: 40px">
-                            <!-- Consumo -->
-                            <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Agregar consumo de productos</strong></h2>
-                            <div class="row" style="margin-top: 20px">
-                                <div class="col-md-4">
-                                    <label for="lblProducto">Productos:</label>
-                                    <select name="productos" class="form-control @error('productos') is-invalid @enderror" id="productos"  onchange="mostrarStock()">
-                                        <option value=""></option>
-                                        @foreach($productos as $producto)
-                                            @if($producto->stock > 0)
-                                                <option value="{{$producto->id}}" data-stock="{{$producto->stock}}">
-                                                    {{$producto->nombre}}
-                                                </option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback" id="productoVacio"></div>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
                                 </div>
-                                <div class="col-md-2">
-                                    <label for="stock">Stock disponible:</label>
-                                    <input type="text" id="stock" class="form-control" readonly>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblCantidad">Cantidad consumida:</label>
-                                        <input type="text" name="cantidad" id="cantidad" class="form-control @error('cantidad') is-invalid @enderror" maxlength="6" value="{{old('cantidad')}}" oninput="validarSoloNumeros(this)">
-                                        <div class="invalid-feedback" id="cantidadVacio"></div>
+                                <hr style="margin-top: 40px">
+                                <!-- Consumo -->
+                                <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Agregar consumo de productos</strong></h2>
+                                <div class="row" style="margin-top: 20px">
+                                    <div class="col-md-4">
+                                        <label for="lblProducto">Productos:</label>
+                                        <select name="productos" class="form-control @error('productos') is-invalid @enderror" id="productos"  onchange="mostrarStock()">
+                                            <option value=""></option>
+                                            @foreach($productos as $producto)
+                                                @if($producto->stock > 0)
+                                                    <option value="{{$producto->id}}" data-stock="{{$producto->stock}}">
+                                                        {{$producto->nombre}}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        <div class="invalid-feedback" id="productoVacio"></div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label for="stock">Stock disponible:</label>
+                                        <input type="text" id="stock" class="form-control" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="lblCantidad">Cantidad consumida:</label>
+                                            <input type="text" name="cantidad" id="cantidad" class="form-control @error('cantidad') is-invalid @enderror" maxlength="6" value="{{old('cantidad')}}" oninput="validarSoloNumeros(this)">
+                                            <div class="invalid-feedback" id="cantidadVacio"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="opcion">Acción:</label>
+                                            <button class="btn btn-success" name="agrePro" id="agrePro">Agregar consumo</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="opcion">Acción:</label>
-                                        <button class="btn btn-success" name="agrePro" id="agrePro">Agregar consumo</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr style="margin-top: 40px">
-                            <div class="table-responsive">
-                                <div class="invalid-feedback" id="tableVacia"></div>
-                                <table class="table table-hover" id="tablaConsumo" style="font-size: 16px;">
-                                    <thead>
+                                <hr style="margin-top: 40px">
+                                <div class="table-responsive">
+                                    <div class="invalid-feedback" id="tableVacia"></div>
+                                    <table class="table table-hover" id="tablaConsumo" style="font-size: 16px;">
+                                        <thead>
                                         <th class="color">Opción</th>
                                         <th class="color">Producto</th>
                                         <th class="color">Cantidad</th>
-                                    </thead>
-                                    <tbody>
+                                        </thead>
+                                        <tbody>
 
-                                    </tbody>
-                                </table>
-                                <div>
-                                    <input type="hidden" name="totalFij" id="totalFij" value="">
-                                    <input type="hidden" name="detallesMandar2" id="detallesMandar2" value="">
-                                    <input type="hidden" name="detallesMandar" id="detallesMandar" value="">
-                                    <input type="hidden" name="hayinternet" id="hayinternet" value="{{$hayinternet ? $hayinternet : 0}}">
-                                    <input type="hidden" name="haynomina" id="haynomina" value="{{$haynomina ? $haynomina : 0}}">
-                                    <input type="hidden" name="hayrenta" id="hayrenta" value="{{$hayrenta ? $hayrenta : 0}}">
-                                    <input type="hidden" name="hayagua" id="hayagua" value="{{$hayagua ? $hayagua : 0}}">
-                                    <input type="hidden" name="hayluz" id="hayluz" value="{{$hayluz ? $hayluz : 0}}">
-                                    <input type="hidden" name="hayGastos" id="hayGastos" value="{{$hayGastos ? $hayGastos : 0}}">
+                                        </tbody>
+                                    </table>
+                                    <div>
+                                        <input type="hidden" name="totalFij" id="totalFij" value="">
+                                        <input type="hidden" name="detallesMandar2" id="detallesMandar2" value="">
+                                        <input type="hidden" name="detallesMandar" id="detallesMandar" value="">
+                                        <input type="hidden" name="hayinternet" id="hayinternet" value="{{$hayinternet ? $hayinternet : 0}}">
+                                        <input type="hidden" name="haynomina" id="haynomina" value="{{$haynomina ? $haynomina : 0}}">
+                                        <input type="hidden" name="hayrenta" id="hayrenta" value="{{$hayrenta ? $hayrenta : 0}}">
+                                        <input type="hidden" name="hayagua" id="hayagua" value="{{$hayagua ? $hayagua : 0}}">
+                                        <input type="hidden" name="hayluz" id="hayluz" value="{{$hayluz ? $hayluz : 0}}">
+                                        <input type="hidden" name="hayGastos" id="hayGastos" value="{{$hayGastos ? $hayGastos : 0}}">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <button name="agregar" type="button" id="agregar" class="btn btn-primary flex-fill me-1">Registrar</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
-                                <a href="{{ route('gastos.index') }}" class="btn btn-danger flex-fill">Regresar</a>
-                            </div>
-                        </form>
+                                <div class="d-flex justify-content-between">
+                                    <button name="agregar" type="button" id="agregar" class="btn btn-primary flex-fill me-1">Registrar</button>
+                                    <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
+                                    <a href="{{ route('gastos.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                                </div>
+                            </form>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
+
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 // Función para permitir solo números y validar el formato correcto para decimales

@@ -3,108 +3,108 @@
 @section('content')
 
     <section class="section">
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h1 class="card-title" style="font-size: 30px !important;">Editar gastos</h1>
-                        <div class="invalid-feedback" id="formularioVacio"></div>
-                        <hr>
-                        <form id="gastoForm" action="{{ isset($gasto) ? route('gastos.update', $gasto->id) : route('gastos.store') }}" method="POST" novalidate>
-                            @csrf
-                            @if(isset($gasto))
-                                @method('put')
-                            @endif
+        @if($usuario->rolpermiso->gastos_editar == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1 class="card-title" style="font-size: 30px !important;">Editar gastos</h1>
+                            <div class="invalid-feedback" id="formularioVacio"></div>
+                            <hr>
+                            <form id="gastoForm" action="{{ isset($gasto) ? route('gastos.update', $gasto->id) : route('gastos.store') }}" method="POST" novalidate>
+                                @csrf
+                                @if(isset($gasto))
+                                    @method('put')
+                                @endif
                                 <!-- Gastos fijos -->
-                            <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Gastos fijos</strong></h2>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblDescripcion"><strong>Descripción: </strong><br>{{$gasto->descripcion}}</label>
-                                    </div>
-                                </div>
-                                @if($gasto->energia > 0)
+                                <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Gastos fijos</strong></h2>
+                                <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="lblLuz"><strong>Energía eléctrica:</strong><br>L. {{ number_format($gasto->energia ?? 0, 2) }}</label>
+                                            <label for="lblDescripcion"><strong>Descripción: </strong><br>{{$gasto->descripcion}}</label>
                                         </div>
                                     </div>
-                                @endif
-                                @if($gasto->agua > 0)
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblAgua"><strong>Agua:</strong><br>L. {{ number_format($gasto->agua ?? 0, 2) }}</label>
+                                    @if($gasto->energia > 0)
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="lblLuz"><strong>Energía eléctrica:</strong><br>L. {{ number_format($gasto->energia ?? 0, 2) }}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endif
-                                @if($gasto->renta > 0)
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblRenta"><strong>Renta:</strong><br>L. {{ number_format($gasto->renta ?? 0, 2) }}</label>
+                                    @endif
+                                    @if($gasto->agua > 0)
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="lblAgua"><strong>Agua:</strong><br>L. {{ number_format($gasto->agua ?? 0, 2) }}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endif
-                                @if($gasto->nomina > 0)
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblNomina"><strong>Nómina:</strong><br>L. {{ number_format($gasto->nomina ?? 0, 2) }}</label>
+                                    @endif
+                                    @if($gasto->renta > 0)
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="lblRenta"><strong>Renta:</strong><br>L. {{ number_format($gasto->renta ?? 0, 2) }}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endif
-                                @if($gasto->internet > 0)
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblInternet"><strong>Internet:</strong><br>L. {{ number_format($gasto->internet ?? 0, 2) }}</label>
+                                    @endif
+                                    @if($gasto->nomina > 0)
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="lblNomina"><strong>Nómina:</strong><br>L. {{ number_format($gasto->nomina ?? 0, 2) }}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                @endif
-                                @if($gasto->totalG > 0)
-                                    <div class="col-md-4">
-                                        <label for="totalF"><strong>Total gastos fijos:</strong><br>L. {{ number_format($gasto->totalG ?? 0, 2) }}</label>
-                                    </div>
-                                @else
-                                    <div class="col-md-4">
-                                        <label for="totalF"><strong>Ningún gasto fijo fue registrado en este registro.</strong></label>
-                                    </div>
-                                @endif
+                                    @endif
+                                    @if($gasto->internet > 0)
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="lblInternet"><strong>Internet:</strong><br>L. {{ number_format($gasto->internet ?? 0, 2) }}</label>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if($gasto->totalG > 0)
+                                        <div class="col-md-4">
+                                            <label for="totalF"><strong>Total gastos fijos:</strong><br>L. {{ number_format($gasto->totalG ?? 0, 2) }}</label>
+                                        </div>
+                                    @else
+                                        <div class="col-md-4">
+                                            <label for="totalF"><strong>Ningún gasto fijo fue registrado en este registro.</strong></label>
+                                        </div>
+                                    @endif
 
-                            </div>
-                            <hr style="margin-top: 40px">
-                            <!-- Consumo -->
-                            <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Editar consumo de productos</strong></h2>
-                            <div class="row" style="margin-top: 20px">
-                                <div class="col-md-4">
-                                    <label for="lblProducto">Producto:</label>
-                                    <input type="text" name="producto" id="producto" class="form-control @error('producto') is-invalid @enderror" readonly>
-                                    <div class="invalid-feedback" id="productoVacio"></div>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="lblCantidad">Cantidad adicional:</label>
-                                        <input type="text" name="cantidad" id="cantidad" class="form-control @error('cantidad') is-invalid @enderror" maxlength="6" value="{{old('cantidad')}}" oninput="validarSoloNumeros(this)">
-                                        <div class="invalid-feedback" id="cantidadVacio"></div>
+                                <hr style="margin-top: 40px">
+                                <!-- Consumo -->
+                                <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Editar consumo de productos</strong></h2>
+                                <div class="row" style="margin-top: 20px">
+                                    <div class="col-md-4">
+                                        <label for="lblProducto">Producto:</label>
+                                        <input type="text" name="producto" id="producto" class="form-control @error('producto') is-invalid @enderror" readonly>
+                                        <div class="invalid-feedback" id="productoVacio"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="lblCantidad">Cantidad adicional:</label>
+                                            <input type="text" name="cantidad" id="cantidad" class="form-control @error('cantidad') is-invalid @enderror" maxlength="6" value="{{old('cantidad')}}" oninput="validarSoloNumeros(this)">
+                                            <div class="invalid-feedback" id="cantidadVacio"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="opcion">Acción:</label> <br>
+                                            <button class="btn btn-success" type="button" name="agrePro" id="agrePro">Agregar consumo</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label for="opcion">Acción:</label> <br>
-                                        <button class="btn btn-success" type="button" name="agrePro" id="agrePro">Agregar consumo</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr style="margin-top: 40px">
-                            <div class="table-responsive">
-                                <div class="invalid-feedback" id="tableVacia"></div>
-                                <table class="table table-hover" style="font-size: 16px;">
-                                    <thead>
-                                    <th class="color">Opción</th>
-                                    <th class="color">Producto</th>
-                                    <th class="color">Cantidad consumida</th>
-                                    <th class="color">Cantidad disponible</th>
-                                    <th class="color">Consumo adicional</th>
-                                    </thead>
-                                    <tbody>
+                                <hr style="margin-top: 40px">
+                                <div class="table-responsive">
+                                    <div class="invalid-feedback" id="tableVacia"></div>
+                                    <table class="table table-hover" style="font-size: 16px;">
+                                        <thead>
+                                        <th class="color">Opción</th>
+                                        <th class="color">Producto</th>
+                                        <th class="color">Cantidad consumida</th>
+                                        <th class="color">Cantidad disponible</th>
+                                        <th class="color">Consumo adicional</th>
+                                        </thead>
+                                        <tbody>
                                         @forelse($gasto->detalles as $detalle)
                                             <tr>
                                                 @if($detalle->producto->stock > 0)
@@ -132,23 +132,34 @@
                                                 <td><td colspan="5" style="text-align: center; color: grey;">No hay productos registrados</td></td>
                                             </tr>
                                         @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div>
-                                <input type="hidden" name="detallesMandar" id="detallesMandar" value="">
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <button name="agregar" type="button" id="agregar" class="btn btn-primary flex-fill me-1">Actualizar</button>
-                                <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Restablecer</button>
-                                <a href="{{ route('gastos.index') }}" class="btn btn-danger flex-fill">Regresar</a>
-                            </div>
-                        </form>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div>
+                                    <input type="hidden" name="detallesMandar" id="detallesMandar" value="">
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <button name="agregar" type="button" id="agregar" class="btn btn-primary flex-fill me-1">Actualizar</button>
+                                    <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Restablecer</button>
+                                    <a href="{{ route('gastos.index') }}" class="btn btn-danger flex-fill">Regresar</a>
+                                </div>
+                            </form>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
 
         <script>
             const boton = document.querySelector(".btn-eliminar");

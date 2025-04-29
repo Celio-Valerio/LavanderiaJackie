@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Cupon;
 use App\Models\Visita;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -23,8 +24,9 @@ class CuponController extends Controller
         } else {
             $cupones = Cupon::where('estado', '!=', 'Activo')->distinct()->get();
         }
+        $usuario = Auth::user();
 
-        return view('primary.cupones.cupon_index', compact('cupones', 'filter'));
+        return view('primary.cupones.cupon_index', compact('cupones', 'filter', 'usuario'));
     }
 
     /**
@@ -45,8 +47,9 @@ class CuponController extends Controller
             )
             ->orderBy('visitas.fecha_visita', 'desc') // Ordenar por la fecha de visita
             ->get();
+        $usuario = Auth::user();
 
-        return view('primary.cupones.cupon_create', compact('visitas'));
+        return view('primary.cupones.cupon_create', compact('visitas', 'usuario'));
     }
 
     /**
@@ -157,8 +160,8 @@ class CuponController extends Controller
     {
         // Carga la relación con los clientes
         $cupon->load('clientes');
-
-        return view('primary.cupones.cupon_show', compact('cupon'));
+        $usuario = Auth::user();
+        return view('primary.cupones.cupon_show', compact('cupon', 'usuario'));
     }
 
     /**

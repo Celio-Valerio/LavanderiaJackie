@@ -15,91 +15,103 @@
     </style>
 
     <section class="section">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Promociones</h1>
-                            <div class="button-group d-flex gap-2">
-                                <a href="{{ route('promociones.index') }}" class="btn btn-dark btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Modo Tabla</a>
-                                <a href="{{ route('promociones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Promoción</a>
+        @if($usuario->rolpermiso->promociones_modo == 1)
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Promociones</h1>
+                                <div class="button-group d-flex gap-2">
+                                    <a href="{{ route('promociones.index') }}" class="btn btn-dark btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Modo Tabla</a>
+                                    <a href="{{ route('promociones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Promoción</a>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Formulario de búsqueda -->
-                        <form method="GET" action="{{ route('promociones.view') }}" class="mb-3">
-                            <div class="d-flex">
-                                <input type="text" name="search" class="form-control" placeholder="Buscar promoción..." value="{{ $search ?? '' }}">
-                                <button type="submit" class="btn btn-primary ms-2">Buscar</button>
-                            </div>
-                        </form>
+                            <!-- Formulario de búsqueda -->
+                            <form method="GET" action="{{ route('promociones.view') }}" class="mb-3">
+                                <div class="d-flex">
+                                    <input type="text" name="search" class="form-control" placeholder="Buscar promoción..." value="{{ $search ?? '' }}">
+                                    <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+                                </div>
+                            </form>
 
-                        @if(session('success'))
-                            <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
-                                {{ session('success') }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        @endif
-                        <hr>
+                            @if(session('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert" id="success-message">
+                                    {{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            @endif
+                            <hr>
 
-                        <!-- Mostrar mensaje si no se encontraron promociones -->
-                        @if($promociones->isEmpty() && $search)
-                            <div class="alert alert-warning">
-                                No se han encontrado promociones para "<strong>{{ $search }}</strong>".
-                            </div>
-                        @endif
+                            <!-- Mostrar mensaje si no se encontraron promociones -->
+                            @if($promociones->isEmpty() && $search)
+                                <div class="alert alert-warning">
+                                    No se han encontrado promociones para "<strong>{{ $search }}</strong>".
+                                </div>
+                            @endif
 
-                        <div id="promotionsContainer" class="row">
-                            @foreach($promociones as $promo)
-                                <div class="col-xxl-3 col-lg-4 col-md-6 col-sm-12 mb-4 promo-card"
-                                     data-name="{{ $promo->name }}"
-                                     data-price="{{ $promo->price }}"
-                                     data-discount="{{ $promo->discount }}"
-                                     data-days="{{ implode(', ', json_decode($promo->days, true)) }}">
-                                    <div class="card promo-card shadow-lg border-0 rounded-3 d-flex flex-column" style="height: auto;">
-                                        <div class="position-relative">
-                                            <img
-                                                src="{{ !empty($promo->image) && file_exists(public_path('assets/img/promociones/' . $promo->image)) ? asset('assets/img/promociones/' . $promo->image) : asset('assets/img/promociones/promos (1).jpg') }}"
-                                                class="card-img-top"
-                                                alt="{{ $promo->image }}"
-                                                style="height: 150px; object-fit: cover;"
-                                            >
-                                            <span class="badge bg-danger position-absolute top-0 end-0 m-2" style="font-size: 0.8em;">{{ $promo->discount }}%</span>
-                                        </div>
-                                        <div class="card-body text-center flex-grow-1">
-                                            <h5 class="card-title" style="font-size: 1.1em;">{{ $promo->name }}</h5>
-                                            <p class="text-muted mb-1" style="font-size: 0.8em; display: none;">
-                                                <del>L. {{ number_format($promo->price, 2) }}</del>
-                                            </p>
-                                            @php
-                                                $discountedPrice = $promo->price - ($promo->price * ($promo->discount / 100));
-                                            @endphp
-                                            <p class="fw-bold mb-3" style="color: #d9534f; font-size: 1.3em; display: none;">
-                                                L. {{ number_format($discountedPrice, 2) }}
-                                            </p>
-
-                                            <div class="mb-3">
-                                                @foreach(json_decode($promo->days, true) as $day)
-                                                    <span class="badge bg-secondary me-1" style="font-size: 0.7em;">{{ $day }}</span>
-                                                @endforeach
+                            <div id="promotionsContainer" class="row">
+                                @foreach($promociones as $promo)
+                                    <div class="col-xxl-3 col-lg-4 col-md-6 col-sm-12 mb-4 promo-card"
+                                         data-name="{{ $promo->name }}"
+                                         data-price="{{ $promo->price }}"
+                                         data-discount="{{ $promo->discount }}"
+                                         data-days="{{ implode(', ', json_decode($promo->days, true)) }}">
+                                        <div class="card promo-card shadow-lg border-0 rounded-3 d-flex flex-column" style="height: auto;">
+                                            <div class="position-relative">
+                                                <img
+                                                    src="{{ !empty($promo->image) && file_exists(public_path('assets/img/promociones/' . $promo->image)) ? asset('assets/img/promociones/' . $promo->image) : asset('assets/img/promociones/promos (1).jpg') }}"
+                                                    class="card-img-top"
+                                                    alt="{{ $promo->image }}"
+                                                    style="height: 150px; object-fit: cover;"
+                                                >
+                                                <span class="badge bg-danger position-absolute top-0 end-0 m-2" style="font-size: 0.8em;">{{ $promo->discount }}%</span>
                                             </div>
-                                            <a href="#" class="btn btn-primary w-100 rounded-pill" style="display: none;">Aplicar</a>
+                                            <div class="card-body text-center flex-grow-1">
+                                                <h5 class="card-title" style="font-size: 1.1em;">{{ $promo->name }}</h5>
+                                                <p class="text-muted mb-1" style="font-size: 0.8em; display: none;">
+                                                    <del>L. {{ number_format($promo->price, 2) }}</del>
+                                                </p>
+                                                @php
+                                                    $discountedPrice = $promo->price - ($promo->price * ($promo->discount / 100));
+                                                @endphp
+                                                <p class="fw-bold mb-3" style="color: #d9534f; font-size: 1.3em; display: none;">
+                                                    L. {{ number_format($discountedPrice, 2) }}
+                                                </p>
+
+                                                <div class="mb-3">
+                                                    @foreach(json_decode($promo->days, true) as $day)
+                                                        <span class="badge bg-secondary me-1" style="font-size: 0.7em;">{{ $day }}</span>
+                                                    @endforeach
+                                                </div>
+                                                <a href="#" class="btn btn-primary w-100 rounded-pill" style="display: none;">Aplicar</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endforeach
-                        </div>
+                                @endforeach
+                            </div>
 
-                        <!-- Agregar el parámetro de búsqueda en la URL de la paginación -->
-                        <div>
-                            {{ $promociones->appends(['search' => $search])->links('pagination::bootstrap-5') }} <!-- Paginación con búsqueda -->
-                        </div>
+                            <!-- Agregar el parámetro de búsqueda en la URL de la paginación -->
+                            <div>
+                                {{ $promociones->appends(['search' => $search])->links('pagination::bootstrap-5') }} <!-- Paginación con búsqueda -->
+                            </div>
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            <div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+                <div class="text-center p-5 bg-white rounded shadow-lg" style="max-width: 600px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/16962/16962145.png"
+                         alt="Sin permisos" class="img-fluid mb-4" style="max-height: 250px; border-radius: 10px;">
+                    <h2 class="text-danger mb-3">Acceso Denegado</h2>
+                    <p class="fs-5">No tienes permisos para acceder a este apartado.</p>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary mt-4 px-4 py-2">Volver al inicio</a>
+                </div>
+            </div>
+        @endif
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
