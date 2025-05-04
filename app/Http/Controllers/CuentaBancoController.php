@@ -76,5 +76,13 @@ class CuentaBancoController extends Controller
         return view('primary.cuentas_bancos.cuenta_bancos_show', compact('cuenta', 'usuario'));
     }
 
-
+    /**
+     * Show the form for creating a new bank account.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return view('primary.cuentas_bancos.cuentas_bancos_create');
+    }
 }

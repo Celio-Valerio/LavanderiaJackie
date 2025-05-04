@@ -403,4 +403,6 @@ Route::post('password/security/question', [PasswordSecurityController::class,'ha
 Route::get('password/security/reset', [PasswordSecurityController::class,'showResetForm'])->name('password.security.reset');
 Route::post('password/security/reset', [PasswordSecurityController::class,'resetPassword'])->name('password.security.reset.post');
 
+Route::get('/cuentas-bancos/create', [CuentaBancoController::class, 'create'])->name('cuentas_bancos.create');
+
 
