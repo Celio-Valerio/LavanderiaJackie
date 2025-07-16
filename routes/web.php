@@ -69,6 +69,7 @@ Route::middleware('auth')->group(function () {
         return view('layouts.principal'); // Otra vista principal (si tienes más páginas)
     });
 
+    Route::post('/compras/store', [CompraController::class, 'store'])->middleware('auth')->name('compras.store');
 // Ruta para mostrar la lista de clientes
     Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index');
 
