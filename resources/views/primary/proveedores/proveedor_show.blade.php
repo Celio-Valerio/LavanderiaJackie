@@ -69,10 +69,10 @@
                             <!-- Botones de acción (1 columna cada uno en la misma fila) -->
                             <div class="row">
                                 <div class="col-md-6">
-                                    <a href="{{ route('proveedores.index') }}" class="btn btn-secondary w-100">Volver a la Lista</a>
+                                    <a href="{{ route('proveedores.index') }}" class="btn btn-secondary w-100">Volver a la lista</a>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-warning w-100">Editar Proveedor</a>
+                                    <a href="{{ route('proveedores.edit', $proveedor->id) }}" class="btn btn-warning w-100">Editar proveedor</a>
                                 </div>
                             </div>
 
