@@ -57,7 +57,6 @@
                                                value="{{ \Carbon\Carbon::now('America/Tegucigalpa')->translatedFormat('j \d\e F, Y h:i A') }}"
                                                readonly>
 
-
                                         <!-- Campo oculto con formato compatible con la base de datos -->
                                         <input type="hidden" name="fecha"
                                                value="{{ \Carbon\Carbon::now('America/Tegucigalpa')->format('Y-m-d H:i:s') }}">
