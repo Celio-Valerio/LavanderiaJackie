@@ -58,7 +58,7 @@
             <div class="field">
                 <label for="password">Contraseña</label>
                 <i class="mdi mdi-lock-outline icon" aria-hidden="true"></i>
-                <input class="input" id="password" name="password" type="password" placeholder="••••••••" required minlength="6" autocomplete="current-password"  pattern="[^\s]+">
+                <input class="input" id="password" name="password" type="password" placeholder="••••••••" required minlength="6" autocomplete="current-password" maxlength="20" pattern="[^\s]+">
                 <button class="toggle" type="button" id="togglePassword" aria-pressed="false" aria-label="Mostrar u ocultar contraseña"><i class="mdi mdi-eye-off"></i></button>
                 <div class="error" id="formError">@if ($errors->has('password') || $errors->has('email')){{ $errors->first('password') ?: $errors->first('email') }}@endif</div>
             </div>
