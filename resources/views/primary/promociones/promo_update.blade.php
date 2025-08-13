@@ -284,6 +284,14 @@
                 document.getElementById('discount').addEventListener('input', (e) => {
                     e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
                 });
+
+                document.getElementById('desde').addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
+                });
+
+                document.getElementById('hasta').addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
+                });
             });
         </script>
 
