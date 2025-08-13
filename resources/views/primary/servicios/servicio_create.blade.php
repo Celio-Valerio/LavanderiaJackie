@@ -101,7 +101,18 @@
                                             <!-- Campo de Nombre del Servicio -->
                                             <div class="col-md-9">
                                                 <label for="nombre" class="form-label">Nombre del servicio</label>
-                                                <input type="text" name="nombre" class="form-control small-text-field @error('nombre') is-invalid @enderror" id="nombre" value="{{ old('nombre') }}" placeholder="Ej: Lavado, Planchado" maxlength="100" required>
+                                                <input
+                                                    type="text"
+                                                    name="nombre"
+                                                    id="nombre"
+                                                    class="form-control small-text-field @error('nombre') is-invalid @enderror"
+                                                    value="{{ old('nombre') }}"
+                                                    placeholder="Ej: Lavado, Planchado"
+                                                    maxlength="100"
+                                                    required
+                                                    pattern="^(?!\s)(?!.*\s{2,}).*$"
+                                                    title="No se permite espacio al inicio ni doble espacio"
+                                                />
                                                 @error('nombre')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -122,7 +133,16 @@
                                             <!-- Campo de Descripción -->
                                             <div class="col-md-12">
                                                 <label for="descripcion" class="form-label">Descripción del servicio</label>
-                                                <textarea name="descripcion" class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" placeholder="Ej: Servicio de lavado y planchado" maxlength="500" rows="3">{{ old('descripcion') }}</textarea>
+                                                <textarea
+                                                    name="descripcion"
+                                                    id="descripcion"
+                                                    class="form-control @error('descripcion') is-invalid @enderror"
+                                                    placeholder="Ej: Servicio de lavado y planchado"
+                                                    maxlength="500"
+                                                    rows="3"
+                                                    pattern="^(?!\s)(?!.*\s{2,}).*$"
+                                                    title="No se permite espacio al inicio ni doble espacio"
+                                                >{{ old('descripcion') }}</textarea>
                                                 @error('descripcion')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                 @enderror
@@ -250,6 +270,46 @@
                 clearButton.addEventListener('click', clearForm);
             });
         </script>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const campos = ['nombre', 'descripcion'].map(id => document.getElementById(id));
+
+                    const normalizarEspacios = (el) => {
+                        if (!el) return;
+                        let v = el.value;
+
+                        // quita espacios al inicio (pero no forzamos trim total para permitir espacios internos)
+                        v = v.replace(/^\s+/, '');
+
+                        // colapsa 2+ espacios internos a uno
+                        v = v.replace(/\s{2,}/g, ' ');
+
+                        el.value = v;
+                    };
+
+                    // Normaliza en cada entrada
+                    campos.forEach(el => {
+                        if (!el) return;
+                        el.addEventListener('input', () => normalizarEspacios(el));
+                        // Por si pegaron texto con muchos espacios
+                        el.addEventListener('paste', (e) => {
+                            setTimeout(() => normalizarEspacios(el), 0);
+                        });
+                    });
+
+                    // Asegura normalización al enviar
+                    const form = document.getElementById('servicioForm');
+                    form.addEventListener('submit', () => campos.forEach(normalizarEspacios));
+
+                    // Si también quieres mantener la capitalización de la primera letra:
+                    const capitalizarPrimera = (el) => {
+                        if (!el || !el.value) return;
+                        el.value = el.value.charAt(0).toUpperCase() + el.value.slice(1);
+                    };
+                    campos.forEach(el => el && el.addEventListener('input', () => capitalizarPrimera(el)));
+                });
+            </script>
 
     </section>
 @endsection
