@@ -190,7 +190,7 @@
                 </div>
             </div>
         @endif
-        
+
         <script>
             // Utilidades de espacios
             function sanitizeSpaces(str) {

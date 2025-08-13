@@ -9,7 +9,7 @@
                     <div class="card shadow-lg rounded-lg border-0" style="background-image: url('{{ asset('assets/img/laundry-background.jpg') }}'); background-size: cover; background-position: center center; border-radius: 15px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;">
                         <div class="card-body" style="background-color: rgba(255, 255, 255, 0.85); border-radius: 15px; transition: background-color 0.3s ease;">
                             <!-- Título de la sección -->
-                            <h1 class="card-title text-center mb-4" style="font-size: 30px !important; color: #333; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">Detalles de la Promoción</h1>
+                            <h1 class="card-title text-center mb-4" style="font-size: 30px !important; color: #333; font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);">Detalles de la promoción</h1>
                             <hr>
 
                             <div class="row">
@@ -73,12 +73,12 @@
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <a href="{{ route('promociones.index') }}" class="btn btn-secondary w-100 rounded-pill py-2" style="transition: background-color 0.3s ease;">
-                                        Volver a la Lista
+                                        Volver a la lista
                                     </a>
                                 </div>
                                 <div class="col-md-6">
                                     <a href="{{ route('promociones.edit', $promocion->id) }}" class="btn btn-warning w-100 rounded-pill py-2" style="transition: background-color 0.3s ease;">
-                                        Editar Promoción
+                                        Editar promoción
                                     </a>
                                 </div>
                             </div>

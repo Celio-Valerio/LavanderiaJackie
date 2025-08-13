@@ -9,10 +9,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de Promociones</h1>
+                                <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de promociones</h1>
                                 <div class="button-group d-flex gap-2">
-                                    <a href="{{ route('promociones.view') }}" class="btn btn-dark btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Modo Vista</a>
-                                    <a href="{{ route('promociones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Promoción</a>
+                                    <a href="{{ route('promociones.view') }}" class="btn btn-dark btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Modo vista</a>
+                                    <a href="{{ route('promociones.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar promoción</a>
                                 </div>
                             </div>
 
@@ -141,4 +141,3 @@
         </script>
     </section>
 @endsection
-                
