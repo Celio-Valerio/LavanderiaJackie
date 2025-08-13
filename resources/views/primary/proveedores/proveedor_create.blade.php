@@ -10,33 +10,61 @@
                         <div class="card-body">
                             <h1 class="card-title" style="font-size: 30px !important;">Registrar proveedor</h1>
                             <hr>
+
                             <!-- Inicio del formulario -->
                             <form id="proveedorForm" action="{{ route('proveedores.store') }}" method="POST" novalidate>
-                                @csrf <!-- Protección contra CSRF -->
+                                @csrf
 
                                 <div class="row mb-3">
-                                    <!-- Campo de Nombre de la Empresa -->
+                                    <!-- Nombre de la Empresa -->
                                     <div class="col-md-4">
                                         <label for="company_name" class="form-label">Nombre de la empresa</label>
-                                        <input type="text" name="company_name" class="form-control small-text-field @error('company_name') is-invalid @enderror" id="company_name" value="{{ old('company_name') }}" placeholder="Ej: Proveedor S.A." maxlength="100" required>
+                                        <input
+                                            type="text"
+                                            name="company_name"
+                                            class="form-control small-text-field @error('company_name') is-invalid @enderror"
+                                            id="company_name"
+                                            value="{{ old('company_name') }}"
+                                            placeholder="Ej: Proveedor S.A."
+                                            maxlength="100"
+                                            pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9.]+( [A-Za-zÁÉÍÓÚáéíóúÑñ0-9.]+)*$"
+                                            required>
                                         @error('company_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
 
-                                    <!-- Campo de Teléfono de la Empresa -->
+                                    <!-- Teléfono de la Empresa -->
                                     <div class="col-md-4">
                                         <label for="company_phone" class="form-label">Teléfono de la empresa</label>
-                                        <input type="text" name="company_phone" class="form-control small-text-field @error('company_phone') is-invalid @enderror" id="company_phone" value="{{ old('company_phone') }}" placeholder="Ej: 90123498" maxlength="8" required>
+                                        <input
+                                            type="text"
+                                            name="company_phone"
+                                            class="form-control small-text-field @error('company_phone') is-invalid @enderror"
+                                            id="company_phone"
+                                            value="{{ old('company_phone') }}"
+                                            placeholder="Ej: 90123498"
+                                            maxlength="8"
+                                            inputmode="numeric"
+                                            pattern="^[2389][0-9]{7}$"
+                                            required>
                                         @error('company_phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
 
-                                    <!-- Campo de Email -->
+                                    <!-- Email -->
                                     <div class="col-md-4">
                                         <label for="email" class="form-label">Correo electrónico</label>
-                                        <input type="email" name="email" class="form-control small-text-field @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}" placeholder="Ej: proveedor@empresa.com" maxlength="50">
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            class="form-control small-text-field @error('email') is-invalid @enderror"
+                                            id="email"
+                                            value="{{ old('email') }}"
+                                            placeholder="Ej: proveedor@empresa.com"
+                                            maxlength="50"
+                                            pattern="^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$">
                                         @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -44,32 +72,51 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <!-- Campo de Nombre del Proveedor -->
+                                    <!-- Nombre del vendedor -->
                                     <div class="col-md-4">
                                         <label for="full_name" class="form-label">Nombre del vendedor</label>
-                                        <input type="text" name="full_name" class="form-control small-text-field @error('full_name') is-invalid @enderror" id="full_name" value="{{ old('full_name') }}" placeholder="Ej: Juan Pérez" maxlength="100" required>
+                                        <input
+                                            type="text"
+                                            name="full_name"
+                                            class="form-control small-text-field @error('full_name') is-invalid @enderror"
+                                            id="full_name"
+                                            value="{{ old('full_name') }}"
+                                            placeholder="Ej: Juan Pérez"
+                                            maxlength="100"
+                                            pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+( [A-Za-zÁÉÍÓÚáéíóúÑñ]+)*$"
+                                            required>
                                         @error('full_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
 
-                                    <!-- Campo de Teléfono -->
+                                    <!-- Teléfono del vendedor -->
                                     <div class="col-md-4">
                                         <label for="phone" class="form-label">Teléfono del vendedor</label>
-                                        <input type="text" name="phone" class="form-control small-text-field @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone') }}" placeholder="Ej: 90123456" maxlength="8" required>
+                                        <input
+                                            type="text"
+                                            name="phone"
+                                            class="form-control small-text-field @error('phone') is-invalid @enderror"
+                                            id="phone"
+                                            value="{{ old('phone') }}"
+                                            placeholder="Ej: 90123456"
+                                            maxlength="8"
+                                            inputmode="numeric"
+                                            pattern="^[2389][0-9]{7}$"
+                                            required>
                                         @error('phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
 
-                                    <!-- Campo de Categoria -->
+                                    <!-- Categoría -->
                                     <div class="col-md-4">
                                         <label for="categoria_id" class="form-label">Categoría</label>
                                         <select name="categoria_id" class="form-select small-text-field @error('categoria_id') is-invalid @enderror" id="categoria_id" required>
                                             <option value="">Selecciona una categoría</option>
                                             @foreach($categorias as $categoria)
                                                 <option value="{{ $categoria->id }}" {{ old('categoria_id') == $categoria->id ? 'selected' : '' }}>
-                                                    {{ $categoria->name }} <!-- Asegúrate de que este campo corresponda al modelo Categoria -->
+                                                    {{ $categoria->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -87,8 +134,7 @@
                                             "Valle", "Yoro"
                                         ];
                                         ?>
-
-                                        <!-- Campo de departamento -->
+                                        <!-- Departamento -->
                                     <div class="col-md-4">
                                         <label for="city" class="form-label">Departamento</label>
                                         <select name="city" class="form-select small-text-field @error('city') is-invalid @enderror" id="city" required>
@@ -103,19 +149,24 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
                                 </div>
 
-                                <!-- Campo de Dirección -->
+                                <!-- Dirección -->
                                 <div class="mb-3">
                                     <label for="company_address" class="form-label">Dirección</label>
-                                    <textarea name="company_address" class="form-control small-text-field @error('company_address') is-invalid @enderror" id="company_address" placeholder="Ej: Calle Principal 123" maxlength="500" rows="3">{{ old('company_address') }}</textarea>
+                                    <textarea
+                                        name="company_address"
+                                        class="form-control small-text-field @error('company_address') is-invalid @enderror"
+                                        id="company_address"
+                                        placeholder="Ej: Calle Principal 123"
+                                        maxlength="500"
+                                        rows="3"></textarea>
                                     @error('company_address')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
 
-                                <!-- Botones de acción -->
+                                <!-- Botones -->
                                 <div class="d-flex justify-content-between">
                                     <button type="submit" class="btn btn-primary flex-fill me-1">Registrar</button>
                                     <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
@@ -140,81 +191,117 @@
             </div>
         @endif
 
+        {{-- Scripts de validación (front) --}}
         <script>
-            // Función para capitalizar la primera letra y la letra después de un espacio
-            function capitalizeInput(input) {
-                let value = input.value.toLowerCase();
-                input.value = value.replace(/\b\w/g, function(char) {
-                    return char.toUpperCase();
-                });
+            // Utilidades de espacios
+            function sanitizeSpaces(str) {
+                return str.replace(/^\s+/, '').replace(/\s{2,}/g, ' ');
             }
 
-            // Función para restringir la entrada de números y caracteres especiales
-            function restrictInput(e) {
-                let key = e.key;
-                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]*$/;
-
-                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
-                    e.preventDefault();
-                }
+            // Capitalizar por palabra (Unicode) para nombres
+            function capitalizeWords(el) {
+                let v = el.value.toLowerCase();
+                v = sanitizeSpaces(v);
+                el.value = v.replace(/(^|\s)([a-záéíóúñ])/giu, (m, sp, ch) => sp + ch.toUpperCase());
+            }
+            // Capitalizar primera letra para campos de texto generales
+            function capitalizeFirst(el) {
+                let v = sanitizeSpaces(el.value);
+                el.value = v.charAt(0).toUpperCase() + v.slice(1);
             }
 
-            // Asignar eventos a los campos full_name
-            document.getElementById('full_name').addEventListener('input', function(e) {
-                capitalizeInput(e.target);
-            });
-
-            document.getElementById('full_name').addEventListener('keydown', function(e) {
-                restrictInput(e);
-            });
-
-            // Función para capitalizar la primera letra del input
-            function capitalizeFirstLetter(input) {
-                let value = input.value;
-                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            // Restricciones de teclado
+            function allowNameKeys(e) {
+                const k = e.key;
+                const ok = /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]$/.test(k) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'].includes(k);
+                if (k === ' ' && e.target.selectionStart === 0) return e.preventDefault(); // sin espacio inicial
+                if (!ok) e.preventDefault();
+            }
+            function allowCompanyNameKeys(e) {
+                const k = e.key;
+                const ok = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9. ]$/.test(k) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'].includes(k);
+                if (k === ' ' && e.target.selectionStart === 0) return e.preventDefault();
+                if (!ok) e.preventDefault();
+            }
+            function allowAddressKeys(e) {
+                const k = e.key;
+                const ok = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ,.\-#]$/.test(k) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'].includes(k);
+                if (k === ' ' && e.target.selectionStart === 0) return e.preventDefault();
+                if (!ok) e.preventDefault();
+            }
+            function allowPhoneKeys(e) {
+                const k = e.key;
+                const ok = /^[0-9]$/.test(k) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'].includes(k);
+                if (!ok) e.preventDefault();
+            }
+            function allowEmailKeys(e) {
+                const k = e.key;
+                const ok = /^[A-Za-z0-9@._-]$/.test(k) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'].includes(k);
+                if (!ok) e.preventDefault();
+                if (k === ' ') e.preventDefault(); // sin espacios
             }
 
-            // Asignar evento al campo Nombre de Empresa y Dirección para capitalizar la primera letra
-            document.getElementById('company_name').addEventListener('input', function(e) {
-                capitalizeFirstLetter(e.target);
-            });
+            // Saneos en tiempo real
+            function cleanPhone(el) {
+                el.value = el.value.replace(/\D+/g,'').slice(0,8);
+            }
+            function cleanCompanyPhone(el) {
+                el.value = el.value.replace(/\D+/g,'').slice(0,8);
+            }
+            function cleanEmail(el) {
+                el.value = el.value.replace(/\s+/g,'').replace(/[^A-Za-z0-9@._-]/g,'').slice(0,50);
+            }
+            function cleanCompanyName(el) {
+                let v = sanitizeSpaces(el.value);
+                // Solo permitir letras/números/espacios y punto
+                v = v.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ0-9. ]+/g, '');
+                el.value = v.slice(0,100);
+                capitalizeFirst(el);
+            }
+            function cleanAddress(el) {
+                let v = sanitizeSpaces(el.value);
+                // Permitir letras/números/espacios , . - #
+                v = v.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ,.\-#]+/g, '');
+                el.value = v.slice(0,500);
+                capitalizeFirst(el);
+            }
 
-            document.getElementById('company_address').addEventListener('input', function(e) {
-                capitalizeFirstLetter(e.target);
-            });
-        </script>
+            // Asignaciones
+            const fullName = document.getElementById('full_name');
+            fullName.addEventListener('keydown', allowNameKeys);
+            fullName.addEventListener('input', () => capitalizeWords(fullName));
 
-        <script>
+            const companyName = document.getElementById('company_name');
+            companyName.addEventListener('keydown', allowCompanyNameKeys);
+            companyName.addEventListener('input', () => cleanCompanyName(companyName));
+
+            const companyAddress = document.getElementById('company_address');
+            companyAddress.addEventListener('keydown', allowAddressKeys);
+            companyAddress.addEventListener('input', () => cleanAddress(companyAddress));
+
+            const phone = document.getElementById('phone');
+            phone.addEventListener('keydown', allowPhoneKeys);
+            phone.addEventListener('input', () => cleanPhone(phone));
+
+            const companyPhone = document.getElementById('company_phone');
+            companyPhone.addEventListener('keydown', allowPhoneKeys);
+            companyPhone.addEventListener('input', () => cleanCompanyPhone(companyPhone));
+
+            const email = document.getElementById('email');
+            email.addEventListener('keydown', allowEmailKeys);
+            email.addEventListener('input', () => cleanEmail(email));
+
+            // Botón limpiar
             document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('proveedorForm');
-
-                // Limpiar los valores del formulario
                 form.reset();
-
-                // Limpiar los campos manualmente para evitar restauración por old()
-                // Excluimos los campos ocultos como el token CSRF
-                form.querySelectorAll('input:not([type="hidden"]), textarea').forEach(function (input) {
-                    input.value = '';  // Borra el valor del campo
-                });
-
-                // Limpiar el select de categoría
+                form.querySelectorAll('input:not([type="hidden"]), textarea').forEach(i => i.value = '');
                 document.getElementById('categoria_id').selectedIndex = 0;
-
-                // Limpiar el select de ciudad
                 document.getElementById('city').selectedIndex = 0;
 
-                // Remover clases de validación (is-invalid) y ocultar mensajes de error
-                const invalidElements = form.querySelectorAll('.is-invalid');
-                invalidElements.forEach(function (element) {
-                    element.classList.remove('is-invalid');
-                });
-
-                const invalidFeedbacks = form.querySelectorAll('.invalid-feedback');
-                invalidFeedbacks.forEach(function (feedback) {
-                    feedback.style.display = 'none';
-                });
+                form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                form.querySelectorAll('.invalid-feedback').forEach(fb => fb.style.display = 'none');
             });
         </script>
-
     </section>
 @endsection
