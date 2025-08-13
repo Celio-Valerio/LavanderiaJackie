@@ -5,386 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Iniciar sesión</title>
-
-    <!-- Fuentes -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-    <!-- Material Design Icons -->
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
-
-    <!-- Animate.css (para la animación de fadeIn) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
     <style>
-        /* Reset y fondo principal */
-        body {
-            font-family: 'Figtree', sans-serif;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
+        :root{ --brand:#2a9fd6; --brand-600:#1f86b7; --ring:rgba(42,159,214,.3); --error:#d93025 }
+        *{ box-sizing:border-box }
+        body{
+            margin:0; font-family:'Figtree',sans-serif; background:linear-gradient(180deg,#e8f6fb,#fff);
+            display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px;
         }
-        body::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(0,188,212,0.2) 0%, transparent 40%),
-                radial-gradient(circle at 80% 30%, rgba(3,169,244,0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 80%, rgba(0,150,136,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 30% 50%, rgba(255,255,255,0.2) 0%, transparent 30%);
-            z-index: 0;
-            pointer-events: none;
-        }
+        .card{ background:#fff; padding:28px; border-radius:16px; max-width:420px; width:100%;
+            box-shadow:0 10px 25px rgba(0,0,0,0.08); }
+        .logo{ width:84px; height:auto; display:block; margin:0 auto; }
+        .title{ text-align:center; font-size:1.6rem; font-weight:600; margin:10px 0 22px; color:var(--brand) }
 
-        /* Figuras de fondo */
-        .background-figures {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at 10% 20%, #ff6f61, #ffcc33);
-            opacity: 0.1;
-            z-index: 0;
-            animation: moveFigures 20s infinite ease-in-out;
-        }
-        @keyframes moveFigures {
-            0%   { transform: translate(0, 0); }
-            50%  { transform: translate(30px, 30px); }
-            100% { transform: translate(0, 0); }
-        }
+        .field{ position:relative; margin-bottom:20px; }
+        label{ display:block; font-size:.92rem; color:#555; margin-bottom:6px; }
+        .icon{ position:absolute; left:12px; top:50%; transform:translateY(-50%); color:#7b8b9b; font-size:20px; pointer-events:none }
+        .input{ width:100%; padding:14px 44px; border-radius:12px; border:1px solid #dbe7ef; background:#f7fbfe; font-size:1rem; }
+        .field:has(.toggle) .input{ padding-right:56px }
+        .input:focus{ border-color:var(--brand); background:#fff; outline:none; box-shadow:0 0 0 4px var(--ring) }
+        .toggle{ position:absolute; right:10px; top:50%; transform:translateY(-50%); border:none; background:transparent; cursor:pointer; color:#7b8b9b; font-size:20px; padding:6px; border-radius:8px }
+        .toggle:focus{ outline:none; box-shadow:0 0 0 3px var(--ring) }
 
-        /* Burbujas en movimiento */
-        .background-bubbles {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .background-bubbles::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 50px; height: 50px;
-            border-radius: 50%;
-            background: rgba(66,165,245,0.4);
-            animation: bubbleMovement 15s infinite ease-in-out;
-            opacity: 0.5;
-        }
-        .bubble {
-            position: absolute;
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: rgba(66,165,245,0.3);
-            animation: bubbleMovement 25s infinite ease-in-out;
-            opacity: 0.4;
-        }
-        @keyframes bubbleMovement {
-            0%   { transform: translate(-30%, 50%); opacity: 0.5; }
-            25%  { transform: translate(-20%, -30%); opacity: 0.3; }
-            50%  { transform: translate(10%, -20%); opacity: 0.6; }
-            75%  { transform: translate(40%, 10%); opacity: 0.4; }
-            100% { transform: translate(-30%, 50%); opacity: 0.5; }
-        }
+        .hint{ font-size:.82rem; color:#7c8794; margin-top:6px; min-height:1em; }
+        .error{ font-size:.84rem; color:var(--error); margin-top:8px; min-height:1em; }
 
-        /* SVG de formas geométricas */
-        .background-shapes {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 0;
-            opacity: 0.25;
-            pointer-events: none;
-        }
+        .btn{ display:inline-flex; justify-content:center; align-items:center; width:100%; padding:14px; background:var(--brand); color:#fff; font-weight:600; font-size:1rem; border:none; border-radius:12px; cursor:pointer; transition:background .15s; }
+        .btn:hover{ background:var(--brand-600) }
 
-        /* Tarjeta de login */
-        .login-card {
-            background-color: rgba(255,255,255,0.9);
-            border-radius: 16px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 2rem;
-            animation: float 6s ease-in-out infinite;
-            width: 100%;
-            max-width: 400px;
-            z-index: 1;
-            position: relative;
-        }
-        @keyframes float {
-            0%   { transform: translateY(0); }
-            50%  { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-
-        /* Formulario e inputs */
-        .form-floating {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        .input-icon {
-            position: absolute;
-            left: 15px;
-            top: 65%;
-            transform: translateY(-50%);
-            color: #757575;
-            font-size: 1.25rem;
-            pointer-events: none;
-        }
-        .form-control {
-            width: 100%;
-            box-sizing: border-box;
-            background-color: #f4f7fb;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            padding: 0.75rem 45px 0.75rem 45px;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-        }
-        .form-control:focus {
-            border-color: #42a5f5;
-            background-color: #ffffff;
-            outline: none;
-        }
-
-        /* Botón de mostrar/ocultar contraseña */
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 65%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #757575;
-            cursor: pointer;
-            padding: 0;
-            font-size: 1.25rem;
-            z-index: 2;
-        }
-        .password-toggle:hover {
-            color: #42a5f5;
-        }
-
-        /* Encabezado */
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .login-header img {
-            width: 80px;
-            height: auto;
-            margin-bottom: 15px;
-        }
-        .login-header h1 {
-            color: #42a5f5;
-            font-size: 2rem;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        /* Botón principal */
-        .btn-primary {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            font-size: 1.2rem;
-            border-radius: 12px;
-            border: 1px solid #42a5f5;
-            background-color: #42a5f5;
-            color: #fff;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
-        }
-        .btn-primary:hover {
-            background-color: #1e88e5;
-            border-color: #1e88e5;
-            transform: scale(1.05);
-        }
-        .btn-primary:focus {
-            outline: none;
-            box-shadow: 0 0 0 0.2rem rgba(66,165,245,0.5);
-        }
-
-        /* Textos auxiliares */
-        .text-muted {
-            color: #757575;
-            font-size: 0.9rem;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .text-center a {
-            color: #42a5f5;
-            font-weight: bold;
-            text-decoration: none;
-        }
-        .text-center a:hover {
-            text-decoration: underline;
-        }
-        .text-danger {
-            font-size: 0.8rem;
-            color: #dc3545;
-            margin-top: 0.25rem;
-        }
+        .links{ text-align:center; margin-top:16px; font-size:.92rem }
+        .links a{ color:var(--brand); font-weight:600; text-decoration:none }
+        .links a:hover{ text-decoration:underline }
     </style>
 </head>
 <body>
-
-<!-- Figuras de fondo -->
-<div class="background-figures"></div>
-
-<!-- Burbujas en movimiento -->
-<div class="background-bubbles">
-    <div class="bubble" style="top:10%; left:15%;  animation-delay: 0s;"></div>
-    <div class="bubble" style="top:70%; left:80%;  animation-delay: 2s;"></div>
-    <div class="bubble" style="top:30%; left:50%;  animation-delay: 4s;"></div>
-    <div class="bubble" style="top:85%; left:30%;  animation-delay: 6s;"></div>
-    <div class="bubble" style="top:45%; left:90%;  animation-delay: 8s;"></div>
-    <div class="bubble" style="top:60%; left:10%;  animation-delay: 10s;"></div>
-    <div class="bubble" style="top:20%; left:70%;  animation-delay: 12s;"></div>
-</div>
-
-<!-- SVG con formas geométricas -->
-<svg class="background-shapes" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
-    <!-- 7 Círculos animados -->
-    <circle cx="5" cy="15" r="1.2" stroke="#42a5f5" stroke-width="0.3" fill="none">
-        <animate attributeName="cy" values="15;18;15" dur="12s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="25" cy="65" r="1.8" stroke="#26c6da" stroke-width="0.3" fill="none">
-        <animate attributeName="cx" values="25;28;25" dur="15s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="45" cy="35" r="1.2" stroke="#ab47bc" stroke-width="0.3" fill="none">
-        <animate attributeName="cy" values="35;38;35" dur="14s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="65" cy="55" r="1.5" stroke="#7e57c2" stroke-width="0.3" fill="none">
-        <animate attributeName="cx" values="65;68;65" dur="16s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="85" cy="25" r="1.2" stroke="#ec407a" stroke-width="0.3" fill="none">
-        <animate attributeName="cy" values="25;28;25" dur="13s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="15" cy="75" r="1.5" stroke="#66bb6a" stroke-width="0.3" fill="none">
-        <animate attributeName="cy" values="75;78;75" dur="17s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="95" cy="85" r="1.2" stroke="#29b6f6" stroke-width="0.3" fill="none">
-        <animate attributeName="cx" values="95;92;95" dur="18s" repeatCount="indefinite"/>
-    </circle>
-    <!-- 7 Triángulos animados -->
-    <polygon points="10,25 12,22 14,25" stroke="#ffa726" stroke-width="0.3" fill="none">
-        <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="10s" repeatCount="indefinite"/>
-    </polygon>
-    <polygon points="30,45 32,42 34,45" stroke="#ef5350" stroke-width="0.3" fill="none">
-        <animateTransform attributeName="transform" type="translate" values="0,0;0,-2;0,0" dur="12s" repeatCount="indefinite"/>
-    </polygon>
-    <!-- Más formas geométricas sin animación adicional -->
-    <circle cx="10" cy="20" r="1.5" stroke="#42a5f5" stroke-width="0.4" fill="none">
-        <animate attributeName="cy" values="20;22;20" dur="5s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="30" cy="60" r="2" stroke="#26c6da" stroke-width="0.4" fill="none"/>
-    <circle cx="50" cy="40" r="1" stroke="#ab47bc" stroke-width="0.4" fill="none"/>
-    <polygon points="20,30 22,26 24,30" stroke="#ffa726" stroke-width="0.4" fill="none">
-        <animateTransform attributeName="transform" type="translate" values="0,0;0,-1;0,0" dur="6s" repeatCount="indefinite"/>
-    </polygon>
-    <polygon points="70,70 72,66 74,70" stroke="#ef5350" stroke-width="0.4" fill="none"/>
-    <g stroke="#66bb6a" stroke-width="0.4">
-        <line x1="60" y1="20" x2="62" y2="22"/>
-        <line x1="62" y1="20" x2="60" y2="22"/>
-    </g>
-    <g stroke="#29b6f6" stroke-width="0.4">
-        <line x1="80" y1="80" x2="82" y2="82"/>
-        <line x1="82" y1="80" x2="80" y2="82"/>
-    </g>
-    <polygon points="40,60 41,58 43,58 44,60 42,62" stroke="#ec407a" stroke-width="0.4" fill="none"/>
-    <polygon points="15,15 16,14 18,14 19,15 19,17 18,18 16,18 15,17" stroke="#7e57c2" stroke-width="0.4" fill="none"/>
-    <polygon points="85,30 86,28 88,29 89,32 87,34 85,33" stroke="#26a69a" stroke-width="0.4" fill="none">
-        <animateTransform attributeName="transform" type="rotate" from="0 87 31" to="360 87 31" dur="20s" repeatCount="indefinite"/>
-    </polygon>
-</svg>
-
-<!-- Tarjeta de login -->
-<div class="login-card animate__animated animate__fadeIn">
-    <div class="login-header">
-        <img src="{{ asset('assets/img/logo.png') }}" alt="Logo Lavandería">
-        <h1>Inicio de Sesión</h1>
-        <hr>
-    </div>
-
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Correo Electrónico -->
-        <div class="form-floating">
-            <div class="form-floating position-relative">
+<main role="main">
+    <section class="card" aria-label="Formulario de inicio de sesión">
+        <header>
+            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo Lavandería" class="logo" loading="lazy" decoding="async">
+            <h1 class="title">Inicio de Sesión</h1>
+        </header>
+        <form method="POST" action="{{ route('login') }}" id="loginForm" novalidate>
+            @csrf
+            <div class="field">
                 <label for="email">Correo electrónico</label>
-                <i class="mdi mdi-email-outline input-icon"></i>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico" value="{{ old('email') }}">
+                <i class="mdi mdi-email-outline icon" aria-hidden="true"></i>
+                <input class="input" id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" value="{{ old('email') }}" required autocomplete="username"  pattern="[^\s]+">
+                <div class="hint" id="emailHint">Usa el correo registrado en la lavandería.</div>
             </div>
-            @error('email')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
+            <div class="field">
+                <label for="password">Contraseña</label>
+                <i class="mdi mdi-lock-outline icon" aria-hidden="true"></i>
+                <input class="input" id="password" name="password" type="password" placeholder="••••••••" required minlength="6" autocomplete="current-password"  pattern="[^\s]+">
+                <button class="toggle" type="button" id="togglePassword" aria-pressed="false" aria-label="Mostrar u ocultar contraseña"><i class="mdi mdi-eye-off"></i></button>
+                <div class="error" id="formError">@if ($errors->has('password') || $errors->has('email')){{ $errors->first('password') ?: $errors->first('email') }}@endif</div>
+            </div>
+            <button type="submit" class="btn" id="submitBtn"><span class="btn-text">Ingresar</span></button>
+        </form>
+        <div class="links">
+            <p class="hint">¿Olvidaste tu contraseña?</p>
+            @if (Route::has('password.security.email'))
+                <a href="{{ route('password.security.email') }}">Recupérala con tu pregunta de seguridad</a>
+            @endif
         </div>
-
-        <!-- Contraseña -->
-        <div class="form-floating">
-            <label for="password">Contraseña</label>
-            <i class="mdi mdi-lock input-icon"></i>
-            <input
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-                placeholder="Contraseña"
-            >
-            <button type="button" class="password-toggle" id="togglePassword">
-                <i class="mdi mdi-eye-off"></i>
-            </button>
-            @error('password')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <!-- Botón Ingresar -->
-        <button type="submit" class="btn-primary">Ingresar</button>
-    </form>
-
-    <div class="text-center mt-6">
-        <p class="text-muted">{{ __('¿Olvidaste tu contraseña?') }}</p>
-
-        @if (Route::has('password.security.email'))
-            <a href="{{ route('password.security.email') }}"
-               class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md
-                  font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-500
-                  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
-                  active:bg-blue-600 transition"
-            >
-                {{ __('Recupérala con tu pregunta de seguridad') }}
-            </a>
-        @endif
-    </div>
-
-
-
-
-
-</div>
-
+    </section>
+</main>
 <script>
-    // Alternar visibilidad de contraseña
-    document.getElementById('togglePassword').addEventListener('click', function() {
+    document.getElementById('togglePassword').addEventListener('click', function(){
         const pwd = document.getElementById('password');
         const icon = this.querySelector('i');
-        if (pwd.type === 'password') {
-            pwd.type = 'text';
-            icon.classList.replace('mdi-eye-off', 'mdi-eye');
-        } else {
-            pwd.type = 'password';
-            icon.classList.replace('mdi-eye', 'mdi-eye-off');
-        }
+        if(pwd.type==='password'){ pwd.type='text'; icon.classList.replace('mdi-eye-off','mdi-eye'); }
+        else{ pwd.type='password'; icon.classList.replace('mdi-eye','mdi-eye-off'); }
+    });
+    // Bloquear espacios en blanco en inputs
+    ['email','password'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.addEventListener('input',()=>{ el.value = el.value.replace(/\s/g,''); });
     });
 </script>
-
 </body>
 </html>
