@@ -190,8 +190,7 @@
                 </div>
             </div>
         @endif
-
-        {{-- Scripts de validación (front) --}}
+        
         <script>
             // Utilidades de espacios
             function sanitizeSpaces(str) {
