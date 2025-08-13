@@ -327,7 +327,9 @@
                 required
                 autofocus
                 value="{{ old('email') }}"
-            >
+                autocomplete="username"
+                maxlength="30"
+                pattern="[^\s]+">
             @error('email')
             <div class="text-danger">{{ $message }}</div>
             @enderror
@@ -337,5 +339,13 @@
     </form>
 
 </div>
+
+<script>
+    // Bloquear espacios en blanco en inputs
+    ['email','password'].forEach(id=>{
+        const el=document.getElementById(id);
+        el.addEventListener('input',()=>{ el.value = el.value.replace(/\s/g,''); });
+    });
+</script>
 </body>
 </html>
