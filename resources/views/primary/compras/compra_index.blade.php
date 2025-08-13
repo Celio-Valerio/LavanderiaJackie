@@ -58,10 +58,10 @@
                                         <td class="small-text-field">{{ $compra->numero_factura }}</td>
                                         <td class="small-text-field">{{ ucfirst(\Carbon\Carbon::parse($compra->fecha_compra)->translatedFormat('l d \d\e F, Y')) }}</td>
                                         <td class="small-text-field">
-                                            L. {{ number_format($compra->detalles->sum(function($detalle) {
+                                        {{ number_format($compra->detalles->sum(function($detalle) {
                                             return ($detalle->cantidad * $detalle->precio) - ( ($detalle->descuento / 100) * ($detalle->cantidad * $detalle->precio));
-                                        }), 2) }}
-                                        </td>
+                                        }), 2, '.', '') }} L
+                                    </td>
                                         <td class="text-center small-text-field">
                                             <a href="{{ route('compras.show', $compra->id) }}" class="btn btn-info btn-sm">Ver</a>
                                             
