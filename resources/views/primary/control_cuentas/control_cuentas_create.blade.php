@@ -53,9 +53,10 @@
                                     <div class="col-md-6">
                                         <label for="fecha" class="form-label">Fecha</label>
                                         <!-- Campo visible con formato bonito -->
-                                        <input type="text" class="form-control"
+                                        <input id="fecha_display" type="text" class="form-control"
                                                value="{{ \Carbon\Carbon::now('America/Tegucigalpa')->translatedFormat('j \d\e F, Y h:i A') }}"
                                                readonly>
+
 
                                         <!-- Campo oculto con formato compatible con la base de datos -->
                                         <input type="hidden" name="fecha"
@@ -299,44 +300,91 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const formularioPrincipal = document.querySelector('form');
-            const formularioModal = document.getElementById('formCuentaBanco');
+            // Asegura que sea el formulario principal (el que hace POST a control_cuentas.store)
+            const formularioPrincipal = document.querySelector('form[action="{{ route('control_cuentas.store') }}"]');
             const limpiarBtn = document.getElementById('limpiarFormulario');
 
-            limpiarBtn.addEventListener('click', function () {
-                if (formularioPrincipal) {
-                    formularioPrincipal.reset();
+            if (!formularioPrincipal || !limpiarBtn) return;
 
-                    // Restablecer los selects a su primera opción
-                    const selects = formularioPrincipal.querySelectorAll('select');
-                    selects.forEach(select => {
-                        select.selectedIndex = 0;
-                    });
+            // --- 1) Crear snapshot del estado inicial ---
+            const snapshot = [];
 
-                    // Restablecer los inputs de tipo texto y número, excepto el de fecha
-                    const inputs = formularioPrincipal.querySelectorAll('input:not([type="hidden"]):not([name="fecha"])');
-                    inputs.forEach(input => {
-                        if (input.type === "text" || input.type === "number") {
-                            input.value = "";
-                        }
-                    });
+            // Incluye todos los campos del form (inputs, selects, textareas)
+            const elementos = formularioPrincipal.querySelectorAll('input, select, textarea');
 
-                    // Restablecer los textareas
-                    const textareas = formularioPrincipal.querySelectorAll('textarea');
-                    textareas.forEach(textarea => {
-                        textarea.value = "";
-                    });
+            elementos.forEach(el => {
+                const item = { ref: null, type: el.tagName.toLowerCase(), attr: {}, value: null };
+
+                // Referencia por 'name' si existe; si no, por 'id'
+                if (el.name) {
+                    item.ref = { by: 'name', key: el.name };
+                } else if (el.id) {
+                    item.ref = { by: 'id', key: el.id };
+                } else {
+                    // Último recurso: índice dentro del formulario (estable pero menos ideal)
+                    item.ref = { by: 'index', key: Array.from(elementos).indexOf(el) };
                 }
 
-                if (formularioModal) {
-                    formularioModal.reset();
+                // Según tipo
+                if (el.tagName.toLowerCase() === 'select') {
+                    if (el.multiple) {
+                        item.value = Array.from(el.options).map(o => o.selected);
+                    } else {
+                        item.value = el.value;
+                    }
+                } else if (el.type === 'checkbox' || el.type === 'radio') {
+                    item.value = el.checked;
+                } else {
+                    item.value = el.value;
+                }
 
-                    // Restablecer el saldo en el modal
-                    const saldoInput = formularioModal.querySelector('input[name="saldo"]');
-                    if (saldoInput) saldoInput.value = "0.00";
+                snapshot.push(item);
+            });
+
+            // Campo de fecha “bonito” (readonly sin name) — lo capturamos aparte
+            const fechaDisplay = document.getElementById('fecha_display');
+            const fechaDisplayValor = fechaDisplay ? fechaDisplay.value : null;
+
+            // --- 2) Restaurar snapshot al pulsar Limpiar ---
+            limpiarBtn.addEventListener('click', function () {
+                snapshot.forEach(item => {
+                    let el = null;
+                    if (item.ref.by === 'name') {
+                        el = formularioPrincipal.querySelector(`[name="${CSS.escape(item.ref.key)}"]`);
+                    } else if (item.ref.by === 'id') {
+                        el = formularioPrincipal.querySelector(`#${CSS.escape(item.ref.key)}`);
+                    } else {
+                        el = elementos[item.ref.key]; // fallback por índice
+                    }
+                    if (!el) return;
+
+                    if (el.tagName.toLowerCase() === 'select') {
+                        if (el.multiple && Array.isArray(item.value)) {
+                            Array.from(el.options).forEach((opt, i) => {
+                                opt.selected = !!item.value[i];
+                            });
+                        } else {
+                            el.value = item.value ?? '';
+                        }
+                        // Dispara change por si hay lógica enganchada
+                        el.dispatchEvent(new Event('change', { bubbles: true }));
+                    } else if (el.type === 'checkbox' || el.type === 'radio') {
+                        el.checked = !!item.value;
+                        el.dispatchEvent(new Event('change', { bubbles: true }));
+                    } else {
+                        el.value = item.value ?? '';
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                        el.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                });
+
+                // Restaurar la fecha visible si existe
+                if (fechaDisplay && fechaDisplayValor !== null) {
+                    fechaDisplay.value = fechaDisplayValor;
                 }
             });
         });
     </script>
+
 
 @endsection
