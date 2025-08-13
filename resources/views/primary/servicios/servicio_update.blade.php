@@ -284,5 +284,45 @@
             });
 
         </script>
+
+        <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const campos = ['nombre', 'descripcion'].map(id => document.getElementById(id));
+
+                    const normalizarEspacios = (el) => {
+                        if (!el) return;
+                        let v = el.value;
+
+                        // quita espacios al inicio (pero no forzamos trim total para permitir espacios internos)
+                        v = v.replace(/^\s+/, '');
+
+                        // colapsa 2+ espacios internos a uno
+                        v = v.replace(/\s{2,}/g, ' ');
+
+                        el.value = v;
+                    };
+
+                    // Normaliza en cada entrada
+                    campos.forEach(el => {
+                        if (!el) return;
+                        el.addEventListener('input', () => normalizarEspacios(el));
+                        // Por si pegaron texto con muchos espacios
+                        el.addEventListener('paste', (e) => {
+                            setTimeout(() => normalizarEspacios(el), 0);
+                        });
+                    });
+
+                    // Asegura normalización al enviar
+                    const form = document.getElementById('servicioForm');
+                    form.addEventListener('submit', () => campos.forEach(normalizarEspacios));
+
+                    // Si también quieres mantener la capitalización de la primera letra:
+                    const capitalizarPrimera = (el) => {
+                        if (!el || !el.value) return;
+                        el.value = el.value.charAt(0).toUpperCase() + el.value.slice(1);
+                    };
+                    campos.forEach(el => el && el.addEventListener('input', () => capitalizarPrimera(el)));
+                });
+            </script>
     </section>
 @endsection
