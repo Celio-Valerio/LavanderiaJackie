@@ -52,7 +52,7 @@
             <div class="field">
                 <label for="email">Correo electrónico</label>
                 <i class="mdi mdi-email-outline icon" aria-hidden="true"></i>
-                <input class="input" id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" value="{{ old('email') }}" required autocomplete="username"  pattern="[^\s]+">
+                <input class="input" id="email" name="email" type="email" placeholder="tucorreo@ejemplo.com" value="{{ old('email') }}" required autocomplete="username" maxlength="30" pattern="[^\s]+">
                 <div class="hint" id="emailHint">Usa el correo registrado en la lavandería.</div>
             </div>
             <div class="field">
