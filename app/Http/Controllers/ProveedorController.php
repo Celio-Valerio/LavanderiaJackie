@@ -93,32 +93,53 @@ class ProveedorController extends Controller
                 'max:50',
             ],
         ], [
-            'full_name.required' => 'El nombre completo del vendedor es obligatorio.',
-            'full_name.regex' => 'El nombre completo puede contener hasta 4 palabras y no debe tener símbolos ni números.',
+        // full_name
+        'full_name.required' => 'El nombre completo del proveedor es obligatorio.',
+        'full_name.string' => 'El nombre completo debe ser texto.',
+        'full_name.min' => 'El nombre completo debe tener al menos 3 caracteres.',
+        'full_name.max' => 'El nombre completo no puede superar los 100 caracteres.',
+        'full_name.regex' => 'El nombre completo puede contener hasta 4 palabras y no debe tener símbolos ni números.',
 
-            'email.email' => 'El correo electrónico debe ser una dirección válida.',
-            'email.unique' => 'El correo electrónico ya está en uso.',
+        // email
+        'email.email' => 'El correo electrónico debe ser una dirección válida.',
+        'email.max' => 'El correo electrónico no puede superar los 50 caracteres.',
+        'email.unique' => 'El correo electrónico ya está en uso.',
+        'email.regex' => 'El correo electrónico solo puede contener letras, números, arroba, punto, guion medio y guion bajo.',
 
-            'phone.required' => 'El teléfono del vendedor es obligatorio.',
-            'phone.digits' => 'El número de teléfono del vendedor debe tener 8 números.',
-            'phone.regex' => 'El número de teléfono del vendedor debe empezar con 2, 3, 8 o 9.',
-            'phone.unique' => 'El número de teléfono del vendedor ya está en uso.',
+        // phone
+        'phone.required' => 'El teléfono del proveedor es obligatorio.',
+        'phone.digits' => 'El número de teléfono del proveedor debe tener exactamente 8 dígitos.',
+        'phone.regex' => 'El número de teléfono del proveedor debe empezar con 2, 3, 8 o 9.',
+        'phone.unique' => 'El número de teléfono del proveedor ya está en uso.',
 
-            'company_name.required' => 'El nombre de la empresa es obligatorio.',
-            'company_name.regex' => 'El nombre de la empresa puede contener hasta 6 palabras.',
+        // company_name
+        'company_name.required' => 'El nombre de la empresa es obligatorio.',
+        'company_name.string' => 'El nombre de la empresa debe ser texto.',
+        'company_name.min' => 'El nombre de la empresa debe tener al menos 3 caracteres.',
+        'company_name.max' => 'El nombre de la empresa no puede superar los 100 caracteres.',
+        'company_name.regex' => 'El nombre de la empresa puede contener hasta 6 palabras con letras, números y puntos.',
 
-            'company_phone.required' => 'El teléfono de la empresa es obligatorio.',
-            'company_phone.digits' => 'El número de teléfono de la empresa debe tener 8 números.',
-            'company_phone.regex' => 'El número de teléfono de la empresa debe empezar con 2, 3, 8 o 9.',
-            'company_phone.unique' => 'El número de teléfono de la empresa ya está en uso.',
+        // company_phone
+        'company_phone.required' => 'El teléfono de la empresa es obligatorio.',
+        'company_phone.digits' => 'El número de teléfono de la empresa debe tener exactamente 8 dígitos.',
+        'company_phone.regex' => 'El número de teléfono de la empresa debe empezar con 2, 3, 8 o 9.',
+        'company_phone.unique' => 'El número de teléfono de la empresa ya está en uso.',
 
-            'company_address.required' => 'La dirección de la empresa es obligatoria.',
+        // company_address
+        'company_address.required' => 'La dirección de la empresa es obligatoria.',
+        'company_address.string' => 'La dirección de la empresa debe ser texto.',
+        'company_address.min' => 'La dirección de la empresa debe tener al menos 5 caracteres.',
+        'company_address.max' => 'La dirección de la empresa no puede superar los 500 caracteres.',
 
-            'categoria_id.required' => 'Debes seleccionar una categoria.',
-            'categoria_id.exists' => 'La categoria_id seleccionada no es válida.',
+        // categoria_id
+        'categoria_id.required' => 'Debes seleccionar una categoría.',
+        'categoria_id.exists' => 'La categoría seleccionada no es válida.',
 
-            'city.required' => 'Debes seleccionar un departamento.',
-        ]);
+        // city
+        'city.required' => 'Debes ingresar un departamento.',
+        'city.string' => 'El departamento debe ser texto.',
+        'city.max' => 'El departamento no puede superar los 50 caracteres.',
+    ]);
 
         // Guardar proveedor en la base de datos
         $proveedor = new Proveedor();
@@ -181,6 +202,7 @@ class ProveedorController extends Controller
             'email' => [
                 'nullable',
                 'email',
+                'max:50',
                 'unique:proveedors,email,' . $id,
                 'regex:/^[\w.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
             ],
@@ -195,7 +217,7 @@ class ProveedorController extends Controller
                 'string',
                 'min:3',
                 'max:100',
-                'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9.]+( [A-Za-zÁÉÍÓÚáéíóúÑñ0-9.]+){0,5}$/', // Permite hasta 6 palabras con letras y números
+                'regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9.]+( [A-Za-zÁÉÍÓÚáéíóúÑñ0-9.]+){0,5}$/',
             ],
             'company_phone' => [
                 'required',
@@ -209,45 +231,65 @@ class ProveedorController extends Controller
                 'min:5',
                 'max:500',
             ],
-            'categoria_id' => [ // Cambia 'position' por 'categoria_id'
+            'categoria_id' => [
                 'required',
-                'exists:categorias,id', // Asegura que el puesto existe en la tabla 'puestos'
+                'exists:categorias,id',
             ],
             'city' => [
                 'required',
                 'string',
                 'max:50',
             ],
-
         ], [
+            // full_name
             'full_name.required' => 'El nombre completo del proveedor es obligatorio.',
+            'full_name.string' => 'El nombre completo debe ser texto.',
+            'full_name.min' => 'El nombre completo debe tener al menos 3 caracteres.',
+            'full_name.max' => 'El nombre completo no puede superar los 100 caracteres.',
             'full_name.regex' => 'El nombre completo puede contener hasta 4 palabras y no debe tener símbolos ni números.',
 
+            // email
             'email.email' => 'El correo electrónico debe ser una dirección válida.',
+            'email.max' => 'El correo electrónico no puede superar los 50 caracteres.',
             'email.unique' => 'El correo electrónico ya está en uso.',
+            'email.regex' => 'El correo electrónico solo puede contener letras, números, arroba, punto, guion medio y guion bajo.',
 
-            'phone.required' => 'El teléfono del vendedor es obligatorio.',
-            'phone.digits' => 'El número de teléfono del vendedor debe tener 8 números.',
-            'phone.regex' => 'El número de teléfono del vendedor debe empezar con 2, 3, 8 o 9.',
-            'phone.unique' => 'El número de teléfono del vendedor ya está en uso.',
+            // phone
+            'phone.required' => 'El teléfono del proveedor es obligatorio.',
+            'phone.digits' => 'El número de teléfono del proveedor debe tener exactamente 8 dígitos.',
+            'phone.regex' => 'El número de teléfono del proveedor debe empezar con 2, 3, 8 o 9.',
+            'phone.unique' => 'El número de teléfono del proveedor ya está en uso.',
 
+            // company_name
             'company_name.required' => 'El nombre de la empresa es obligatorio.',
-            'company_name.regex' => 'El nombre de la empresa puede contener hasta 6.',
+            'company_name.string' => 'El nombre de la empresa debe ser texto.',
+            'company_name.min' => 'El nombre de la empresa debe tener al menos 3 caracteres.',
+            'company_name.max' => 'El nombre de la empresa no puede superar los 100 caracteres.',
+            'company_name.regex' => 'El nombre de la empresa puede contener hasta 6 palabras con letras, números y puntos.',
 
+            // company_phone
             'company_phone.required' => 'El teléfono de la empresa es obligatorio.',
-            'company_phone.digits' => 'El número de teléfono de la empresa debe tener 8 números.',
+            'company_phone.digits' => 'El número de teléfono de la empresa debe tener exactamente 8 dígitos.',
             'company_phone.regex' => 'El número de teléfono de la empresa debe empezar con 2, 3, 8 o 9.',
             'company_phone.unique' => 'El número de teléfono de la empresa ya está en uso.',
 
+            // company_address
             'company_address.required' => 'La dirección de la empresa es obligatoria.',
+            'company_address.string' => 'La dirección de la empresa debe ser texto.',
+            'company_address.min' => 'La dirección de la empresa debe tener al menos 5 caracteres.',
+            'company_address.max' => 'La dirección de la empresa no puede superar los 500 caracteres.',
 
-            'categoria_id.required' => 'Debes seleccionar una categoria.',
-            'categoria_id.exists' => 'La categoria seleccionado no es válida.',
+            // categoria_id
+            'categoria_id.required' => 'Debes seleccionar una categoría.',
+            'categoria_id.exists' => 'La categoría seleccionada no es válida.',
 
-            'city.required' => 'Debes seleccionar un departamento.',
+            // city
+            'city.required' => 'Debes ingresar un departamento.',
+            'city.string' => 'El departamento debe ser texto.',
+            'city.max' => 'El departamento no puede superar los 50 caracteres.',
         ]);
 
-        // Actualizar proveedor en la base de datos
+        // Actualizar proveedor
         $proveedor = Proveedor::findOrFail($id);
         $proveedor->full_name = $request->full_name;
         $proveedor->email = $request->email;
@@ -256,15 +298,14 @@ class ProveedorController extends Controller
         $proveedor->company_phone = $request->company_phone;
         $proveedor->company_address = $request->company_address;
         $proveedor->city = $request->city;
-        $proveedor->categoria_id = $request->categoria_id; // Actualiza el ID de la categoria relacionada
+        $proveedor->categoria_id = $request->categoria_id;
 
         $proveedor->save();
 
-        $nombreProveedor = $request-> full_name;
-        $nombreEmpresa = $request-> company_name;
-
-        return redirect()->route('proveedores.index')->with('success', 'El proveedor ' .$nombreProveedor . ' de la empresa ' . $nombreEmpresa . ' ha sido actualizado exitosamente.');
+        return redirect()->route('proveedores.index')
+            ->with('success', 'El proveedor ' . $request->full_name . ' de la empresa ' . $request->company_name . ' ha sido actualizado exitosamente.');
     }
+
 
     /**
      * Remove the specified resource from storage.
