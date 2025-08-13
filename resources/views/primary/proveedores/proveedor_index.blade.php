@@ -11,7 +11,7 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de proveedores</h1>
                                 <!-- Botón agregar proveedor -->
-                                <a href="{{ route('proveedores.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Proveedor</a>
+                                <a href="{{ route('proveedores.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar proveedor</a>
                             </div>
 
                             @if(session('success'))
