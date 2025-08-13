@@ -330,6 +330,7 @@
                     required
                     autofocus
                     value="{{ old('email') }}"
+                    maxlength="30"
                 >
             </div>
             @error('email')

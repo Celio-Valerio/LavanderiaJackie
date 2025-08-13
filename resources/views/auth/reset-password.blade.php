@@ -326,7 +326,7 @@
                 name="email"
                 placeholder="nombre@ejemplo.com"
                 required
-                value="{{ old('email', $request->email) }}"
+                value="{{ old('email', $request->email) }}" maxlength="30"
                 readonly
             >
             @error('email')
