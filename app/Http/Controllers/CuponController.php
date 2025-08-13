@@ -32,26 +32,33 @@ class CuponController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        // Obtener todas las visitas con la información del cliente
-        $visitas = Visita::join('clientes', 'visitas.cliente_id', '=', 'clientes.id')
-            ->select(
-                'clientes.id',
-                'clientes.first_name',
-                'clientes.last_name',
-                'visitas.id',
-                'visitas.fecha_visita',
-                'visitas.visitas_totales',
-                'visitas.visitas_disponibles'
-            )
-            ->orderBy('visitas.fecha_visita', 'desc') // Ordenar por la fecha de visita
-            ->get();
-        $usuario = Auth::user();
+   /**
+ * Show the form for creating a new resource.
+ */
+public function create()
+{
+    // Obtener todas las visitas con la información del cliente
+    $fechaMinima = now()->subYear()->format('Y-m-d'); // 1 año antes de hoy
+    $fechaMaxima = now()->addYear()->format('Y-m-d'); // 1 año después de hoy
 
-        return view('primary.cupones.cupon_create', compact('visitas', 'usuario'));
-    }
+    $visitas = Visita::join('clientes', 'visitas.cliente_id', '=', 'clientes.id')
+        ->select(
+            'clientes.id',
+            'clientes.first_name',
+            'clientes.last_name',
+            'visitas.id',
+            'visitas.fecha_visita',
+            'visitas.visitas_totales',
+            'visitas.visitas_disponibles'
+        )
+        ->whereBetween('visitas.fecha_visita', [$fechaMinima, $fechaMaxima])
+        ->orderBy('visitas.fecha_visita', 'desc')
+        ->get();
 
+    $usuario = Auth::user();
+
+    return view('primary.cupones.cupon_create', compact('visitas', 'usuario', 'fechaMinima', 'fechaMaxima'));
+}
     /**
      * Store a newly created resource in storage.
      */

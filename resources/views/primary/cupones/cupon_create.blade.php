@@ -51,22 +51,38 @@
                                 <div class="row-mb-3">
                                     <div class="row mb-2">
                                         <!-- Fecha Desde -->
-                                        <div class="col-md-3">
-                                            <label for="fecha_desde" class="form-label">Fecha de inicio</label>
-                                            <input type="date" name="fecha_desde" id="fecha_desde" class="form-control @error('fecha_desde') is-invalid @enderror" required value="{{ old('fecha_desde') }}">
-                                            @error('fecha_desde')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                <div class="col-md-3">
+                                    <label for="fecha_desde" class="form-label">Fecha de inicio</label>
+                                    <input type="date" name="fecha_desde" id="fecha_desde" 
+                                        class="form-control @error('fecha_desde') is-invalid @enderror" 
+                                        required 
+                                        value="{{ old('fecha_desde') }}"
+                                        min="{{ now()->subYear()->format('Y-m-d') }}"
+                                        max="{{ now()->format('Y-m-d') }}"
+                                        pattern="\d{4}-\d{2}-\d{2}"
+                                        oninput="validarFecha(this)">
+                                    @error('fecha_desde')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror 
+                                </div>
 
-                                        <!-- Fecha Hasta -->
-                                        <div class="col-md-3">
-                                            <label for="fecha_hasta" class="form-label">Fecha de finalización</label>
-                                            <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control @error('fecha_hasta') is-invalid @enderror" required value="{{ old('fecha_hasta') }}">
-                                            @error('fecha_hasta')
-                                            <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
+                                    <!-- Fecha Hasta -->
+                                    <div class="col-md-3">
+                                        <label for="fecha_hasta" class="form-label">Fecha de finalización</label>
+                                        <input type="date" name="fecha_hasta" id="fecha_hasta" 
+                                            class="form-control @error('fecha_hasta') is-invalid @enderror" 
+                                            required 
+                                            value="{{ old('fecha_hasta') }}"
+                                            min="{{ now()->subYear()->format('Y-m-d') }}"
+                                            max="{{ now()->format('Y-m-d') }}"
+                                            pattern="\d{4}-\d{2}-\d{2}"
+                                            oninput="validarFecha(this)">
+                                        @error('fecha_hasta')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    </script>
                                     </div>
 
                                     <!-- Campo de Descripción -->
@@ -86,21 +102,36 @@
                                     <div class="align-center">
                                         <h5>Clientes que tendrán este cupón</h5>
                                     </div>
-
                                     <!-- Filtro de fechas -->
-                                    <div class="row mb-3">
-                                        <div class="col-md-12">
-                                            <div class="d-flex align-items-center gap-2 mb-3">
-                                                <label class="form-label m-0">Filtrar visitas por fecha:</label>
-                                                <input type="date" id="filter-fecha-desde" class="form-control" style="width: 180px;">
-                                                <span>a</span>
-                                                <input type="date" id="filter-fecha-hasta" class="form-control" style="width: 180px;">
-                                                <button type="button" id="clear-filters" class="btn btn-secondary btn-sm">
-                                                    <i class="bi bi-x-circle"></i> Limpiar
-                                                </button>
-                                            </div>
-                                        </div>
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <div class="d-flex align-items-center gap-2 mb-3">
+                                        <label class="form-label m-0">Filtrar visitas por fecha:</label>
+                                        <input type="date" id="filter-fecha-desde" class="form-control @error('fecha_visita_desde') is-invalid @enderror" 
+                                            style="width: 180px;" 
+                                            maxlength="10"
+                                            pattern="\d{4}-\d{2}-\d{2}"
+                                            min="{{ now()->subYear()->format('Y-m-d') }}"
+                                            max="{{ now()->format('Y-m-d') }}">
+                                        <span>a</span>
+                                        <input type="date" id="filter-fecha-hasta" class="form-control @error('fecha_visita_hasta') is-invalid @enderror" 
+                                            style="width: 180px;"
+                                            maxlength="10"
+                                            pattern="\d{4}-\d{2}-\d{2}"
+                                            min="{{ now()->subYear()->format('Y-m-d') }}"
+                                            max="{{ now()->format('Y-m-d') }}">
+                                        <button type="button" id="clear-filters" class="btn btn-secondary btn-sm">
+                                            <i class="bi bi-x-circle"></i> Limpiar
+                                        </button>
                                     </div>
+                                    @error('fecha_visita_desde')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                    @error('fecha_visita_hasta')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
 
                                     <!-- Tabla de clientes disponibles -->
                                     <div class="col-md-6">

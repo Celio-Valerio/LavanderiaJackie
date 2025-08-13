@@ -23,12 +23,25 @@
 
                             <!-- Filtros de fechas y botón de recargar -->
                             <div class="mb-3 d-flex align-items-center gap-2">
-                                <div>
-                                    <label for="fecha-desde" class="form-label">Buscar desde</label>
-                                    <input type="date" id="fecha-desde" class="form-control" style="display: inline-block; width: auto;">
-                                    <label for="fecha-hasta" class="form-label">hasta</label>
-                                    <input type="date" id="fecha-hasta" class="form-control" style="display: inline-block; width: auto;">
-                                </div>
+                               <div>
+                                <label for="fecha-desde" class="form-label">Buscar desde</label>
+                                <input type="date" 
+                                    id="fecha-desde" 
+                                    class="form-control" 
+                                    style="display: inline-block; width: auto;"
+                                    min="1900-01-01"
+                                    max="9999-12-31"
+                                    onchange="validarAnio(this)">
+                                
+                                <label for="fecha-hasta" class="form-label">hasta</label>
+                                <input type="date" 
+                                    id="fecha-hasta" 
+                                    class="form-control" 
+                                    style="display: inline-block; width: auto;"
+                                    min="1900-01-01"
+                                    max="9999-12-31"
+                                    onchange="validarAnio(this)">
+                            </div>
                                 <!-- Botón de recargar -->
                                 <button id="reload-button" class="btn btn-link p-0" style="color: #007bff; font-size: 24px; margin-top: 5px;">
                                     <i class="bi bi-arrow-clockwise"></i>
@@ -89,7 +102,7 @@
 
                                             <td class="text-center">
                                                 <a href="{{ route('cupones.show', $cupon->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                                <a href="{{ route('cupones.edit', $cupon->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                                
                                             </td>
                                         </tr>
                                     @endif
