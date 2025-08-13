@@ -79,6 +79,7 @@
         if(pwd.type==='password'){ pwd.type='text'; icon.classList.replace('mdi-eye-off','mdi-eye'); }
         else{ pwd.type='password'; icon.classList.replace('mdi-eye','mdi-eye-off'); }
     });
+    
     // Bloquear espacios en blanco en inputs
     ['email','password'].forEach(id=>{
         const el=document.getElementById(id);
