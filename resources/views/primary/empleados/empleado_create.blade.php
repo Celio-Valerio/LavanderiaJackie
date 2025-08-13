@@ -12,13 +12,23 @@
                             <hr>
                             <!-- Inicio del formulario -->
                             <form id="empleadoForm" action="{{ route('empleados.store') }}" method="POST" novalidate>
-                                @csrf <!-- Protección contra CSRF -->
+                                @csrf
 
                                 <div class="row mb-3">
                                     <!-- Campo de Identidad -->
                                     <div class="col-md-6">
                                         <label for="identity_number" class="form-label">Número de Identidad</label>
-                                        <input type="text" name="identity_number" class="form-control @error('identity_number') is-invalid @enderror" id="identity_number" value="{{ old('identity_number') }}" placeholder="Ej: 0801199012345" maxlength="13" required>
+                                        <input
+                                            type="text"
+                                            name="identity_number"
+                                            class="form-control @error('identity_number') is-invalid @enderror"
+                                            id="identity_number"
+                                            value="{{ old('identity_number') }}"
+                                            placeholder="Ej: 0801199012345"
+                                            maxlength="13"
+                                            pattern="\d{13}"
+                                            inputmode="numeric"
+                                            required>
                                         @error('identity_number')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -27,7 +37,15 @@
                                     <!-- Campo de Nombre -->
                                     <div class="col-md-6">
                                         <label for="first_name" class="form-label">Nombre</label>
-                                        <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" id="first_name" value="{{ old('first_name') }}" placeholder="Ej: Juan" maxlength="50" required>
+                                        <input
+                                            type="text"
+                                            name="first_name"
+                                            class="form-control @error('first_name') is-invalid @enderror"
+                                            id="first_name"
+                                            value="{{ old('first_name') }}"
+                                            placeholder="Ej: Juan"
+                                            maxlength="50"
+                                            required>
                                         @error('first_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -36,7 +54,15 @@
                                     <!-- Campo de Apellido -->
                                     <div class="col-md-6">
                                         <label for="last_name" class="form-label">Apellido</label>
-                                        <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" id="last_name" value="{{ old('last_name') }}" placeholder="Ej: Pérez" maxlength="50" required>
+                                        <input
+                                            type="text"
+                                            name="last_name"
+                                            class="form-control @error('last_name') is-invalid @enderror"
+                                            id="last_name"
+                                            value="{{ old('last_name') }}"
+                                            placeholder="Ej: Pérez"
+                                            maxlength="50"
+                                            required>
                                         @error('last_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -47,7 +73,16 @@
                                     <!-- Campo de Email -->
                                     <div class="col-md-6">
                                         <label for="email" class="form-label">Correo electrónico</label>
-                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}" placeholder="Ej: ejemplo@gmail.com" required>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            class="form-control @error('email') is-invalid @enderror"
+                                            id="email"
+                                            value="{{ old('email') }}"
+                                            placeholder="Ej: ejemplo@gmail.com"
+                                            maxlength="50"
+                                            pattern="^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+                                            required>
                                         @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -59,7 +94,7 @@
                                             <option value="">Selecciona un puesto</option>
                                             @foreach($puestos as $puesto)
                                                 <option value="{{ $puesto->id }}" {{ old('puesto_id') == $puesto->id ? 'selected' : '' }}>
-                                                    {{ $puesto->name }} <!-- Asegúrate de que este campo corresponda al modelo Puesto -->
+                                                    {{ $puesto->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -73,7 +108,17 @@
                                     <!-- Campo de Teléfono -->
                                     <div class="col-md-3">
                                         <label for="phone" class="form-label">Teléfono</label>
-                                        <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" value="{{ old('phone') }}" placeholder="Ej: 90123456" maxlength="8" required>
+                                        <input
+                                            type="text"
+                                            name="phone"
+                                            class="form-control @error('phone') is-invalid @enderror"
+                                            id="phone"
+                                            value="{{ old('phone') }}"
+                                            placeholder="Ej: 90123456"
+                                            maxlength="8"
+                                            inputmode="numeric"
+                                            pattern="\d{8}"
+                                            required>
                                         @error('phone')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -82,7 +127,16 @@
                                     <!-- Campo de Salario -->
                                     <div class="col-md-3">
                                         <label for="salary" class="form-label">Salario</label>
-                                        <input type="number" name="salary" class="form-control @error('salary') is-invalid @enderror" id="salary" value="{{ old('salary') }}" placeholder="Ej: 2000" min="1500" max="999999" step="0.01" required>
+                                        <input
+                                            type="text"
+                                            name="salary"
+                                            class="form-control @error('salary') is-invalid @enderror"
+                                            id="salary"
+                                            value="{{ old('salary') }}"
+                                            placeholder="Ej: 12345.67"
+                                            maxlength="8" {{-- 5 dígitos + punto + 2 --}}
+                                            pattern="^\d{1,5}(\.\d{2})?$"
+                                            required>
                                         @error('salary')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -105,14 +159,18 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
                                     </div>
-
-
                                 </div>
 
                                 <!-- Campo de Dirección -->
                                 <div class="mb-3">
                                     <label for="address" class="form-label">Dirección</label>
-                                    <textarea name="address" class="form-control @error('address') is-invalid @enderror" id="address" placeholder="Ej: Calle Principal 123" maxlength="500" rows="3">{{ old('address') }}</textarea>
+                                    <textarea
+                                        name="address"
+                                        class="form-control @error('address') is-invalid @enderror"
+                                        id="address"
+                                        placeholder="Ej: Calle Principal 123"
+                                        maxlength="500"
+                                        rows="3">{{ old('address') }}</textarea>
                                     @error('address')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -143,103 +201,167 @@
             </div>
         @endif
 
-
-
+        {{-- Scripts de validación --}}
         <script>
-            // Función para capitalizar la primera letra y la letra después de un espacio
-            function capitalizeInput(input) {
-                let value = input.value.toLowerCase();
-                input.value = value.replace(/\b\w/g, function(char) {
-                    return char.toUpperCase();
-                });
+            // --- Utilidades de espacios ---
+            function sanitizeSpaces(str) {
+                return str.replace(/^\s+/, '').replace(/\s{2,}/g, ' ');
             }
 
-            // Función para restringir la entrada de números y caracteres especiales
-            function restrictInput(e) {
-                let key = e.key;
-                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]*$/;
+            // --- Nombres/Apellidos: capitalizar por palabra (Unicode), sin dobles espacios ni espacio inicial ---
+            function capitalizeWordsInput(el) {
+                let v = el.value.toLowerCase();
+                v = sanitizeSpaces(v);
+                el.value = v.replace(/(^|\s)([a-záéíóúñ])/gu, (m, sp, ch) => sp + ch.toUpperCase());
+            }
+            function restrictNameKey(e) {
+                const key = e.key;
+                // letras (incluye tildes) y espacio
+                const ok = /^[A-Za-zÁÉÍÓÚáéíóúÑñ ]$/.test(key) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','Delete'].includes(key);
+                // Evitar espacio como primer carácter
+                if (key === ' ' && e.target.selectionStart === 0) return e.preventDefault();
+                if (!ok) e.preventDefault();
+            }
 
-                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
-                    e.preventDefault();
+            // --- Dirección: capitalizar primera letra, sin dobles espacios ni espacio inicial ---
+            function capitalizeFirstLetter(el) {
+                let v = sanitizeSpaces(el.value);
+                el.value = v.charAt(0).toUpperCase() + v.slice(1);
+            }
+            function restrictAddressKey(e) {
+                const key = e.key;
+                const ok = /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ,.\-#]$/.test(key) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End','Delete'].includes(key);
+                if (key === ' ' && e.target.selectionStart === 0) return e.preventDefault();
+                if (!ok) e.preventDefault();
+            }
+
+            // --- Teléfono: solo dígitos 0-9 ---
+            function restrictPhoneKey(e) {
+                const key = e.key;
+                const ok = /^[0-9]$/.test(key) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'].includes(key);
+                if (!ok) e.preventDefault();
+            }
+
+            // --- DNI: exactamente 13 dígitos ---
+            function restrictDNIKey(e) {
+                const key = e.key;
+                const ok = /^[0-9]$/.test(key) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'].includes(key);
+                if (!ok) e.preventDefault();
+            }
+            function sanitizeDNI(el) {
+                // Dejar solo dígitos y cortar a 13
+                el.value = (el.value.replace(/\D+/g,'')).slice(0,13);
+            }
+
+            // --- Salario: 1-5 dígitos, opcional . y exactamente 2 decimales si hay punto ---
+            const SALARY_REGEX = /^\d{1,5}(\.\d{2})?$/;
+            function restrictSalaryKey(e) {
+                const key = e.key;
+                const allowedControl = ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'];
+                if (allowedControl.includes(key)) return;
+
+                if (!/^[0-9.]$/.test(key)) return e.preventDefault();
+
+                const v = e.target.value;
+                const selStart = e.target.selectionStart;
+                const selEnd = e.target.selectionEnd;
+
+                // Simular el valor resultante tras la tecla
+                const next = v.slice(0, selStart) + key + v.slice(selEnd);
+
+                // Reglas:
+                // - Solo un punto
+                if ((key === '.' && v.includes('.'))) return e.preventDefault();
+                // - No permitir iniciar con punto
+                if (key === '.' && selStart === 0) return e.preventDefault();
+                // - Máx 5 dígitos antes del punto
+                const parts = next.split('.');
+                if (parts[0].length > 5) return e.preventDefault();
+                // - Si hay punto, máx 2 decimales
+                if (parts.length === 2 && parts[1].length > 2) return e.preventDefault();
+            }
+            function sanitizeSalary(el) {
+                // Dejar solo dígitos y un punto
+                let v = el.value.replace(/[^\d.]/g, '');
+                // Mantener solo el primer punto
+                const firstDot = v.indexOf('.');
+                if (firstDot !== -1) {
+                    v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replace(/\./g, '');
+                }
+                // Cortar antes del punto a 5 dígitos
+                let [intPart, decPart=''] = v.split('.');
+                intPart = intPart.slice(0, 5);
+                if (decPart) decPart = decPart.slice(0, 2);
+                v = decPart.length ? intPart + '.' + decPart : intPart;
+                el.value = v;
+                // Validar contra el patrón final
+                if (v && !SALARY_REGEX.test(v)) {
+                    el.setCustomValidity('Formato inválido. Use hasta 5 dígitos y opcionalmente . con 2 decimales (ej: 12345.67)');
+                } else {
+                    el.setCustomValidity('');
                 }
             }
 
-            // Asignar eventos a los campos first_name y last_name
-            document.getElementById('first_name').addEventListener('input', function(e) {
-                capitalizeInput(e.target);
-            });
-
-            document.getElementById('first_name').addEventListener('keydown', function(e) {
-                restrictInput(e);
-            });
-
-            document.getElementById('last_name').addEventListener('input', function(e) {
-                capitalizeInput(e.target);
-            });
-
-            document.getElementById('last_name').addEventListener('keydown', function(e) {
-                restrictInput(e);
-            });
-        </script>
-
-        <script>
-            // Función para capitalizar solo la primera letra de la primera palabra
-            function capitalizeFirstLetter(input) {
-                let value = input.value;
-                input.value = value.charAt(0).toUpperCase() + value.slice(1);
+            // --- Email: sin espacios, solo letters/numbers y @ . - _
+            function restrictEmailKey(e) {
+                const key = e.key;
+                const ok = /^[A-Za-z0-9@._-]$/.test(key) || ['Backspace','Tab','Enter','ArrowLeft','ArrowRight','Home','End','Delete'].includes(key);
+                if (!ok) e.preventDefault();
+                if (key === ' ' ) e.preventDefault();
+            }
+            function sanitizeEmail(el) {
+                el.value = el.value.replace(/\s+/g, '').replace(/[^A-Za-z0-9@._-]/g, '').slice(0, 50);
             }
 
-            // Función para restringir caracteres si es necesario
-            function restrictInput(e) {
-                let key = e.key;
-                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.]*$/;
+            // --- Asignación de eventos ---
+            // DNI
+            const dni = document.getElementById('identity_number');
+            dni.addEventListener('keydown', restrictDNIKey);
+            dni.addEventListener('input', () => sanitizeDNI(dni));
 
-                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
-                    e.preventDefault();
-                }
-            }
+            // Nombres
+            const firstName = document.getElementById('first_name');
+            firstName.addEventListener('keydown', restrictNameKey);
+            firstName.addEventListener('input', () => capitalizeWordsInput(firstName));
 
-            // Asignar eventos al campo address
-            document.getElementById('address').addEventListener('input', function(e) {
-                capitalizeFirstLetter(e.target);
-            });
-            document.getElementById('address').addEventListener('keydown', function(e) {
-                restrictInput(e);
-            });
-        </script>
+            const lastName = document.getElementById('last_name');
+            lastName.addEventListener('keydown', restrictNameKey);
+            lastName.addEventListener('input', () => capitalizeWordsInput(lastName));
 
-        <script>
-            // Función para limpiar los campos del formulario y eliminar los errores de validación
+            // Dirección
+            const address = document.getElementById('address');
+            address.addEventListener('keydown', restrictAddressKey);
+            address.addEventListener('input', () => capitalizeFirstLetter(address));
+
+            // Teléfono
+            const phone = document.getElementById('phone');
+            phone.addEventListener('keydown', restrictPhoneKey);
+            phone.addEventListener('input', () => { phone.value = phone.value.replace(/\D+/g,'').slice(0,8); });
+
+            // Salario
+            const salary = document.getElementById('salary');
+            salary.addEventListener('keydown', restrictSalaryKey);
+            salary.addEventListener('input', () => sanitizeSalary(salary));
+
+            // Email
+            const email = document.getElementById('email');
+            email.addEventListener('keydown', restrictEmailKey);
+            email.addEventListener('input', () => sanitizeEmail(email));
+
+            // Limpiar formulario
             document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('empleadoForm');
-
-                // Limpiar los valores del formulario
                 form.reset();
-
-                // Limpiar los campos manualmente para evitar restauración por old()
                 form.querySelectorAll('input, textarea, select').forEach(function (input) {
-                    if (input.type !== 'hidden') { // No limpiar campos ocultos
-                        input.value = '';
-                    }
+                    if (input.type !== 'hidden') input.value = '';
+                    input.setCustomValidity && input.setCustomValidity('');
                 });
-
-                // Limpiar el select de categoría
                 document.getElementById('puesto_id').selectedIndex = 0;
-
-                // También puedes eliminar las clases de error de validación
                 form.querySelectorAll('.is-invalid').forEach(function (input) {
                     input.classList.remove('is-invalid');
                 });
             });
         </script>
 
-        <script>
-            // Validación para limitar el campo de salario a 6 dígitos
-            document.getElementById('salary').addEventListener('input', function(e) {
-                if (this.value.length > 6) {
-                    this.value = this.value.slice(0, 6); // Limitar a 6 dígitos
-                }
-            });
-        </script>
     </section>
 @endsection

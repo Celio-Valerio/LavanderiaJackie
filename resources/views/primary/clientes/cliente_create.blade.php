@@ -187,7 +187,6 @@
                 });
             </script>
 
-
             <script>
             // Función para limpiar los campos del formulario y eliminar los errores de validación
             document.getElementById('clearButton').addEventListener('click', function () {
