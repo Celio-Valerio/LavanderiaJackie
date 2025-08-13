@@ -39,7 +39,7 @@
                                     <!-- Campo de Email -->
                                     <div class="col-md-6">
                                         <label for="email" class="form-label">Correo Electrónico</label>
-                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}" placeholder="Ej: ejemplo@gmail.com" required>
+                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email') }}" placeholder="Ej: ejemplo@gmail.com" maxlength="50" required>
                                         @error('email')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -104,70 +104,91 @@
             </div>
         @endif
 
-        <script>
-            // Función para capitalizar la primera letra y la letra después de un espacio
-            function capitalizeInput(input) {
-                let value = input.value.toLowerCase();
-                input.value = value.replace(/\b\w/g, function(char) {
-                    return char.toUpperCase();
+            <script>
+                // Función para capitalizar la primera letra de cada palabra (soporta tildes)
+                function capitalizeInput(input) {
+                    let value = input.value.toLowerCase();
+
+                    // Evitar espacios al inicio y dobles espacios
+                    value = value.replace(/^\s+/, "").replace(/\s{2,}/g, " ");
+
+                    // Capitalizar primera letra de cada palabra
+                    input.value = value.replace(/(^|\s)([a-záéíóúñ])/gu, function(match, space, char) {
+                        return space + char.toUpperCase();
+                    });
+                }
+
+                // Función para restringir nombres y apellidos
+                function restrictNameInput(e) {
+                    let key = e.key;
+                    let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]$/;
+
+                    if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                        e.preventDefault();
+                    }
+                }
+
+                // Función para capitalizar solo la primera letra (dirección)
+                function capitalizeFirstLetter(input) {
+                    let value = input.value;
+
+                    // Evitar espacios al inicio y dobles espacios
+                    value = value.replace(/^\s+/, "").replace(/\s{2,}/g, " ");
+
+                    input.value = value.charAt(0).toUpperCase() + value.slice(1);
+                }
+
+                // Función para restringir caracteres en dirección
+                function restrictAddressInput(e) {
+                    let key = e.key;
+                    let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.]$/;
+
+                    if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                        e.preventDefault();
+                    }
+                }
+
+                // Función para restringir teléfono solo a números 0-9
+                function restrictPhoneInput(e) {
+                    let key = e.key;
+                    let regex = /^[0-9]$/;
+
+                    if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
+                        e.preventDefault();
+                    }
+                }
+
+                // Eventos para first_name y last_name
+                document.getElementById('first_name').addEventListener('input', function(e) {
+                    capitalizeInput(e.target);
                 });
-            }
+                document.getElementById('first_name').addEventListener('keydown', function(e) {
+                    restrictNameInput(e);
+                });
 
-            // Función para restringir la entrada de números y caracteres especiales
-            function restrictInput(e) {
-                let key = e.key;
-                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]*$/;
+                document.getElementById('last_name').addEventListener('input', function(e) {
+                    capitalizeInput(e.target);
+                });
+                document.getElementById('last_name').addEventListener('keydown', function(e) {
+                    restrictNameInput(e);
+                });
 
-                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
-                    e.preventDefault();
-                }
-            }
+                // Eventos para address
+                document.getElementById('address').addEventListener('input', function(e) {
+                    capitalizeFirstLetter(e.target);
+                });
+                document.getElementById('address').addEventListener('keydown', function(e) {
+                    restrictAddressInput(e);
+                });
 
-            // Asignar eventos a los campos first_name y last_name
-            document.getElementById('first_name').addEventListener('input', function(e) {
-                capitalizeInput(e.target);
-            });
+                // Eventos para phone (solo números)
+                document.getElementById('phone').addEventListener('keydown', function(e) {
+                    restrictPhoneInput(e);
+                });
+            </script>
 
-            document.getElementById('first_name').addEventListener('keydown', function(e) {
-                restrictInput(e);
-            });
 
-            document.getElementById('last_name').addEventListener('input', function(e) {
-                capitalizeInput(e.target);
-            });
-
-            document.getElementById('last_name').addEventListener('keydown', function(e) {
-                restrictInput(e);
-            });
-        </script>
-
-        <script>
-            // Función para capitalizar solo la primera letra de la primera palabra
-            function capitalizeFirstLetter(input) {
-                let value = input.value;
-                input.value = value.charAt(0).toUpperCase() + value.slice(1);
-            }
-
-            // Función para restringir caracteres si es necesario
-            function restrictInput(e) {
-                let key = e.key;
-                let regex = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ0-9\s,.]*$/;
-
-                if (!regex.test(key) && key !== 'Backspace' && key !== 'Tab' && key !== 'Enter') {
-                    e.preventDefault();
-                }
-            }
-
-            // Asignar eventos al campo address
-            document.getElementById('address').addEventListener('input', function(e) {
-                capitalizeFirstLetter(e.target);
-            });
-            document.getElementById('address').addEventListener('keydown', function(e) {
-                restrictInput(e);
-            });
-        </script>
-
-        <script>
+            <script>
             // Función para limpiar los campos del formulario y eliminar los errores de validación
             document.getElementById('clearButton').addEventListener('click', function () {
                 const form = document.getElementById('clienteForm');
@@ -188,6 +209,5 @@
                 });
             });
         </script>
-
     </section>
 @endsection
