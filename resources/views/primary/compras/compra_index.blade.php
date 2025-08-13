@@ -64,7 +64,7 @@
                                         </td>
                                         <td class="text-center small-text-field">
                                             <a href="{{ route('compras.show', $compra->id) }}" class="btn btn-info btn-sm">Ver</a>
-                                            <a href="{{ route('compras.edit', $compra->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                                            
                                         </td>
                                     </tr>
                                 @empty

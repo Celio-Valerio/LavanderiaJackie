@@ -134,8 +134,7 @@
                                                 <a href="{{ route('cupones.show', $cupon->id) }}" class="btn btn-info btn-sm" title="Ver" data-bs-toggle="tooltip">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
-                                                <a href="{{ route('cupones.edit', $cupon->id) }}" class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="tooltip">
-                                                    <i class="bi bi-pencil"></i>
+                                               
                                                 </a>
                                                 <a href="{{ route('cupones.print', $cupon) }}"
                                                    class="btn btn-sm btn-success no-print"
