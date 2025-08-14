@@ -124,10 +124,10 @@
                             <!-- Botones de acción -->
                             <div class="row mt-4">
                                 <div class="col-md-6">
-                                    <a href="{{ route('empleados.index') }}" class="btn btn-secondary w-100">Volver a la Lista</a>
+                                    <a href="{{ route('empleados.index') }}" class="btn btn-secondary w-100">Volver a la lista</a>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning w-100">Editar Empleado</a>
+                                    <a href="{{ route('empleados.edit', $empleado->id) }}" class="btn btn-warning w-100">Editar empleado</a>
                                 </div>
                             </div>
 

@@ -156,14 +156,7 @@
         @endif
 
         <script>
-            // Función para capitalizar la primera letra y la letra después de un espacio
-            function capitalizeInput(input) {
-                let value = input.value.toLowerCase();
-                input.value = value.replace(/\b\w/g, function(char) {
-                    return char.toUpperCase();
-                });
-            }
-
+          
             // Función para restringir la entrada de números y caracteres especiales
             function restrictInput(e) {
                 let key = e.key;
@@ -233,6 +226,8 @@
                         document.getElementById('phone').value = data.phone;
                         document.getElementById('address').value = data.address;
                         document.getElementById('salary').value = data.salary;
+                        document.getElementById('identity_number').value = data.identity_number;
+                        
 
                         // Actualizar el select de puesto
                         const puestoSelect = document.getElementById('puesto_id');
