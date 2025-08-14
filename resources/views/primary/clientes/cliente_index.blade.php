@@ -84,61 +84,85 @@
             </div>
         @endif
 
-        <script>
-            $(document).ready(function() {
-                var table = $('#clientesTable').DataTable({
-                    "paging": true,
-                    "pageLength": 5,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "lengthMenu": [5, 10, 25, 50],
-                    "language": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ clientes",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún cliente disponible en esta tabla",
-                        "sInfo": "Se muestran los clientes del _START_ al _END_ de _TOTAL_.",
-                        "sInfoEmpty": "No hay resultados ",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ clientes)",
-                        "sSearch": "",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
+            <script>
+                $(document).ready(function() {
+                    var table = $('#clientesTable').DataTable({
+                        paging: true,
+                        pageLength: 5,
+                        lengthChange: true,
+                        searching: true,
+                        ordering: true,
+                        lengthMenu: [5, 10, 25, 50],
+                        language: {
+                            sProcessing: "Procesando...",
+                            sLengthMenu: "Mostrar _MENU_ clientes",
+                            sZeroRecords: "No se encontraron resultados",
+                            sEmptyTable: "Ningún cliente disponible en esta tabla",
+                            sInfo: "Se muestran los clientes del _START_ al _END_ de _TOTAL_.",
+                            sInfoEmpty: "No hay resultados ",
+                            sInfoFiltered: "(filtrado de un total de _MAX_ clientes)",
+                            sSearch: "",
+                            oPaginate: {
+                                sFirst: "Primero",
+                                sLast: "Último",
+                                sNext: "Siguiente",
+                                sPrevious: "Anterior"
+                            }
+                        },
+                        columnDefs: [{
+                            targets: 0,
+                            orderable: false
+                        }],
+                        drawCallback: function(settings) {
+                            var api = this.api();
+                            var startIndex = 1;
+                            api.rows({ search: 'applied' }).every(function(rowIdx) {
+                                $(this.node()).find('td.row-index').html(startIndex++);
+                            });
                         }
-                    },
-                    "columnDefs": [{
-                        "targets": 0,
-                        "orderable": false // Deshabilitar ordenamiento en la columna del índice
-                    }],
-                    "drawCallback": function(settings) {
-                        var api = this.api();
-                        var startIndex = 1; // Comenzar el índice en 1
+                    });
 
-                        // Actualizar el índice en la columna correspondiente
-                        api.rows({ search: 'applied' }).every(function(rowIdx) {
-                            $(this.node()).find('td.row-index').html(startIndex++); // Incrementar el índice
+                    // Estilo
+                    $('#clientesTable_length').addClass('text-end').css('float', 'right');
+                    $('#clientesTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                    $('#clientesTable_filter input')
+                        .attr('placeholder', 'Buscar por todos los datos')
+                        .css({
+                            width: '300px',
+                            'border-radius': '5px',
+                            padding: '5px'
                         });
-                    }
+
+                    // Validación del input de búsqueda
+                    const $searchInput = $('#clientesTable_filter input');
+                    const allowedCharsRegex = /[^A-Za-zÁÉÍÓÚáéíóúÑñ0-9 ]/g;
+
+                    // Evitar espacio inicial y doble espacio
+                    $searchInput.on('keydown', function(e) {
+                        if (e.key === ' ' || e.keyCode === 32) {
+                            const pos = this.selectionStart;
+                            const val = this.value;
+                            if (pos === 0 || (val && val[pos - 1] === ' ')) {
+                                e.preventDefault();
+                            }
+                        }
+                    });
+
+                    // Limpiar caracteres inválidos en tiempo real
+                    $searchInput.on('input', function() {
+                        let val = this.value;
+                        val = val.replace(allowedCharsRegex, ''); // quitar no permitidos
+                        val = val.replace(/\s{2,}/g, ' ');        // quitar dobles espacios
+                        val = val.replace(/^\s+/, '');            // quitar espacios iniciales
+                        if (val !== this.value) {
+                            this.value = val;
+                        }
+                        table.search(this.value).draw();
+                    });
                 });
+            </script>
 
-                // Estilo para mover el select a la derecha
-                $('#clientesTable_length').addClass('text-end').css('float', 'right');
-
-                // Mover el input de búsqueda a la izquierda y agregar placeholder
-                $('#clientesTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#clientesTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#clientesTable_filter input').css({
-                    'width': '300px',
-                    'border-radius': '5px',
-                    'padding': '5px'
-                });
-            });
-        </script>
-
-        <script>
+            <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 const alert = document.getElementById('success-message');
                 if (alert) {
