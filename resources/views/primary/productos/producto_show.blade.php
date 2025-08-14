@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <a href="{{ route('productos.edit', $producto->id) }}" class="btn btn-warning w-100 rounded-pill py-2">
-                                        Editar Producto
+                                        Editar producto
                                     </a>
                                 </div>
                             </div>
