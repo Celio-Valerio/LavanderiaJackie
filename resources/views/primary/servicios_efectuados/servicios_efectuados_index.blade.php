@@ -156,72 +156,65 @@
         <script>
             $(document).ready(function() {
                 var table = $('#serviciosEfectuadosTable').DataTable({
-                    "paging": true,
-                    "pageLength": 5,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "lengthMenu": [5, 10, 25, 50],
-                    "language": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ servicios efectuados",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún servicio efectuado disponible en esta tabla",
-                        "sInfo": "Mostrando _START_ a _END_ de _TOTAL_ servicios efectuados",
-                        "sInfoEmpty": "No hay resultados",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ servicios efectuados)",
-                        "sSearch": "",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
+                    paging: true,
+                    pageLength: 5,
+                    lengthChange: true,
+                    searching: true,
+                    ordering: true,
+                    lengthMenu: [5, 10, 25, 50],
+                    language: {
+                        sProcessing: "Procesando...",
+                        sLengthMenu: "Mostrar _MENU_ servicios efectuados",
+                        sZeroRecords: "No se encontraron resultados",
+                        sEmptyTable: "Ningún servicio efectuado disponible en esta tabla",
+                        sInfo: "Mostrando _START_ a _END_ de _TOTAL_ servicios efectuados",
+                        sInfoEmpty: "No hay resultados",
+                        sInfoFiltered: "(filtrado de un total de _MAX_ servicios efectuados)",
+                        sSearch: "",
+                        oPaginate: {
+                            sFirst: "Primero",
+                            sLast: "Último",
+                            sNext: "Siguiente",
+                            sPrevious: "Anterior"
                         }
                     },
-                    "columnDefs": [{
-                        "targets": 0,
-                        "orderable": false
-                    }],
-                    "drawCallback": function(settings) {
+                    columnDefs: [
+                        { targets: 0, orderable: false },       // # fila
+                        { targets: 2, searchable: false } ,      // Columna 3 (Fecha) SIN búsqueda de texto
+                        { targets: 4, searchable: false }
+                    ],
+                    drawCallback: function(settings) {
                         var api = this.api();
                         var startIndex = 1;
                         api.rows({ search: 'applied' }).every(function(rowIdx) {
                             $(this.node()).find('td.row-index').html(startIndex++);
                         });
                     },
-                    "responsive": true
+                    responsive: true
                 });
 
                 function filterByDate() {
-                    var fechaDesde = $('#fecha-desde').val();
-                    var fechaHasta = $('#fecha-hasta').val();
                     table.draw();
                 }
 
-                $.fn.dataTable.ext.search.push(
-                    function(settings, data, dataIndex) {
-                        var fechaDesde = $('#fecha-desde').val();
-                        var fechaHasta = $('#fecha-hasta').val();
-                        var fechaServicio = $(table.row(dataIndex).node()).data('fecha');
+                // Filtro por rango de fechas (se mantiene igual)
+                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    var fechaDesde = $('#fecha-desde').val();
+                    var fechaHasta = $('#fecha-hasta').val();
+                    var fechaServicio = $(table.row(dataIndex).node()).data('fecha');
 
-                        if (!fechaDesde || !fechaHasta) {
-                            return true;
-                        }
-
-                        return fechaServicio >= fechaDesde && fechaServicio <= fechaHasta;
-                    }
-                );
+                    if (!fechaDesde || !fechaHasta) return true;
+                    return fechaServicio >= fechaDesde && fechaServicio <= fechaHasta;
+                });
 
                 $('#fecha-desde, #fecha-hasta').change(filterByDate);
 
+                // Estilos del buscador
                 $('#serviciosEfectuadosTable_length').addClass('text-end').css('float', 'right');
                 $('#serviciosEfectuadosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#serviciosEfectuadosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#serviciosEfectuadosTable_filter input').css({
-                    'width': '300px',
-                    'border-radius': '5px',
-                    'padding': '5px'
-                });
+                $('#serviciosEfectuadosTable_filter input')
+                    .attr('placeholder', 'Buscar por nombre o estado')
+                    .css({ width: '300px', 'border-radius': '5px', padding: '5px' });
 
                 // Funcionalidad de impresión
                 let servicioId = null; // Inicializa la variable
