@@ -78,23 +78,30 @@
                             </div>
 
                             <!-- Historial de precios -->
-                            <h3 class="mt-4 mb-3 text-center">Historial de Precios</h3>
+                            <h3 class="mt-4 mb-3 text-center">Historial de precios</h3>
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
                                     <th>Fecha</th>
                                     <th>Precio</th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach($historialPrecios as $historial)
                                     <tr>
                                         <td>{{ ucfirst(\Carbon\Carbon::parse($historial->fecha_cambio)->translatedFormat('l d \d\e F, Y')) }}</td>
-                                        <td>L.{{ number_format($historial->precio_nuevo, 2) }}</td>
+                                        <td>L.{{ number_format($historial->precio_mostrar, 2) }}
+                                            @if(!empty($historial->es_inicial) && $historial->es_inicial)
+                                                <strong>( Precio inicial )</strong>
+                                            @endif
+                                        </td>
+
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
+
 
                             <!-- Botones de acción -->
                             <div class="row mt-4">

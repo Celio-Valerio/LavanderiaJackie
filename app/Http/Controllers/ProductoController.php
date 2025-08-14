@@ -110,16 +110,55 @@ class ProductoController extends Controller
 // En el controlador ProductoController
     public function show($id)
     {
-        // Obtener el producto por ID
         $producto = Producto::findOrFail($id);
+        $usuario  = Auth::user();
 
-        // Obtener el historial de precios usando la relación definida en el modelo Producto
-        // Asegúrate de que el nombre de la columna sea 'fecha_cambio' en la base de datos
-        $historialPrecios = $producto->historialPrecios()->orderBy('fecha_cambio', 'desc')->get();  // Asegúrate de tener la columna 'fecha_cambio' en tu tabla
-        $usuario = Auth::user();
+        // Traer historial en orden ascendente para identificar el primero (más antiguo)
+        $historial = $producto->historialPrecios()
+            ->orderBy('fecha_cambio', 'asc')
+            ->get();
 
-        // Pasar los datos a la vista
-        return view('primary.productos.producto_show', compact('producto', 'historialPrecios', 'usuario'));
+        // Construir colección que incluya el precio inicial
+        $historialConInicial = collect();
+
+        if ($historial->isNotEmpty()) {
+            // Si existe precio_anterior en el historial, úsalo; si no, usa el precio del producto al crearse
+            $primerRegistro = $historial->first();
+            $precioInicial  = $primerRegistro->precio_anterior ?? $producto->precio;
+            $fechaInicial   = $producto->created_at;
+
+            // Agregar fila "inicial"
+            $historialConInicial->push((object) [
+                'fecha_cambio'  => $fechaInicial,
+                'precio_mostrar'=> $precioInicial,
+                'es_inicial'    => true,
+            ]);
+
+            // Agregar el resto de cambios del historial usando precio_nuevo
+            foreach ($historial as $h) {
+                $historialConInicial->push((object) [
+                    'fecha_cambio'  => $h->fecha_cambio,
+                    'precio_mostrar'=> $h->precio_nuevo, // ajusta si tu campo se llama distinto
+                    'es_inicial'    => false,
+                ]);
+            }
+        } else {
+            // No hay historial: mostrar solo el precio inicial del producto
+            $historialConInicial->push((object) [
+                'fecha_cambio'  => $producto->created_at,
+                'precio_mostrar'=> $producto->precio,
+                'es_inicial'    => true,
+            ]);
+        }
+
+        // Orden para mostrar: más reciente primero
+        $historialParaVista = $historialConInicial->sortByDesc('fecha_cambio')->values();
+
+        return view('primary.productos.producto_show', [
+            'producto'           => $producto,
+            'historialPrecios'   => $historialParaVista,
+            'usuario'            => $usuario,
+        ]);
     }
 
 
