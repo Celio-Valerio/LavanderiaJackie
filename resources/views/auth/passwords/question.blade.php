@@ -304,7 +304,6 @@
     </polygon>
 </svg>
 
-<!-- Tarjeta de login -->
 <div class="login-card animate__animated animate__fadeIn">
     <div class="login-header">
         <img src="{{ asset('assets/img/logo.png') }}" alt="Logo Lavandería">
@@ -334,5 +333,22 @@
     </form>
 
 </div>
+
+<script>
+    document.getElementById('answer').addEventListener('input', function (e) {
+        let value = e.target.value;
+
+        // Eliminar caracteres que no sean letras o espacios
+        value = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+
+        // Evitar espacios al inicio
+        value = value.replace(/^\s+/g, '');
+
+        // Reemplazar dobles espacios por uno solo
+        value = value.replace(/\s{2,}/g, ' ');
+
+        e.target.value = value;
+    });
+</script>
 </body>
 </html>
