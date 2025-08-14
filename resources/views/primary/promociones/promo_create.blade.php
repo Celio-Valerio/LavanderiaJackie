@@ -311,6 +311,6 @@
                 clearButton.addEventListener('click', clearForm);
             });
         </script>
-        
+
     </section>
 @endsection

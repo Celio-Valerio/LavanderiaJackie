@@ -191,11 +191,11 @@ class MaquinariaController extends Controller
                 'required',
                 'string',
                 'regex:/^[a-zA-Z0-9_-]+$/', // Permitir solo letras, números, guiones y guiones bajos
-                // 'max:10', // Cambiar el máximo a 10 caracteres
+                // 'max:10', // Se eliminó la restricción de longitud máxima
             ],
             'proveedor_id' => [
                 'required',
-                'exists:proveedors,id',
+                'exists:proveedors,id', // Verifica que el proveedor exista
             ],
         ], [
             // Mensajes de error personalizados
@@ -212,10 +212,10 @@ class MaquinariaController extends Controller
             'status.required' => 'El estado de la maquinaria es obligatorio.',
             'status.in' => 'El estado seleccionado no es válido.',
 
-            'acquisition_date.required' => 'La fecha de adquisición es obligatoria.',
-            'acquisition_date.date' => 'La fecha de adquisición debe ser una fecha válida.',
-            'acquisition_date.after_or_equal' => 'La fecha de adquisición no es valida.',
-            'acquisition_date.before_or_equal' => 'La fecha de adquisición no puede ser posterior a la fecha actual.',
+            'acquisition_date.required' => 'La fecha  es obligatoria.',
+            'acquisition_date.date' => 'La fecha debe ser una fecha válida.',
+            'acquisition_date.after_or_equal' => 'La fecha no es valida',
+            'acquisition_date.before_or_equal' => 'La fecha  no puede ser posterior a la fecha actual.',
 
             'brand.required' => 'La marca de la maquinaria es obligatoria.',
             'brand.string' => 'La marca de la maquinaria debe ser una cadena de texto válida.',
@@ -223,7 +223,7 @@ class MaquinariaController extends Controller
             'brand.max' => 'La marca de la maquinaria no puede exceder los 50 caracteres.',
 
             'model.required' => 'El modelo de la maquinaria es obligatorio.',
-            'model.string' => 'El modelo de la maquinaria debe ser una cadena de texto válida.',
+            'model.string' => 'El modelo de la maquinaria debe ser  válido.',
             'model.regex' => 'El modelo de la maquinaria debe contener solo letras y números.',
             // 'model.max' => 'El modelo de la maquinaria no puede exceder los 10 caracteres.',
 
@@ -231,8 +231,15 @@ class MaquinariaController extends Controller
             'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
         ]);
 
-        // Actualizar la maquinaria en la base de datos
-        $maquinaria->update($request->all());
+
+        $maquinaria->name             = $request->name;
+        $maquinaria->type             = $request->type;
+        $maquinaria->status           = $request->status;
+        $maquinaria->acquisition_date = $request->acquisition_date;
+        $maquinaria->brand            = $request->brand;
+        $maquinaria->model            = $request->model;
+        $maquinaria->proveedor_id     = $request->proveedor_id;
+        $maquinaria->save();
 
         return redirect()->route('maquinarias.index')->with('success', 'La maquinaria ' . $maquinaria->name . ' ha sido actualizada exitosamente.');
     }
