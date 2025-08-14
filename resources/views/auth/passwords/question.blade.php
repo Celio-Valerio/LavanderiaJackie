@@ -331,7 +331,6 @@
 
         <button type="submit" class="btn-primary">Verificar</button>
     </form>
-
 </div>
 
 <script>
