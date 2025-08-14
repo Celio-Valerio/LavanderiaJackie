@@ -76,29 +76,66 @@
                                 <h2 class="card-subtitle text-center mb-3" style="font-size: 22px;"><strong>Gastos fijos</strong></h2>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label for="lblDescripcion">Descripción:</label>
-                                            <input type="text" name="descripcion" id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" maxlength="50" value="{{old('descripcion')}}">
-                                            <div class="invalid-feedback" id="descripcionVacio"></div>
-                                        </div>
+                                       <div class="form-group">
+                                        <label for="lblDescripcion">Descripción:</label>
+                                        <input type="text" name="descripcion" id="descripcion" 
+                                            class="form-control @error('descripcion') is-invalid @enderror" 
+                                            maxlength="50" 
+                                            value="{{ old('descripcion') }}" 
+                                            required
+                                            onkeydown="return evitarEspacioInicio(event)">
+                                        <div class="invalid-feedback" id="descripcionVacio"></div>
+                                        @error('descripcion')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                        <script>
+                                        function evitarEspacioInicio(event) {
+                                            // Si es el primer carácter y es un espacio, no permitirlo
+                                            if (event.target.value.length === 0 && event.key === ' ') {
+                                                event.preventDefault();
+                                                document.getElementById('descripcionVacio').style.display = 'block';
+                                                
+                                                event.target.classList.add('is-invalid');
+                                                return false;
+                                            }
+                                            
+                                            // Si ya hay contenido, permitir espacios normales
+                                            return true;
+                                        }
+
+                                        // Validación adicional al perder el foco
+                                        document.getElementById('descripcion').addEventListener('blur', function() {
+                                            if (this.value.startsWith(' ')) {
+                                                this.value = this.value.trimStart();
+                                                document.getElementById('descripcionVacio').style.display = 'block';
+                                                document.getElementById('descripcionVacio').textContent = 'Se han eliminado los espacios al inicio.';
+                                                this.classList.add('is-invalid');
+                                            } else {
+                                                document.getElementById('descripcionVacio').style.display = 'none';
+                                                this.classList.remove('is-invalid');
+                                            }
+                                        });
+                                        </script>
                                     </div>
                                     <div class="col-md-4">
                                         <label for="lblProducto">Gastos fijos:</label>
-                                        <select name="gastosfijos" class="form-control @error('gastosfijos') is-invalid @enderror" id="gastosfijos" >
+                                        <select name="gastosfijos" class="form-control @error('gastosfijos') is-invalid @enderror" id="gastosfijos">
                                         </select>
                                         <div class="invalid-feedback" id="gastofijoVacio"></div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="lblValor">Monto:</label>
-                                            <input type="text" name="monto" id="monto" class="form-control" maxlength="6" value="{{old('monto')}}" oninput="validarSoloNumeros2(this)">
+                                            <input type="text" name="monto" id="monto" class="form-control @error('monto') is-invalid @enderror" maxlength="6" value="{{old('monto')}}" oninput="validarSoloNumeros2(this)">
                                             <div class="invalid-feedback" id="montoVacio"></div>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="opcion">Acción:</label> <br>
-                                            <button class="btn btn-success" name="agreGasto" id="agreGasto">Agregar gasto</button>
+                                            <button type="button" class="btn btn-success" name="agreGasto" id="agreGasto">Agregar gasto</button>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +157,7 @@
                                 <div class="row" style="margin-top: 20px">
                                     <div class="col-md-4">
                                         <label for="lblProducto">Productos:</label>
-                                        <select name="productos" class="form-control @error('productos') is-invalid @enderror" id="productos"  onchange="mostrarStock()">
+                                        <select name="productos" class="form-control @error('productos') is-invalid @enderror" id="productos" onchange="mostrarStock()">
                                             <option value=""></option>
                                             @foreach($productos as $producto)
                                                 @if($producto->stock > 0)
@@ -146,7 +183,7 @@
                                     <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="opcion">Acción:</label>
-                                            <button class="btn btn-success" name="agrePro" id="agrePro">Agregar consumo</button>
+                                            <button type="button" class="btn btn-success" name="agrePro" id="agrePro">Agregar consumo</button>
                                         </div>
                                     </div>
                                 </div>
@@ -159,9 +196,7 @@
                                         <th class="color">Producto</th>
                                         <th class="color">Cantidad</th>
                                         </thead>
-                                        <tbody>
-
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                     <div>
                                         <input type="hidden" name="totalFij" id="totalFij" value="">
@@ -176,7 +211,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <button name="agregar" type="button" id="agregar" class="btn btn-primary flex-fill me-1">Registrar</button>
+                                    <button name="agregar" type="submit" id="agregar" class="btn btn-primary flex-fill me-1">Registrar</button>
                                     <button type="button" class="btn btn-warning flex-fill me-1" id="clearButton">Limpiar</button>
                                     <a href="{{ route('gastos.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                                 </div>
@@ -205,13 +240,9 @@
                     input.value = input.value
                         .replace(/[^0-9]/g, "") // Permite solo números y un punto decimal
                         .replace(/^0+(?=\d)/, "0") // Permite un solo 0 al inicio, seguido de más números
-                        .replace(/^0+(?!\.|$)/g, "") // Elimina ceros iniciales si no hay un punto o es solo un 0
+                        .replace(/^0+(?!\.|$)/g, ""); // Elimina ceros iniciales si no hay un punto o es solo un 0
                 };
-            });
-        </script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                // Función para validar que solo se ingresen números y un único punto decimal
+                
                 window.validarSoloNumeros2 = function (input) {
                     input.value = input.value
                         .replace(/[^0-9.]/g, "")          // Permite solo números y puntos
@@ -219,52 +250,62 @@
                         .replace(/^\./, "")              // Elimina un punto al principio
                         .replace(/(\..*)\./g, "$1");    // Permite un solo punto en el valor
                 };
+                
+                // Inicializar el select de gastos fijos
+                selectVacio();
+                
+                // Mostrar stock inicial si hay un producto seleccionado
+                mostrarStock();
             });
-        </script>
-        <!-- Manejo de la tabla -->
-        <script>
+            
+            function mostrarStock(){
+                const select = document.getElementById('productos');
+                var stock = select.options[select.selectedIndex].getAttribute('data-stock') || 0;
+                var mostrar = document.getElementById('stock');
+                mostrar.value = stock;
+            }
+            
+            function selectVacio(){
+                const selectElement = document.getElementById("gastosfijos");
+                const hayluz = document.getElementById("hayluz");
+                const hayagua = document.getElementById("hayagua");
+                const hayrenta = document.getElementById("hayrenta");
+                const haynomina = document.getElementById("haynomina");
+                const hayinternet = document.getElementById("hayinternet");
+
+                function agregarOpcion(value, texto) {
+                    const option = document.createElement("option");
+                    option.value = value;
+                    option.textContent = texto;
+                    selectElement.appendChild(option);
+                }
+
+                selectElement.innerHTML = "";
+                agregarOpcion("", "");
+
+                if (parseInt(hayluz.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Energía eléctrica")) {
+                    agregarOpcion("luz", "Energía eléctrica");
+                }
+                if (parseInt(hayagua.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Agua")) {
+                    agregarOpcion("agua", "Agua");
+                }
+                if (parseInt(haynomina.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Nómina")) {
+                    agregarOpcion("nomina", "Nómina");
+                }
+                if (parseInt(hayrenta.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Renta")) {
+                    agregarOpcion("renta", "Renta");
+                }
+                if (parseInt(hayinternet.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Internet")) {
+                    agregarOpcion("internet", "Internet");
+                }
+            }
+
             let detallesCompra = [];
             let detallesFijos = [];
-            document.addEventListener('DOMContentLoaded', function () {
-                // Simula el arreglo de detallesCompra
-                const hayGastos = document.getElementById('hayGastos').value;
-                if(parseInt(hayGastos) === 1){
-                    const tbody = document.querySelector('#tablaGasto tbody'); // Selecciona el tbody de la tabla
-                    const trVacio = document.createElement('tr');
-
-                    trVacio.innerHTML = `
-            <td colspan="2" style="text-align: center; color: grey;">Los gastos fijos ya han sido registrados este mes</td>
-        `;
-
-                    tbody.appendChild(trVacio);
-                }
-
-                if (detallesFijos.length === 0 && parseInt(hayGastos) === 0) {
-                    const tbody = document.querySelector('#tablaGasto tbody'); // Selecciona el tbody de la tabla
-                    const trVacio = document.createElement('tr');
-
-                    trVacio.innerHTML = `
-            <td colspan="3" style="text-align: center; color: grey;">No hay gastos fijos</td>
-        `;
-
-                    tbody.appendChild(trVacio);
-                }
-            });
-            document.addEventListener('DOMContentLoaded', function () {
-                // Simula el arreglo de detallesCompra
-
-                if (detallesCompra.length === 0) {
-                    const tbody = document.querySelector('#tablaConsumo tbody'); // Selecciona el tbody de la tabla
-                    const trVacio = document.createElement('tr');
-
-                    trVacio.innerHTML = `
-            <td colspan="3" style="text-align: center; color: grey;">No hay productos aún</td>
-        `;
-
-                    tbody.appendChild(trVacio);
-                }
-            });
-
+            
+            // Inicializar tablas
+            actualizarTabla();
+            actualizarTabla2();
 
             document.getElementById('agrePro').addEventListener('click', function (e) {
                 e.preventDefault();
@@ -278,7 +319,6 @@
                 const select = document.getElementById('productos');
                 var cant = document.getElementById('stock');
                 var stock = parseInt(select.options[select.selectedIndex].getAttribute('data-stock')) || 0;
-
 
                 productoVacio.style.display = 'none';
                 productoVacio.textContent = '';
@@ -311,14 +351,12 @@
                         hayError = true;
                     }
                 }
-
                 else if(cantidad > 0 && !selectProducto.value){
                     cantidadVacio.style.display = 'block';
                     cantidadInput.classList.add('is-invalid');
                     cantidadVacio.textContent = 'Por favor, seleccione un producto antes de ingresar la cantidad.';
                     hayError = true;
                 }
-
                 else if(stock > 0 && cantidad > stock){
                     if(cantidad > stock){
                         cantidadVacio.style.display = 'block';
@@ -335,17 +373,14 @@
                     return;
                 }
 
-
                 if (selectProducto.value && cantidad) {
                     const productoId = selectProducto.value;
                     const productoNombre = selectProducto.options[selectProducto.selectedIndex].textContent;
                     const productoExistente = detallesCompra.find(detalle => detalle.producto_id === productoId);
 
                     if (productoExistente) {
-                        // Sumar la cantidad si ya existe
                         const nuevaCantidad = parseInt(productoExistente.cantidad) + parseInt(cantidad);
 
-                        // Validar que la nueva cantidad no supere el stock
                         if (nuevaCantidad > stock) {
                             cantidadVacio.style.display = 'block';
                             cantidadVacio.textContent = 'La cantidad total supera el stock disponible.';
@@ -354,7 +389,6 @@
 
                         productoExistente.cantidad = nuevaCantidad;
                     } else {
-                        // Agregar un nuevo producto si no existe
                         const detalle = {
                             producto_id: productoId,
                             nombre: productoNombre,
@@ -368,7 +402,6 @@
                     selectProducto.selectedIndex = 0;
                     cant.value = "";
                     document.querySelector('input[name="cantidad"]').value = "";
-
                 }
             });
 
@@ -387,7 +420,6 @@
                 montoVacio.textContent = '';
 
                 let hayError = false;
-
 
                 if (!gastosfijos.value) {
                     gastosfijos.classList.add('is-invalid');
@@ -411,20 +443,17 @@
                         hayError = true;
                     }
                 }
-
                 else if(monto > 0 && !gastosfijos.value){
                     montoVacio.style.display = 'block';
                     montoInput.classList.add('is-invalid');
                     montoVacio.textContent = 'Por favor, seleccione un gasto fijo antes de ingresar el monto.';
                     hayError = true;
                 }
-
                 else if(monto < 100){
                     montoVacio.style.display = 'block';
                     montoInput.classList.add('is-invalid');
                     montoVacio.textContent = 'El monto debe ser mayor o igual a L. 100.00.';
                     hayError = true;
-
                 }
                 else{
                     montoInput.classList.remove('is-invalid');
@@ -434,16 +463,14 @@
                     return;
                 }
 
-
                 if (gastosfijos.value && monto) {
                     const productoNombre = gastosfijos.options[gastosfijos.selectedIndex].textContent;
                     const productoExistente = detallesFijos.find(detalle => detalle.gastosfijos === productoNombre);
 
-                    // Agregar un nuevo producto si no existe
                     const detalle = {
                         valor: gastosfijos.value,
                         gastosfijos: productoNombre,
-                        monto : parseFloat(monto),
+                        monto: parseFloat(monto),
                     };
 
                     detallesFijos.push(detalle);
@@ -451,58 +478,13 @@
                     actualizarTabla2();
                     selectVacio();
                     gastosfijos.selectedIndex = 0;
-                    monto.value = "";
                     document.querySelector('input[name="monto"]').value = "";
-
                 }
-
             });
 
-            function selectVacio(){
-                // Elemento del select donde se agregarán las opciones
-                const selectElement = document.getElementById("gastosfijos");
-                const hayluz = document.getElementById("hayluz");
-                const hayagua = document.getElementById("hayagua");
-                const hayrenta = document.getElementById("hayrenta");
-                const haynomina = document.getElementById("haynomina");
-                const hayinternet = document.getElementById("hayinternet");
-
-                // Función para agregar una opción al select
-                function agregarOpcion(value, texto) {
-                    const option = document.createElement("option");
-                    option.value = value;
-                    option.textContent = texto;
-                    selectElement.appendChild(option);
-                }
-
-                    // Limpiar las opciones previas (si es necesario)
-                    selectElement.innerHTML = "";
-
-                    // Agregar la opción vacía
-                    agregarOpcion("", "");
-
-                    // Agregar opciones según los valores de los gastos
-                    if (parseInt(hayluz.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Energía eléctrica")) {
-                        agregarOpcion("luz", "Energía eléctrica");
-                    }
-                    if (parseInt(hayagua.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Agua")) {
-                        agregarOpcion("agua", "Agua");
-                    }
-                    if (parseInt(haynomina.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Nómina")) {
-                        agregarOpcion("nomina", "Nómina");
-                    }
-                    if (parseInt(hayrenta.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Renta")) {
-                        agregarOpcion("renta", "Renta");
-                    }
-                    if (parseInt(hayinternet.value) === 0 && !detallesFijos.some(detalle => detalle.gastosfijos === "Internet")) {
-                        agregarOpcion("internet", "Internet");
-                    }
-
-            }
-
-
-            document.getElementById('agregar').addEventListener('click', function(e) {
+            document.getElementById('gastoForm').addEventListener('submit', function(e) {
                 e.preventDefault();
+                
                 const hayGastos = document.getElementById('hayGastos').value;
                 const tableVacia = document.getElementById('tableVacia');
                 const totalFij = document.getElementById('totalFij');
@@ -539,6 +521,7 @@
                 else{
                     descripcionInput.classList.remove('is-invalid');
                 }
+                
                 if(detallesFijos.length > 0){
                     hayDato = true;
                 }
@@ -560,50 +543,48 @@
                         return;
                     }
                 }
+                
                 const totalMonto = detallesFijos.reduce((suma, detalle) => suma + parseFloat(detalle.monto), 0);
                 totalFij.value = totalMonto;
                 detallesMandar2.value = JSON.stringify(detallesFijos);
                 detallesMandar.value = JSON.stringify(detallesCompra);
 
-                document.querySelector('form').submit();
+                this.submit();
             });
 
             function actualizarTabla2() {
-                // Selecciona el tbody de la tabla correspondiente
                 const tbody = document.querySelector('#tablaGasto tbody');
-                tbody.innerHTML = ''; // Limpia el contenido del tbody
+                tbody.innerHTML = '';
 
-                // Si no hay datos en detallesFijos, muestra el mensaje de "No hay gastos fijos registrados"
                 if (detallesFijos.length === 0) {
                     const trVacio = document.createElement('tr');
                     trVacio.innerHTML = `
-                        <td colspan="2" style="text-align: center; color: grey;">No hay gastos fijos</td>
+                        <td colspan="3" style="text-align: center; color: grey;">No hay gastos fijos</td>
                     `;
                     tbody.appendChild(trVacio);
                     return;
                 }
 
-                // Recorre el array detallesFijos y genera las filas para la tabla
                 detallesFijos.forEach(function (detalle, index) {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
                     <td><button type="button" class="btn-eliminar2 btn btn-danger flex-fill" data-index="${index}">Eliminar</button></td>
                     <td>${detalle.gastosfijos}</td>
-                    <td>L ${detalle.monto}</td>
+                    <td>L ${detalle.monto.toFixed(2)}</td>
                 `;
                     tbody.appendChild(tr);
                 });
+                
                 const totalMonto = detallesFijos.reduce((suma, detalle) => suma + parseFloat(detalle.monto), 0);
 
-                // Agrega una fila al final de la tabla para mostrar el total
                 const trTotal = document.createElement('tr');
                 trTotal.innerHTML = `
                     <td style="font-weight: bold; text-align: right;" colspan="2">Total:</td>
                     <td style="font-weight: bold;">L ${totalMonto.toFixed(2)}</td>
                 `;
                 tbody.appendChild(trTotal);
-                document.querySelectorAll('.btn-eliminar2').forEach(function (boton, index) {
-                    boton.setAttribute('data-index', index);
+                
+                document.querySelectorAll('.btn-eliminar2').forEach(function (boton) {
                     boton.addEventListener('click', function () {
                         const index = boton.getAttribute('data-index');
                         detallesFijos.splice(index, 1);
@@ -620,7 +601,7 @@
                 if (detallesCompra.length === 0) {
                     const trVacio = document.createElement('tr');
                     trVacio.innerHTML = `
-                    <td colspan="5" style="text-align: center; color: grey;">No hay productos aún</td>
+                    <td colspan="3" style="text-align: center; color: grey;">No hay productos aún</td>
                 `;
                     tbody.appendChild(trVacio);
                     return;
@@ -636,40 +617,18 @@
                     tbody.appendChild(tr);
                 });
 
-                document.querySelectorAll('.btn-eliminar').forEach(function (boton, index) {
-                    boton.setAttribute('data-index', index);
+                document.querySelectorAll('.btn-eliminar').forEach(function (boton) {
                     boton.addEventListener('click', function () {
                         const index = boton.getAttribute('data-index');
                         detallesCompra.splice(index, 1);
                         actualizarTabla();
                     });
                 });
-
             }
 
-        </script>
-        <script>
             document.getElementById('clearButton').addEventListener('click', function () {
                 location.reload();
             });
         </script>
-
-        <script>
-            function mostrarStock(){
-                const select = document.getElementById('productos');
-                var stock = select.options[select.selectedIndex].getAttribute('data-stock') || 0;
-                var mostrar = document.getElementById('stock');
-
-                mostrar.value = stock;
-
-            }
-        </script>
-        <script>
-            window.onload = function (){
-                selectVacio();
-            }
-        </script>
-
-
     </section>
 @endsection
