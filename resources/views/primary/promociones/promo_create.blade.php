@@ -273,7 +273,7 @@
 
                 // Validar el campo de porcentaje de desde
                 document.getElementById('desde').addEventListener('input', (e) => {
-                    e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 2);
+                    e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
                 });
 
                 // Validar el campo de porcentaje de hasta

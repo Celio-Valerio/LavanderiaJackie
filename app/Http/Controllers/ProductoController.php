@@ -86,7 +86,7 @@ class ProductoController extends Controller
             'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
 
             'descripcion.max' => 'La descripción no puede exceder los 500 caracteres.',
-            'descripcion.required' => 'Method… del producto es obligatoria.',
+            'descripcion.required' => 'La descripción del producto es obligatoria.',
 
             'presentacion.required' => 'Debes seleccionar la presentación del producto.',
         ]);
@@ -221,7 +221,7 @@ class ProductoController extends Controller
             'proveedor_id.required' => 'Debes seleccionar un proveedor.',
             'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
             'descripcion.max' => 'La descripción no puede exceder los 500 caracteres.',
-            'descripcion.required' => 'Method… del producto es obligatoria.',
+            'descripcion.required' => 'La descripción del producto es obligatoria.',
             'presentacion.required' => 'Debes seleccionar la presentación del producto.',
         ]);
 
