@@ -76,61 +76,94 @@
             </div>
         @endif
 
-        <script>
-            $(document).ready(function() {
-                var table = $('#empleadosTable').DataTable({
-                    "paging": true,
-                    "pageLength": 5,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "lengthMenu": [5, 10, 25, 50],
-                    "language": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ empleados",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún empleado disponible en esta tabla",
-                        "sInfo": "Se muestran los empleados del _START_ al _END_ de _TOTAL_.",
-                        "sInfoEmpty": "No hay resultados ",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ empleados)",
-                        "sSearch": "",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
+            <script>
+                $(document).ready(function() {
+                    var table = $('#empleadosTable').DataTable({
+                        "paging": true,
+                        "pageLength": 5,
+                        "lengthChange": true,
+                        "searching": true,
+                        "ordering": true,
+                        "lengthMenu": [5, 10, 25, 50],
+                        "language": {
+                            "sProcessing": "Procesando...",
+                            "sLengthMenu": "Mostrar _MENU_ empleados",
+                            "sZeroRecords": "No se encontraron resultados",
+                            "sEmptyTable": "Ningún empleado disponible en esta tabla",
+                            "sInfo": "Se muestran los empleados del _START_ al _END_ de _TOTAL_.",
+                            "sInfoEmpty": "No hay resultados ",
+                            "sInfoFiltered": "(filtrado de un total de _MAX_ empleados)",
+                            "sSearch": "",
+                            "oPaginate": {
+                                "sFirst": "Primero",
+                                "sLast": "Último",
+                                "sNext": "Siguiente",
+                                "sPrevious": "Anterior"
+                            }
+                        },
+                        "columnDefs": [{
+                            "targets": 0,
+                            "orderable": false
+                        }],
+                        "drawCallback": function(settings) {
+                            var api = this.api();
+                            var startIndex = 1;
+                            api.rows({ search: 'applied' }).every(function(rowIdx) {
+                                $(this.node()).find('td.row-index').html(startIndex++);
+                            });
                         }
-                    },
-                    "columnDefs": [{
-                        "targets": 0,
-                        "orderable": false // Deshabilitar ordenamiento en la columna del índice
-                    }],
-                    "drawCallback": function(settings) {
-                        var api = this.api();
-                        var startIndex = 1; // Comenzar el índice en 1
+                    });
 
-                        // Actualizar el índice en la columna correspondiente
-                        api.rows({ search: 'applied' }).every(function(rowIdx) {
-                            $(this.node()).find('td.row-index').html(startIndex++); // Incrementar el índice
-                        });
-                    }
+                    // Estilos del buscador (como ya tienes)
+                    $('#empleadosTable_length').addClass('text-end').css('float', 'right');
+                    $('#empleadosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                    $('#empleadosTable_filter input')
+                        .attr('placeholder', 'Buscar por todos los datos')
+                        .css({ 'width': '300px', 'border-radius': '5px', 'padding': '5px' });
+
+                    // === VALIDACIÓN DEL INPUT DE BÚSQUEDA ===
+                    const $input = $('#empleadosTable_filter input');
+
+                    // Solo letras (con tildes y ñ), números y espacios
+                    const allowRegex = /[^0-9A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]/g;
+
+                    // Evitar espacio al inicio y doble espacio al teclear
+                    $input.on('keydown', function(e) {
+                        if (e.key === ' ' || e.keyCode === 32) {
+                            const pos = this.selectionStart;
+                            const val = this.value;
+                            // Bloquea si el cursor está al inicio o si el carácter anterior ya es un espacio
+                            if (pos === 0 || (val && val[pos - 1] === ' ')) {
+                                e.preventDefault();
+                            }
+                        }
+                    });
+
+                    // Sanitizar en cada cambio (tecleo/pegar/autocompletar)
+                    $input.on('input', function() {
+                        let v = this.value;
+
+                        // 1) Remover caracteres no permitidos
+                        v = v.replace(allowRegex, '');
+
+                        // 2) Reemplazar múltiples espacios por uno
+                        v = v.replace(/\s{2,}/g, ' ');
+
+                        // 3) Quitar espacios iniciales
+                        v = v.replace(/^\s+/, '');
+
+                        // Solo si cambió, actualiza el input
+                        if (v !== this.value) this.value = v;
+
+                        // Actualizar búsqueda de DataTables con el valor saneado
+                        table.search(this.value).draw();
+                    });
+                    // === FIN VALIDACIÓN ===
                 });
+            </script>
 
-                // Estilo para mover el select a la derecha
-                $('#empleadosTable_length').addClass('text-end').css('float', 'right');
 
-                // Mover el input de búsqueda a la izquierda y agregar placeholder
-                $('#empleadosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#empleadosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#empleadosTable_filter input').css({
-                    'width': '300px',
-                    'border-radius': '5px',
-                    'padding': '5px'
-                });
-            });
-        </script>
-
-        <script>
+            <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 const alert = document.getElementById('success-message');
                 if (alert) {
