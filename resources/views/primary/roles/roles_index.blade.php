@@ -106,8 +106,12 @@
             </div>
         @endif
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js"></script>
+        
         <script>
             $(document).ready(function() {
+                // Inicializar DataTable
                 var table = $('#gastosTable').DataTable({
                     "paging": true,
                     "pageLength": 5,
@@ -144,35 +148,54 @@
                     }
                 });
 
-                function filterByDate() {
-                    var fechaDesde = $('#fecha-desde').val();
-                    var fechaHasta = $('#fecha-hasta').val();
-                    table.draw();
+                // Función para normalizar fechas
+                function normalizarFecha(fecha) {
+                    if (!fecha) return null;
+                    // Convertir formato "lunes 12 de agosto, 2023" a Date
+                    const meses = {
+                        'enero': '01', 'febrero': '02', 'marzo': '03', 'abril': '04',
+                        'mayo': '05', 'junio': '06', 'julio': '07', 'agosto': '08',
+                        'septiembre': '09', 'octubre': '10', 'noviembre': '11', 'diciembre': '12'
+                    };
+                    
+                    const partes = fecha.match(/(\d+) de (\w+), (\d+)/);
+                    if (!partes) return null;
+                    
+                    const dia = partes[1].padStart(2, '0');
+                    const mes = meses[partes[2].toLowerCase()];
+                    const año = partes[3];
+                    
+                    return `${año}-${mes}-${dia}`;
                 }
 
+                // Filtrado por fechas
                 $.fn.dataTable.ext.search.push(
                     function(settings, data, dataIndex) {
                         var fechaDesde = $('#fecha-desde').val();
                         var fechaHasta = $('#fecha-hasta').val();
-                        var fechaGasto = $(table.row(dataIndex).node()).data('fecha');
-
-                        if (!fechaDesde || !fechaHasta) {
-                            return true;
+                        
+                        // Obtener la fecha de la columna 2 (índice 1)
+                        var fechaTexto = table.cell(dataIndex, 2).data();
+                        var fechaGasto = normalizarFecha(fechaTexto);
+                        
+                        if (!fechaDesde && !fechaHasta) return true;
+                        if (!fechaGasto) return false;
+                        
+                        if (fechaDesde && !fechaHasta) {
+                            return fechaGasto >= fechaDesde;
                         }
-
+                        
+                        if (!fechaDesde && fechaHasta) {
+                            return fechaGasto <= fechaHasta;
+                        }
+                        
                         return fechaGasto >= fechaDesde && fechaGasto <= fechaHasta;
                     }
                 );
 
-                $('#fecha-desde, #fecha-hasta').change(filterByDate);
-
-                $('#gastosTable_length').addClass('text-end').css('float', 'right');
-                $('#gastosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#gastosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#gastosTable_filter input').css({
-                    'width': '300px',
-                    'border-radius': '5px',
-                    'padding': '5px'
+                // Aplicar filtro cuando cambian las fechas
+                $('#fecha-desde, #fecha-hasta').change(function() {
+                    table.draw();
                 });
 
                 // Botón de recargar
@@ -181,28 +204,56 @@
                     $('#fecha-hasta').val('');
                     table.search('').draw();
                 });
+
+                // Estilos para DataTables
+                $('#gastosTable_length').addClass('text-end').css('float', 'right');
+                $('#gastosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                $('#gastosTable_filter input')
+                    .attr('placeholder', 'Buscar por todos los datos')
+                    .attr('maxlength', '100')
+                    .css({
+                        'width': '300px',
+                        'border-radius': '5px',
+                        'padding': '5px'
+                    })
+                    .on('keydown', function(e) {
+                        if (e.which === 32 && !$(this).val().length) {
+                            return false;
+                        }
+                    })
+                    .on('input', function() {
+                        let value = $(this).val().replace(/^\s+/, '');
+                        if (value.length > 100) {
+                            value = value.substring(0, 100);
+                        }
+                        $(this).val(value);
+                    });
+            });
+
+            // Validación para el formulario de creación/edición de roles
+            document.addEventListener('DOMContentLoaded', function() {
+                const forms = document.querySelectorAll('form[role="form"]');
+                
+                forms.forEach(form => {
+                    const nombreInput = form.querySelector('input[name="nombre"]');
+                    
+                    if (nombreInput) {
+                        nombreInput.addEventListener('input', function(e) {
+                            // Permitir solo letras, números y espacios
+                            this.value = this.value.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]/g, '');
+                        });
+                        
+                        form.addEventListener('submit', function(e) {
+                            if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/.test(nombreInput.value)) {
+                                e.preventDefault();
+                                alert('El nombre del rol solo puede contener letras, números y espacios');
+                                nombreInput.focus();
+                            }
+                        });
+                    }
+                });
             });
         </script>
-
-
-        <script>
-            document.getElementById('export-pdf-btn').addEventListener('click', function(e) {
-                e.preventDefault();
-
-                const params = new URLSearchParams();
-                const fDesde = document.getElementById('fecha-desde').value;
-                const fHasta = document.getElementById('fecha-hasta').value;
-                const search = document.querySelector('#gastosTable_filter input').value.trim();
-
-                if (fDesde) params.append('fecha_desde', fDesde);
-                if (fHasta) params.append('fecha_hasta', fHasta);
-                if (search) params.append('search', search);
-
-                const url = `{{ route('gastos.export-pdf') }}?${params.toString()}`;
-                window.open(url, '_blank');
-            });
-        </script>
-
 
         <script>
             document.addEventListener('DOMContentLoaded', (event) => {
