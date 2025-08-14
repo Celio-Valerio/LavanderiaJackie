@@ -101,8 +101,7 @@
                                 @endforeach
                                 </tbody>
                             </table>
-
-
+                            
                             <!-- Botones de acción -->
                             <div class="row mt-4">
                                 <div class="col-md-6">
