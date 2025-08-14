@@ -1,5 +1,5 @@
 @extends('layouts.principal')
-@section('title', 'Factura de Venta de Servicios')
+@section('title', 'Factura de venta de servicios')
 @section('content')
 
     <style>
@@ -43,7 +43,7 @@
                         <div class="card-body factura">
                             <!-- Encabezado -->
                             <h1 class="card-title text-center" style="font-size: 25px !important; margin-bottom: -15px;">Lavandería Jackie</h1>
-                            <h2 class="card-title text-center" style="font-size: 20px !important; margin-bottom: -15px;">Factura de Venta de Servicios</h2>
+                            <h2 class="card-title text-center" style="font-size: 20px !important; margin-bottom: -15px;">Factura de venta de servicios</h2>
 
                             <div class="header-info mb-3">
                                 <h3 class="text-center" style="font-size: 20px; margin-bottom: 5px;">Prop. Matilde Jackeline Moncada Zelaya</h3>
@@ -66,7 +66,7 @@
                                     <label class="form-label"><strong>Cliente:</strong> {{ $servicioEfectuado->cliente->first_name }} {{ $servicioEfectuado->cliente->last_name }}</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label"><strong>Fecha del Servicio:</strong> {{ ucfirst(\Carbon\Carbon::parse($servicioEfectuado->created_at)->translatedFormat('l d \d\e F, Y')) }}</label>
+                                    <label class="form-label"><strong>Fecha del servicio:</strong> {{ ucfirst(\Carbon\Carbon::parse($servicioEfectuado->created_at)->translatedFormat('l d \d\e F, Y')) }}</label>
                                 </div>
                             </div>
 
@@ -77,7 +77,7 @@
                                     <tr>
                                         <th>Servicio</th>
                                         <th>Libras</th>
-                                        <th>Precio por Libra</th>
+                                        <th>Precio por libra</th>
                                         <th>Promoción</th>
                                         <th>Descuento</th>
                                         <th>Total</th>
@@ -99,7 +99,7 @@
                             <!-- Total de la Factura -->
                             <div class="row mb-3">
                                 <div class="col-md-12 text-end">
-                                    <h4><strong>Total a Pagar:</strong> L. {{ number_format(($servicioEfectuado->total - ($servicioEfectuado->total * ($servicioEfectuado->promo->discount ?? 0) / 100)) + ($servicioEfectuado->precio_envio ?? 0), 2) }}</h4>
+                                    <h4><strong>Total a pagar:</strong> L. {{ number_format(($servicioEfectuado->total - ($servicioEfectuado->total * ($servicioEfectuado->promo->discount ?? 0) / 100)) + ($servicioEfectuado->precio_envio ?? 0), 2) }}</h4>
                                 </div>
                             </div>
 
