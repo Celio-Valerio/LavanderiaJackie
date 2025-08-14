@@ -325,6 +325,7 @@
                 name="password"
                 placeholder="Nueva contraseña"
                 required
+                maxlength="20"
             >
             <button type="button" class="password-toggle" id="togglePassword">
                 <i class="mdi mdi-eye-off"></i>
@@ -342,6 +343,7 @@
                 name="password_confirmation"
                 placeholder="Confirmar contraseña"
                 required
+                maxlength="20"
             >
             <button type="button" class="password-toggle" id="togglePasswordConfirmation">
                 <i class="mdi mdi-eye-off"></i>
@@ -378,6 +380,5 @@
         }
     });
 </script>
-
 </body>
 </html>
