@@ -47,7 +47,7 @@
                                 <div class="d-flex justify-content-between">
                                     <button type="submit" class="btn btn-primary flex-fill me-1">Actualizar</button>
                                     <button type="button" class="btn btn-warning flex-fill me-1" id="reloadButton" formnovalidate>Reestablecer</button>
-                                    <a href="{{ route('presupuestos.index') }}" class="btn btn-danger flex-fill">Cancelar</a>
+                                    <a href="{{ route('presupuestos.index') }}" class="btn btn-danger flex-fill">Regresar</a>
                                 </div>
                             </form>
 
