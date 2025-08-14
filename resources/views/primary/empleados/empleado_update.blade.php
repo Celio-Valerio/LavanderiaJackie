@@ -25,34 +25,58 @@
                                         @enderror
                                     </div>
 
-                                    <!-- Campo de Nombre -->
-                                    <div class="col-md-6">
-                                        <label for="first_name" class="form-label">Nombre</label>
-                                        <input type="text" name="first_name" class="form-control @error('first_name') is-invalid @enderror" id="first_name" value="{{ old('first_name', $empleado->first_name) }}" placeholder="Ej: Juan" maxlength="50" required>
-                                        @error('first_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-
-                                    <!-- Campo de Apellido -->
-                                    <div class="col-md-6">
-                                        <label for="last_name" class="form-label">Apellido</label>
-                                        <input type="text" name="last_name" class="form-control @error('last_name') is-invalid @enderror" id="last_name" value="{{ old('last_name', $empleado->last_name) }}" placeholder="Ej: Pérez" maxlength="50" required>
-                                        @error('last_name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                  <!-- Campo de Nombre -->
+                                <div class="col-md-6">
+                                    <label for="first_name" class="form-label">Nombre</label>
+                                    <input type="text" name="first_name" 
+                                        class="form-control @error('first_name') is-invalid @enderror" 
+                                        id="first_name" 
+                                        value="{{ old('first_name', $empleado->first_name) }}" 
+                                        placeholder="Ej: Juan" 
+                                        maxlength="50" 
+                                        required
+                                        oninput="this.value = this.value.trimStart()"
+                                        pattern="^\S.*$"
+                                        title="El nombre no puede comenzar con espacios">
+                                    @error('first_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
-                                <div class="row mb-3">
-                                    <!-- Campo de Email -->
-                                    <div class="col-md-6">
-                                        <label for="email" class="form-label">Correo electrónico</label>
-                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ old('email', $empleado->email) }}" placeholder="Ej: ejemplo@gmail.com" required>
-                                        @error('email')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                        @enderror
-                                    </div>
+                                <!-- Campo de Apellido -->
+                                <div class="col-md-6">
+                                    <label for="last_name" class="form-label">Apellido</label>
+                                    <input type="text" name="last_name" 
+                                        class="form-control @error('last_name') is-invalid @enderror" 
+                                        id="last_name" 
+                                        value="{{ old('last_name', $empleado->last_name) }}" 
+                                        placeholder="Ej: Pérez" 
+                                        maxlength="50" 
+                                        required
+                                        oninput="this.value = this.value.trimStart()"
+                                        pattern="^\S.*$"
+                                        title="El apellido no puede comenzar con espacios">
+                                    @error('last_name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Campo de Email -->
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Correo electrónico</label>
+                                    <input type="email" name="email" 
+                                        class="form-control @error('email') is-invalid @enderror" 
+                                        id="email" 
+                                        value="{{ old('email', $empleado->email) }}" 
+                                        placeholder="Ej: ejemplo@gmail.com" 
+                                        required
+                                        oninput="this.value = this.value.trimStart()"
+                                        pattern="^\S.*$"
+                                        title="El email no puede comenzar con espacios">
+                                    @error('email')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
 
                                     <!-- Campo de Puesto -->
                                     <div class="col-md-6">
