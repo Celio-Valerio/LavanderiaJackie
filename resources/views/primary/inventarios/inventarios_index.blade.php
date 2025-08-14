@@ -176,14 +176,34 @@
                 // Estilo para mover el select a la derecha
                 $('#productosTable_length').addClass('text-end').css('float', 'right');
 
-                // Mover el input de búsqueda a la izquierda y agregar placeholder
-                $('#productosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#productosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#productosTable_filter input').css({
-                    'width': '300px',
-                    'border-radius': '5px',
-                    'padding': '5px'
-                });
+               // Mover el input de búsqueda a la izquierda y agregar placeholder
+                    $('#productosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                    $('#productosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
+                    $('#productosTable_filter input').css({
+                        'width': '300px',
+                        'border-radius': '5px',
+                        'padding': '5px'
+                    });
+
+                    // Eliminar espacios al inicio mientras se escribe
+                    $('#productosTable_filter input').on('input', function() {
+                        // Eliminar espacios al inicio
+                        if (this.value.startsWith(' ')) {
+                            this.value = this.value.trimStart();
+                        }
+                        // Actualizar la búsqueda
+                        table.search(this.value).draw();
+                    });
+
+                    // Prevenir pegado de texto con espacios al inicio
+                    $('#productosTable_filter input').on('paste', function(e) {
+                        e.preventDefault();
+                        var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                        // Eliminar espacios al inicio del texto pegado
+                        text = text.replace(/^\s+/, '');
+                        document.execCommand('insertText', false, text);
+                        table.search(text).draw();
+                    });
             });
         </script>
 
