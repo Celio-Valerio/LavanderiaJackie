@@ -68,61 +68,88 @@
             </div>
         @endif
 
-        <script>
-            $(document).ready(function() {
-                var table = $('#productosTable').DataTable({
-                    "paging": true,
-                    "pageLength": 5,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "lengthMenu": [5, 10, 25, 50],
-                    "language": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar MENU productos",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún producto disponible en esta tabla",
-                        "sInfo": "Se muestran los productos del START al END de TOTAL.",
-                        "sInfoEmpty": "No hay resultados ",
-                        "sInfoFiltered": "(filtrado de un total de MAX productos)",
-                        "sSearch": "",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
+            <script>
+                $(document).ready(function() {
+                    var table = $('#productosTable').DataTable({
+                        paging: true,
+                        pageLength: 5,
+                        lengthChange: true,
+                        searching: true,
+                        ordering: true,
+                        lengthMenu: [5, 10, 25, 50],
+                        language: {
+                            sProcessing: "Procesando...",
+                            sLengthMenu: "Mostrar _MENU_ productos",
+                            sZeroRecords: "No se encontraron resultados",
+                            sEmptyTable: "Ningún producto disponible en esta tabla",
+                            sInfo: "Se muestran los productos del START al END de TOTAL.",
+                            sInfoEmpty: "No hay resultados ",
+                            sInfoFiltered: "(filtrado de un total de MAX productos)",
+                            sSearch: "",
+                            oPaginate: {
+                                sFirst: "Primero",
+                                sLast: "Último",
+                                sNext: "Siguiente",
+                                sPrevious: "Anterior"
+                            }
+                        },
+                        columnDefs: [{
+                            targets: 0,
+                            orderable: false
+                        }],
+                        drawCallback: function(settings) {
+                            var api = this.api();
+                            var startIndex = 1;
+                            api.rows({ search: 'applied' }).every(function(rowIdx) {
+                                $(this.node()).find('td.row-index').html(startIndex++);
+                            });
                         }
-                    },
-                    "columnDefs": [{
-                        "targets": 0,
-                        "orderable": false // Deshabilitar ordenamiento en la columna del índice
-                    }],
-                    "drawCallback": function(settings) {
-                        var api = this.api();
-                        var startIndex = 1; // Comenzar el índice en 1
+                    });
 
-                        // Actualizar el índice en la columna correspondiente
-                        api.rows({ search: 'applied' }).every(function(rowIdx) {
-                            $(this.node()).find('td.row-index').html(startIndex++); // Incrementar el índice
-                        });
-                    }
+                    // Estilo
+                    $('#productosTable_length').addClass('text-end').css('float', 'right');
+                    $('#productosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                    $('#productosTable_filter input')
+                        .attr('placeholder', 'Buscar por todos los datos')
+                        .css({ width: '300px', 'border-radius': '5px', padding: '5px' });
+
+                    // === VALIDACIÓN DEL INPUT DE BÚSQUEDA ===
+                    const $searchInput = $('#productosTable_filter input');
+
+                    // Permite: letras (incluye ñ/Ñ), números, vocales con tilde, espacio, punto y coma
+                    const disallowed = /[^A-Za-zÁÉÍÓÚáéíóúÑñ0-9\.,\s]/g;
+
+                    // Bloquear espacio al inicio y doble espacio al teclear
+                    $searchInput.on('keydown', function(e) {
+                        if (e.key === ' ' || e.keyCode === 32) {
+                            const pos = this.selectionStart;
+                            const val = this.value;
+                            if (pos === 0 || (val && val[pos - 1] === ' ')) {
+                                e.preventDefault(); // no espacio inicial ni doble espacio
+                            }
+                        }
+                    });
+
+                    // Limpiar en tiempo real y aplicar búsqueda
+                    $searchInput.on('input', function() {
+                        let v = this.value;
+
+                        // 1) quitar caracteres no permitidos
+                        v = v.replace(disallowed, '');
+
+                        // 2) colapsar espacios múltiples y eliminar espacios iniciales
+                        v = v.replace(/\s{2,}/g, ' ').replace(/^\s+/, '');
+
+                        if (v !== this.value) this.value = v;
+
+                        // 3) filtrar DataTables
+                        table.search(this.value).draw();
+                    });
+                    // === FIN VALIDACIÓN ===
                 });
+            </script>
 
-                // Estilo para mover el select a la derecha
-                $('#productosTable_length').addClass('text-end').css('float', 'right');
-
-                // Mover el input de búsqueda a la izquierda y agregar placeholder
-                $('#productosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#productosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#productosTable_filter input').css({
-                    'width': '300px',
-                    'border-radius': '5px',
-                    'padding': '5px'
-                });
-            });
-        </script>
-
-        <script>
+            <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 const alert = document.getElementById('success-message');
                 if (alert) {
