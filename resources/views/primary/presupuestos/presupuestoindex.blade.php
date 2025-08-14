@@ -124,13 +124,31 @@
                                     }
                                 });
 
-                                // Estilo para mover el select de paginación y búsqueda
-                                $('#gastosTable_length').addClass('text-end').css('float', 'right');
-                                $('#gastosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                                $('#gastosTable_filter input').attr('placeholder', 'Buscar por todos los datos').css({
+                           // Estilo para mover el select de paginación y búsqueda
+                            $('#gastosTable_length').addClass('text-end').css('float', 'right');
+                            $('#gastosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
+                            $('#gastosTable_filter input')
+                                .attr('placeholder', 'Buscar por todos los datos')
+                                .attr('maxlength', '100') // Limita a 100 caracteres en el HTML
+                                .css({
                                     'width': '300px',
                                     'border-radius': '5px',
                                     'padding': '5px'
+                                })
+                                .on('keydown', function(e) {
+                                    // Evitar espacios al inicio
+                                    if (e.which === 32 && !$(this).val().length) {
+                                        return false;
+                                    }
+                                })
+                                .on('input', function() {
+                                    // Eliminar espacios al inicio si se pega texto con espacios
+                                    let value = $(this).val().replace(/^\s+/, '');
+                                    // Asegurar que no supere los 100 caracteres
+                                    if (value.length > 100) {
+                                        value = value.substring(0, 100);
+                                    }
+                                    $(this).val(value);
                                 });
 
                                 // Filtro de fechas

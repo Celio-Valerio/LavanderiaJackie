@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-body"></div>
+                        <div class="card-body">
                         <h1 class="card-title" style="font-size: 30px !important;">Registro de presupuesto del mes de {{ ucfirst(Carbon::now()->locale('es')->monthName) }}</h1>
                         <hr>
                         <form id="presupuestoForm" action="{{ route('presupuestos.store') }}" method="POST" novalidate>
