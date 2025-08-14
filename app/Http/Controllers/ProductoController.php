@@ -203,7 +203,7 @@ class ProductoController extends Controller
                 'exists:proveedors,id', // Verifica que el proveedor exista
             ],
             'descripcion' => [
-                'nullable',
+                'required',
                 'string',
                 'max:500',
             ],
