@@ -101,12 +101,12 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            
+
                             <!-- Botones de acción -->
                             <div class="row mt-4">
                                 <div class="col-md-6">
                                     <a href="{{ route('productos.index') }}" class="btn btn-secondary w-100 rounded-pill py-2">
-                                        Volver a la Lista
+                                        Volver a la lista
                                     </a>
                                 </div>
                                 <div class="col-md-6">
