@@ -43,6 +43,26 @@
 <body>
 <main role="main">
     <section class="card" aria-label="Formulario de inicio de sesión">
+        @if (session('status'))
+            <div id="status-message" style="background:#e6ffed;border:1px solid #34c759;color:#1b5e20;
+        padding:.75rem 1rem;border-radius:8px;margin-bottom:1rem;text-align:center;
+        transition: opacity 0.5s ease;">
+                {{ session('status') }}
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const msg = document.getElementById('status-message');
+                    if (msg) {
+                        setTimeout(() => {
+                            msg.style.opacity = '0';
+                            setTimeout(() => msg.remove(), 500); // elimina después del fade
+                        }, 4000); // 5 segundos visible
+                    }
+                });
+            </script>
+        @endif
+
         <header>
             <img src="{{ asset('assets/img/logo.png') }}" alt="Logo Lavandería" class="logo" loading="lazy" decoding="async">
             <h1 class="title">Inicio de Sesión</h1>

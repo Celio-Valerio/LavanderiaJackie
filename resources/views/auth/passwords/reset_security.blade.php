@@ -311,6 +311,13 @@
         <hr>
     </div>
 
+    <!-- Mensaje de éxito -->
+    @if (session('status'))
+        <div style="background:#e6ffed;border:1px solid #34c759;color:#1b5e20;padding:.75rem 1rem;border-radius:8px;margin-bottom:1rem;text-align:center;">
+            {{ session('status') }}
+        </div>
+    @endif
+
     <form method="POST" action="{{ route('password.security.reset') }}">
         @csrf
         <input type="hidden" name="email" value="{{ $email }}">
@@ -352,33 +359,83 @@
 
         <button type="submit" class="btn-primary">Cambiar contraseña</button>
     </form>
+
+    <script>
+        (function () {
+            const allowedRegex = /[^A-Za-z0-9$\-._@]/g; // todo lo NO permitido
+            const inputs = [document.getElementById('password'), document.getElementById('password_confirmation')];
+
+            function sanitize(value) {
+                // 1) Eliminar espacios (cualquier whitespace) y 2) eliminar no permitidos
+                value = value.replace(/\s+/g, '');         // sin espacios
+                value = value.replace(allowedRegex, '');   // solo letras/números/$-._@
+                return value;
+            }
+
+            function attachGuards(el) {
+                // Bloquear barra espaciadora y entradas no deseadas por teclado
+                el.addEventListener('keydown', function (e) {
+                    if (e.key === ' ' || e.key === 'Spacebar') {
+                        e.preventDefault();
+                    }
+                });
+
+                // Limpiar en tiempo real (tanto tipeo como pegar/arrastrar)
+                el.addEventListener('input', function (e) {
+                    const cleaned = sanitize(e.target.value);
+                    if (e.target.value !== cleaned) {
+                        const pos = e.target.selectionStart;
+                        e.target.value = cleaned;
+                        // Ajuste simple del cursor
+                        e.target.setSelectionRange(cleaned.length, cleaned.length);
+                    }
+                });
+
+                // Extra: evitar pegar contenido inválido antes de que entre al input
+                el.addEventListener('paste', function (e) {
+                    e.preventDefault();
+                    const text = (e.clipboardData || window.clipboardData).getData('text');
+                    const cleaned = sanitize(text);
+                    const start = el.selectionStart;
+                    const end = el.selectionEnd;
+                    const before = el.value.slice(0, start);
+                    const after = el.value.slice(end);
+                    const next = (before + cleaned + after).slice(0, el.maxLength || 9999);
+                    el.value = next;
+                    const caret = (before + cleaned).length;
+                    el.setSelectionRange(caret, caret);
+                });
+            }
+
+            inputs.forEach(attachGuards);
+
+            // Toggles de visibilidad (ya los tenías)
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                const pwd = document.getElementById('password');
+                const icon = this.querySelector('i');
+                if (pwd.type === 'password') {
+                    pwd.type = 'text';
+                    icon.classList.replace('mdi-eye-off', 'mdi-eye');
+                } else {
+                    pwd.type = 'password';
+                    icon.classList.replace('mdi-eye', 'mdi-eye-off');
+                }
+            });
+            document.getElementById('togglePasswordConfirmation').addEventListener('click', function() {
+                const pwd = document.getElementById('password_confirmation');
+                const icon = this.querySelector('i');
+                if (pwd.type === 'password') {
+                    pwd.type = 'text';
+                    icon.classList.replace('mdi-eye-off', 'mdi-eye');
+                } else {
+                    pwd.type = 'password';
+                    icon.classList.replace('mdi-eye', 'mdi-eye-off');
+                }
+            });
+        })();
+    </script>
 </div>
 
-<script>
-    // Toggle para nueva contraseña
-    document.getElementById('togglePassword').addEventListener('click', function() {
-        const pwd = document.getElementById('password');
-        const icon = this.querySelector('i');
-        if (pwd.type === 'password') {
-            pwd.type = 'text';
-            icon.classList.replace('mdi-eye-off', 'mdi-eye');
-        } else {
-            pwd.type = 'password';
-            icon.classList.replace('mdi-eye', 'mdi-eye-off');
-        }
-    });
-    // Toggle para confirmación
-    document.getElementById('togglePasswordConfirmation').addEventListener('click', function() {
-        const pwd = document.getElementById('password_confirmation');
-        const icon = this.querySelector('i');
-        if (pwd.type === 'password') {
-            pwd.type = 'text';
-            icon.classList.replace('mdi-eye-off', 'mdi-eye');
-        } else {
-            pwd.type = 'password';
-            icon.classList.replace('mdi-eye', 'mdi-eye-off');
-        }
-    });
-</script>
+
 </body>
 </html>
