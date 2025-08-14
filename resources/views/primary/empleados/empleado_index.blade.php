@@ -162,7 +162,6 @@
                 });
             </script>
 
-
             <script>
             document.addEventListener('DOMContentLoaded', (event) => {
                 const alert = document.getElementById('success-message');
