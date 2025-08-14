@@ -341,7 +341,6 @@
 </div>
 
 <script>
-    // Bloquear espacios en blanco en inputs
     ['email','password'].forEach(id=>{
         const el=document.getElementById(id);
         el.addEventListener('input',()=>{ el.value = el.value.replace(/\s/g,''); });
