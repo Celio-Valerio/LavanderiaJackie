@@ -58,51 +58,80 @@
         <script>
             $(document).ready(function() {
                 var table = $('#usuariosTable').DataTable({
-                    "paging": true,
-                    "pageLength": 5,
-                    "lengthChange": true,
-                    "searching": true,
-                    "ordering": true,
-                    "lengthMenu": [5, 10, 25, 50],
-                    "language": {
-                        "sProcessing": "Procesando...",
-                        "sLengthMenu": "Mostrar _MENU_ usuarios",
-                        "sZeroRecords": "No se encontraron resultados",
-                        "sEmptyTable": "Ningún usuario disponible en esta tabla",
-                        "sInfo": "Se muestran los usuarios del _START_ al _END_ de _TOTAL_.",
-                        "sInfoEmpty": "No hay resultados ",
-                        "sInfoFiltered": "(filtrado de un total de _MAX_ usuarios)",
-                        "sSearch": "",
-                        "oPaginate": {
-                            "sFirst": "Primero",
-                            "sLast": "Último",
-                            "sNext": "Siguiente",
-                            "sPrevious": "Anterior"
+                    paging: true,
+                    pageLength: 5,
+                    lengthChange: true,
+                    searching: true,
+                    ordering: true,
+                    lengthMenu: [5, 10, 25, 50],
+                    language: {
+                        sProcessing: "Procesando...",
+                        sLengthMenu: "Mostrar _MENU_ usuarios",
+                        sZeroRecords: "No se encontraron resultados",
+                        sEmptyTable: "Ningún usuario disponible en esta tabla",
+                        sInfo: "Se muestran los usuarios del _START_ al _END_ de _TOTAL_.",
+                        sInfoEmpty: "No hay resultados ",
+                        sInfoFiltered: "(filtrado de un total de _MAX_ usuarios)",
+                        sSearch: "",
+                        oPaginate: {
+                            sFirst: "Primero",
+                            sLast: "Último",
+                            sNext: "Siguiente",
+                            sPrevious: "Anterior"
                         }
                     },
-                    "columnDefs": [{
-                        "targets": 0,
-                        "orderable": false // Deshabilitar ordenamiento en la columna del índice
+                    columnDefs: [{
+                        targets: 0,
+                        orderable: false
                     }],
-                    "drawCallback": function(settings) {
+                    drawCallback: function(settings) {
                         var api = this.api();
                         var startIndex = 1;
-
-                        // Actualizar el índice en la columna correspondiente
                         api.rows({ search: 'applied' }).every(function(rowIdx) {
                             $(this.node()).find('td.row-index').html(startIndex++);
                         });
                     }
                 });
 
-                // Ajustes en el diseño de DataTable
+                // Ajustes de diseño
                 $('#usuariosTable_length').addClass('text-end').css('float', 'right');
                 $('#usuariosTable_filter').addClass('text-start').removeClass('text-end').css('float', 'left');
-                $('#usuariosTable_filter input').attr('placeholder', 'Buscar por todos los datos');
-                $('#usuariosTable_filter input').css({
-                    'width': '300px',
-                    'border-radius': '5px',
-                    'padding': '5px'
+                $('#usuariosTable_filter input')
+                    .attr('placeholder', 'Buscar por todos los datos')
+                    .css({
+                        width: '300px',
+                        'border-radius': '5px',
+                        padding: '5px'
+                    });
+
+                // Validación del campo de búsqueda
+                const $searchInput = $('#usuariosTable_filter input');
+                const allowedCharsRegex = /[^A-Za-zÁÉÍÓÚáéíóúÑñ0-9.@\-_ ]/g; // Solo letras, números, punto, @, guion medio, guion bajo y espacios
+
+                $searchInput.on('keydown', function(e) {
+                    if (e.key === ' ' || e.keyCode === 32) {
+                        const pos = this.selectionStart;
+                        const val = this.value;
+                        // No permitir espacio inicial ni doble espacio
+                        if (pos === 0 || (val && val[pos - 1] === ' ')) {
+                            e.preventDefault();
+                        }
+                    }
+                });
+
+                $searchInput.on('input', function() {
+                    let val = this.value;
+                    // Eliminar caracteres no permitidos
+                    val = val.replace(allowedCharsRegex, '');
+                    // Reemplazar múltiples espacios por uno solo
+                    val = val.replace(/\s{2,}/g, ' ');
+                    // Quitar espacios iniciales
+                    val = val.replace(/^\s+/, '');
+                    if (val !== this.value) {
+                        this.value = val;
+                    }
+                    // Aplicar filtro en DataTables
+                    table.search(this.value).draw();
                 });
             });
         </script>
