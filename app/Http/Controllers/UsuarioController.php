@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Empleado;
+use App\Models\Rolpermiso;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UsuarioController extends Controller
@@ -56,6 +58,19 @@ class UsuarioController extends Controller
             'telefono' => ['required', 'digits:8', 'regex:/^[2389][0-9]{7}$/', 'unique:users,telefono'],
             'direccion' => ['required', 'string', 'min:5', 'max:500'],
             'empleado_id' => ['required', 'exists:empleados,id'],
+            // ⬇⬇ NUEVO
+            'security_question' => [
+                'required',
+                'string',
+                'in:¿Cuál es el nombre de tu primera mascota?,¿En qué ciudad naciste?,¿Cuál es tu comida favorita?,¿Cómo se llamaba tu colegio primario?,¿Cuál es el nombre de tu mejor amigo de la infancia?'
+            ],
+            'security_answer' => [
+                'required',
+                'string',
+                'min:3',
+                'max:100',
+                'regex:/^[\p{L}\p{N}\s]+$/u'
+            ],
         ],[
             'name.required' => 'El nombre de usuario es obligatorio.',
             'name.regex' => 'El nombre de usuario puede contener hasta 5 palabras y no debe contener símbolos ni números.',
@@ -88,6 +103,13 @@ class UsuarioController extends Controller
 
             'empleado_id.required' => 'El empleado es obligatorio.',
             'empleado_id.exists' => 'El empleado seleccionado no es válido.',
+
+            'security_question.required' => 'La pregunta de seguridad es obligatoria.',
+            'security_question.in' => 'La pregunta de seguridad seleccionada no es válida.',
+            'security_answer.required' => 'La respuesta de seguridad es obligatoria.',
+            'security_answer.min' => 'La respuesta de seguridad debe tener al menos 3 caracteres.',
+            'security_answer.max' => 'La respuesta de seguridad no puede exceder los 100 caracteres.',
+            'security_answer.regex' => 'La respuesta solo puede contener letras, números y espacios.',
         ]);
 
         try {
@@ -98,21 +120,23 @@ class UsuarioController extends Controller
             $user->direccion = $request->direccion;
             $user->telefono = $request->telefono;
             $user->empleado_id = $request->empleado_id;
+            $user->rolpermiso_id = 1;
+            $user->security_question = $request->security_question;
+            $user->security_answer = $request->security_answer;
 
             // Guardar imagen
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $extension = $image->getClientOriginalExtension();
 
-                // Generar el nombre en el formato deseado
                 $timestamp = now()->format('d-m-Y_H-i-s');
                 $randomNumber = str_pad(rand(1, 99999), 5, '0', STR_PAD_LEFT);
                 $imageName = "perfiles_{$timestamp}_{$randomNumber}.{$extension}";
 
-                // Guardar la imagen directamente en la carpeta public/assets/img/promociones
-                $image->move(public_path('assets/img/perfiles'), $imageName);
+                // Guarda en storage/app/public/perfiles
+                Storage::disk('public')->putFileAs('perfiles', $image, $imageName);
 
-                // Almacenar el nombre en la base de datos
+                // guarda solo el nombre (o la ruta relativa) en BD
                 $user->image = $imageName;
             }
 
