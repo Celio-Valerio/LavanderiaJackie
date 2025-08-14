@@ -40,15 +40,24 @@
                                             @error('status') <div class="invalid-feedback">{{ $message }}</div> @enderror
                                         </div>
 
-                                        {{-- PROVEEDOR: nombre visible + hidden con ID real --}}
+                                        {{-- PROVEEDOR (editable) --}}
                                         <div class="col-md-6">
-                                            <label for="proveedor_nombre" class="form-label">Proveedor</label>
-                                            <input type="text" id="proveedor_nombre" class="form-control"
-                                                   value="{{ old('proveedor_nombre', $maquinaria->proveedor->full_name) }}" readonly>
-                                            <input type="hidden" name="proveedor_id" id="proveedor_id"
-                                                   value="{{ old('proveedor_id', $maquinaria->proveedor_id) }}">
-                                            @error('proveedor_id') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                            <label for="proveedor_id" class="form-label">Proveedor</label>
+                                            <select name="proveedor_id" id="proveedor_id"
+                                                    class="form-select @error('proveedor_id') is-invalid @enderror" required>
+                                                <option value="">Selecciona un proveedor</option>
+                                                @foreach($proveedores as $proveedor)
+                                                    <option value="{{ $proveedor->id }}"
+                                                        {{ (string)old('proveedor_id', $maquinaria->proveedor_id) === (string)$proveedor->id ? 'selected' : '' }}>
+                                                        {{ $proveedor->full_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('proveedor_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
                                         </div>
+
                                     </div>
 
                                     {{-- CAMPOS DE TEXTO con maxlength corregidos --}}
