@@ -9,7 +9,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h1 class="card-title" style="font-size: 30px; margin: 0;">Lista de usuarios</h1>
                             <!-- Botón agregar usuario -->
-                            <a href="{{ route('usuarios.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar Usuario</a>
+                            <a href="{{ route('usuarios.create') }}" class="btn btn-primary btn-sm d-flex align-items-center" style="border-radius: 5px; height: 40px; padding: 0 15px;">Agregar usuario</a>
                         </div>
 
                         @if(session('success'))
