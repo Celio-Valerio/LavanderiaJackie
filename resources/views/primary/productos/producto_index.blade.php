@@ -82,7 +82,7 @@
                             sLengthMenu: "Mostrar _MENU_ productos",
                             sZeroRecords: "No se encontraron resultados",
                             sEmptyTable: "Ningún producto disponible en esta tabla",
-                            sInfo: "Se muestran los productos del START al END de TOTAL.",
+                            "sInfo": "Se muestran los productos del _START_ al _END_ de _TOTAL_.",
                             sInfoEmpty: "No hay resultados ",
                             sInfoFiltered: "(filtrado de un total de MAX productos)",
                             sSearch: "",
