@@ -25,7 +25,7 @@ class RolpermisoController extends Controller
     public function create()
     {
         $usuario = Auth::user();
-        return view('primary.roles.formulario_rol', compact( 'usuario'));
+        return view('primary.roles.formulario_rol', compact('usuario'));
     }
 
     /**
@@ -34,11 +34,12 @@ class RolpermisoController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nombre' => ['required','unique:rolpermisos,nombre'],
+            'nombre' => ['required', 'unique:rolpermisos,nombre', 'regex:/^[a-zA-Z0-9\s]+$/'],
 
         ], [
             'nombre.required' => 'El nombre del rol es obligatorio.',
             'nombre.unique' => 'El nombre del rol debe ser único.',
+            'nombre.regex' => 'El nombre del rol solo puede contener letras y números.',
 
         ]);
 
@@ -143,7 +144,6 @@ class RolpermisoController extends Controller
         } else {
             return redirect()->route('roles.index')->with('success', 'Error. El rol no pudo ser guardado.');
         }
-
     }
 
     /**
@@ -153,7 +153,7 @@ class RolpermisoController extends Controller
     {
         $rol = Rolpermiso::findOrfail($id);
         $usuario = Auth::user();
-        return view('primary.roles.roles_show', compact( 'usuario', 'rol'));
+        return view('primary.roles.roles_show', compact('usuario', 'rol'));
     }
 
     /**
@@ -163,8 +163,7 @@ class RolpermisoController extends Controller
     {
         $rol = Rolpermiso::findOrfail($id);
         $usuario = Auth::user();
-        return view('primary.roles.formulario_rol', compact( 'usuario', 'rol'));
-
+        return view('primary.roles.formulario_rol', compact('usuario', 'rol'));
     }
 
     /**
@@ -174,11 +173,12 @@ class RolpermisoController extends Controller
     {
         $NuevoRol = Rolpermiso::findOrfail($id);
         $request->validate([
-            'nombre' => ['required',Rule::unique('rolpermisos', 'nombre')->ignore($NuevoRol->id)],
+            'nombre' => ['required', Rule::unique('rolpermisos', 'nombre')->ignore($NuevoRol->id), 'regex:/^[a-zA-Z0-9\s]+$/'],
 
         ], [
             'nombre.required' => 'El nombre del rol es obligatorio.',
             'nombre.unique' => 'El nombre del rol debe ser único.',
+            'nombre.regex' => 'El nombre del rol solo puede contener letras y números.',
 
         ]);
         $NuevoRol->nombre = $request->input('nombre');
