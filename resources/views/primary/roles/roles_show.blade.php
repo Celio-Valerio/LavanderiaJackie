@@ -2,6 +2,56 @@
 @section('title', 'Registrar rol')
 @section('content')
     <style>
+        .card {
+            background-image: url('{{ asset('assets/img/laundry-background.jpg') }}');
+            background-size: fill;
+            background-position: center center;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-body {
+            background-color: rgba(255, 255, 255, 0.76);
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .card-title {
+            font-size: 30px !important;
+            color: #333;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .info-label {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .info-value {
+            font-size: 20px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #0056b3;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
         .form-check-input:checked {
             background-color: #0d6efd; /* azul Bootstrap */
             border-color: #0d6efd;

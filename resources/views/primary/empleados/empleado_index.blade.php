@@ -30,7 +30,7 @@
                                     <th style="width: 15%;">Apellido</th>
                                     <th style="width: 10%;">Teléfono</th>
                                     <th style="width: 15%;">Puesto</th>
-                                    <th style="width: 15%;">Estado</th>
+                                    <th style="width: 10%;">Estado</th>
                                     <th style="width: 25%;">Acciones</th>
                                 </tr>
                                 </thead>
